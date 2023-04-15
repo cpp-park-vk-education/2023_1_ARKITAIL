@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  web:
+    container_name: calundula_web
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_PORT=${DATABASE_PORT}
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+  db:
+    container_name: calendula_db
+    image: postgres:15.2-alpine
+    volumes:
+      - calendula_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: user
+      POSTGRES_DB: calendula
+    expose:
+      - 5432
+        
+volumes:
+  calendula_data:
