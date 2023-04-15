@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.15)
 
 project(Calendula)
 
-find_package(PostgreSQL REQUIRED)
 find_package(Boost REQUIRED)
 find_package(Wt REQUIRED)
 

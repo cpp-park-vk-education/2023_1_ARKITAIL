@@ -28,3 +28,11 @@ build: # Use a generated recipe to build artifacts.
 .PHONY: test
 test: # Run all Google tests.
 	ctest --test-dir build/
+
+.PHONY: web
+web: # Run detatched db service and web service's shell
+	docker compose run --build web sh
+
+.PHONY: down
+down: # Down all running services
+	docker compose down

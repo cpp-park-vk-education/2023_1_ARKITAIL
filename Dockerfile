@@ -4,15 +4,9 @@ RUN apk update && \
     apk add --no-cache \
       build-base \
       cmake \
+      libstdc++ \
       boost-dev \
       wt-dev \
-      postgresql-dev \
       gtest-dev
 
-WORKDIR /calendula
-
-COPY . .
-
-RUN make generate build
-
-CMD [ "./build/Calendula" ]
+WORKDIR /calendula/
