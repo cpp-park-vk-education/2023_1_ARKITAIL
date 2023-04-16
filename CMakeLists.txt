@@ -4,6 +4,9 @@ project(Calendula)
 
 find_package(Boost REQUIRED)
 find_package(Wt REQUIRED)
+find_package(PostgreSQL REQUIRED)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(BUILD_TESTS "build tests" OFF)
 if(BUILD_TESTS)

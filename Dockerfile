@@ -4,8 +4,8 @@ RUN apk update && \
     apk add --no-cache \
       build-base \
       cmake \
-      libstdc++ \
       boost-dev \
+      libpq-dev \
       wt-dev \
       gtest-dev
 

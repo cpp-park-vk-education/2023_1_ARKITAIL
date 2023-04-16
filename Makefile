@@ -13,7 +13,6 @@ clean: # Delete build/ and .cache/ directories.
 .PHONY: generate
 generate: # Generate a build recipe in a build/ directory.
 	cmake \
-		-DCMAKE_EXPORT_COMPILE_COMMANDS=1 \
 		-DCMAKE_BUILD_TYPE=Debug \
 		-DBUILD_TESTS=ON \
 		-B build/
@@ -29,10 +28,22 @@ build: # Use a generated recipe to build artifacts.
 test: # Run all Google tests.
 	ctest --test-dir build/
 
-.PHONY: web
-web: # Run detatched db service and web service's shell
-	docker compose run --build web sh
+# TODO: coverage, lint
 
-.PHONY: down
-down: # Down all running services
+# TODO: подумать над неймингами :)
+
+.PHONY: run
+run: # Run development container and up all dependences.
+	docker compose run --build dev
+
+.PHONY: resume
+resume: # Resume existing development container.
+	docker start --attach --interactive \
+		`docker ps --filter status=exited --quiet --latest`
+
+.PHONY: remove
+remove: # Remove development container and down all dependences.
 	docker compose down
+	docker rm `docker ps --filter status=exited --quiet --latest`
+
+# TODO: prod, debug

@@ -1,8 +1,8 @@
 version: "3.9"
 
 services:
-  web:
-    container_name: calundula_web
+  dev:
+    container_name: calundula_dev
     build:
       context: .
       dockerfile: Dockerfile
@@ -24,9 +24,9 @@ services:
     volumes:
       - calendula_data:/var/lib/postgresql/data/
     environment:
-      POSTGRES_PASSWORD: password
-      POSTGRES_USER: user
-      POSTGRES_DB: calendula
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_DB: ${DATABASE_NAME}
     expose:
       - 5432
         
