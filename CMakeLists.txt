@@ -2,9 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 
 project(Calendula)
 
-find_package(Boost REQUIRED)
 find_package(Wt REQUIRED)
-find_package(PostgreSQL REQUIRED)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -20,12 +18,14 @@ target_compile_features(calendula_compiler_flags INTERFACE
                         cxx_std_17)
 
 target_compile_options(calendula_compiler_flags INTERFACE
-  "$<BUILD_INTERFACE:-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused>"
+  "$<BUILD_INTERFACE:-Wall;-Wextra;-Wformat=2;-Wunused>"
 )
 
 add_subdirectory(lib)
 
-add_executable(Calendula src/main.cpp)
+add_executable(Calendula.wt src/main.cpp)
 
-target_link_libraries(Calendula PUBLIC
+target_link_libraries(Calendula.wt PUBLIC
+                      wthttp
+                      calendula_application
                       calendula_compiler_flags)
