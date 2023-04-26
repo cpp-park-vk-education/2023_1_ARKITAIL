@@ -1,3 +1,7 @@
 add_subdirectory(calendar)
 add_subdirectory(event)
 add_subdirectory(user)
+add_subdirectory(navigation)
+add_subdirectory(tree)
+add_subdirectory(public_calendar)
+add_subdirectory(private_calendar)

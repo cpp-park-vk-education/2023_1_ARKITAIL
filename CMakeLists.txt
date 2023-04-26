@@ -8,6 +8,8 @@ find_package(PostgreSQL REQUIRED)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+SET (WT_CONNECTOR "wthttp" CACHE STRING "Connector used (wthttp or wtfcgi)")
+
 option(BUILD_TESTS "build tests" OFF)
 if(BUILD_TESTS)
   enable_testing()
@@ -25,7 +27,13 @@ target_compile_options(calendula_compiler_flags INTERFACE
 
 add_subdirectory(lib)
 
-add_executable(Calendula src/main.cpp)
+add_executable(Calendula.wt src/main.cpp)
 
-target_link_libraries(Calendula PUBLIC
+target_link_libraries(Calendula.wt PUBLIC
+                      ${WT_CONNECTOR} wt
+                      navigation
+                      public_calendar
+                      private_calendar
                       calendula_compiler_flags)
+
+

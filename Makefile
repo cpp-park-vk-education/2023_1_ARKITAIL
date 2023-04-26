@@ -34,7 +34,7 @@ test: # Run all Google tests.
 
 .PHONY: run
 run: # Run development container and up all dependences.
-	docker compose run --build dev
+	docker compose run --build --publish 8080:8080 dev
 
 .PHONY: resume
 resume: # Resume existing development container.
@@ -46,4 +46,12 @@ remove: # Remove development container and down all dependences.
 	docker compose down
 	docker rm `docker ps --filter status=exited --quiet --latest`
 
-# TODO: prod, debug
+.PHONY: debug
+debug: # Run application
+	./build/Calendula.wt \
+		--docroot . \
+		--http-address 0.0.0.0 \
+		--http-port 8080 \
+		--resources-dir='../resources, ../style'
+
+# TODO: prod
