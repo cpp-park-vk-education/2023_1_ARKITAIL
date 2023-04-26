@@ -15,5 +15,5 @@ class Tree : public Wt::WContainerWidget {
 
   private:
     Wt::WLineEdit *search;
-    std::unique_ptr<Wt::WTree> tree;
+    Wt::WTree *tree;
 };

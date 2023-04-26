@@ -128,12 +128,12 @@ void Calendar::showAddEventModal(Wt::WObject *owner) {
     auto end_container = dialog->contents()->addNew<Wt::WContainerWidget>();
 
     Wt::WDateEdit *end_date = end_container->addNew<Wt::WDateEdit>();
-    end_date->setPlaceholderText("Начало");
+    end_date->setPlaceholderText("Конец");
     end_date->setValidator(date_validator);
 
     Wt::WTimeEdit *end_time = end_container->addNew<Wt::WTimeEdit>();
     end_time->setFormat("hh:mm");
-    end_time->setPlaceholderText("Начало");
+    end_time->setPlaceholderText("Конец");
     end_time->setValidator(time_validator);
 
     allDay->changed().connect([=] {
@@ -234,7 +234,7 @@ void Calendar::makeHeaderTime() {
 }
 
 void Calendar::addStyles() {
-    addStyleClass("container calendar");
+    addStyleClass("calendar");
     today_button->addStyleClass("mx-2 btn-light");
     prev_day_button->addStyleClass("mx-1 btn-light");
     next_day_button->addStyleClass("mx-2 btn-light");

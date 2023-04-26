@@ -52,7 +52,7 @@ class CalendulaApplication : public Wt::WApplication {
 CalendulaApplication::CalendulaApplication(const Wt::WEnvironment &env) : WApplication(env) {
     setTitle("Calendula");
     setTheme(std::make_unique<Wt::WBootstrap5Theme>());
-    useStyleSheet("/resources/style/style.css");
+    useStyleSheet("/style/style.css");
     // setTheme(std::make_unique<Wt::WCssTheme>("polished"));
     // setInternalPath("/Calendula", true);
 
