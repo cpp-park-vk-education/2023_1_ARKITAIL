@@ -1,10 +1,8 @@
-add_library(calendar src/calendar.cpp)
+set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_include_directories(calendar PUBLIC include)
+file(GLOB SOURCES ${SOURCE_DIR}/*.cpp)
 
-target_link_libraries(calendar PUBLIC
-                      calendula_compiler_flags)
+add_library(calendar ${SOURCES})
+target_include_directories(calendar PUBLIC ${INCLUDE_DIR})
 
-if(BUILD_TESTS)
-  add_subdirectory(tests)
-endif(BUILD_TESTS)
