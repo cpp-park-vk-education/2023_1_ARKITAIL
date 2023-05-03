@@ -8,6 +8,7 @@
 #include <Wt/WDate.h>
 #include <Wt/WGridLayout.h>
 #include <Wt/WIconPair.h>
+#include <Wt/WInteractWidget.h>
 #include <Wt/WLineEdit.h>
 #include <Wt/WMenu.h>
 #include <Wt/WMessageBox.h>
@@ -29,8 +30,8 @@
 #include <variant>
 #include <vector>
 
-#include "calendar.hpp"
-#include "navigation.hpp"
+#include "MainWidget.hpp"
+#include "NavbarWidget.hpp"
 #include "private_calendar.hpp"
 #include "public_calendar.hpp"
 
@@ -46,7 +47,7 @@ class CalendulaApplication : public Wt::WApplication {
 
   private:
     Wt::WBorderLayout *layout;
-    Navigation *navigation;
+    NavbarWidget *navigation;
 };
 
 CalendulaApplication::CalendulaApplication(const Wt::WEnvironment &env) : WApplication(env) {
@@ -61,15 +62,21 @@ CalendulaApplication::CalendulaApplication(const Wt::WEnvironment &env) : WAppli
 
     // -----------------начало
 
-    navigation = layout->addWidget(std::make_unique<Navigation>(), Wt::LayoutPosition::North);
-    navigation->addPublicCalendar(std::make_unique<PublicCalendar>());
-    navigation->addProfile(std::make_unique<Wt::WText>("Профиль"));
-    navigation->addPrivateCalendar(std::make_unique<Wt::WText>("Приватный календарь"));
+    navigation = layout->addWidget(std::make_unique<NavbarWidget>(), Wt::LayoutPosition::North);
+    navigation->addCalendar(std::make_unique<MainWidget>());
+    navigation->addProfile(std::make_unique<PublicCalendar>());
+    navigation->addSearch(std::make_unique<Wt::WText>("Поиск"));
 
     // -------------- дерево
 
     auto item = std::make_unique<Wt::WText>("Footer");
     layout->addWidget(std::move(item), Wt::LayoutPosition::South);
+
+    auto x = std::make_unique<Wt::WContainerWidget>();
+    x->setDraggable("WContainerWidget");
+    x->setStyleClass("");
+    x->addWidget(std::make_unique<Wt::WText>("tytyty"));
+    root()->addWidget(std::move(x));
 }
 
 int main(int argc, char **argv) {

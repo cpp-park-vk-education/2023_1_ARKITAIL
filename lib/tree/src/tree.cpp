@@ -7,6 +7,8 @@
 
 #include <memory>
 
+#include "public_calendar.hpp"
+
 Tree::Tree() {
     auto search_ptr = std::make_unique<Wt::WLineEdit>();
     search = search_ptr.get();
@@ -36,4 +38,10 @@ Tree::Tree() {
     rootTree->expand();
     addWidget(std::move(search_ptr));
     addWidget(std::move(tree_ptr));
+
+    auto icheck = std::make_unique<Wt::WCheckBox>("test");
+    check = icheck.get();
+    addWidget(std::move(icheck));
+
+    check->checked().connect([=] { m_signal.emit(1); });
 }

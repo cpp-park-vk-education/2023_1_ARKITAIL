@@ -13,32 +13,26 @@
 
 #include <memory>
 
-class Navigation : public Wt::WContainerWidget {
+class NavbarWidget : public Wt::WContainerWidget {
   public:
-    Navigation();
-    ~Navigation() = default;
+    NavbarWidget();
+    ~NavbarWidget() = default;
 
     void addProfile(std::unique_ptr<Wt::WWidget> content);
-    void addPrivateCalendar(std::unique_ptr<Wt::WWidget> content);
-    void addPublicCalendar(std::unique_ptr<Wt::WWidget> content);
-    void addProfiles(std::unique_ptr<Wt::WWidget> content);
+    void addCalendar(std::unique_ptr<Wt::WWidget> content);
+    void addSearch(std::unique_ptr<Wt::WWidget> content);
 
   private:
     Wt::WNavigationBar *navigation;
     Wt::WStackedWidget *contents_stack;
     Wt::WMenu *left_menu_;
     Wt::WMenuItem *profile;
-    Wt::WMenuItem *private_calendar;
-    Wt::WMenuItem *public_calendar;
-    Wt::WMenuItem *profiles;
-    Wt::WText *searchResult_;  // убрать
-    Wt::WWidget *searchProf_;  // убрать
-    Wt::WLineEdit *search_line;
+    Wt::WMenuItem *calendar;
+    Wt::WMenuItem *search;
     Wt::WPushButton *exit;
 
     Wt::WMenuItem *addLink(const std::string &iconPath, const std::string &path);
     void addSignals();
     void addStyle();
     void logout();
-    void search();
 };

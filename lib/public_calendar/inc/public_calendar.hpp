@@ -14,6 +14,7 @@ class PublicCalendar : public Wt::WContainerWidget {
   public:
     PublicCalendar();
     ~PublicCalendar() = default;
+    void test();
 
   private:
     Calendar* calendar;

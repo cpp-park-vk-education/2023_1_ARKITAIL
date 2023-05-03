@@ -25,7 +25,7 @@
 
 #include "event.hpp"
 
-enum Range { day = 2, week = 1, month = 0 };
+enum Range1 { day1 = 2, week1 = 1, month1 = 0 };
 
 class Calendar : public Wt::WContainerWidget {
   public:
@@ -34,7 +34,7 @@ class Calendar : public Wt::WContainerWidget {
     void updateCalendar();
 
   private:
-    Range range;
+    Range1 range;
     std::unique_ptr<Wt::WDate> selected_date;
     Wt::WTable *table_;
     Wt::WPushButton *today_button;
@@ -45,7 +45,7 @@ class Calendar : public Wt::WContainerWidget {
     Wt::WPushButton *button_add_event;
 
     Wt::WString makeTitle();
-    void setRange(Range new_range);
+    void setRange1(Range1 new_range);
     void today();
     void prevDay();
     void nextDay();

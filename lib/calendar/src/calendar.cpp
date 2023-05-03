@@ -1,6 +1,6 @@
 #include "calendar.hpp"
 
-Calendar::Calendar() : range(week) {
+Calendar::Calendar() : range(week1) {
     selected_date = std::make_unique<Wt::WDate>(std::chrono::system_clock::now());
     addNavbar();
     auto table = std::make_unique<Wt::WTable>();
@@ -24,21 +24,21 @@ void Calendar::updateCalendar() {
               Wt::WDateTime(Wt::WDate(2023, 4, 30), Wt::WTime(14, 0)))};
 
     switch (range) {
-        case day:
+        case day1:
             break;
-        case week:
+        case week1:
             table_->setHeaderCount(1);
             table_->setHeaderCount(1, Wt::Orientation::Vertical);
-            table_->addStyleClass("week");
+            table_->addStyleClass("week1");
             makeHeaderTime();
             makeHeaderWeek();
             for (auto &&event : events) {
                 event.makeEventWidgets(table_, *(selected_date.get()));
             }
             break;
-        case month:
+        case month1:
             table_->setHeaderCount(1);
-            table_->addStyleClass("week");
+            table_->addStyleClass("week1");
             makeHeaderWeek();
             break;
     }
@@ -76,7 +76,7 @@ void Calendar::addSignals() {
     today_button->clicked().connect(this, &Calendar::today);
     prev_day_button->clicked().connect(this, &Calendar::prevDay);
     next_day_button->clicked().connect(this, &Calendar::nextDay);
-    option_range->changed().connect(bindSafe([this] { setRange(Range(option_range->currentIndex())); }));
+    option_range->changed().connect(bindSafe([this] { setRange1(Range1(option_range->currentIndex())); }));
 
     auto c = addWidget(std::make_unique<Wt::WContainerWidget>());
     button_add_event->clicked().connect([=] { Calendar::showAddEventModal(c); });
@@ -171,13 +171,13 @@ void Calendar::today() {
 
 void Calendar::prevDay() {
     switch (range) {
-        case day:
+        case day1:
             selected_date = std::make_unique<Wt::WDate>(selected_date->addDays(-1));
             break;
-        case week:
+        case week1:
             selected_date = std::make_unique<Wt::WDate>(selected_date->addDays(-7));
             break;
-        case month:
+        case month1:
             selected_date = std::make_unique<Wt::WDate>(selected_date->addMonths(-1));
             break;
     }
@@ -186,20 +186,20 @@ void Calendar::prevDay() {
 
 void Calendar::nextDay() {
     switch (range) {
-        case day:
+        case day1:
             selected_date = std::make_unique<Wt::WDate>(selected_date->addDays(1));
             break;
-        case week:
+        case week1:
             selected_date = std::make_unique<Wt::WDate>(selected_date->addDays(7));
             break;
-        case month:
+        case month1:
             selected_date = std::make_unique<Wt::WDate>(selected_date->addMonths(1));
             break;
     }
     updateCalendar();
 }
 
-void Calendar::setRange(Range new_range) {
+void Calendar::setRange1(Range1 new_range) {
     range = new_range;
     updateCalendar();
 }
