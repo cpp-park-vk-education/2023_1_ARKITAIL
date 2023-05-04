@@ -9,6 +9,7 @@ public:
     TreeNode(const Node& node);
     const Node& getNode();
     const std::vector<TreeNode*>& getChilds();
+    void check();
 
 private:
     Node node;

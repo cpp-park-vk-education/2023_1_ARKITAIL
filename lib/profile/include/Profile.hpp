@@ -1,18 +1,17 @@
 #pragma once
 
 #include <cstddef>
-#include <string>
+#include <vector>
 
-class Directory {
+class Profile {
 public:
-    Directory();
+    Profile();
 
     size_t id;
     size_t node_id;
     size_t owner_id;
 
-    std::string name;
-    std::string description;
+    std::vector<size_t> nodes;
 
 };
 

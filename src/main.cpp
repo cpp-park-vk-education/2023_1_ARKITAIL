@@ -1,4 +1,5 @@
 #include <Wt/WApplication.h>
+/*
 #include <Wt/WContainerWidget.h>
 #include <Wt/WGlobal.h>
 #include <Wt/WText.h>
@@ -7,7 +8,7 @@
 #include <memory>
 #include <string>
 
-#include "calendar.hpp"
+#include "Calendar.hpp"
 
 class App : public Wt::WApplication {
 public:
@@ -42,9 +43,11 @@ private:
 
 };
 
+*/
+
 int main(int argc, char** argv, char** envp) {
     Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
-        return std::make_unique<App>(env);
+        return std::make_unique<Wt::WApplication>(env);
     });
     return 0;
 }
