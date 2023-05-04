@@ -16,7 +16,8 @@ public:
     Node(
         size_t id,
         size_t parent_id,
-        
+        NodeType type,
+        size_t rosource_id
     );
 
     Node(const Node& node);
