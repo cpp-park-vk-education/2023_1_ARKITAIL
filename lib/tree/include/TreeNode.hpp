@@ -7,8 +7,11 @@
 class TreeNode {
 public:
     TreeNode(const Node& node);
+
     const Node& getNode();
-    const std::vector<TreeNode*>& getChilds();
+    std::vector<TreeNode*> getChilds() const;
+
+    bool isChecked();
     void check();
 
 private:

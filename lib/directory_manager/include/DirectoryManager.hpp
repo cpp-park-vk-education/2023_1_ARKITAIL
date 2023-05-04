@@ -7,12 +7,10 @@
 
 class DirectoryManager {
 public:
-    DirectoryManager();
-
-    std::vector<Event> getEvents(const Directory& directory);
-    void remove(const Directory& directory);
-    void add(const Directory& directory);
-    void update(const Directory& directory);
+    static std::vector<Event> getEvents(const Directory& directory);
+    static void remove(const Directory& directory);
+    static void add(const Directory& directory, const Directory& parent);
+    static void update(const Directory& directory);
 
 };
 

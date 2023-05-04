@@ -1,3 +1,5 @@
+add_subdirectory(application)
+add_subdirectory(unmet_deps)
 add_subdirectory(search_page)
 
 add_subdirectory(calendar)

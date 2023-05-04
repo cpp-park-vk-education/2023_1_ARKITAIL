@@ -8,10 +8,11 @@
 class Tree {
 public:
     Tree(const Node& node);
-    const TreeNode& insertNode(const TreeNode& node, const TreeNode& parent);
-    void removeNode(const TreeNode& node);
-    const TreeNode& getRoot();
-    const std::vector<TreeNode*> getChilds(const TreeNode& node);
+
+    TreeNode* insertNode(const TreeNode& node, TreeNode* parent);
+    void removeNode(TreeNode* node);
+    TreeNode* getRoot();
+    std::vector<TreeNode*> getChilds(TreeNode* node);
     std::vector<Event> getCheckedEvents();
     std::vector<Event> checkNode();
     size_t checked();
