@@ -183,8 +183,8 @@ public:
 class tags {
 public:
     std::string name;
-
     dbo::collection<dbo::ptr<calendars>> calendar;
+
 
     template<class Action>
     void persist(Action& a) {
@@ -198,6 +198,7 @@ public:
     std::string name;
     std::string description;
     dbo::ptr<nodes> node;
+
 
     template<class Action>
     void persist(Action& a) {
@@ -214,8 +215,6 @@ public:
     std::time_t time_end;
     std::string description;
     dbo::collection< dbo::ptr<calendars> > calendar;
-
-
 
 
     template<class Action>
@@ -324,7 +323,7 @@ int main(){
     session.mapClass<directory>("directory");
     session.mapClass<users>("users");
     session.mapClass<calendars>("calendars");
-    session.createTables(); //already create
+    //session.createTables(); //already create
 
     // Получаем список пользователей из базы данных
     typedef dbo::collection<dbo::ptr<users>> Users;
@@ -376,7 +375,6 @@ int main(){
     // for (const dbo::ptr<events> &event : eventss) {
     //     std::cout << event->name << ", " << event->time_start << ", " << event->time_end << ", " << event->description << std::endl;
     // }
-
     transaction.commit();
     return 0;
 }
