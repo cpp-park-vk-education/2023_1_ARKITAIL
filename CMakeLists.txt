@@ -31,9 +31,8 @@ add_executable(Calendula.wt src/main.cpp)
 
 target_link_libraries(Calendula.wt PUBLIC
                       ${WT_CONNECTOR} wt
-                      navigation
-                      public_calendar
-                      private_calendar
+                      NavbarW
+                      MainP
                       calendula_compiler_flags)
 
 
