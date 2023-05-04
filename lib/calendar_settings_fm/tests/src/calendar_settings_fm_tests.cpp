@@ -1,5 +1,6 @@
-#include <algorithm>
 #include <gtest/gtest.h>
+
+#include <memory.h>
 
 #include "calendar.hpp"
 #include "calendar_settings_fm.hpp"

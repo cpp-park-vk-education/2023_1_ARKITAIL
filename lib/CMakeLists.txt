@@ -16,3 +16,8 @@ add_subdirectory(calendar_import_fm)
 
 add_subdirectory(calendar_export_fv)
 add_subdirectory(calendar_export_fm)
+
+add_subdirectory(event_d)
+
+add_subdirectory(event_settings_fv)
+add_subdirectory(event_settings_fm)
