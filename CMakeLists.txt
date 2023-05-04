@@ -25,7 +25,13 @@ target_compile_options(calendula_compiler_flags INTERFACE
 
 add_subdirectory(lib)
 
-add_executable(Calendula src/main.cpp)
+add_executable(Calendula src/main.cpp avatar2.jpg)
+
+target_include_directories(Calendula PUBLIC ${PostgreSQL_INCLUDE_DIRS})
 
 target_link_libraries(Calendula PUBLIC
-                      calendula_compiler_flags)
+                      calendula_compiler_flags
+                      ${PostgreSQL_LIBRARIES}
+                      wt
+                      wtdbo
+                      wtdbopostgres)
