@@ -1,0 +1,3 @@
+add_library(i_character_reader INTERFACE)
+
+target_include_directories(i_character_reader INTERFACE include)
