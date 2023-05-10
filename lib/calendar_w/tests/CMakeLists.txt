@@ -1,0 +1,9 @@
+add_executable(calendar_w_tests src/calendar_w_tests.cpp)
+
+target_link_libraries(calendar_w_tests PUBLIC
+                      calendar_w
+                      utils
+                      GTest::gtest_main
+                      calendula_compiler_flags)
+
+add_test(calendar_w_tests calendar_w_tests)

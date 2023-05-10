@@ -18,21 +18,25 @@ endif(BUILD_TESTS)
 
 add_library(calendula_compiler_flags INTERFACE)
 
-target_compile_features(calendula_compiler_flags INTERFACE
-                        cxx_std_17)
+target_compile_features(
+  calendula_compiler_flags 
+  INTERFACE
+  cxx_std_17
+)
 
 target_compile_options(calendula_compiler_flags INTERFACE
   "$<BUILD_INTERFACE:-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused>"
 )
 
-add_subdirectory(lib)
-
 add_executable(Calendula.wt src/main.cpp)
+
+add_subdirectory(lib)
 
 target_link_libraries(Calendula.wt PUBLIC
                       ${WT_CONNECTOR} wt
-                      NavbarW
-                      MainP
+                      navbar_w
+                      main_p
                       calendula_compiler_flags)
+
 
 

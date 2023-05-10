@@ -30,8 +30,8 @@
 #include <variant>
 #include <vector>
 
-#include "MainP.hpp"
-#include "NavbarW.hpp"
+#include "main_p.hpp"
+#include "navbar_w.hpp"
 
 using std::cout, std::endl;
 
