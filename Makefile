@@ -26,7 +26,7 @@ build: # Use a generated recipe to build artifacts.
 
 .PHONY: test
 test: # Run all Google tests.
-	ctest --test-dir build/
+	ctest --test-dir build/ --output-on-failure
 
 # TODO: coverage, lint
 
