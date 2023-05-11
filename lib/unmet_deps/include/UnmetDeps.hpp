@@ -1,4 +1,5 @@
 #pragma once
 
-class Session;
+class Session {};
+class NavbarW {};
 

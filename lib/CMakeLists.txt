@@ -1,6 +1,8 @@
 add_subdirectory(application)
 add_subdirectory(unmet_deps)
 add_subdirectory(search_page)
+add_subdirectory(swapable)
+add_subdirectory(connections_mediator)
 
 add_subdirectory(calendar)
 add_subdirectory(event)
@@ -19,4 +21,6 @@ add_subdirectory(profile_manager)
 add_subdirectory(tag_manager)
 add_subdirectory(event_manager)
 add_subdirectory(comment_manager)
+
+add_subdirectory(page_widget)
 

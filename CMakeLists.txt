@@ -36,7 +36,7 @@ target_link_libraries(
     wthttp
     wt
 
-    calendar
+    application
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC /usr/local/inlcude/Wt)
