@@ -1,3 +1,5 @@
 #pragma once
 
-enum Range { day = 2, week = 1, month = 0 };
+enum Range { MONTH = 0, WEEK, DAY };
+
+enum NodeType { PRIVATE = 0, PUBLIC, SUBSCRIBTIONS, DIRECTORY, CALENDAR };

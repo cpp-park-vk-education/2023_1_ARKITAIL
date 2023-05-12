@@ -3,14 +3,13 @@
 #include <Wt/WInPlaceEdit.h>
 
 #include "options_w.hpp"
-#include "tree_node_w.hpp"
+#include "tree_node_leave_w.hpp"
 
-class TreeNodeGroupW : public TreeNodeW {
+class TreeNodeGroupW : public TreeNodeLeaveW {
   public:
-    TreeNodeGroupW();
+    TreeNodeGroupW(std::string label);
     ~TreeNodeGroupW() = default;
 
   private:
     Wt::WInPlaceEdit* label_;
-    OptionsW* options_;
 };

@@ -32,6 +32,7 @@
 
 #include "main_p.hpp"
 #include "navbar_w.hpp"
+#include "other_p.hpp"
 
 using std::cout, std::endl;
 
@@ -51,16 +52,15 @@ class CalendulaApplication : public Wt::WApplication {
 CalendulaApplication::CalendulaApplication(const Wt::WEnvironment &env) : WApplication(env) {
     setTitle("Calendula");
     setTheme(std::make_unique<Wt::WBootstrap5Theme>());
-    useStyleSheet("/style/style.css");
+    useStyleSheet("/static/style.css");
     // setTheme(std::make_unique<Wt::WCssTheme>("polished"));
     // setInternalPath("/Calendula", true);
 
     auto container = root()->addWidget(std::make_unique<Wt::WContainerWidget>());
     layout = container->setLayout(std::make_unique<Wt::WBorderLayout>());
-
     navigation = layout->addWidget(std::make_unique<NavbarW>(), Wt::LayoutPosition::North);
     navigation->addCalendar(std::make_unique<MainP>());
-    navigation->addProfile(std::make_unique<Wt::WText>("Профиль"));
+    navigation->addProfile(std::make_unique<OtherP>());
     navigation->addSearch(std::make_unique<Wt::WText>("Поиск"));
 
     auto item = std::make_unique<Wt::WText>("Footer");

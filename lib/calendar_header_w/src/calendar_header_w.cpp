@@ -23,7 +23,7 @@ CalendarHeaderW::CalendarHeaderW() {
 
     container_option_range_ = addNew<Wt::WContainerWidget>();
 
-    container_option_range_->addStyleClass("d-flex ms-3 row");
+    container_option_range_->addStyleClass("d-flex row");
     option_range_ = container_option_range_->addNew<Wt::WComboBox>();
     option_range_->addItem("Месяц");
     option_range_->addItem("Неделя");
@@ -38,7 +38,7 @@ CalendarHeaderW::CalendarHeaderW() {
 }
 
 Wt::WString CalendarHeaderW::makeTitle() {
-    if (range_ == day) {
+    if (range_ == DAY) {
         return selected_date_->toString("dd MMMM");
     }
     return selected_date_->toString("MMMM yyyy");
@@ -68,13 +68,13 @@ void CalendarHeaderW::switchToToday() {
 
 void CalendarHeaderW::switchToPrev() {
     switch (range_) {
-        case day:
+        case DAY:
             selected_date_ = std::make_unique<Wt::WDate>(selected_date_->addDays(-1));
             break;
-        case week:
+        case WEEK:
             selected_date_ = std::make_unique<Wt::WDate>(selected_date_->addDays(-7));
             break;
-        case month:
+        case MONTH:
             selected_date_ = std::make_unique<Wt::WDate>(selected_date_->addMonths(-1));
             break;
     }
@@ -84,13 +84,13 @@ void CalendarHeaderW::switchToPrev() {
 
 void CalendarHeaderW::switchToNext() {
     switch (range_) {
-        case day:
+        case DAY:
             selected_date_ = std::make_unique<Wt::WDate>(selected_date_->addDays(1));
             break;
-        case week:
+        case WEEK:
             selected_date_ = std::make_unique<Wt::WDate>(selected_date_->addDays(7));
             break;
-        case month:
+        case MONTH:
             selected_date_ = std::make_unique<Wt::WDate>(selected_date_->addMonths(1));
             break;
     }

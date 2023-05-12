@@ -2,6 +2,7 @@
 
 #include <Wt/WContainerWidget.h>
 #include <Wt/WPopupMenu.h>
+#include <Wt/WPushButton.h>
 
 class OptionsW : public Wt::WContainerWidget {
   public:
@@ -9,5 +10,6 @@ class OptionsW : public Wt::WContainerWidget {
     ~OptionsW() = default;
 
   protected:
-    Wt::WPopupMenu* options_button_;
+    Wt::WPopupMenu* popup_;
+    Wt::WPushButton* options_button_;
 };

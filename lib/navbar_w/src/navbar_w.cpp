@@ -42,7 +42,6 @@ void NavbarW::addStyle() {
     navigation->addStyleClass("navbar navbar-light bg-light navbar-expand-lg");
     contents_stack->addStyleClass("contents");
     left_menu_->addStyleClass("me-auto");
-    exit->addStyleClass("ms-2");
 }
 
 void NavbarW::logout() {

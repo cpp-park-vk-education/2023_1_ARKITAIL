@@ -11,10 +11,9 @@
 #include <memory>
 #include <vector>
 
-WeekW::WeekW() { std::cout << "\n\nweekMake\n" << std::endl; }
+WeekW::WeekW() {}
 
 void WeekW::updateCalendar(Wt::WDate selected_date_) {
-    std::cout << "\n\nweekUpdate\n" << std::endl;
     auto selected_date =
         std::make_unique<Wt::WDate>(selected_date_.year(), selected_date_.month(), selected_date_.day());
     table_->clear();

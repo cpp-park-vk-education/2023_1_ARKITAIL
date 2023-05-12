@@ -52,6 +52,6 @@ debug: # Run application
 		--docroot . \
 		--http-address 0.0.0.0 \
 		--http-port 8080 \
-		--resources-dir='../resources, ../style'
+		--resources-dir='../resources, ../static'
 
 # TODO: prod

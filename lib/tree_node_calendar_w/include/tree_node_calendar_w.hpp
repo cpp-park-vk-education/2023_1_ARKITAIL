@@ -3,14 +3,14 @@
 #include <Wt/WText.h>
 
 #include "options_w.hpp"
-#include "tree_node_w.hpp"
+#include "tree_node_leave_w.hpp"
 
-class TreeNodeCalendarW : public TreeNodeW {
+class TreeNodeCalendarW : public TreeNodeLeaveW {
   public:
     TreeNodeCalendarW(int id, std::string label);
     ~TreeNodeCalendarW() = default;
 
   private:
     Wt::WText* label_;
-    OptionW* options_;
+    OptionsW* options_;
 };

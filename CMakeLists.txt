@@ -36,6 +36,7 @@ target_link_libraries(Calendula.wt PUBLIC
                       ${WT_CONNECTOR} wt
                       navbar_w
                       main_p
+                      other_p
                       calendula_compiler_flags)
 
 

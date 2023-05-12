@@ -9,6 +9,8 @@
 #include <memory>
 #include <string>
 
+#include "event_d.hpp"
+
 class EventW {
   public:
     EventW(int id, const std::string &title, Wt::WColor color, Wt::WDateTime begin, Wt::WDateTime end)
@@ -25,6 +27,5 @@ class EventW {
     Wt::WDateTime begin_;
     Wt::WDateTime end_;
 
-    std::unique_ptr<Wt::WContainerWidget> makeEventPartWidget(std::string style_class);
-    void openDialog();
+    void makeEventPartWidget(std::string style_class, Wt::WTableCell *event_cell);
 };

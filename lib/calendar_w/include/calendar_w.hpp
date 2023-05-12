@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Wt/WContainerWidget.h>
+#include <Wt/WPushButton.h>
 
 #include <vector>
 
@@ -27,6 +28,8 @@ class CalendarW : public Wt::WContainerWidget {
     InterfaceCalendarHeaderW* header_;
     Range range_;
     std::vector<InterfaceCalendarBodyW*> calendars_;
+    Wt::WPushButton* show_tree_button_;
 
     void setCalendarRange(Range range);
+    void showTree();
 };
