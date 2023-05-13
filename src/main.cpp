@@ -1,3 +1,7 @@
+/*
+ * Оставлю мейн, чтобы перенести что нужно туда, где это нужно
+ *
+ *
 #include <Wt/WApplication.h>
 #include <Wt/WBootstrap5Theme.h>
 #include <Wt/WBorderLayout.h>
@@ -36,13 +40,10 @@
 
 using std::cout, std::endl;
 
-// ------------------
-
-// ----------------------
 class CalendulaApplication : public Wt::WApplication {
   public:
     CalendulaApplication(const Wt::WEnvironment &env);
-    ~CalendulaApplication() { std::cout << "Calendula dead" << std::endl; }
+    ~CalendulaApplication() { std::cout << "Calendula dead" << std::endl; }  // У нас Family Friendly приложение, поэтому "dead" поправить на "done" ;)
 
   private:
     Wt::WBorderLayout *layout;
@@ -77,4 +78,22 @@ CalendulaApplication::CalendulaApplication(const Wt::WEnvironment &env) : WAppli
 int main(int argc, char **argv) {
     return Wt::WRun(argc, argv,
                     [](const Wt::WEnvironment &env) { return std::make_unique<CalendulaApplication>(env); });
+*/
+#include <iostream>
+
+#include <Wt/WLogger.h>
+#include <Wt/WApplication.h>
+#include <Wt/Signals/signals.hpp>
+#include <Wt/WContainerWidget.h>
+#include <Wt/WEnvironment.h>
+#include <Wt/WSignal.h>
+
+#include "Application.hpp"
+
+int main(int argc, char** argv, char** envp) {
+    Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
+        return std::make_unique<Application>(env);
+    });
+
+    return 0;
 }
