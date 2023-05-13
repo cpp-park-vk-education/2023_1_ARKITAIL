@@ -1,10 +1,12 @@
 #pragma once
 
-#include <vector>
+#include <string>
+#include <unordered_map>
 #include <Wt/WEnvironment.h>
 
 #include <Wt/WApplication.h>
 
+#include "PageWidget.hpp"
 #include "Swapable.hpp" 
 #include "UnmetDeps.hpp"
 
@@ -15,9 +17,12 @@ public:
     void route(const std::string& internalPath);
     
 private:
-    Session session;
-    std::vector<Swapable> pages_;
-    Swapable cur_page_;
+    Session session_;
+
+    std::unordered_map<std::string, Swapable> pages_;
+    Swapable cur_swap_;
+    PageWidget* cur_page_;
+
     NavbarW* navbar_;
 
 };

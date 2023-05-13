@@ -1,3 +1,5 @@
+#include <Wt/WWidget.h>
+#include <algorithm>
 #include <memory>
 
 #include "Swapable.hpp"
@@ -23,5 +25,13 @@ void Swapable::set_destination(Swapable* destination) {
 
 void Swapable::build_destination() {
 	destination_->destination_ = this;
+}
+
+void Swapable::set_content(std::unique_ptr<PageWidget> content) {
+	content_.swap(content);
+}
+
+std::unique_ptr<PageWidget> Swapable::get_content() {
+	return std::move(content_);
 }
 
