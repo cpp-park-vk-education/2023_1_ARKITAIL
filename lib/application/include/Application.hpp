@@ -19,8 +19,8 @@ public:
 private:
     Session session_;
 
-    std::unordered_map<std::string, Swapable> pages_;
-    Swapable cur_swap_;
+    std::unordered_map<std::string, Swapable<PageWidget>> pages_;
+    Swapable<PageWidget> cur_swap_;
     PageWidget* cur_page_;
 
     NavbarW* navbar_;
