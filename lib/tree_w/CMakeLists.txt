@@ -12,4 +12,4 @@ target_link_libraries(tree_w  PUBLIC
                       options_calendars_dir_w
                       options_personal_calendar_w
                       options_subscription_w
-                      options_w)
+                      utils)

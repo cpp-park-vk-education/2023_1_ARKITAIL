@@ -40,14 +40,14 @@ void TreeNodeDirW::closeNode() {
 }
 
 void TreeNodeDirW::checkNode() {
-    check_box_->setTristate(true);
+    check_box_->setChecked(true);
     for (auto&& child : childrenNodes()) {
         child->checkNode();
     }
 }
 
 void TreeNodeDirW::uncheckNode() {
-    check_box_->setTristate(false);
+    check_box_->setChecked(false);
     for (auto&& child : childrenNodes()) {
         child->uncheckNode();
     }

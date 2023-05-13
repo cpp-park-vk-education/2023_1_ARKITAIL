@@ -4,6 +4,8 @@
 #include <Wt/WLineEdit.h>
 #include <Wt/WPushButton.h>
 
+#include <vector>
+
 #include "tree_node_w.hpp"
 
 class TreeW : public Wt::WContainerWidget {

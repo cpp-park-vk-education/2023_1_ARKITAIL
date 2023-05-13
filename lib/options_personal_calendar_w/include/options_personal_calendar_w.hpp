@@ -1,11 +1,10 @@
 #pragma once
 #include <Wt/WMenuItem.h>
+#include <Wt/WPopupMenu.h>
 
 #include <memory>
 
-#include "options_w.hpp"
-
-class OptionsPersonalCalendarW : public OptionsW {
+class OptionsPersonalCalendarW : public Wt::WPopupMenu {
   public:
     OptionsPersonalCalendarW();
     ~OptionsPersonalCalendarW() = default;

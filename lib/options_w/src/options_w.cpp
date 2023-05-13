@@ -1,8 +1,13 @@
 #include "options_w.hpp"
 
+#include <Wt/WPopupMenu.h>
+
 OptionsW::OptionsW() {
-    addStyleClass("inline-block");
-    options_button_ = addWidget(std::make_unique<Wt::WPushButton>("•••"));
-    options_button_->addStyleClass("p-1 py-0 inline-block border-0 btn-light");
-    popup_ = addWidget(std::make_unique<Wt::WPopupMenu>());
+    // addStyleClass("inline-block");
+    // popup_ = addWidget(std::make_unique<Wt::WPopupMenu>());
 }
+
+// void OptionsW::show(Wt::WWidget* button) {
+//     std::cout << "odododo" << std::endl;
+//     popup_->exec(button);
+// }

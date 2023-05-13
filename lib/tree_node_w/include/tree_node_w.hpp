@@ -3,13 +3,11 @@
 #include <Wt/WContainerWidget.h>
 #include <Wt/WHBoxLayout.h>
 
-#include "options_w.hpp"
-
 class TreeNodeW : public Wt::WContainerWidget {
   public:
     TreeNodeW();
     virtual ~TreeNodeW() = default;
-    TreeNodeW* addOptions(std::unique_ptr<OptionsW> options);
+    TreeNodeW* addOptions(std::unique_ptr<Wt::WPopupMenu> options);
     void removeNode();
     TreeNodeW* endNode();
     virtual TreeNodeW* addChildNode(std::unique_ptr<TreeNodeW> child) {}
@@ -20,7 +18,7 @@ class TreeNodeW : public Wt::WContainerWidget {
     virtual void closeNode() = 0;
 
   protected:
+    Wt::WPushButton* options_button_;
     Wt::WHBoxLayout* node_block_;
-    OptionsW* options_;
     Wt::WCheckBox* check_box_;
 };

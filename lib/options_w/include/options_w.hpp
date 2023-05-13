@@ -4,12 +4,13 @@
 #include <Wt/WPopupMenu.h>
 #include <Wt/WPushButton.h>
 
-class OptionsW : public Wt::WContainerWidget {
+class OptionsW : public Wt::WPopupMenu {
   public:
     OptionsW();
     ~OptionsW() = default;
 
-  protected:
-    Wt::WPopupMenu* popup_;
-    Wt::WPushButton* options_button_;
+    //   void show(Wt::WWidget* button);
+
+    // protected:
+    //   Wt::WPopupMenu* popup_;
 };

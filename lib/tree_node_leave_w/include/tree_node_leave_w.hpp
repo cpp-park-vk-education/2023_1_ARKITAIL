@@ -5,7 +5,6 @@
 
 #include <memory>
 
-#include "options_w.hpp"
 #include "tree_node_w.hpp"
 
 class TreeNodeLeaveW : public TreeNodeW {

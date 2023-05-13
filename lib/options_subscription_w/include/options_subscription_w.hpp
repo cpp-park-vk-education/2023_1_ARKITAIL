@@ -1,10 +1,9 @@
 #pragma once
 
 #include <Wt/WMenuItem.h>
+#include <Wt/WPopupMenu.h>
 
-#include "options_w.hpp"
-
-class OptionsSubscriptionW : public OptionsW {
+class OptionsSubscriptionW : public Wt::WPopupMenu {
   public:
     OptionsSubscriptionW();
     ~OptionsSubscriptionW() = default;

@@ -4,5 +4,4 @@ target_include_directories(tree_node_group_w  PUBLIC include)
 
 target_link_libraries(tree_node_group_w  PUBLIC
                       tree_node_leave_w
-                      options_w
                       calendula_compiler_flags)

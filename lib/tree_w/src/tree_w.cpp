@@ -11,11 +11,11 @@
 #include "options_calendars_dir_w.hpp"
 #include "options_personal_calendar_w.hpp"
 #include "options_subscription_w.hpp"
-#include "options_w.hpp"
 #include "tree_node_calendar_w.hpp"
 #include "tree_node_calendars_dir_w.hpp"
 #include "tree_node_dir_w.hpp"
 #include "tree_node_group_w.hpp"
+#include "utils.hpp"
 
 TreeW::TreeW() {
     animateHide(Wt::WAnimation(Wt::AnimationEffect::SlideInFromLeft));
@@ -33,6 +33,10 @@ TreeW::TreeW() {
     remember_combination_button_->setEnabled(false);
     remember_combination_button_->setWidth(Wt::WLength(120));
 
+    // options_.push_back(addWidget(std::make_unique<OptionsCalendarsDirW>()));
+    // options_.push_back(addWidget(std::make_unique<OptionsPersonalCalendarW>()));
+    // options_.push_back(addWidget(std::make_unique<OptionsSubscriptionW>()));
+
     search_line_->enterPressed().connect(this, &TreeW::search);
     remember_combination_button_->clicked().connect(this, &TreeW::rememberCombination);
 }
@@ -46,14 +50,14 @@ void TreeW::setRoot() {
     root_ = addWidget(std::make_unique<TreeNodeDirW>("Календари"))->endNode();
     root_->hideCheckBox();
     auto group = root_->addChildNode(std::make_unique<TreeNodeDirW>("Группировки"))->endNode();
-    group->addChildNode(std::make_unique<TreeNodeGroupW>("Тупики"))
-        ->addOptions(std::make_unique<OptionsPersonalCalendarW>())
+    group->addChildNode(std::make_unique<TreeNodeGroupW>("ГруппаТупики"))
+        ->addOptions(std::make_unique<Wt::WPopupMenu>())
         ->endNode();
     auto priv = root_->addChildNode(std::make_unique<TreeNodeDirW>("Приватные"))->endNode();
     auto priv1 = priv->addChildNode(std::make_unique<TreeNodeDirW>("Папка1"))
-                     ->addOptions(std::make_unique<OptionsPersonalCalendarW>())
+                     ->addOptions(std::make_unique<OptionsCalendarsDirW>())
                      ->endNode();
-    priv->addChildNode(std::make_unique<TreeNodeGroupW>("Rfktylfhm"))
+    priv->addChildNode(std::make_unique<TreeNodeGroupW>("Группа1"))
         ->addOptions(std::make_unique<OptionsPersonalCalendarW>())
         ->endNode();
 

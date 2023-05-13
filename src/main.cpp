@@ -52,12 +52,13 @@ class CalendulaApplication : public Wt::WApplication {
 CalendulaApplication::CalendulaApplication(const Wt::WEnvironment &env) : WApplication(env) {
     setTitle("Calendula");
     setTheme(std::make_unique<Wt::WBootstrap5Theme>());
-    useStyleSheet("/static/style.css");
+    useStyleSheet("/style/style.css");
     // setTheme(std::make_unique<Wt::WCssTheme>("polished"));
     // setInternalPath("/Calendula", true);
 
     auto container = root()->addWidget(std::make_unique<Wt::WContainerWidget>());
     layout = container->setLayout(std::make_unique<Wt::WBorderLayout>());
+
     navigation = layout->addWidget(std::make_unique<NavbarW>(), Wt::LayoutPosition::North);
     navigation->addCalendar(std::make_unique<MainP>());
     navigation->addProfile(std::make_unique<OtherP>());

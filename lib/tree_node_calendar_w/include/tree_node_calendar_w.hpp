@@ -2,7 +2,6 @@
 
 #include <Wt/WText.h>
 
-#include "options_w.hpp"
 #include "tree_node_leave_w.hpp"
 
 class TreeNodeCalendarW : public TreeNodeLeaveW {
@@ -12,5 +11,4 @@ class TreeNodeCalendarW : public TreeNodeLeaveW {
 
   private:
     Wt::WText* label_;
-    OptionsW* options_;
 };

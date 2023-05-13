@@ -2,7 +2,6 @@
 
 #include <Wt/WInPlaceEdit.h>
 
-#include "options_w.hpp"
 #include "tree_node_leave_w.hpp"
 
 class TreeNodeGroupW : public TreeNodeLeaveW {
