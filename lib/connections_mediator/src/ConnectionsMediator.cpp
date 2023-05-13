@@ -1,11 +1,14 @@
 #include "ConnectionsMediator.hpp"
 
-ConnectionsMediator::ConnectionsMediator() {}
+ConnectionsMediator::ConnectionsMediator() :
+	cp() {}
 
 ConnectionsMediator& ConnectionsMediator::instance() {
 	static ConnectionsMediator cm;
 	return cm;
 }
 
-void ConnectionsMediator::connect() {}
+void ConnectionsMediator::connect() {
+	cp.connect();
+}
 

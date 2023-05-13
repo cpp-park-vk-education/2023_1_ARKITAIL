@@ -26,7 +26,7 @@ Application::Application(const Wt::WEnvironment& env) :
 
 	// Connections mediator connections establishing
 	ConnectionsMediator::instance().connect();
-	
+	cur_page_->trigger();
 }
 
 void Application::route(const std::string& internalPath) {
