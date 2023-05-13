@@ -4,6 +4,13 @@
 
 #include "character_reader.hpp"
 
+enum class Tag;
+
+struct Lexem;
+
+class ILexer;
+class iCalendarLexer;
+
 enum class Tag {
   kBof,
 
@@ -25,6 +32,10 @@ struct Lexem {
   
   bool operator==(const Lexem& other) const {
     return tag == other.tag && image == other.image;
+  }
+
+  bool operator!=(const Lexem& other) const {
+    return tag != other.tag || image != other.image;
   }
 };
 
