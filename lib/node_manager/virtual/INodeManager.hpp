@@ -12,8 +12,7 @@ public:
 	virtual void remove(size_t node_id) = 0;
 
 	virtual void move(size_t node_id, size_t destination_id) = 0;
-	virtual void subscribe(size_t node_id, size_t user_id) = 0;
-	virtual std::vector<const Node&> getChilds(size_t node_id) = 0;
+	virtual void subscribe(size_t node_id) = 0;
 
 };
 

@@ -3,12 +3,17 @@
 #include <cstddef>
 
 enum NodeType {
-    PRIVATE,
-    PUBLIC,
-    SUBSCTIPTION,
-    DIRECTORY,
-    CALENDAR,
-    MOUNT
+    ROOT                = 1 << 1,
+    PRIVATE_GROUP       = 1 << 2,
+    PRIVATE_DIRECTORY   = 1 << 3,
+    PRIVATE_CALENDAR    = 1 << 4,
+    PUBLIC_GROUP        = 1 << 5,
+    PUBLIC_DIRECTORY    = 1 << 6,
+    PUBLIC_CALENDAR     = 1 << 7,
+    SUBSCRIPTIONS_GROUP = 1 << 8,
+    MOUNT               = 1 << 9,
+    PROFILE_GROUP       = 1 << 10,
+    PROFILE             = 1 << 11
 };
 
 class Node {

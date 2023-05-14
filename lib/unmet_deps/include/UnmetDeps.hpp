@@ -2,6 +2,9 @@
 
 #include <vector>
 
+#include "User.hpp"
+#include "Calendar.hpp"
+#include "Event.hpp"
 #include "Node.hpp"
 #include "Directory.hpp"
 
@@ -10,13 +13,23 @@ class NavbarW {};
 
 class DBConnection {};
 
-class UserDbManager {};
+class IUserDbManager {
+public:
+	virtual const User& get() = 0;
+	
+};
+
+class UserDbManager : public IUserDbManager {
+public:
+	const User& get();
+
+};
 
 class IDirectoryDbManager {
 public:
 	virtual const Directory& get(size_t) = 0;
 	virtual size_t add(const Directory&) = 0;
-	virtual size_t update(const Directory&) = 0;
+	virtual void update(const Directory&) = 0;
 	virtual void remove(size_t) = 0;
 
 	virtual std::vector<Directory> getChildren() = 0;
@@ -25,18 +38,38 @@ public:
 
 class DirectoryDbManager : public IDirectoryDbManager {
 public:
-	const Directory& get(size_t directory_id) override;
-	size_t add(const Directory& directory) override;
-	size_t update(const Directory& directory) override;
-	void remove(size_t directory_id) override;
+	const Directory& get(size_t) override;
+	size_t add(const Directory&) override;
+	void update(const Directory&) override;
+	void remove(size_t) override;
 	
-	std::vector<Directory> getChildren(size_t directory_id);
+	std::vector<Directory> getChildren(size_t);
 
 };
 
 class EventDbManager {};
 
-class CalendarDbManager {};
+class ICalendarDbManager {
+public:
+	virtual const Calendar& get(size_t) = 0;
+	virtual size_t add(const Calendar&) = 0;
+	virtual void update(const Calendar&) = 0;
+	virtual void remove(size_t) = 0;
+
+	virtual std::vector<Event> getEvents(size_t) = 0;
+
+};
+
+class CalendarDbManager : public ICalendarDbManager {
+public:
+	const Calendar& get(size_t) override;
+	size_t add(const Calendar&) override;
+	void update(const Calendar&) override;
+	void remove(size_t) override;
+
+	std::vector<Event> getEvents(size_t) override;
+
+};
 
 class TagDbManager {};
 
@@ -44,7 +77,7 @@ class INodeDbManager {
 public:
 	virtual const Node& get(size_t) = 0;
 	virtual size_t add(const Node&) = 0;
-	virtual size_t update(const Node&) = 0;
+	virtual void update(const Node&) = 0;
 	virtual void remove(size_t) = 0;
 
 	virtual std::vector<Node> getChildren(size_t) = 0;
@@ -53,12 +86,12 @@ public:
 
 class NodeDbManager : public INodeDbManager {
 public:
-	const Node& get(size_t node_id) override;
-	size_t add(const Node& node) override;
-	size_t update(const Node& node) override;
-	void remove(size_t node_id) override;
+	const Node& get(size_t) override;
+	size_t add(const Node&) override;
+	void update(const Node&) override;
+	void remove(size_t) override;
 
-	std::vector<Node> getChildren(size_t node_id) override;
+	std::vector<Node> getChildren(size_t) override;
 
 };
 

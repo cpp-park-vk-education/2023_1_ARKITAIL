@@ -21,6 +21,7 @@ add_subdirectory(profile_manager)
 add_subdirectory(tag_manager)
 add_subdirectory(event_manager)
 add_subdirectory(comment_manager)
+add_subdirectory(node_manager)
 
 add_subdirectory(page_widget)
 
