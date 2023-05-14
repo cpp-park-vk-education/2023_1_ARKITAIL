@@ -20,6 +20,14 @@ class CompositeValue;
 class IParser;
 class iCalendarParser;
 
+using StreamUptr = std::unique_ptr<StreamNode>;
+using ComponentUptr = std::unique_ptr<ComponentNode>;
+using PropertyUptr = std::unique_ptr<PropertyNode>;
+using ParameterUptr = std::unique_ptr<ParameterNode>;
+
+using IValueUptr = std::unique_ptr<IValue>;
+using PairValueUptr = std::unique_ptr<PairValue>;
+
 class INode {
  public:
   virtual ~INode() = default;
@@ -27,76 +35,69 @@ class INode {
 
 class StreamNode : public INode {
  public:
-  using Components = std::vector<std::unique_ptr<ComponentNode>>;
-
-  StreamNode(Components&& components)
+  StreamNode(std::vector<ComponentUptr>&& components)
     : components_(std::move(components)) {
   }
 
-  const Components& components() const {
+  std::vector<ComponentUptr>& components() {
     return components_;
   }
  private:
-   Components components_;
+   std::vector<ComponentUptr> components_;
 };
 
 class ComponentNode : public INode {
  public:
-  using Components = std::vector<std::unique_ptr<ComponentNode>>;
-  using Properties = std::vector<std::unique_ptr<PropertyNode>>;
-
   ComponentNode(std::string&& name,
-                Properties&& properties,
-                Components&& components)
+                std::vector<PropertyUptr>&& properties,
+                std::vector<ComponentUptr>&& components)
     : name_(std::move(name)),
       properties_(std::move(properties)),
       components_(std::move(components)) {
   }
 
-  const std::string& name() const {
+  std::string& name() {
     return name_;
   }
 
-  const Properties& properties() const {
+  std::vector<PropertyUptr>& properties() {
     return properties_;
   }
 
-  const Components& components() const {
+  std::vector<ComponentUptr>& components() {
     return components_;
   }
  private:
   std::string name_;
-  Properties properties_;
-  Components components_;
+  std::vector<PropertyUptr> properties_;
+  std::vector<ComponentUptr> components_;
 };
 
 class PropertyNode : public INode {
  public:
-  using Parameters = std::vector<std::unique_ptr<ParameterNode>>;
-
   PropertyNode(std::string&& name,
-               Parameters&& parameters,
+               std::vector<ParameterUptr>&& parameters,
                std::unique_ptr<IValue>&& value)
     : name_(std::move(name)),
       parameters_(std::move(parameters)),
       value_(std::move(value)) {
   }
 
-  const std::string& name() const {
+  std::string& name() {
     return name_;
   }
 
-  const Parameters& parameters() const {
+  std::vector<ParameterUptr>& parameters() {
     return parameters_;
   }
 
-  const std::unique_ptr<IValue>& value() const {
+  IValueUptr& value() {
     return value_;
   }
  private:
   std::string name_;
-  Parameters parameters_;
-  std::unique_ptr<IValue> value_;
+  std::vector<ParameterUptr> parameters_;
+  IValueUptr value_;
 };
 
 class ParameterNode : public INode {
@@ -105,11 +106,11 @@ class ParameterNode : public INode {
     : pair_value_(std::move(pair_value)) {
   }
 
-  const std::unique_ptr<PairValue>& pair_value() const {
+  PairValueUptr& pair_value() {
     return pair_value_;
   }
  private:
-  std::unique_ptr<PairValue> pair_value_;
+  PairValueUptr pair_value_;
 };
 
 class IValue {
@@ -123,7 +124,7 @@ class TextValue : public IValue {
     : text_(std::move(text)) {
   }
 
-  const std::string& text() const {
+  std::string& text() {
     return text_;
   }
  private:
@@ -138,7 +139,7 @@ class PairValue : public TextValue {
       name_(std::move(name)) {
   }
 
-  const std::string& name() const {
+  std::string& name() {
     return name_;
   }
  private:
@@ -147,40 +148,38 @@ class PairValue : public TextValue {
 
 class CompositeValue : public IValue {
  public:
-  using Values = std::vector<std::unique_ptr<IValue>>;
-
-  CompositeValue(Values&& values)
+  CompositeValue(std::vector<IValueUptr>&& values)
     : values_(std::move(values)) {
   }
 
-  const Values& values() const {
+  std::vector<IValueUptr>& values() {
     return values_;
   }
  private:
-  Values values_;
+  std::vector<IValueUptr> values_;
 };
 
 class IParser {
  public:
   // возвращает корень абстрактного синтаксического дерева
-  virtual std::unique_ptr<INode> Parse() = 0;
+  virtual std::unique_ptr<StreamNode> Parse() = 0;
   
   virtual ~IParser() = default;
 };
 
 class iCalendarParser : public IParser {
  public:
-  std::unique_ptr<INode> Parse() override;
+  std::unique_ptr<StreamNode> Parse() override;
 
   void set_lexer(ILexer& lexer);
  private:
-  std::unique_ptr<StreamNode> ParseStream();
-  std::unique_ptr<ComponentNode> ParseComponent();
-  std::unique_ptr<PropertyNode> ParseProperty();
-  std::unique_ptr<ParameterNode> ParseParameter();
+  StreamUptr ParseStream();
+  ComponentUptr ParseComponent();
+  PropertyUptr ParseProperty();
+  ParameterUptr ParseParameter();
 
-  std::unique_ptr<IValue> ParseValue();
-  std::unique_ptr<PairValue> ParsePairValue();
+  IValueUptr ParseValue();
+  PairValueUptr ParsePairValue();
 
   bool IsName(const std::string& name) const;
 

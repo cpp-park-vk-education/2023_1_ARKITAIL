@@ -30,7 +30,7 @@ name           = *( ALPHA / DIGIT / "-" )
 text           = любые символы, за исключением ";", "=" и "\r"
 */
 
-std::unique_ptr<INode> iCalendarParser::Parse() {
+StreamUptr iCalendarParser::Parse() {
   return ParseStream();
 }
 
@@ -39,8 +39,8 @@ void iCalendarParser::set_lexer(ILexer &lexer) {
 }
 
 // stream = *component
-std::unique_ptr<StreamNode> iCalendarParser::ParseStream() {
-  std::vector<std::unique_ptr<ComponentNode>> components;
+StreamUptr iCalendarParser::ParseStream() {
+  std::vector<ComponentUptr> components;
 
   // *component
   while (lexer_->Peek().tag != Tag::kEof) {
@@ -54,10 +54,10 @@ std::unique_ptr<StreamNode> iCalendarParser::ParseStream() {
 //             *property
 //             *component
 //             "END" ":" name "\r" "\n"
-std::unique_ptr<ComponentNode> iCalendarParser::ParseComponent() {
+ComponentUptr iCalendarParser::ParseComponent() {
   std::string name = "";
-  std::vector<std::unique_ptr<PropertyNode>> properties;
-  std::vector<std::unique_ptr<ComponentNode>> components;
+  std::vector<PropertyUptr> properties;
+  std::vector<ComponentUptr> components;
 
   // "BEGIN"
   if (lexer_->Peek() != kBegin) {
@@ -139,10 +139,10 @@ std::unique_ptr<ComponentNode> iCalendarParser::ParseComponent() {
 }
 
 // property = name *parameter ":" value "\r" "\n"
-std::unique_ptr<PropertyNode> iCalendarParser::ParseProperty() {
+PropertyUptr iCalendarParser::ParseProperty() {
   std::string name = "";
-  std::vector<std::unique_ptr<ParameterNode>> parameters;
-  std::unique_ptr<IValue> value = nullptr;
+  std::vector<ParameterUptr> parameters;
+  IValueUptr value = nullptr;
 
   // name
   if (lexer_->Peek().tag != Tag::kIdentifier
@@ -180,8 +180,8 @@ std::unique_ptr<PropertyNode> iCalendarParser::ParseProperty() {
 }
 
 // parameter = ";" pair-value
-std::unique_ptr<ParameterNode> iCalendarParser::ParseParameter() {
-  std::unique_ptr<PairValue> pair_value = nullptr;
+ParameterUptr iCalendarParser::ParseParameter() {
+  PairValueUptr pair_value = nullptr;
 
   // ";"
   if (lexer_->Peek() != kSemicolon) {
@@ -196,7 +196,7 @@ std::unique_ptr<ParameterNode> iCalendarParser::ParseParameter() {
 }
 
 // value = text / ( pair-value *( ";" pair-value ) )
-std::unique_ptr<IValue> iCalendarParser::ParseValue() {
+IValueUptr iCalendarParser::ParseValue() {
   if (lexer_->Peek(1) != kEqual) {
     // text
     if (lexer_->Peek().tag != Tag::kIdentifier) {
@@ -205,7 +205,7 @@ std::unique_ptr<IValue> iCalendarParser::ParseValue() {
 
     return std::make_unique<TextValue>(std::move(lexer_->Get().image));
   } else {
-    std::vector<std::unique_ptr<IValue>> values;
+    std::vector<IValueUptr> values;
 
     // ( pair-value *( ";" pair-value ) )
     do {
@@ -217,7 +217,7 @@ std::unique_ptr<IValue> iCalendarParser::ParseValue() {
 }
 
 // pair-value = name "=" text
-std::unique_ptr<PairValue> iCalendarParser::ParsePairValue() {
+PairValueUptr iCalendarParser::ParsePairValue() {
   std::string name = "";
   std::string text = "";
 
@@ -234,7 +234,7 @@ std::unique_ptr<PairValue> iCalendarParser::ParsePairValue() {
   }
   lexer_->Get();
 
-  // value
+  // text
   if (lexer_->Peek().tag != Tag::kIdentifier) {
     return nullptr;
   }
