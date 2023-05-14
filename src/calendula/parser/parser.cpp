@@ -1,5 +1,6 @@
 #include "parser.hpp"
 
+#include <cassert>
 #include <memory>
 
 #include "lexer.hpp"
@@ -207,10 +208,16 @@ IValueUptr iCalendarParser::ParseValue() {
   } else {
     std::vector<IValueUptr> values;
 
-    // ( pair-value *( ";" pair-value ) )
-    do {
+    // pair-value
+    values.push_back(ParsePairValue());
+
+    while (lexer_->Peek() == kSemicolon) {
+      // ";"
+      lexer_->Get();
+
+      // pair-value
       values.push_back(ParsePairValue());
-    } while (lexer_->Peek() == kSemicolon);
+    }
     
     return std::make_unique<CompositeValue>(std::move(values));
   }
@@ -229,7 +236,7 @@ PairValueUptr iCalendarParser::ParsePairValue() {
   name = lexer_->Get().image;
 
   // "="
-  if (lexer_->Peek() != kColon) {
+  if (lexer_->Peek() != kEqual) {
     return nullptr;
   }
   lexer_->Get();
