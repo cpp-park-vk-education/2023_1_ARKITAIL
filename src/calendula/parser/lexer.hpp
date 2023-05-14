@@ -1,5 +1,6 @@
 #pragma once
 
+#include <deque>
 #include <string>
 
 #include "character_reader.hpp"
@@ -11,9 +12,18 @@ struct Lexem;
 class ILexer;
 class iCalendarLexer;
 
-enum class Tag {
-  kBof,
+extern const Lexem kEof;
 
+extern const Lexem kBegin;
+extern const Lexem kEnd;
+
+extern const Lexem kColon;
+extern const Lexem kSemicolon;
+extern const Lexem kEqual;
+extern const Lexem kCarriageReturn;
+extern const Lexem kLineFeed;
+
+enum class Tag {
   kDelimiter,
   kIdentifier,
 
@@ -41,26 +51,28 @@ struct Lexem {
 
 class ILexer {
  public:
-  virtual Lexem Get() = 0;
-  virtual Lexem Peek() = 0;
+  virtual Lexem Get(std::size_t k = 0) = 0;
+  virtual Lexem Peek(std::size_t k = 0) = 0;
   
   virtual ~ILexer() = default;
 };
 
 class iCalendarLexer : public ILexer {
  public:
-  iCalendarLexer() : character_reader_(nullptr), current_(Lexem(Tag::kBof)) {
+  iCalendarLexer() : character_reader_(nullptr) {
   }
 
-  Lexem Get() override;
-  Lexem Peek() override;
+  Lexem Get(std::size_t k = 0) override;
+  Lexem Peek(std::size_t k = 0) override;
 
   void set_character_reader(ICharacterReader& character_reader);
  private:
   Lexem GetInternal();
   Lexem GetIdentificator();
+
+  void PushLacking(std::size_t k);
   bool IsDelimiter(char character) const;
   
   ICharacterReader* character_reader_;
-  Lexem current_;
+  std::deque<Lexem> got_lexems_;
 };

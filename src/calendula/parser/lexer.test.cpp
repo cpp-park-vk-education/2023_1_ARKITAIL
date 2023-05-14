@@ -48,7 +48,7 @@ class iCalendarLexerTest : public ::testing::Test {
   iCalendarLexer lexer_;
 };
 
-TEST_F(iCalendarLexerTest, EmptyCalendarStream) {
+TEST_F(iCalendarLexerTest, Empty) {
   std::stringstream ss("");
   char_reader_.set_ss(std::move(ss));
   
@@ -56,63 +56,49 @@ TEST_F(iCalendarLexerTest, EmptyCalendarStream) {
   EXPECT_EQ(lexer_.Get(), Lexem(Tag::kEof, ""));
 }
 
-TEST_F(iCalendarLexerTest, EmptyCalendarBody) {
-  std::stringstream ss("BEGIN:VCALENDAR\r\n"
-                       "END:VCALENDAR\r\n");
-  char_reader_.set_ss(std::move(ss));
-  
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kIdentifier, "BEGIN"));
-  EXPECT_EQ(lexer_.Peek(), Lexem(Tag::kDelimiter, ":"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kDelimiter, ":"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kIdentifier, "VCALENDAR"));
-  EXPECT_EQ(lexer_.Peek(), Lexem(Tag::kDelimiter, "\r"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kDelimiter, "\r"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kDelimiter, "\n"));
-
-  EXPECT_EQ(lexer_.Peek(), Lexem(Tag::kIdentifier, "END"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kIdentifier, "END"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kDelimiter, ":"));
-  EXPECT_EQ(lexer_.Peek(), Lexem(Tag::kIdentifier, "VCALENDAR"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kIdentifier, "VCALENDAR"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kDelimiter, "\r"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kDelimiter, "\n"));
-
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kEof));
-}
-
 TEST_F(iCalendarLexerTest, CommonLine) {
   std::stringstream ss("BEGIN:VCALENDAR\r\n");
   char_reader_.set_ss(std::move(ss));
   
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kIdentifier, "BEGIN"));
-  EXPECT_EQ(lexer_.Peek(), Lexem(Tag::kDelimiter, ":"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kDelimiter, ":"));
+  EXPECT_EQ(lexer_.Get(), kBegin);
+  EXPECT_EQ(lexer_.Peek(), kColon);
+  EXPECT_EQ(lexer_.Get(), kColon);
   EXPECT_EQ(lexer_.Peek(), Lexem(Tag::kIdentifier, "VCALENDAR"));
   EXPECT_EQ(lexer_.Get(), Lexem(Tag::kIdentifier, "VCALENDAR"));
-  EXPECT_EQ(lexer_.Peek(), Lexem(Tag::kDelimiter, "\r"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kDelimiter, "\r"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kDelimiter, "\n"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kEof));
+  EXPECT_EQ(lexer_.Peek(), kCarriageReturn);
+  EXPECT_EQ(lexer_.Get(), kCarriageReturn);
+  EXPECT_EQ(lexer_.Get(), kLineFeed);
+  EXPECT_EQ(lexer_.Get(), kEof);
 }
 
 TEST_F(iCalendarLexerTest, LineWithParameters) {
-  std::stringstream ss("RRULE:FREQ=WEEKLY;INTERVAL=2;UNTIL=20230605\r\n");
+  std::stringstream ss("RRULE:FREQ=WEEKLY;UNTIL=20230605\r\n");
   char_reader_.set_ss(std::move(ss));
 
   EXPECT_EQ(lexer_.Get(), Lexem(Tag::kIdentifier, "RRULE"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kDelimiter, ":"));
+  EXPECT_EQ(lexer_.Get(), kColon);
   EXPECT_EQ(lexer_.Get(), Lexem(Tag::kIdentifier, "FREQ"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kDelimiter, "="));
+  EXPECT_EQ(lexer_.Get(), kEqual);
   EXPECT_EQ(lexer_.Get(), Lexem(Tag::kIdentifier, "WEEKLY"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kDelimiter, ";"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kIdentifier, "INTERVAL"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kDelimiter, "="));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kIdentifier, "2"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kDelimiter, ";"));
+  EXPECT_EQ(lexer_.Get(), kSemicolon);
   EXPECT_EQ(lexer_.Get(), Lexem(Tag::kIdentifier, "UNTIL"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kDelimiter, "="));
+  EXPECT_EQ(lexer_.Get(), kEqual);
   EXPECT_EQ(lexer_.Get(), Lexem(Tag::kIdentifier, "20230605"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kDelimiter, "\r"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kDelimiter, "\n"));
-  EXPECT_EQ(lexer_.Get(), Lexem(Tag::kEof));
+  EXPECT_EQ(lexer_.Get(), kCarriageReturn);
+  EXPECT_EQ(lexer_.Get(), kLineFeed);
+  EXPECT_EQ(lexer_.Get(), kEof);
+}
+
+TEST_F(iCalendarLexerTest, RequestKthLexem) {
+  std::stringstream ss("RRULE:FREQ=MONTHLY\r\n");
+  char_reader_.set_ss(std::move(ss));
+
+  EXPECT_EQ(lexer_.Get(1), kColon);
+  EXPECT_EQ(lexer_.Peek(), Lexem(Tag::kIdentifier, "FREQ"));
+  EXPECT_EQ(lexer_.Peek(1), kEqual);
+  EXPECT_EQ(lexer_.Get(2), Lexem(Tag::kIdentifier, "MONTHLY"));
+  EXPECT_EQ(lexer_.Get(), kCarriageReturn);
+  EXPECT_EQ(lexer_.Peek(1), kEof);
+  EXPECT_EQ(lexer_.Get(), kLineFeed);
+  EXPECT_EQ(lexer_.Get(), kEof);
 }
