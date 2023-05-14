@@ -3,7 +3,7 @@
 #include <deque>
 #include <string>
 
-#include "character_reader.hpp"
+#include "char_reader.hpp"
 
 enum class Tag;
 
@@ -65,7 +65,7 @@ class iCalendarLexer : public ILexer {
   Lexem Get(std::size_t k = 0) override;
   Lexem Peek(std::size_t k = 0) override;
 
-  void set_character_reader(ICharacterReader& character_reader);
+  void set_character_reader(ICharReader& character_reader);
  private:
   Lexem GetInternal();
   Lexem GetIdentificator();
@@ -73,6 +73,6 @@ class iCalendarLexer : public ILexer {
   void PushLacking(std::size_t k);
   bool IsDelimiter(char character) const;
   
-  ICharacterReader* character_reader_;
+  ICharReader* character_reader_;
   std::deque<Lexem> got_lexems_;
 };

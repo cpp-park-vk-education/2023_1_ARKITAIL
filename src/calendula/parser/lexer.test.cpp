@@ -4,10 +4,10 @@
 #include <sstream>
 #include <string>
 
-#include "character_reader.hpp"
+#include "char_reader.hpp"
 #include "lexer.hpp"
 
-class StringStubCharReader : public ICharacterReader {
+class StringStubCharReader : public ICharReader {
  public:
   char Peek(std::size_t k = 0) override {
     auto pos = ss_.tellg();

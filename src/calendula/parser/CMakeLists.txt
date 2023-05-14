@@ -1,5 +1,5 @@
 add_library(parser
-  character_reader.cpp
+  char_reader.cpp
   lexer.cpp
   parser.cpp)
 
@@ -7,11 +7,11 @@ target_link_libraries(parser calendula_compiler_flags)
 target_include_directories(parser PUBLIC .)
 
 if(BUILD_TESTS)
-  add_executable(character_reader_test character_reader.test.cpp)
-  target_link_libraries(character_reader_test GTest::gtest_main
-                                              parser
-                                              calendula_compiler_flags)
-  add_test(character_reader_test character_reader_test)
+  add_executable(char_reader_test char_reader.test.cpp)
+  target_link_libraries(char_reader_test GTest::gtest_main
+                                         parser
+                                         calendula_compiler_flags)
+  add_test(char_reader_test char_reader_test)
 
   add_executable(lexer_test lexer.test.cpp)
   target_link_libraries(lexer_test GTest::gtest_main

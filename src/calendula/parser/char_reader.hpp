@@ -3,19 +3,19 @@
 #include <cstddef>
 #include <fstream>
 
-class ICharacterReader {
+class ICharReader {
  public:
   virtual char Peek(std::size_t k = 0) = 0;
   virtual char Get(std::size_t k = 0) = 0;
 
   virtual bool IsEof() = 0;
 
-  virtual ~ICharacterReader() = default;
+  virtual ~ICharReader() = default;
 };
 
-class FileCharacterReader : public ICharacterReader {
+class FileCharReader : public ICharReader {
  public:
-  explicit FileCharacterReader(std::ifstream&& f);
+  explicit FileCharReader(std::ifstream&& fs);
 
   char Peek(std::size_t k = 0) override;
   char Get(std::size_t k = 0) override;
@@ -23,5 +23,5 @@ class FileCharacterReader : public ICharacterReader {
   bool IsEof() override;
   
  private:
-  std::ifstream f_;
+  std::ifstream fs_;
 };

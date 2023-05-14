@@ -2,13 +2,13 @@
 
 #include <fstream>
 
-#include "character_reader.hpp"
+#include "char_reader.hpp"
 
 const std::string kPath = "../../../../data/";
 
 TEST(FileCharacterReaderTest, EmptyFile) {
   std::ifstream f(kPath + "empty.ics");
-  FileCharacterReader fcr(std::move(f));
+  FileCharReader fcr(std::move(f));
 
   EXPECT_EQ(fcr.IsEof(), true);
 
@@ -21,7 +21,7 @@ TEST(FileCharacterReaderTest, EmptyFile) {
 
 TEST(FileCharacterReaderTest, NonEmptyFile) {
   std::ifstream f(kPath + "bmstu_schedule.ics");
-  FileCharacterReader fcr(std::move(f));
+  FileCharReader fcr(std::move(f));
 
   EXPECT_EQ(fcr.IsEof(), false);
 

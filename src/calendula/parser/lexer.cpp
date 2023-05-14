@@ -89,6 +89,6 @@ bool iCalendarLexer::IsDelimiter(char character) const {
           != kDelimiters.end());
 }
 
-void iCalendarLexer::set_character_reader(ICharacterReader& character_reader) {
+void iCalendarLexer::set_character_reader(ICharReader& character_reader) {
   character_reader_ = &character_reader;
 }
