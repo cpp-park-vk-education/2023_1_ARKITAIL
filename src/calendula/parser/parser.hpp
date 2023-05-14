@@ -13,14 +13,12 @@ class PropertyNode;
 class ParameterNode;
 
 class IValue;
-class StringValue;
+class TextValue;
 class PairValue;
 class CompositeValue;
 
 class IParser;
 class iCalendarParser;
-
-// TODO: добавить геттеры, сеттеры
 
 class INode {
  public:
@@ -29,50 +27,89 @@ class INode {
 
 class StreamNode : public INode {
  public:
-  StreamNode(std::vector<std::unique_ptr<INode>>&& components)
+  using Components = std::vector<std::unique_ptr<ComponentNode>>;
+
+  StreamNode(Components&& components)
     : components_(std::move(components)) {
   }
+
+  const Components& components() const {
+    return components_;
+  }
  private:
-   std::vector<std::unique_ptr<INode>> components_;
+   Components components_;
 };
 
 class ComponentNode : public INode {
  public:
+  using Components = std::vector<std::unique_ptr<ComponentNode>>;
+  using Properties = std::vector<std::unique_ptr<PropertyNode>>;
+
   ComponentNode(std::string&& name,
-                std::vector<std::unique_ptr<INode>>&& properties,
-                std::vector<std::unique_ptr<INode>>&& components)
+                Properties&& properties,
+                Components&& components)
     : name_(std::move(name)),
       properties_(std::move(properties)),
       components_(std::move(components)) {
   }
+
+  const std::string& name() const {
+    return name_;
+  }
+
+  const Properties& properties() const {
+    return properties_;
+  }
+
+  const Components& components() const {
+    return components_;
+  }
  private:
   std::string name_;
-  std::vector<std::unique_ptr<INode>> properties_;
-  std::vector<std::unique_ptr<INode>> components_;
+  Properties properties_;
+  Components components_;
 };
 
 class PropertyNode : public INode {
  public:
+  using Parameters = std::vector<std::unique_ptr<ParameterNode>>;
+
   PropertyNode(std::string&& name,
-               std::vector<std::unique_ptr<INode>>&& parameters,
-               std::vector<std::unique_ptr<IValue>>&& value)
+               Parameters&& parameters,
+               std::unique_ptr<IValue>&& value)
     : name_(std::move(name)),
       parameters_(std::move(parameters)),
       value_(std::move(value)) {
   }
+
+  const std::string& name() const {
+    return name_;
+  }
+
+  const Parameters& parameters() const {
+    return parameters_;
+  }
+
+  const std::unique_ptr<IValue>& value() const {
+    return value_;
+  }
  private:
   std::string name_;
-  std::vector<std::unique_ptr<INode>> parameters_;
-  std::vector<std::unique_ptr<IValue>> value_;
+  Parameters parameters_;
+  std::unique_ptr<IValue> value_;
 };
 
 class ParameterNode : public INode {
  public:
-  ParameterNode(std::unique_ptr<IValue>&& value)
-    : value_(std::move(value)) {
+  ParameterNode(std::unique_ptr<PairValue>&& pair_value)
+    : pair_value_(std::move(pair_value)) {
+  }
+
+  const std::unique_ptr<PairValue>& pair_value() const {
+    return pair_value_;
   }
  private:
-  std::unique_ptr<IValue> value_;
+  std::unique_ptr<PairValue> pair_value_;
 };
 
 class IValue {
@@ -80,33 +117,47 @@ class IValue {
   virtual ~IValue() = default;
 };
 
-class StringValue : public IValue {
+class TextValue : public IValue {
  public:
-  StringValue(std::string&& value)
-    : value_(std::move(value)) {
+  TextValue(std::string&& text)
+    : text_(std::move(text)) {
+  }
+
+  const std::string& text() const {
+    return text_;
   }
  private:
-  std::string value_;
+  std::string text_;
 };
 
-class PairValue : public IValue {
+class PairValue : public TextValue {
  public:
-  PairValue(std::string&& key,
-            std::string&& value)
-    : key_(std::move(key)),
-      value_(std::move(value)) {
+  PairValue(std::string&& name,
+            std::string&& text)
+    : TextValue(std::move(text)),
+      name_(std::move(name)) {
+  }
+
+  const std::string& name() const {
+    return name_;
   }
  private:
-  std::string key_;
-  std::string value_;
+  std::string name_;
 };
 
 class CompositeValue : public IValue {
-  CompositeValue(std::vector<std::unique_ptr<IValue>>&& values)
+ public:
+  using Values = std::vector<std::unique_ptr<IValue>>;
+
+  CompositeValue(Values&& values)
     : values_(std::move(values)) {
   }
+
+  const Values& values() const {
+    return values_;
+  }
  private:
-  std::vector<std::unique_ptr<IValue>> values_;
+  Values values_;
 };
 
 class IParser {
@@ -123,10 +174,14 @@ class iCalendarParser : public IParser {
 
   void set_lexer(ILexer& lexer);
  private:
-  std::unique_ptr<INode> ParseStream();
-  std::unique_ptr<INode> ParseComponent();
-  std::unique_ptr<INode> ParseProperty();
-  std::unique_ptr<INode> ParseParameter();
+  std::unique_ptr<StreamNode> ParseStream();
+  std::unique_ptr<ComponentNode> ParseComponent();
+  std::unique_ptr<PropertyNode> ParseProperty();
+  std::unique_ptr<ParameterNode> ParseParameter();
+
+  std::unique_ptr<IValue> ParseValue();
+  std::unique_ptr<PairValue> ParsePairValue();
+
   bool IsName(const std::string& name) const;
 
   ILexer* lexer_;
