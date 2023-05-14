@@ -26,11 +26,10 @@ Application::Application(const Wt::WEnvironment& env) :
 
 	// Connections mediator connections establishing
 	ConnectionsMediator::instance().connect();
-	cur_page_->trigger();
 }
 
 void Application::route(const std::string& internalPath) {
-	cur_swap_.set_content(root()->removeWidget<PageWidget>(cur_page_));
+	cur_swap_.set_content(root()->removeWidget(cur_page_));
 	cur_swap_.swap();
 	pages_[internalPath].build_destination();
 	cur_swap_.swap();

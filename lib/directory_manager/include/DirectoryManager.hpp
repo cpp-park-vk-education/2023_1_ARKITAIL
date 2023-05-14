@@ -2,15 +2,24 @@
 
 #include <vector>
 
+#include "UnmetDeps.hpp"
+#include "IDirectoryManager.hpp"
 #include "Directory.hpp"
 #include "Event.hpp"
 
-class DirectoryManager {
+class DirectoryManager : public IDirectoryManager {
 public:
-    static std::vector<Event> getEvents(const Directory& directory);
-    static void remove(const Directory& directory);
-    static void add(const Directory& directory, const Directory& parent);
-    static void update(const Directory& directory);
+	const Directory& get(size_t directory_id) override;
+	void add(const Directory& directory, size_t directory_id) override;
+	void update(const Directory& directory) override;
+	void remove(size_t directory_id) override;
+
+	std::vector<Event> getEvents(size_t directory_id) override;
+
+
+private:
+	IDirectoryDbManager* dir_mg_; 
+	INodeDbManager* node_mg_;
 
 };
 

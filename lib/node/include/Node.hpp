@@ -13,6 +13,8 @@ enum NodeType {
 
 class Node {
 public:
+    Node() = default;
+
     Node(
         size_t id,
         size_t parent_id,
@@ -29,5 +31,4 @@ public:
     NodeType type;
 
 };
-
 
