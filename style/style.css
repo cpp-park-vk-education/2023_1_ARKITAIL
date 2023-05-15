@@ -1,8 +1,0 @@
-.week td {
-    width: calc(100%/7);
-    padding: 0;
-}
-
-.calendar {
-    min-width: min(100%, 1000px);
-}

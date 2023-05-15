@@ -8,7 +8,7 @@ TreeNodeLeaveW::TreeNodeLeaveW() {}
 
 void TreeNodeLeaveW::checkNode() { check_box_->setChecked(true); }
 
-void TreeNodeLeaveW::uncheckNode() { check_box_->setChecked(false); }
+void TreeNodeLeaveW::uncheckNode() { uncheckParentNodes(); }
 
 void TreeNodeLeaveW::showNode() {}
 

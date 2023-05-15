@@ -1,37 +1,20 @@
 #pragma once
 
-#include <Wt/WApplication.h>
-#include <Wt/WContainerWidget.h>
-#include <Wt/WLineEdit.h>
 #include <Wt/WMenu.h>
 #include <Wt/WNavigationBar.h>
-#include <Wt/WPopupMenu.h>
 #include <Wt/WPushButton.h>
-#include <Wt/WStackedWidget.h>
-#include <Wt/WString.h>
-#include <Wt/WText.h>
 
-#include <memory>
-
-class NavbarW : public Wt::WContainerWidget {
+class NavbarW : public Wt::WNavigationBar {
   public:
     NavbarW();
     ~NavbarW() = default;
 
-    void addProfile(std::unique_ptr<Wt::WWidget> content);
-    void addCalendar(std::unique_ptr<Wt::WWidget> content);
-    void addSearch(std::unique_ptr<Wt::WWidget> content);
+    Wt::WMenuItem *addLink(const std::string &icon_path, const std::string &path);
 
   private:
-    Wt::WNavigationBar *navigation;
-    Wt::WStackedWidget *contents_stack;
     Wt::WMenu *left_menu_;
-    Wt::WMenuItem *profile;
-    Wt::WMenuItem *calendar;
-    Wt::WMenuItem *search;
-    Wt::WPushButton *exit;
+    Wt::WPushButton *exit_button_;
 
-    Wt::WMenuItem *addLink(const std::string &iconPath, const std::string &path);
     void addSignals();
     void addStyle();
     void logout();

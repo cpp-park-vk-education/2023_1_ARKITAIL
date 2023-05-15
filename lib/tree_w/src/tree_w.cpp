@@ -8,14 +8,15 @@
 
 #include <memory>
 
+#include "Node.hpp"
+#include "Tree.hpp"
+#include "TreeNode.hpp"
 #include "options_calendars_dir_w.hpp"
 #include "options_personal_calendar_w.hpp"
 #include "options_subscription_w.hpp"
 #include "tree_node_calendar_w.hpp"
-#include "tree_node_calendars_dir_w.hpp"
 #include "tree_node_dir_w.hpp"
 #include "tree_node_group_w.hpp"
-#include "utils.hpp"
 
 TreeW::TreeW() {
     animateHide(Wt::WAnimation(Wt::AnimationEffect::SlideInFromLeft));
@@ -33,9 +34,9 @@ TreeW::TreeW() {
     remember_combination_button_->setEnabled(false);
     remember_combination_button_->setWidth(Wt::WLength(120));
 
-    // options_.push_back(addWidget(std::make_unique<OptionsCalendarsDirW>()));
-    // options_.push_back(addWidget(std::make_unique<OptionsPersonalCalendarW>()));
-    // options_.push_back(addWidget(std::make_unique<OptionsSubscriptionW>()));
+    options_.push_back(std::make_unique<OptionsCalendarsDirW>());
+    options_.push_back(std::make_unique<OptionsPersonalCalendarW>());
+    options_.push_back(std::make_unique<OptionsSubscriptionW>());
 
     search_line_->enterPressed().connect(this, &TreeW::search);
     remember_combination_button_->clicked().connect(this, &TreeW::rememberCombination);
@@ -47,23 +48,45 @@ void TreeW::setRoot() {
     // иду по нему и запускаю метод(надо его написать), который проверяет тип ноды
     // если это лист(календарь), то он просто добавляется
     // иначе(директория), то она рисуется и в ее метод передается ее вектор нод, которые добавляются в контейнер нод
-    root_ = addWidget(std::make_unique<TreeNodeDirW>("Календари"))->endNode();
-    root_->hideCheckBox();
+
+    std::vector<std::string> tags;
+    tags.push_back("tag1");
+    tags.push_back("tag2");
+    tags.push_back("tag3");
+    root_ = addWidget(std::make_unique<TreeNodeDirW>("Календари"))->hideCheckBox()->endNode();
     auto group = root_->addChildNode(std::make_unique<TreeNodeDirW>("Группировки"))->endNode();
     group->addChildNode(std::make_unique<TreeNodeGroupW>("ГруппаТупики"))
-        ->addOptions(std::make_unique<Wt::WPopupMenu>())
+        ->addOptions(std::make_unique<OptionsPersonalCalendarW>())
         ->endNode();
     auto priv = root_->addChildNode(std::make_unique<TreeNodeDirW>("Приватные"))->endNode();
     auto priv1 = priv->addChildNode(std::make_unique<TreeNodeDirW>("Папка1"))
                      ->addOptions(std::make_unique<OptionsCalendarsDirW>())
                      ->endNode();
+    priv1->addChildNode(std::make_unique<TreeNodeGroupW>("Прив1"))
+        ->addOptions(std::make_unique<OptionsPersonalCalendarW>())
+        ->endNode();
     priv->addChildNode(std::make_unique<TreeNodeGroupW>("Группа1"))
         ->addOptions(std::make_unique<OptionsPersonalCalendarW>())
         ->endNode();
 
     auto pub = root_->addChildNode(std::make_unique<TreeNodeDirW>("Публичные"))->endNode();
+    pub->addChildNode(std::make_unique<TreeNodeCalendarW>("Публичные тупики"))
+        ->addOptions(std::make_unique<OptionsPersonalCalendarW>())
+        ->addToolTip("Календарь с главными событиями тупиков", tags)
+        ->endNode();
     auto sub = root_->addChildNode(std::make_unique<TreeNodeDirW>("Подписки"))->endNode();
+    sub->addChildNode(std::make_unique<TreeNodeCalendarW>("МГТУ"))
+        ->addOptions(std::make_unique<OptionsSubscriptionW>())
+        ->addToolTip(
+            "Добро пожаловать на официальную страницу МГТУ им. Н.Э. Баумана! Здесь вы найдете новости "
+            "нашего университета, анонсы мероприятий и многое другое.",
+            tags, "МГТУ")
+        ->endNode();
 }
+
+TreeNodeW* makeTreeNodeWidget(const Node& node) { TreeNodeW* res; }
+
+void TreeW::setRoot(const Node& node) {}
 
 void TreeW::rememberCombination() {}
 

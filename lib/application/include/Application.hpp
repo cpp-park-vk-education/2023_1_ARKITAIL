@@ -1,22 +1,23 @@
 #pragma once
 
-#include <string>
-#include <unordered_map>
+#include <Wt/WApplication.h>
 #include <Wt/WEnvironment.h>
 
-#include <Wt/WApplication.h>
+#include <string>
+#include <unordered_map>
 
 #include "PageWidget.hpp"
-#include "Swapable.hpp" 
+#include "Swapable.hpp"
 #include "UnmetDeps.hpp"
+#include "navbar_w.hpp"
 
 class Application : public Wt::WApplication {
-public:
+  public:
     Application(const Wt::WEnvironment& env);
 
     void route(const std::string& internalPath);
-    
-private:
+
+  private:
     Session session_;
 
     std::unordered_map<std::string, Swapable> pages_;
@@ -24,6 +25,4 @@ private:
     PageWidget* cur_page_;
 
     NavbarW* navbar_;
-
 };
-

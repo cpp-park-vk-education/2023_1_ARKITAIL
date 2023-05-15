@@ -4,7 +4,9 @@
 
 #include <memory>
 
-class OptionsPersonalCalendarW : public Wt::WPopupMenu {
+#include "options_w.hpp"
+
+class OptionsPersonalCalendarW : public OptionsW {
   public:
     OptionsPersonalCalendarW();
     ~OptionsPersonalCalendarW() = default;

@@ -6,8 +6,9 @@
 
 class TreeNodeCalendarW : public TreeNodeLeaveW {
   public:
-    TreeNodeCalendarW(int id, std::string label);
+    TreeNodeCalendarW(std::string label);
     ~TreeNodeCalendarW() = default;
+    Wt::WInteractWidget* getTitle() override;
 
   private:
     Wt::WText* label_;

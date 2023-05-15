@@ -8,7 +8,6 @@
 #include "calendar_body_w.hpp"
 #include "calendar_header_w.hpp"
 #include "tree_w.hpp"
-#include "utils.hpp"
 
 class CalendarW : public Wt::WContainerWidget {
   public:

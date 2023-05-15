@@ -27,5 +27,7 @@ class EventW {
     Wt::WDateTime begin_;
     Wt::WDateTime end_;
 
-    void makeEventPartWidget(std::string style_class, Wt::WTableCell *event_cell);
+    void addDialog(Wt::WPushButton *eventWidget);
+    void makeEventLargePartWidget(std::string title, std::string style_class, Wt::WTableCell *event_cell);
+    void makeEventSmallPartWidget(Wt::WTableCell *event_cell);
 };

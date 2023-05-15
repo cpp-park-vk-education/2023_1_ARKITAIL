@@ -9,5 +9,7 @@ class WeekW : public CalendarBodyW {
   public:
     WeekW();
     ~WeekW() = default;
-    void updateCalendar(Wt::WDate selected_date) override;
+
+  private:
+    void update(Wt::WDate selected_date) override;
 };

@@ -21,6 +21,7 @@ class TreeNodeDirW : public TreeNodeW {
     void closeNode() override;
     void checkNode() override;
     void uncheckNode() override;
+    Wt::WInteractWidget* getTitle() override;
 
   private:
     std::vector<TreeNodeW*> children_;

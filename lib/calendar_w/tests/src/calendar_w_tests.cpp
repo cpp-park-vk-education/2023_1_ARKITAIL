@@ -5,9 +5,8 @@
 #include <memory>
 
 #include "calendar_body_w.hpp"
-#include "calendar_header_w.hpp"
 #include "calendar_w.hpp"
-#include "utils.hpp"
+#include "i_calendar_header_w.hpp"
 
 class CalendarHeaderMock : public InterfaceCalendarHeaderW {
     CalendarHeaderMock();

@@ -1,7 +1,3 @@
 #pragma once
 
-enum Range { MONTH = 0, WEEK, DAY };
-
-enum OptionsType { PERSONAL_DIR = 0, PERSONAL_CALENDAR, SUBSCRIPTION };
-
 enum NodeType { PRIVATE = 0, PUBLIC, SUBSCRIBTIONS, DIRECTORY, CALENDAR };

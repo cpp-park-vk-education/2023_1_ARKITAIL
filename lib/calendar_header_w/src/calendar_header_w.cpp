@@ -10,8 +10,6 @@
 
 #include <memory>
 
-#include "utils.hpp"
-
 CalendarHeaderW::CalendarHeaderW() {
     selected_date_ = std::make_unique<Wt::WDate>(std::chrono::system_clock::now());
     auto button_box = addNew<Wt::WContainerWidget>();

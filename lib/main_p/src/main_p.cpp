@@ -15,5 +15,4 @@ MainP::MainP() {
     calendar_->addCalendarBodyWeek(std::make_unique<WeekW>());
     calendar_->addCalendarBodyMonth(std::make_unique<MonthW>());
     calendar_->addConnections();
-    calendar_->setHeaderRange();
 }

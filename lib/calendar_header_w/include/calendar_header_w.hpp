@@ -1,4 +1,5 @@
 #pragma once
+
 #include <Wt/WComboBox.h>
 #include <Wt/WContainerWidget.h>
 #include <Wt/WDate.h>
@@ -9,25 +10,7 @@
 
 #include <memory>
 
-#include "utils.hpp"
-
-class InterfaceCalendarHeaderW : public Wt::WContainerWidget {
-  public:
-    virtual ~InterfaceCalendarHeaderW() = default;
-
-    virtual Wt::Signal<Wt::WDate>& selectedDateChanged() = 0;
-    virtual Wt::Signal<Range>& rangeChanged() = 0;
-    virtual Wt::Signal<>& eventAdded() = 0;
-    virtual void setRange() = 0;
-    virtual void addConnections() = 0;
-
-  protected:
-    virtual Wt::WString makeTitle() = 0;
-    virtual void addStyle() = 0;
-    virtual void switchToToday() = 0;
-    virtual void switchToPrev() = 0;
-    virtual void switchToNext() = 0;
-};
+#include "i_calendar_header_w.hpp"
 
 class CalendarHeaderW : public InterfaceCalendarHeaderW {
   public:

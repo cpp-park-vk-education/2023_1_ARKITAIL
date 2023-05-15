@@ -8,8 +8,8 @@ target_link_libraries(tree_w  PUBLIC
                       tree_node_group_w
                       tree_node_calendar_w
                       tree_node_dir_w
-                      tree_node_calendars_dir_w
                       options_calendars_dir_w
                       options_personal_calendar_w
                       options_subscription_w
-                      utils)
+                      node
+                      tree)

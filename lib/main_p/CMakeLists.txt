@@ -9,5 +9,6 @@ target_link_libraries(main_p PUBLIC
                       day_w
                       week_w
                       month_w
+                      page_widget
                       calendula_compiler_flags)
 

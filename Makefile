@@ -48,7 +48,7 @@ remove: # Remove development container and down all dependences.
 
 .PHONY: debug
 debug: # Run application
-	./build/Calendula.wt \
+	./build/Calendula \
 		--docroot . \
 		--http-address 0.0.0.0 \
 		--http-port 8080 \

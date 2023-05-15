@@ -8,5 +8,5 @@ class DayW : public CalendarBodyW {
     ~DayW() = default;
 
   private:
-    void updateCalendar(Wt::WDate selected_date) override;
+    void update(Wt::WDate selected_date) override;
 };

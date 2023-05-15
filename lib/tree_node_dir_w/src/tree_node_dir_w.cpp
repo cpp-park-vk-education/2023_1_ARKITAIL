@@ -20,6 +20,7 @@ TreeNodeDirW::TreeNodeDirW(std::string label) {
 
 TreeNodeW* TreeNodeDirW::addChildNode(std::unique_ptr<TreeNodeW> child) {
     TreeNodeW* child_node = children_container_->addWidget(std::move(child));
+    child_node->addParent(this);
     child_node->setHidden(true);
     children_.push_back(child_node);
     return child_node;
@@ -47,8 +48,10 @@ void TreeNodeDirW::checkNode() {
 }
 
 void TreeNodeDirW::uncheckNode() {
-    check_box_->setChecked(false);
+    uncheckParentNodes();
     for (auto&& child : childrenNodes()) {
         child->uncheckNode();
     }
 }
+
+Wt::WInteractWidget* TreeNodeDirW::getTitle() { return label_; }

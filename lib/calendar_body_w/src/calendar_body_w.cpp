@@ -11,13 +11,19 @@ CalendarBodyW::CalendarBodyW() {
     auto table = std::make_unique<Wt::WTable>();
     table_ = table.get();
     table_->setWidth(Wt::WLength("100%"));
-    table_->addStyleClass("table table-bordered table-sm d-block");
+    table_->addStyleClass("table table-bordered table-sm d-block w-100");
     addWidget(std::move(table));
 }
 
 void CalendarBodyW::makeHeaderTime() {
     for (unsigned i = 0; i < 24; ++i) {
-        table_->elementAt(i + 1, 0)->addNew<Wt::WText>(Wt::WString(i < 10 ? "0{1}:00" : "{1}:00").arg(i));
+        table_->elementAt(i, 0)->addNew<Wt::WText>(Wt::WString(i < 10 ? "0{1}:00" : "{1}:00").arg(i));
+    }
+}
+
+void CalendarBodyW::updateCalendar(Wt::WDate selected_date) {
+    if (isVisible()) {
+        update(selected_date);
     }
 }
 
