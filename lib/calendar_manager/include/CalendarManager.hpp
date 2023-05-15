@@ -2,13 +2,22 @@
 
 #include <vector>
 
+#include "UnmetDeps.hpp"
+#include "ICalendarManager.hpp"
 #include "Event.hpp"
 #include "Calendar.hpp"
 
-class CalendarManager {
+class CalendarManager : public ICalendarManager {
 public:
-    static void addEvent(const Calendar& calendar, const Event& event);
-    static std::vector<Event> getEvents(const Calendar& calendar);
+    const Calendar& get(size_t) override;
+	size_t add(const Calendar&) override;
+	void update(const Calendar&) override;
+	void remove(size_t) override;
+
+    std::vector<Event> getEvents(size_t calendar_id) override;
+
+private:
+    ICalendarDbManager* manager_;
 
 };
 

@@ -5,6 +5,7 @@
 #include "User.hpp"
 #include "Calendar.hpp"
 #include "Event.hpp"
+#include "Comment.hpp"
 #include "Node.hpp"
 #include "Directory.hpp"
 
@@ -47,7 +48,27 @@ public:
 
 };
 
-class EventDbManager {};
+class IEventDbManager {
+public:
+	virtual const Event& get(size_t) = 0;
+	virtual size_t add(const Event&) = 0;
+	virtual void update(const Event&) = 0;
+	virtual void remove(size_t) = 0;
+
+	virtual std::vector<Comment> getComments(size_t) = 0;
+
+};
+
+class EventDbManager {
+public:
+	const Event& get(size_t);
+	size_t add(const Event&);
+	void update(const Event&);
+	void remove(size_t);
+
+	std::vector<Comment> getComments(size_t);
+
+};
 
 class ICalendarDbManager {
 public:

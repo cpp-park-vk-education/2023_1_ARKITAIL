@@ -1,12 +1,16 @@
 #pragma once
 
+#include "UnmetDeps.hpp"
+#include "IUserManager.hpp"
 #include "User.hpp"
 
-class UserManager {
+class UserManager : public IUserManager {
 public:
-    UserManager();
+    const User& get();
+    const User& get(size_t user_id);
 
-    const User& getUser(const User& user);
-
+private:
+    IUserDbManager* manager_;
+    
 };
 

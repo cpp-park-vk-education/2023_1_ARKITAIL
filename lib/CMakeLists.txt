@@ -14,6 +14,7 @@ add_subdirectory(tree)
 add_subdirectory(profile)
 add_subdirectory(comment)
 
+add_subdirectory(managers)
 add_subdirectory(directory_manager)
 add_subdirectory(user_manager)
 add_subdirectory(calendar_manager)

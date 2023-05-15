@@ -4,9 +4,10 @@
 #include "Directory.hpp"
 #include "DirectoryManager.hpp"
 #include "Event.hpp"
+#include "Managers.hpp"
 
 const Directory& DirectoryManager::get(size_t directory_id) {
-    return dir_mg_->get(directory_id);
+    return manager_->get(directory_id);
 }
 
 // Для добавления директория должна содежать следуюшие поля:
@@ -17,11 +18,11 @@ const Directory& DirectoryManager::get(size_t directory_id) {
 // Остальные поля не участвуют в добавлении опускаются 
 //
 // parent_id является полем Directory::id родительской директории
-void DirectoryManager::add(const Directory& directory, size_t parent_id) {
-    size_t new_dir_id = dir_mg_->add(directory);
+size_t DirectoryManager::add(const Directory& directory, size_t parent_id) {
+    size_t new_dir_id = manager_->add(directory);
 
     //  Добавляемая директория наследует тип родительской
-    const Node& parent_node = node_mg_->get(dir_mg_->get(parent_id).node_id);
+    const Node& parent_node = Managers::instance().node_manager->get(manager_->get(parent_id).node_id);
     
     Node new_node {
         0,
@@ -30,16 +31,20 @@ void DirectoryManager::add(const Directory& directory, size_t parent_id) {
         parent_node.type
     };
     
-    node_mg_->add(new_node);
+    return Managers::instance().node_manager->add(new_node);
 }
 
-void DirectoryManager::update(const Directory& directory) {}
+void DirectoryManager::update(const Directory& directory) {
+    // TODO(uma_op): IMPLEMENT ME
+}
 
 void DirectoryManager::remove(size_t directory_id) {
-    node_mg_->remove(dir_mg_->get(directory_id).node_id);
+    Managers::instance().node_manager->remove(manager_->get(directory_id).node_id);
 }
 
 std::vector<Event> DirectoryManager::getEvents(size_t directory_id) {
+    // TODO(uma_op): IMPLEMENT ME
+
     return std::vector<Event>();
 }
 

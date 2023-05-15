@@ -1,6 +1,7 @@
 #include <vector>
 
 #include "Calendar.hpp"
+#include "Event.hpp"
 #include "UnmetDeps.hpp"
 #include "Directory.hpp"
 #include "Node.hpp"
@@ -52,5 +53,20 @@ std::vector<Event> CalendarDbManager::getEvents(size_t calendar_id) {
 
 const User& UserDbManager::get() {
 	return *(new User());
+}
+
+const Event& EventDbManager::get(size_t) {
+	return *(new Event());
+}
+
+size_t EventDbManager::add(const Event& event) {
+	return 0;
+}
+
+void EventDbManager::update(const Event& event) {}
+void EventDbManager::remove(size_t event_id) {}
+
+std::vector<Comment> EventDbManager::getComments(size_t event_id) {
+	return std::vector<Comment>();
 }
 

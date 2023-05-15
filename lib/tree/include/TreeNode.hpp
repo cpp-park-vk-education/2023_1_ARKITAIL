@@ -9,14 +9,14 @@ public:
     TreeNode(const Node& node);
 
     const Node& getNode();
-    std::vector<TreeNode*> getChilds() const;
+    std::vector<TreeNode*> getChildren() const;
 
     bool isChecked();
     void check();
 
 private:
-    Node node;
-    std::vector<TreeNode*> childs;
-    bool checked;
+    Node node_;
+    std::vector<TreeNode*> children_;
+    bool checked_;
 };
 
