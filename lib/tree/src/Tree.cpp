@@ -9,6 +9,7 @@ Tree::Tree(const Node& node) :
     checked_count(0) {}
 
 TreeNode* Tree::insertNode(const TreeNode& node, TreeNode* parent) {
+
     return nullptr;
 }
 

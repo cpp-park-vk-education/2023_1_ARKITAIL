@@ -9,6 +9,7 @@ public:
     Event();
 
     size_t id;
+    size_t calendar_id;
     std::string name;
     std::string description;
     std::chrono::time_point<std::chrono::steady_clock> begin_point;
