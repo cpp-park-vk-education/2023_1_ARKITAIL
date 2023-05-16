@@ -55,3 +55,4 @@ debug: # Run application
 		--resources-dir='../resources, ../static'
 
 # TODO: prod
+
