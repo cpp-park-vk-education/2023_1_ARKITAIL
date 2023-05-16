@@ -1,6 +1,6 @@
 #pragma once
 
-#include "User_db_model.hpp"
+#include "Main_model.hpp"
 
 class user_manager {
 public:
@@ -8,6 +8,6 @@ public:
     users deleteUser(int id);
     users upgradeUser(users);
     users getByLogin(std::string login);
-    bool authenticate(Wt::Auth::Identity& Identity);
+    bool authenticate(dbo::Auth::Identity& Identity);
     void logout();
 };

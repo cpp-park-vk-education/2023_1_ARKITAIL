@@ -3,7 +3,9 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/lib/base_for_all/include",
+                "${workspaceFolder}/lib/main_model/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang-14",

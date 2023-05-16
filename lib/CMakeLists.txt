@@ -7,11 +7,4 @@ add_subdirectory(tag_db_manager)
 add_subdirectory(user_db_manager)
 
 
-add_subdirectory(calendar_db_model)
-add_subdirectory(directory_db_model)
-add_subdirectory(event_db_model)
-add_subdirectory(node_db_model)
-add_subdirectory(tag_db_model)
-add_subdirectory(user_db_model)
-
-add_subdirectory(tests)
+add_subdirectory(main_model)
