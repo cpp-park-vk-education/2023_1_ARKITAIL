@@ -3,23 +3,23 @@
 #include <cstddef>
 
 #include "Event.hpp"
-#include "TreeNode.hpp"
+#include "TreeNodeMock.hpp"
 
 class Tree {
 public:
     Tree(const Node& node);
 
-    TreeNode* getRoot();
+    ITreeNode* getRoot();
 
     std::vector<Event> getCheckedEvents();
 
-    std::vector<Event> checkNode(TreeNode* node);
-    void uncheckNode(TreeNode* node);
+    std::vector<Event> checkNode(ITreeNode* node);
+    void uncheckNode(ITreeNode* node);
 
     size_t checked();
 
 private:
-    std::unique_ptr<TreeNode> root_;
+    std::unique_ptr<ITreeNode> root_;
     size_t checked_;
     
 };

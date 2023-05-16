@@ -1,10 +1,11 @@
 #include <memory>
 #include <vector>
 
+#include "ITreeNode.hpp"
 #include "Managers.hpp"
 #include "TreeNode.hpp"
 
-TreeNode::TreeNode(const Node& node, TreeNode* parent) :
+TreeNode::TreeNode(const Node& node, ITreeNode* parent) :
     node_(node),
     children_(),
     checked_(false),
@@ -18,12 +19,12 @@ const Node& TreeNode::getNode() {
     return node_;
 }
 
-TreeNode* TreeNode::getParent() {
+ITreeNode* TreeNode::getParent() {
     return parent_;
 }
 
-std::vector<TreeNode*> TreeNode::getChildren() {
-    std::vector<TreeNode*> children;
+std::vector<ITreeNode*> TreeNode::getChildren() {
+    std::vector<ITreeNode*> children;
 
     for (size_t i = 0; i < children_.size(); i++)
         children.push_back(children_[i].get());
@@ -31,13 +32,13 @@ std::vector<TreeNode*> TreeNode::getChildren() {
     return children;
 }
 
-TreeNode* TreeNode::addChild(const Node& node) {
-    std::unique_ptr<TreeNode> tree_node = std::make_unique<TreeNode>(node, this);
+ITreeNode* TreeNode::addChild(const Node& node) {
+    std::unique_ptr<ITreeNode> tree_node = std::make_unique<TreeNode>(node, this);
     children_.emplace_back(std::move(tree_node));
     return children_.back().get();
 }
 
-std::unique_ptr<TreeNode> TreeNode::remove() {
+std::unique_ptr<ITreeNode> TreeNode::remove() {
     return parent_->removeChild(this);
 }
 
@@ -53,8 +54,8 @@ bool TreeNode::isChecked() {
     return checked_;
 }
 
-std::unique_ptr<TreeNode> TreeNode::removeChild(TreeNode* child) {
-    std::unique_ptr<TreeNode> rmd_child;
+std::unique_ptr<ITreeNode> TreeNode::removeChild(ITreeNode* child) {
+    std::unique_ptr<ITreeNode> rmd_child;
 
     for (auto b = children_.begin(); b != children_.end(); b++) {
         if (b->get() == child) {
