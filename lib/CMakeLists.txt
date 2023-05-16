@@ -1,10 +1,10 @@
-add_subdirectory(base_for_all)
-add_subdirectory(calendar_db_manager)
-add_subdirectory(directory_db_manager)
-add_subdirectory(event_db_manager)
-add_subdirectory(node_db_manager)
-add_subdirectory(tag_db_manager)
-add_subdirectory(user_db_manager)
+add_subdirectory(baseForAll)
+add_subdirectory(calendarDbManager)
+add_subdirectory(directoryDbManager)
+add_subdirectory(eventDbManager)
+add_subdirectory(nodeDbManager)
+add_subdirectory(tagDbManager)
+add_subdirectory(userDbManager)
 
 
-add_subdirectory(main_model)
+add_subdirectory(mainModel)
