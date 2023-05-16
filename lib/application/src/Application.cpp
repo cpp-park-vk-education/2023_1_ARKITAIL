@@ -1,16 +1,15 @@
-#include "Application.hpp"
-
 #include <Wt/WBootstrap5Theme.h>
 #include <Wt/WText.h>
 #include <Wt/WWidget.h>
 
 #include <string>
+#include <thread>
 
-#include "ConnectionsMediator.hpp"
-#include "PageWidget.hpp"
 #include "main_p.hpp"
 #include "navbar_w.hpp"
 #include "other_p.hpp"
+#include "Application.hpp"
+#include "SessionScopeMap.hpp"
 
 Application::Application(const Wt::WEnvironment& env)
     : Wt::WApplication(env), session_(), pages_(), cur_swap_(), cur_page_(nullptr) {
@@ -36,6 +35,8 @@ Application::Application(const Wt::WEnvironment& env)
 
     // Connections mediator connections establishing
     ConnectionsMediator::instance().connect();
+
+    SessionScopeMap::instance().add(std::this_thread::get_id());
 }
 
 void Application::route(const std::string& internalPath) {

@@ -35,6 +35,7 @@ add_subdirectory(options_calendars_dir_w)
 
 
 add_subdirectory(application)
+add_subdirectory(session_scope_map)
 add_subdirectory(unmet_deps)
 add_subdirectory(search_page)
 add_subdirectory(swapable)

@@ -43,6 +43,10 @@ void NodeManager::remove(size_t node_id) {
 	}
 }
 
+void NodeManager::tag(const Tag& tag, size_t node_id) {
+	// TODO(uma_op): IMPLEMENT ME
+}
+
 void NodeManager::move(size_t node_id, size_t destination_id) {
 	const Node& mv_node = manager_->get(node_id); 
 	Node mvd_node = mv_node;
@@ -81,5 +85,9 @@ void NodeManager::unsubscribe(size_t node_id) {
 
 			break;
 		}
+}
+
+std::vector<Node> NodeManager::getChildren(size_t node_id) {
+	return manager_->getChildren(node_id);
 }
 
