@@ -12,3 +12,4 @@ add_subdirectory(parser)
 add_subdirectory(utils)
 
 add_subdirectory(calendar_dialogs)
+add_subdirectory(event_dialogs)

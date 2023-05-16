@@ -1,9 +1,9 @@
 #include "calendar_settings_view.hpp"
 
-#include <Wt/WColorPicker.h>
-#include <Wt/WComboBox.h>
 #include <memory>
 
+#include <Wt/WColorPicker.h>
+#include <Wt/WComboBox.h>
 #include <Wt/WLineEdit.h>
 #include <Wt/WPushButton.h>
 #include <Wt/WString.h>

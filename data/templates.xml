@@ -86,4 +86,107 @@
       </div>
     </div>
   </message>
+  <message id="event">
+    <div class="row m-3">
+      <div class="col">
+        <label class="form-label" for="${id:title}">
+          Название
+        </label>
+        ${title}
+        <div class="form-text">
+          ${title-info}
+        </div>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col">
+        <label class="form-label" for="${id:description}">
+          Описание
+        </label>
+        ${description}
+        <div class="form-text">
+          ${description-info}
+        </div>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col">
+        <label class="form-label" for="${id:calendars}">
+          Календарь
+        </label>
+        ${calendars}
+        <div class="form-text">
+          ${calendars-info}
+        </div>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col-6">
+        <label class="form-label" for="${id:begin-date}">
+          Дата начала
+        </label>
+        ${begin-date}
+        <div class="form-text">
+          ${begin-date-info}
+        </div>
+      </div>
+      <div class="col-6">
+        <label class="form-label" for="${id:begin-time}">
+          Время начала
+        </label>
+        ${begin-time}
+        <div class="form-text">
+          ${begin-time-info}
+        </div>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col-6">
+        <label class="form-label" for="${id:end-date}">
+          Дата окончания
+        </label>
+        ${end-date}
+        <div class="form-text">
+          ${end-date-info}
+        </div>
+      </div>
+      <div class="col-6">
+        <label class="form-label" for="${id:end-time}">
+          Время окончания
+        </label>
+        ${end-time}
+        <div class="form-text">
+          ${end-time-info}
+        </div>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col-6">
+        <label class="form-label" for="${id:repeat}">
+          Повторять
+        </label>
+        ${repeat}
+        <div class="form-text">
+          ${repeat-info}
+        </div>
+      </div>
+      <div class="col-6">
+        <label class="form-label" for="${id:until}">
+          До
+        </label>
+        ${until}
+        <div class="form-text">
+          ${until-info}
+        </div>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col">
+        ${submit-button}
+        <span class="help-inline">
+          ${submit-info}
+        </span>
+      </div>
+    </div>
+  </message>
 </messages>
