@@ -19,6 +19,7 @@ SessionScope* SessionScopeMap::get(std::thread::id tid) {
 
 void SessionScopeMap::add(std::thread::id tid) {
 	std::lock_guard<std::mutex> lg(container_mutex_);
+
 	if (container_.find(tid) != container_.end())
 		return;
 

@@ -1,14 +1,8 @@
-#pragma once
-
-#include <vector>
-#include <memory>
-
-#include "Node.hpp"
 #include "ITreeNode.hpp"
 
-class TreeNode : public ITreeNode {
+class TreeNodeMock : public ITreeNode {
 public:
-    TreeNode(const Node& node, ITreeNode* parent);
+    TreeNodeMock(const Node& node, ITreeNode* parent);
 
     const Node& getNode();
     ITreeNode* getParent();
@@ -21,7 +15,7 @@ public:
 
     void check();
     void uncheck();
-
+    
 private:
     std::unique_ptr<ITreeNode> removeChild(ITreeNode* child);
 

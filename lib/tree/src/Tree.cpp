@@ -5,18 +5,17 @@
 #include "Managers.hpp"
 #include "Tree.hpp"
 #include "Node.hpp"
-#include "TreeNode.hpp"
 
 Tree::Tree(const Node& node) :
-    root_(std::make_unique<TreeNode>(TreeNode(node, nullptr))),
+    root_(std::make_unique<TreeNodeMock>(node, nullptr)),
     checked_(0) {}
 
-TreeNode* Tree::getRoot() {
+ITreeNode* Tree::getRoot() {
     return root_.get();
 }
 
 std::vector<Event> Tree::getCheckedEvents() {
-    std::queue<TreeNode*> q;
+    std::queue<ITreeNode*> q;
     std::vector<Event> v;
 
     q.push(getRoot());
@@ -35,8 +34,8 @@ std::vector<Event> Tree::getCheckedEvents() {
     return v;
 }
 
-std::vector<Event> Tree::checkNode(TreeNode* node) {
-    std::queue<TreeNode*> q;
+std::vector<Event> Tree::checkNode(ITreeNode* node) {
+    std::queue<ITreeNode*> q;
     std::vector<Event> v;
 
     q.push(node);
@@ -59,8 +58,8 @@ std::vector<Event> Tree::checkNode(TreeNode* node) {
     return v;
 }
 
-void Tree::uncheckNode(TreeNode* node) {
-    TreeNode* cur_node = node;
+void Tree::uncheckNode(ITreeNode* node) {
+    ITreeNode* cur_node = node;
 
     while (cur_node->isChecked()) {
         cur_node->uncheck();
