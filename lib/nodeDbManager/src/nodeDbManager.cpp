@@ -1,6 +1,6 @@
 #include "nodeDbManager.hpp"
 
-int node_manager::add(Ret_Node &ret) {
+int NodeManager::add(Ret_Node &ret) {
   Ret_Tag t_ret;
   dbo::Transaction transaction(session_);
 
@@ -16,7 +16,7 @@ int node_manager::add(Ret_Node &ret) {
   return id;
 }
 
-void node_manager::remove(const int id) {
+void NodeManager::remove(const int id) {
   dbo::Transaction transaction(session_);
 
   dbo::ptr<nodes> node = session_.find<nodes>().where("id = ?").bind(id);
@@ -25,7 +25,7 @@ void node_manager::remove(const int id) {
   transaction.commit();
 }
 
-void node_manager::update(Ret_Node &ret) {
+void NodeManager::update(Ret_Node &ret) {
   dbo::Transaction transaction(session_);
 
   dbo::ptr<nodes> node =
@@ -39,7 +39,7 @@ void node_manager::update(Ret_Node &ret) {
   transaction.commit();
 }
 
-Ret_Node node_manager::get(const int id) {
+Ret_Node NodeManager::get(const int id) {
   dbo::Transaction transaction(session_);
 
   std::vector<int> tagv;
@@ -59,7 +59,7 @@ Ret_Node node_manager::get(const int id) {
   return ret;
 }
 
-void node_manager::tag(const int id, Ret_Tag &rec) {
+void NodeManager::tag(const int id, Ret_Tag &rec) {
   dbo::Transaction transaction(session_);
 
   dbo::ptr<tags> tag = session_.find<tags>().where("name = ?").bind(rec.name);
@@ -76,7 +76,7 @@ void node_manager::tag(const int id, Ret_Tag &rec) {
   transaction.commit();
 }
 
-void node_manager::move(const int id, const int destination_id) {
+void NodeManager::move(const int id, const int destination_id) {
   dbo::Transaction transaction(session_);
 
   dbo::ptr<nodes> node = session_.find<nodes>().where("id = ?").bind(id);
@@ -87,7 +87,7 @@ void node_manager::move(const int id, const int destination_id) {
   transaction.commit();
 }
 
-std::vector<Ret_Node> node_manager::getChildren(const int id) {
+std::vector<Ret_Node> NodeManager::getChildren(const int id) {
   dbo::Transaction transaction(session_);
   Ret_Node ret;
   std::vector<Ret_Node> children;

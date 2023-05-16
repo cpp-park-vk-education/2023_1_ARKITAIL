@@ -17,7 +17,7 @@ struct Ret_Calen {
   int node_id;
 };
 
-class calendars_manager {
+class CalendarManager {
 public:
   int add(Ret_Calen&);
   void remove(const int id);

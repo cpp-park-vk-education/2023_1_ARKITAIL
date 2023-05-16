@@ -2,7 +2,7 @@
 
 // time_start и time_end передаются в виде "0, 0, 0, 14, 4, 2023 - 1900",
 // где это сек, мин, час, д, мес, год
-int event_manager::add(Ret_Event &ret) {
+int EventManager::add(Ret_Event &ret) {
   dbo::Transaction transaction(session_);
 
   std::unique_ptr<events> event{new events()};
@@ -26,7 +26,7 @@ int event_manager::add(Ret_Event &ret) {
   return id;
 }
 
-void event_manager::remove(const int id) {
+void EventManager::remove(const int id) {
   dbo::Transaction transaction(session_);
 
   dbo::ptr<events> event = session_.find<events>().where("id = ?").bind(id);
@@ -35,7 +35,7 @@ void event_manager::remove(const int id) {
   transaction.commit();
 }
 
-void event_manager::update(Ret_Event &ret) {
+void EventManager::update(Ret_Event &ret) {
   dbo::Transaction transaction(session_);
 
   dbo::ptr<events> event =
@@ -56,7 +56,7 @@ void event_manager::update(Ret_Event &ret) {
 
   transaction.commit();
 }
-Ret_Event event_manager::get(const int id) {
+Ret_Event EventManager::get(const int id) {
   dbo::Transaction transaction(session_);
 
   Ret_Event ret;

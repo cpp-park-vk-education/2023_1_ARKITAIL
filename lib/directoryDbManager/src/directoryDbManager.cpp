@@ -1,6 +1,6 @@
 #include "directoryDbManager.hpp"
 
-int directory_manager::add(Ret_Dir &ret) {
+int DirectoryManager::add(Ret_Dir &ret) {
   dbo::Transaction transaction(session_);
 
   std::unique_ptr<directory> direct{new directory()};
@@ -15,7 +15,7 @@ int directory_manager::add(Ret_Dir &ret) {
   return id;
 }
 
-void directory_manager::remove(const int id) {
+void DirectoryManager::remove(const int id) {
   dbo::Transaction transaction(session_);
 
   dbo::ptr<directory> direct =
@@ -25,7 +25,7 @@ void directory_manager::remove(const int id) {
   transaction.commit();
 }
 
-void directory_manager::update(Ret_Dir &ret) {
+void DirectoryManager::update(Ret_Dir &ret) {
   dbo::Transaction transaction(session_);
 
   dbo::ptr<directory> direct =
@@ -39,7 +39,7 @@ void directory_manager::update(Ret_Dir &ret) {
   transaction.commit();
 }
 
-Ret_Dir directory_manager::get(const int id) {
+Ret_Dir DirectoryManager::get(const int id) {
   dbo::Transaction transaction(session_);
 
   Ret_Dir ret;

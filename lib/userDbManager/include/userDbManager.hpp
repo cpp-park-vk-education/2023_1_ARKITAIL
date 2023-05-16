@@ -2,7 +2,7 @@
 
 #include "mainModel.hpp"
 
-class user_manager {
+class UserManager {
 public:
     users addUser(users);
     users deleteUser(int id);

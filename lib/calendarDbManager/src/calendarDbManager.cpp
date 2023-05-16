@@ -1,6 +1,6 @@
 #include "calendarDbManager.hpp"
 
-int calendars_manager::add(Ret_Calen &ret) {
+int CalendarManager::add(Ret_Calen &ret) {
   dbo::Transaction transaction(session_);
 
   std::unique_ptr<calendars> calendar{new calendars()};
@@ -16,7 +16,7 @@ int calendars_manager::add(Ret_Calen &ret) {
   return id;
 }
 
-void calendars_manager::remove(const int id) {
+void CalendarManager::remove(const int id) {
   dbo::Transaction transaction(session_);
 
   dbo::ptr<calendars> calendar =
@@ -26,7 +26,7 @@ void calendars_manager::remove(const int id) {
   transaction.commit();
 }
 
-void calendars_manager::update(Ret_Calen &ret) {
+void CalendarManager::update(Ret_Calen &ret) {
   dbo::Transaction transaction(session_);
 
   dbo::ptr<calendars> calendar =
@@ -41,7 +41,7 @@ void calendars_manager::update(Ret_Calen &ret) {
 
   transaction.commit();
 }
-Ret_Calen calendars_manager::get(const int id) {
+Ret_Calen CalendarManager::get(const int id) {
   dbo::Transaction transaction(session_);
 
   Ret_Calen ret;
@@ -57,7 +57,7 @@ Ret_Calen calendars_manager::get(const int id) {
   return ret;
 }
 
-std::vector<Ret_Event> calendars_manager::getEvents(const int id) {
+std::vector<Ret_Event> CalendarManager::getEvents(const int id) {
 
   Ret_Event ret;
   std::vector<Ret_Event> v;

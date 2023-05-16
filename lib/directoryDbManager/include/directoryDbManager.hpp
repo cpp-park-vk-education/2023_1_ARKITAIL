@@ -8,7 +8,7 @@ struct Ret_Dir {
   int node_id;
 };
 
-class directory_manager {
+class DirectoryManager {
 public:
   int add(Ret_Dir &);
   void remove(const int id);

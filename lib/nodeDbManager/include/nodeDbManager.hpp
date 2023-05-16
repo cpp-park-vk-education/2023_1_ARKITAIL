@@ -14,7 +14,7 @@ struct Ret_Node {
   std::vector<int> tag_id;
 };
 
-class node_manager {
+class NodeManager {
 public:
   int add(Ret_Node &);
   void remove(const int id);

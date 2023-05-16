@@ -10,9 +10,9 @@ struct Ret_Event {
   int calendar_id;
 };
 
-class event_manager {
+class EventManager {
 public:
-  event_manager(dbo::Session &session) : session_(session) {}
+  EventManager(dbo::Session &session) : session_(session) {}
 
   int add(Ret_Event &);
   void remove(const int id);
