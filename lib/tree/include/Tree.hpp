@@ -9,18 +9,18 @@ class Tree {
 public:
     Tree(const Node& node);
 
-    TreeNode* insertNode(const TreeNode& node, TreeNode* parent);
-    void removeNode(TreeNode* node);
     TreeNode* getRoot();
-    std::vector<TreeNode*> getChilds(TreeNode* node);
+
     std::vector<Event> getCheckedEvents();
-    std::vector<Event> checkNode();
+
+    std::vector<Event> checkNode(TreeNode* node);
+    void uncheckNode(TreeNode* node);
+
     size_t checked();
-    bool someChecked();
 
 private:
-    TreeNode root;
-    size_t checked_count;
+    std::unique_ptr<TreeNode> root_;
+    size_t checked_;
     
 };
 
