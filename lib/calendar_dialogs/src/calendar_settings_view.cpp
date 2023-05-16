@@ -11,8 +11,10 @@
 
 #include "calendar_settings_model.hpp"
 
-CalendarSettingsView::CalendarSettingsView() {
-  model_ = std::make_shared<CalendarSettingsModel>();
+// по умолчаню calendar = nullptr
+CalendarSettingsView::CalendarSettingsView(
+    std::unique_ptr<Calendar>&& calendar) {
+  model_ = std::make_shared<CalendarSettingsModel>(std::move(calendar));
 
   setTemplateText(Wt::WString::tr("calendar-settings"));
 
@@ -36,11 +38,11 @@ CalendarSettingsView::CalendarSettingsView() {
   color_ = color.get();
   setFormWidget(CalendarSettingsModel::kColorField, std::move(color));
 
-  auto button = bindWidget(
-      "submit-button", std::make_unique<Wt::WPushButton>("Создать"));
+  button_ = bindWidget(
+      "submit-button", std::make_unique<Wt::WPushButton>("OK"));
   bindString("submit-info", Wt::WString());
-  button->addStyleClass("btn-success");
-  button->clicked().connect(this, &CalendarSettingsView::HandleInput);
+  button_->addStyleClass("btn btn-success");
+  button_->clicked().connect(this, &CalendarSettingsView::HandleInput);
 
   updateView(model_.get());
 }
@@ -49,10 +51,17 @@ void CalendarSettingsView::HandleInput() {
   updateModel(model_.get());
 
   if (model_->validate()) {
-    // ...
+    // Раскомментировать при слиянии:
+    // calendar_manager.add(model_->GetData());
+    calendar_created_.emit(model_->GetData());
+    bindString("submit-info", Wt::WString("Успешно!"));
   } else {
     bindEmpty("submit-info");
   }
 
   updateView(model_.get());
+}
+
+Wt::Signal<std::shared_ptr<Calendar>>& CalendarSettingsView::calendar_created() {
+  return calendar_created_;
 }

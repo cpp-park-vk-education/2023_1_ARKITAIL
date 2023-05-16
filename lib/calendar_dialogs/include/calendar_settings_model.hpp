@@ -14,9 +14,9 @@ class CalendarSettingsModel : public Wt::WFormModel {
   static const Wt::WFormModel::Field kVisibilityField;
   static const Wt::WFormModel::Field kColorField;
 
-  CalendarSettingsModel();
+  CalendarSettingsModel(std::unique_ptr<Calendar>&& calendar = nullptr);
 
-  std::unique_ptr<Calendar> GetData() const;
+  std::shared_ptr<Calendar> GetData() const;
 
  private:
   std::shared_ptr<Wt::WValidator> CreateTitleValidator();

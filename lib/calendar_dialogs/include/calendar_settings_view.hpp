@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Wt/WPushButton.h>
 #include <memory>
 
 #include <Wt/WTemplateFormView.h>
@@ -12,9 +13,11 @@
 
 class CalendarSettingsView : public Wt::WTemplateFormView {
  public:
-  CalendarSettingsView();
+  CalendarSettingsView(std::unique_ptr<Calendar>&& calendar = nullptr);
 
   void HandleInput();
+
+  Wt::Signal<std::shared_ptr<Calendar>>& calendar_created();
  private:
   std::shared_ptr<CalendarSettingsModel> model_;
   
@@ -22,4 +25,7 @@ class CalendarSettingsView : public Wt::WTemplateFormView {
   Wt::WTextArea* description_;
   Wt::WComboBox* visibility_;
   Wt::WColorPicker* color_;
+  Wt::WPushButton* button_;
+
+  Wt::Signal<std::shared_ptr<Calendar>> calendar_created_;
 };

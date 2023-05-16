@@ -22,7 +22,7 @@ CalendarImportView::CalendarImportView() {
       CalendarImportModel::kImportiCalendarField, std::move(import_iCalendar));
 
   auto button = bindWidget(
-      "submit-button", std::make_unique<Wt::WPushButton>("Импортировать"));
+      "submit-button", std::make_unique<Wt::WPushButton>("OK"));
   bindString("submit-info", Wt::WString());
   button->addStyleClass("btn-success");
   button->clicked().connect(this, &CalendarImportView::HandleInput);

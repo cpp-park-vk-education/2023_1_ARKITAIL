@@ -1,5 +1,6 @@
 #include "calendar_settings_model.hpp"
 
+#include <Wt/WAny.h>
 #include <memory>
 
 #include <Wt/WFormModel.h>
@@ -11,7 +12,9 @@ const Wt::WFormModel::Field CalendarSettingsModel::kDescriptionField = "descript
 const Wt::WFormModel::Field CalendarSettingsModel::kVisibilityField = "visibility";
 const Wt::WFormModel::Field CalendarSettingsModel::kColorField = "color";
 
-CalendarSettingsModel::CalendarSettingsModel() : Wt::WFormModel() {
+// по умолчаню caledar = nullptr
+CalendarSettingsModel::CalendarSettingsModel(
+    std::unique_ptr<Calendar>&& calendar) : Wt::WFormModel() {
   addField(kTitleField);
   addField(kDescriptionField);
   addField(kVisibilityField);
@@ -19,7 +22,12 @@ CalendarSettingsModel::CalendarSettingsModel() : Wt::WFormModel() {
 
   setValidator(kTitleField, CreateTitleValidator());
 
-  setValue(kColorField, "#FCBF21");
+  if (calendar) {
+    setValue(kTitleField, calendar->title);
+    setValue(kDescriptionField, calendar->description);
+    setValue(kVisibilityField, calendar->visibility);
+    setValue(kColorField, calendar->color);
+  }
 }
 
 std::shared_ptr<Wt::WValidator> CalendarSettingsModel::CreateTitleValidator() {
@@ -32,7 +40,13 @@ std::shared_ptr<Wt::WValidator> CalendarSettingsModel::CreateTitleValidator() {
   return validator;
 }
 
-std::unique_ptr<Calendar> CalendarSettingsModel::GetData() const {
-  // ИСПРАВИТЬ
-  return nullptr;
+std::shared_ptr<Calendar> CalendarSettingsModel::GetData() const {
+  auto calendar = std::make_shared<Calendar>();
+
+  calendar->title = Wt::asString(value(kTitleField));
+  calendar->description = Wt::asString(value(kDescriptionField));
+  calendar->visibility = Wt::asString(value(kVisibilityField));
+  calendar->color = Wt::asString(value(kColorField));
+
+  return calendar;
 }
