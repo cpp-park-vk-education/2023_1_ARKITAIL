@@ -31,7 +31,8 @@ std::vector<TreeNode*> TreeNode::getChildren() {
     return children;
 }
 
-TreeNode* TreeNode::addChild(std::unique_ptr<TreeNode> tree_node) {
+TreeNode* TreeNode::addChild(const Node& node) {
+    std::unique_ptr<TreeNode> tree_node = std::make_unique<TreeNode>(node, this);
     children_.emplace_back(std::move(tree_node));
     return children_.back().get();
 }

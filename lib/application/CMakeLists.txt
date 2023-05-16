@@ -6,5 +6,16 @@ file(GLOB SOURCES ${SOURCE_DIR}/*.cpp)
 
 add_library(${MODULE_NAME} STATIC ${SOURCES})
 target_include_directories(${MODULE_NAME} PUBLIC ${INCLUDE_DIR})
-target_link_libraries(${MODULE_NAME} PUBLIC wt wthttp unmet_deps swapable connections_mediator page_widget)
+
+target_link_libraries(
+	${MODULE_NAME}
+	PUBLIC 
+	wt 
+	wthttp
+
+	unmet_deps
+	swapable
+
+	session_scope_map
+)
 

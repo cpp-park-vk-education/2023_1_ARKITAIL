@@ -1,20 +1,21 @@
 #pragma once
 
+#include <Wt/WContainerWidget.h>
+#include <Wt/WSignal.h>
+
 #include "PageWidget.hpp"
 #include "ConnectionPoint.hpp"
-#include <Wt/WSignal.h>
 
 class ConnectionsMediator {
 public:
+	ConnectionsMediator();
+
 	static ConnectionsMediator& instance();
 
 	void connect();
 	
 	// Declare your connetion points there 
-	ConnectionPoint<Wt::Signal<int>, PageWidget, int> cp;
-
-private:
-	ConnectionsMediator();
+	ConnectionPoint<Wt::Signal<int>, Wt::WContainerWidget, int> cp;
 
 };
 

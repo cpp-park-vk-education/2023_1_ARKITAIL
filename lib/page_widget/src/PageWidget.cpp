@@ -16,8 +16,8 @@ PageWidget::PageWidget(const std::string& path) :
 
 	anchor_ = addWidget(std::make_unique<Wt::WAnchor>(Wt::WLink(Wt::LinkType::InternalPath, path), path));
 
-	ConnectionsMediator::instance().cp.add_sender(&triggered_);
-	ConnectionsMediator::instance().cp.add_receiver(this, &PageWidget::triggered);
+	//ConnectionsMediator::instance().cp.add_sender(&triggered_);
+	//ConnectionsMediator::instance().cp.add_receiver(this, &PageWidget::triggered);
 }
 
 void PageWidget::trigger() {

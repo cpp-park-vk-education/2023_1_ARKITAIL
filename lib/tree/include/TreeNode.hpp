@@ -13,7 +13,7 @@ public:
     TreeNode* getParent();
 
     std::vector<TreeNode*> getChildren();
-    TreeNode* addChild(std::unique_ptr<TreeNode> tree_node);
+    TreeNode* addChild(const Node& node);
     std::unique_ptr<TreeNode> remove();
 
     bool isChecked();

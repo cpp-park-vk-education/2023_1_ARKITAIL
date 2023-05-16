@@ -1,11 +1,13 @@
+#include <thread>
+
+#include "SessionScopeMap.hpp"
 #include "ConnectionsMediator.hpp"
 
 ConnectionsMediator::ConnectionsMediator() :
 	cp() {}
 
 ConnectionsMediator& ConnectionsMediator::instance() {
-	static ConnectionsMediator cm;
-	return cm;
+	return SessionScopeMap::instance().get(std::this_thread::get_id())->connections_mediator;
 }
 
 void ConnectionsMediator::connect() {

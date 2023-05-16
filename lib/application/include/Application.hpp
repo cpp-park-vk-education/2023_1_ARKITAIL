@@ -8,9 +8,11 @@
 #include <unordered_map>
 
 
+#include "ConnectionsMediator.hpp"
 #include "PageWidget.hpp"
 #include "Swapable.hpp" 
 #include "UnmetDeps.hpp"
+#include "Managers.hpp"
 
 class Application : public Wt::WApplication {
 public:

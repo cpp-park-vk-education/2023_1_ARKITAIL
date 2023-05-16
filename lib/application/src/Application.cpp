@@ -1,9 +1,9 @@
 #include <Wt/WWidget.h>
 #include <string>
+#include <thread>
 
 #include "Application.hpp"
-#include "ConnectionsMediator.hpp"
-#include "PageWidget.hpp"
+#include "SessionScopeMap.hpp"
 
 Application::Application(const Wt::WEnvironment& env) :
 	Wt::WApplication(env),
@@ -26,6 +26,8 @@ Application::Application(const Wt::WEnvironment& env) :
 
 	// Connections mediator connections establishing
 	ConnectionsMediator::instance().connect();
+
+	SessionScopeMap::instance().add(std::this_thread::get_id());
 }
 
 void Application::route(const std::string& internalPath) {
