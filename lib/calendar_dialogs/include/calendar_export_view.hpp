@@ -2,19 +2,17 @@
 
 #include <memory>
 
-#include <Wt/WTemplateFormView.h>
 #include <Wt/WLineEdit.h>
+#include <Wt/WPushButton.h>
+#include <Wt/WTemplateFormView.h>
 
-#include "calendar.hpp"
-#include "calendar_export_fm.hpp"
+#include "calendar_export_model.hpp"
 
-class CalendarExportFV : public Wt::WTemplateFormView {
+class CalendarExportView : public Wt::WTemplateFormView {
  public:
-  CalendarExportFV();
-
-  void UpdateModel(std::unique_ptr<Calendar> calendar);
+  CalendarExportView(std::shared_ptr<Calendar> calendar);
  private:
-  std::shared_ptr<CalendarExportFM> model_;
+  std::shared_ptr<CalendarExportModel> model_;
   
   Wt::WLineEdit* export_iCalendar_;
 };

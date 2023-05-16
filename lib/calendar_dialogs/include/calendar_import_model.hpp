@@ -11,4 +11,6 @@ class CalendarImportModel : public Wt::WFormModel {
   static const Wt::WFormModel::Field kImportiCalendarField;
 
   CalendarImportModel();
+
+  std::shared_ptr<Calendar> GetData() const;
 };

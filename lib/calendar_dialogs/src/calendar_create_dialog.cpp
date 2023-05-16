@@ -1,6 +1,5 @@
 #include "calendar_create_dialog.hpp"
 
-#include <iostream>
 #include <memory>
 
 #include <Wt/WDialog.h>

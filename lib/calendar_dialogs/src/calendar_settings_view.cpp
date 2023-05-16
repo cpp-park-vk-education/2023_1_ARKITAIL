@@ -13,8 +13,8 @@
 
 // по умолчаню calendar = nullptr
 CalendarSettingsView::CalendarSettingsView(
-    std::unique_ptr<Calendar>&& calendar) {
-  model_ = std::make_shared<CalendarSettingsModel>(std::move(calendar));
+    std::shared_ptr<Calendar> calendar) {
+  model_ = std::make_shared<CalendarSettingsModel>(calendar);
 
   setTemplateText(Wt::WString::tr("calendar-settings"));
 

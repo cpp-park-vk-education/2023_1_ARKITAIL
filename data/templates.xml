@@ -73,4 +73,17 @@
       </div>
     </div>
   </message>
+  <message id="calendar-export">
+    <div class="row m-3">
+      <div class="col">
+        <label class="form-label" for="${id:export-icalendar}">
+          В формате iCalendar
+        </label>
+        ${export-icalendar}
+        <div class="form-text">
+          ${export-icalendar-info}
+        </div>
+      </div>
+    </div>
+  </message>
 </messages>

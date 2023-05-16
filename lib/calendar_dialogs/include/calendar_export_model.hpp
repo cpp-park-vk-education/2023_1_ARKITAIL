@@ -6,11 +6,9 @@
 
 #include "calendar.hpp"
 
-class CalendarExportFM : public Wt::WFormModel {
+class CalendarExportModel : public Wt::WFormModel {
  public:
   static const Wt::WFormModel::Field kExportiCalendarField;
 
-  CalendarExportFM();
-
-  void SetData(std::unique_ptr<Calendar> calendar);
+  CalendarExportModel(std::shared_ptr<Calendar> calendar);
 };

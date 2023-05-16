@@ -8,3 +8,11 @@ const Wt::WFormModel::Field CalendarImportModel::kImportiCalendarField
 CalendarImportModel::CalendarImportModel() {
   addField(kImportiCalendarField);
 }
+
+std::shared_ptr<Calendar> CalendarImportModel::GetData() const {
+  auto calendar = std::make_shared<Calendar>();
+
+  // ...
+
+  return calendar;
+}

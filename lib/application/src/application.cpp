@@ -13,9 +13,11 @@
 #include <iostream>
 #include <memory>
 
+#include "calendar.hpp"
 #include "session.hpp"
 #include "utils.hpp"
 #include "calendar_create_dialog.hpp"
+#include "calendar_edit_dialog.hpp"
 
 Application::Application(const Wt::WEnvironment& env)
   : Wt::WApplication(env),
@@ -27,13 +29,24 @@ Application::Application(const Wt::WEnvironment& env)
 
   messageResourceBundle().use(appRoot() + "data/templates");
 
-  // ТЕСТ
-  auto button = std::make_unique<Wt::WPushButton>("Создать событие");
-  button->clicked().connect([=]{
+  // Временный блок для демонстрации работы диалогов
+  auto calendar_create = std::make_unique<Wt::WPushButton>("Создать календарь");
+  calendar_create->clicked().connect([=]{
       CreateCalendarDialog::Show(root());
   });
-  root()->addWidget(std::move(button));
-  // ТЕСТ
+  root()->addWidget(std::move(calendar_create));
+
+  auto calendar = Calendar {
+    "Название календаря",
+    "Описание календаря",
+    "Приватный",
+    "#D12828",
+  };
+  auto calendar_edit = std::make_unique<Wt::WPushButton>("Редактировать календарь");
+  calendar_edit->clicked().connect([=]{
+      EditCalendarDialog::Show(root(), std::make_shared<Calendar>(calendar));
+  });
+  root()->addWidget(std::move(calendar_edit));
 
   auto auth_widget = std::make_unique<Wt::Auth::AuthWidget>(
       Session::GetAuthService(), session_.users(), session_.login());
@@ -41,7 +54,8 @@ Application::Application(const Wt::WEnvironment& env)
   auth_widget->setRegistrationEnabled(true);
   auth_widget->processEnvironment();
 
-  root()->addWidget(std::move(auth_widget));
+  // Раскомментировать в production'е
+  // root()->addWidget(std::move(auth_widget));
 }
 
 void Application::AuthEvent() {

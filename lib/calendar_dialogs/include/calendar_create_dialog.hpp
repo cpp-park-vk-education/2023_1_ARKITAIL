@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Wt/WDialog.h>
 #include <Wt/WObject.h>
 
 class CreateCalendarDialog {

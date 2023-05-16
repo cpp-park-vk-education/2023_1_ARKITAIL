@@ -14,7 +14,7 @@ const Wt::WFormModel::Field CalendarSettingsModel::kColorField = "color";
 
 // по умолчаню caledar = nullptr
 CalendarSettingsModel::CalendarSettingsModel(
-    std::unique_ptr<Calendar>&& calendar) : Wt::WFormModel() {
+    std::shared_ptr<Calendar> calendar) : Wt::WFormModel() {
   addField(kTitleField);
   addField(kDescriptionField);
   addField(kVisibilityField);
