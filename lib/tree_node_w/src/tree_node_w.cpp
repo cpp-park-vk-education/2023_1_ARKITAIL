@@ -9,9 +9,13 @@
 #include <Wt/WPopupWidget.h>
 #include <Wt/WPushButton.h>
 
+#include "Managers.hpp"
 #include "Node.hpp"
+#include "Profile.hpp"
+#include "ProfileManager.hpp"
 #include "Tree.hpp"
 #include "TreeNode.hpp"
+#include "User.hpp"
 #include "options_calendars_dir_w.hpp"
 #include "options_personal_calendar_w.hpp"
 #include "options_subscription_w.hpp"
@@ -76,11 +80,11 @@ TreeNodeW* TreeNodeW::addToolTip(std::string description, std::vector<std::strin
     return this;
 }
 
-TreeNodeW* TreeNodeW::addToolTip(std::string description, std::vector<std::string> tags, std::string author) {
+TreeNodeW* TreeNodeW::addToolTip(std::string description, std::vector<std::string> tags, User author) {
     auto content = std::make_unique<Wt::WContainerWidget>();
 
-    auto author_ptr =
-        content->addWidget(std::make_unique<Wt::WAnchor>(Wt::WLink(Wt::LinkType::InternalPath, "/calendars"), author));
+    auto author_ptr = content->addWidget(
+        std::make_unique<Wt::WAnchor>(Wt::WLink(Wt::LinkType::InternalPath, "/calendars"), author.nickname));
     author_ptr->setStyleClass("fw-bolder");
     author_ptr->clicked().connect([=] { std::cout << author_ptr->text().toUTF8() << std::endl; });
     content->addWidget(std::make_unique<Wt::WBreak>());
@@ -114,35 +118,37 @@ TreeNodeW* TreeNodeW::hideCheckBox() {
 
 std::unique_ptr<TreeNodeW> TreeNodeW::makeTreeNodeWidget(TreeNode* tree_node) {
     std::unique_ptr<TreeNodeW> res;
-    // тут
-    Node* node;
-    // Node* node = tree_node->getNode();
-    // у менеджера дир нужно поле name
-    std::string name = "";
-    if (node->type & (PRIVATE_CALENDAR | PUBLIC_CALENDAR)) {
+    Node node = tree_node->getNode();
+    std::vector<std::string> tags;
+
+    if (node.type & (PRIVATE_CALENDAR | PUBLIC_CALENDAR)) {
+        Calendar child = Managers::instance().calendar_manager->get(node.resource_id);
+        res = std::make_unique<TreeNodeCalendarW>(child.name, tree_node);
+        res.get()->addOptions(std::make_unique<OptionsPersonalCalendarW>())->addToolTip(child.description, tags);
+    } else if (node.type & (PRIVATE_DIRECTORY | PUBLIC_DIRECTORY)) {
+        Directory child = Managers::instance().directory_manager->get(node.resource_id);
+        res = std::make_unique<TreeNodeDirW>(child.name, tree_node);
+        res.get()->addOptions(std::make_unique<OptionsCalendarsDirW>())->addToolTip(child.description, tags);
+    } else if (node.type & (PRIVATE_GROUP)) {
+        Directory child = Managers::instance().directory_manager->get(node.resource_id);
         std::string desc = "";
-        std::vector<std::string> tags;
-        res = std::make_unique<TreeNodeCalendarW>(name, tree_node);
-        res.get()->addOptions(std::make_unique<OptionsPersonalCalendarW>())->addToolTip(desc, tags);
-    } else if (node->type & (PRIVATE_DIRECTORY | PUBLIC_DIRECTORY)) {
-        std::string desc = "";
-        std::vector<std::string> tags;
-        res = std::make_unique<TreeNodeDirW>(name, tree_node);
-        res.get()->addOptions(std::make_unique<OptionsCalendarsDirW>())->addToolTip(desc, tags);
-    } else if (node->type & (PROFILE_GROUP | PRIVATE_GROUP)) {
-        std::string desc = "";
-        std::vector<std::string> tags;
-        res = std::make_unique<TreeNodeDirW>(name, tree_node);
+        res = std::make_unique<TreeNodeDirW>(child.name, tree_node);
         res.get()->hideCheckBox();
-    } else if (node->type & PUBLIC_GROUP) {
-        res = std::make_unique<TreeNodePublicGroupW>(name, tree_node);
+    } else if (node.type & (PROFILE_GROUP)) {
+        // Profile child = Managers::instance().->get(node.resource_id);
+        // res = std::make_unique<TreeNodeDirW>(child.name, tree_node);
+        // res.get()->hideCheckBox();
+    } else if (node.type & PUBLIC_GROUP) {
+        Directory child = Managers::instance().directory_manager->get(node.resource_id);
+        res = std::make_unique<TreeNodePublicGroupW>(child.name, tree_node);
         res.get()->hideCheckBox();
-    } else if (node->type & SUBSCRIPTIONS_GROUP) {
-        res = std::make_unique<TreeNodeSubscriptionsDirW>(name, tree_node);
+    } else if (node.type & SUBSCRIPTIONS_GROUP) {
+        Directory child = Managers::instance().directory_manager->get(node.resource_id);
+        res = std::make_unique<TreeNodeSubscriptionsDirW>(child.name, tree_node);
         res.get()->hideCheckBox();
-    } else if (node->type & PROFILE) {
-        res = std::make_unique<TreeNodeProfileW>(name, tree_node);
-        res.get()->hideCheckBox();
+    } else if (node.type & PROFILE) {
+        // res = std::make_unique<TreeNodeProfileW>(child.name, tree_node);
+        // res.get()->hideCheckBox();
     }
     res.get()->endNode()->addParent(this);
     return res;

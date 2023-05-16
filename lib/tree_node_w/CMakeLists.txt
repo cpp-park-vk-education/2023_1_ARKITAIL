@@ -18,4 +18,7 @@ target_link_libraries(tree_node_w  PUBLIC
                       tree
                       calendar
                       directory
+                      user
+                      profile
+                      profile_manager
                       )

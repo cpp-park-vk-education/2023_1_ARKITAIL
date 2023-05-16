@@ -12,6 +12,7 @@
 #include "Node.hpp"
 #include "Tree.hpp"
 #include "TreeNode.hpp"
+#include "User.hpp"
 #include "options_w.hpp"
 
 class TreeNodeW : public Wt::WContainerWidget {
@@ -35,7 +36,7 @@ class TreeNodeW : public Wt::WContainerWidget {
     virtual std::unique_ptr<TreeNodeW> makeTreeNodeWidget(TreeNode* node);
     TreeNodeW* addOptions(std::unique_ptr<OptionsW> options);
     TreeNodeW* addToolTip(std::string description, std::vector<std::string> tags);
-    TreeNodeW* addToolTip(std::string description, std::vector<std::string> tags, std::string author);
+    TreeNodeW* addToolTip(std::string description, std::vector<std::string> tags, User author);
     TreeNodeW* hideCheckBox();
     TreeNodeW* endNode();
 
