@@ -2,10 +2,9 @@
 
 #include <Wt/WContainerWidget.h>
 
-#include "PageWidget.hpp"
 #include "calendar_w.hpp"
 
-class MainP : public PageWidget {
+class MainP : public Wt::WContainerWidget {
   public:
     MainP();
     ~MainP() = default;

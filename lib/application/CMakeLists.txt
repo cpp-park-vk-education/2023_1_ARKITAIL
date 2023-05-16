@@ -16,5 +16,8 @@ target_link_libraries(
 	swapable
 
 	session_scope_map
+	main_p
+	other_p
+	navbar_w
 )
 

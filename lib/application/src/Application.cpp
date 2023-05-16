@@ -1,4 +1,5 @@
 #include <Wt/WBootstrap5Theme.h>
+#include <Wt/WContainerWidget.h>
 #include <Wt/WText.h>
 #include <Wt/WWidget.h>
 
@@ -23,7 +24,7 @@ Application::Application(const Wt::WEnvironment& env)
     navbar_->addLink("Calendars", "/calendars");
     pages_.emplace("/profile", std::make_unique<OtherP>()).first->second.set_destination(&cur_swap_);
     navbar_->addLink("My Profile", "/profile");
-    pages_.emplace("/search", std::make_unique<PageWidget>()).first->second.set_destination(&cur_swap_);
+    pages_.emplace("/search", std::make_unique<Wt::WContainerWidget>()).first->second.set_destination(&cur_swap_);
     navbar_->addLink("Search", "/search");
 
     // Main page configuration

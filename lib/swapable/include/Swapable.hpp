@@ -1,6 +1,5 @@
 #pragma once
 
-#include "PageWidget.hpp"
 #include <Wt/WWidget.h>
 #include <memory>
 

@@ -3,7 +3,6 @@
 #include <Wt/WContainerWidget.h>
 #include <Wt/WSignal.h>
 
-#include "PageWidget.hpp"
 #include "ConnectionPoint.hpp"
 
 class ConnectionsMediator {

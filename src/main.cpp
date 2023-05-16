@@ -80,19 +80,15 @@ int main(int argc, char **argv) {
     return Wt::WRun(argc, argv,
                     [](const Wt::WEnvironment &env) { return std::make_unique<CalendulaApplication>(env); });
 */
-#include <Wt/WApplication.h>
-#include <Wt/WContainerWidget.h>
 #include <Wt/WEnvironment.h>
-#include <Wt/WLogger.h>
-#include <Wt/WSignal.h>
-
-#include <Wt/Signals/signals.hpp>
 #include <iostream>
 
 #include "Application.hpp"
 
 int main(int argc, char** argv) {
-    Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) { return std::make_unique<Application>(env); });
+    Wt::WRun(argc, argv, [](const Wt::WEnvironment& env) {
+        return std::make_unique<Application>(env);
+    });
 
     return 0;
 }
