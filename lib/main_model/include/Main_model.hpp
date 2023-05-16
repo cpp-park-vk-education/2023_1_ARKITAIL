@@ -11,8 +11,8 @@ class tags;
 
 class calendars {
 public:
-  dbo::ptr<users> user;                    // Owner
-  std::string name;                        // name
+  dbo::ptr<users> user; // Owner
+  std::string name;     // name
   std::string description;
   dbo::collection<dbo::ptr<events>> event; // event
   dbo::ptr<nodes> node;                    // p_node
@@ -56,7 +56,19 @@ public:
   }
 };
 
-enum class Type { Directory = 0, Calendar = 1, Mount = 2 };
+enum class Type {
+  Root = 0,
+  Private_Group = 1,
+  Private_Directory = 2,
+  Private_Calendar = 3,
+  Public_Group = 4,
+  Public_Directory = 5,
+  Public_Calendar = 6,
+  Subscription_Group = 7,
+  Mount = 8,
+  Profile_Group = 9,
+  Profile = 10
+};
 
 class nodes {
 public:

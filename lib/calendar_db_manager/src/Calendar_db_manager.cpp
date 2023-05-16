@@ -65,20 +65,20 @@ std::vector<Ret_Event> calendars_manager::getEvent(const int id) {
   dbo::Transaction transaction(session_);
   dbo::ptr<calendars> calendar =
       session_.find<calendars>().where("id = ?").bind(id);
-
-  for (int i = 0; i < calendar->event.size(); ++i) {
-
-    dbo::ptr<events> event =
+  dbo::collection<dbo::ptr<events>> event =
         session_.find<events>().where("calendar_id = ?").bind(id);
-    ret.name = event->name;
-    ret.description = event->description;
-    ret.calendar_id = event->calendar.id();
-    std::tm tm_res_start = *std::localtime(&event->time_start);
+
+  for (const dbo::ptr<events>& eve : event) {
+
+        ret.name = eve->name;
+    ret.description = eve->description;
+    ret.calendar_id = eve->calendar.id();
+    std::tm tm_res_start = *std::localtime(&eve->time_start);
 
     ret.t_start = {tm_res_start.tm_sec,  tm_res_start.tm_min,
                    tm_res_start.tm_hour, tm_res_start.tm_mday,
                    tm_res_start.tm_mon,  tm_res_start.tm_year + 1900};
-    std::tm tm_res_end = *std::localtime(&event->time_end);
+    std::tm tm_res_end = *std::localtime(&eve->time_end);
 
     ret.t_end = {tm_res_end.tm_sec,  tm_res_end.tm_min,
                  tm_res_end.tm_hour, tm_res_end.tm_mday,

@@ -4,12 +4,14 @@
 
 struct Ret_Tag {
   std::string name;
+  std::vector<int> node_id;
 };
 
 struct Ret_Node {
   int parent_id;
   Type type;
   int resource_id;
+  std::vector<int> tag_id;
 };
 
 class node_manager {
