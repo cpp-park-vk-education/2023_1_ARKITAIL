@@ -4,4 +4,4 @@ target_include_directories(tree_node_calendar_w  PUBLIC include)
 
 target_link_libraries(tree_node_calendar_w  PUBLIC
                       calendula_compiler_flags
-                      tree_node_leave_w)
+                      tree_node_leaf_w)

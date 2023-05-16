@@ -4,4 +4,5 @@ target_include_directories(options_calendars_dir_w  PUBLIC include)
 
 target_link_libraries(options_calendars_dir_w  PUBLIC
                       calendula_compiler_flags
-                      options_w)
+                      options_w
+                      options_dir_w)

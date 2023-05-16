@@ -2,13 +2,14 @@
 
 #include <Wt/WText.h>
 
-#include "tree_node_leave_w.hpp"
+#include "tree_node_leaf_w.hpp"
 
-class TreeNodeCalendarW : public TreeNodeLeaveW {
+class TreeNodeCalendarW : public TreeNodeLeafW {
   public:
-    TreeNodeCalendarW(std::string label);
+    TreeNodeCalendarW(std::string label, TreeNode* node);
     ~TreeNodeCalendarW() = default;
     Wt::WInteractWidget* getTitle() override;
+    void performAction(Action action) override;
 
   private:
     Wt::WText* label_;

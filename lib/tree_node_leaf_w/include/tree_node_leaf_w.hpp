@@ -7,13 +7,15 @@
 
 #include "tree_node_w.hpp"
 
-class TreeNodeLeaveW : public TreeNodeW {
+class TreeNodeLeafW : public TreeNodeW {
   public:
-    TreeNodeLeaveW();
-    ~TreeNodeLeaveW() = default;
+    TreeNodeLeafW(TreeNode* node);
+    ~TreeNodeLeafW() = default;
 
     void showNode() override;
     void closeNode() override;
     void checkNode() override;
     void uncheckNode() override;
+
+    void performAction(Action action) override;
 };

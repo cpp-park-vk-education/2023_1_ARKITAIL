@@ -3,8 +3,10 @@
 #include <Wt/WString.h>
 #include <Wt/WText.h>
 
-TreeNodeCalendarW::TreeNodeCalendarW(std::string label) {
+TreeNodeCalendarW::TreeNodeCalendarW(std::string label, TreeNode* node) : TreeNodeLeafW(node) {
     label_ = node_block_->addWidget(std::make_unique<Wt::WText>(label));
 }
 
 Wt::WInteractWidget* TreeNodeCalendarW::getTitle() { return label_; }
+
+void TreeNodeCalendarW::performAction(Action action) {}

@@ -15,9 +15,8 @@ class TreeW : public Wt::WContainerWidget {
   public:
     TreeW();
     ~TreeW() = default;
-    void setRoot(const Node& node);
+    void setRoot(Node* node);
     void setRoot();
-    TreeNodeW* makeTreeNodeWidget(const Node& node);
 
   private:
     Tree* tree_manager_;

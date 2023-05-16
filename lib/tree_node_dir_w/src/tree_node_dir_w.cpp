@@ -7,7 +7,7 @@
 #include "Wt/WText.h"
 #include "tree_node_w.hpp"
 
-TreeNodeDirW::TreeNodeDirW(std::string label) {
+TreeNodeDirW::TreeNodeDirW(std::string label, TreeNode* node) : TreeNodeW(node) {
     icon_ = node_block_->insertWidget(
         0, std::make_unique<Wt::WIconPair>("/static/icons/nav-plus.svg", "/static/icons/nav-minus.svg"), 0);
     icon_->addStyleClass("me-1");
@@ -21,7 +21,6 @@ TreeNodeDirW::TreeNodeDirW(std::string label) {
 TreeNodeW* TreeNodeDirW::addChildNode(std::unique_ptr<TreeNodeW> child) {
     TreeNodeW* child_node = children_container_->addWidget(std::move(child));
     child_node->addParent(this);
-    child_node->setHidden(true);
     children_.push_back(child_node);
     return child_node;
 }
@@ -29,8 +28,15 @@ TreeNodeW* TreeNodeDirW::addChildNode(std::unique_ptr<TreeNodeW> child) {
 std::vector<TreeNodeW*> TreeNodeDirW::childrenNodes() { return children_; }
 
 void TreeNodeDirW::showNode() {
-    for (auto&& child : childrenNodes()) {
-        child->setHidden(false);
+    if (childrenNodes().empty()) {
+        std::vector<TreeNode*> node_children = node_->getChildren();
+        for (auto&& node_child : node_children) {
+            addChildNode(this->makeTreeNodeWidget(node_child));
+        }
+    } else {
+        for (auto&& child : childrenNodes()) {
+            child->setHidden(false);
+        }
     }
 }
 
@@ -53,5 +59,7 @@ void TreeNodeDirW::uncheckNode() {
         child->uncheckNode();
     }
 }
+
+void TreeNodeDirW::performAction(Action action) {}
 
 Wt::WInteractWidget* TreeNodeDirW::getTitle() { return label_; }

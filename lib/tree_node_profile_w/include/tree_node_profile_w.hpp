@@ -2,12 +2,12 @@
 
 #include <Wt/WInPlaceEdit.h>
 
-#include "tree_node_leave_w.hpp"
+#include "tree_node_leaf_w.hpp"
 
-class TreeNodeGroupW : public TreeNodeLeaveW {
+class TreeNodeProfileW : public TreeNodeLeafW {
   public:
-    TreeNodeGroupW(std::string label);
-    ~TreeNodeGroupW() = default;
+    TreeNodeProfileW(std::string label, TreeNode* node);
+    ~TreeNodeProfileW() = default;
     Wt::WInteractWidget* getTitle() override;
 
   private:

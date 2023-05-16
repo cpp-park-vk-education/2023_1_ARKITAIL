@@ -8,9 +8,7 @@ file(GLOB SOURCES ${SOURCE_DIR}/*.cpp)
 add_library(${MODULE_NAME} STATIC ${SOURCES})
 target_include_directories(${MODULE_NAME} PUBLIC ${INCLUDE_DIR} ${VIRTUAL_DIR})
 
-target_link_libraries(
-	${MODULE_NAME}
-	PRIVATE
+target_link_libraries(${MODULE_NAME} PRIVATE
 	managers
 	user
 	unmet_deps

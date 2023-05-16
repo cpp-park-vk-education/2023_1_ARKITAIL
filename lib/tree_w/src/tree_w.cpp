@@ -16,7 +16,8 @@
 #include "options_subscription_w.hpp"
 #include "tree_node_calendar_w.hpp"
 #include "tree_node_dir_w.hpp"
-#include "tree_node_group_w.hpp"
+#include "tree_node_other_dir_w.hpp"
+#include "tree_node_profile_w.hpp"
 
 TreeW::TreeW() {
     animateHide(Wt::WAnimation(Wt::AnimationEffect::SlideInFromLeft));
@@ -49,44 +50,53 @@ void TreeW::setRoot() {
     // если это лист(календарь), то он просто добавляется
     // иначе(директория), то она рисуется и в ее метод передается ее вектор нод, которые добавляются в контейнер нод
 
-    std::vector<std::string> tags;
-    tags.push_back("tag1");
-    tags.push_back("tag2");
-    tags.push_back("tag3");
-    root_ = addWidget(std::make_unique<TreeNodeDirW>("Календари"))->hideCheckBox()->endNode();
-    auto group = root_->addChildNode(std::make_unique<TreeNodeDirW>("Группировки"))->endNode();
-    group->addChildNode(std::make_unique<TreeNodeGroupW>("ГруппаТупики"))
-        ->addOptions(std::make_unique<OptionsPersonalCalendarW>())
-        ->endNode();
-    auto priv = root_->addChildNode(std::make_unique<TreeNodeDirW>("Приватные"))->endNode();
-    auto priv1 = priv->addChildNode(std::make_unique<TreeNodeDirW>("Папка1"))
-                     ->addOptions(std::make_unique<OptionsCalendarsDirW>())
-                     ->endNode();
-    priv1->addChildNode(std::make_unique<TreeNodeGroupW>("Прив1"))
-        ->addOptions(std::make_unique<OptionsPersonalCalendarW>())
-        ->endNode();
-    priv->addChildNode(std::make_unique<TreeNodeGroupW>("Группа1"))
-        ->addOptions(std::make_unique<OptionsPersonalCalendarW>())
-        ->endNode();
+    // std::vector<std::string> tags;
+    // tags.push_back("tag1");
+    // tags.push_back("tag2");
+    // tags.push_back("tag3");
+    // root_ = addWidget(std::make_unique<TreeNodeDirW>("Календари"))->hideCheckBox()->endNode();
+    // auto group = root_->addChildNode(std::make_unique<TreeNodeDirW>("Группировки"))->endNode();
+    // group->addChildNode(std::make_unique<TreeNodeProfileW>("ГруппаТупики"))
+    //     ->addOptions(std::make_unique<OptionsPersonalCalendarW>())
+    //     ->endNode();
+    // auto priv = root_->addChildNode(std::make_unique<TreeNodeDirW>("Приватные"))->endNode();
+    // auto priv1 = priv->addChildNode(std::make_unique<TreeNodeDirW>("Папка1"))
+    //                  ->addOptions(std::make_unique<OptionsCalendarsDirW>())
+    //                  ->endNode();
+    // priv1->addChildNode(std::make_unique<TreeNodeProfileW>("Прив1"))
+    //     ->addOptions(std::make_unique<OptionsPersonalCalendarW>())
+    //     ->endNode();
+    // priv->addChildNode(std::make_unique<TreeNodeProfileW>("Группа1"))
+    //     ->addOptions(std::make_unique<OptionsPersonalCalendarW>())
+    //     ->endNode();
 
-    auto pub = root_->addChildNode(std::make_unique<TreeNodeDirW>("Публичные"))->endNode();
-    pub->addChildNode(std::make_unique<TreeNodeCalendarW>("Публичные тупики"))
-        ->addOptions(std::make_unique<OptionsPersonalCalendarW>())
-        ->addToolTip("Календарь с главными событиями тупиков", tags)
-        ->endNode();
-    auto sub = root_->addChildNode(std::make_unique<TreeNodeDirW>("Подписки"))->endNode();
-    sub->addChildNode(std::make_unique<TreeNodeCalendarW>("МГТУ"))
-        ->addOptions(std::make_unique<OptionsSubscriptionW>())
-        ->addToolTip(
-            "Добро пожаловать на официальную страницу МГТУ им. Н.Э. Баумана! Здесь вы найдете новости "
-            "нашего университета, анонсы мероприятий и многое другое.",
-            tags, "МГТУ")
-        ->endNode();
+    // auto pub = root_->addChildNode(std::make_unique<TreeNodeDirW>("Публичные"))->endNode();
+    // pub->addChildNode(std::make_unique<TreeNodeCalendarW>("Публичные тупики"))
+    //     ->addOptions(std::make_unique<OptionsPersonalCalendarW>())
+    //     ->addToolTip("Календарь с главными событиями тупиков", tags)
+    //     ->endNode();
+    // auto sub = root_->addChildNode(std::make_unique<TreeNodeDirW>("Подписки"))->endNode();
+    // sub->addChildNode(std::make_unique<TreeNodeCalendarW>("МГТУ"))
+    //     ->addOptions(std::make_unique<OptionsSubscriptionW>())
+    //     ->addToolTip(
+    //         "Добро пожаловать на официальную страницу МГТУ им. Н.Э. Баумана! Здесь вы найдете новости "
+    //         "нашего университета, анонсы мероприятий и многое другое.",
+    //         tags, "МГТУ")
+    //     ->endNode();
 }
 
-TreeNodeW* makeTreeNodeWidget(const Node& node) { TreeNodeW* res; }
-
-void TreeW::setRoot(const Node& node) {}
+void TreeW::setRoot(Node* node) {
+    // tree_manager_ = Tree(node);
+    auto tree_node = tree_manager_->getRoot();
+    // Node* node = tree_node->getNode();
+    // у менеджера дир нужно поле name
+    std::string name = "";
+    if (node->type & ROOT) {
+        root_ = addWidget(std::make_unique<TreeNodeDirW>(name, tree_node));
+    } else {
+        root_ = addWidget(std::make_unique<TreeNodeOtherDirW>(name, tree_node));
+    }
+}
 
 void TreeW::rememberCombination() {}
 

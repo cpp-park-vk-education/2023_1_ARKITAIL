@@ -12,18 +12,18 @@
 
 class TreeNodeDirW : public TreeNodeW {
   public:
-    TreeNodeDirW(std::string label);
+    TreeNodeDirW(std::string label, TreeNode* node);
     ~TreeNodeDirW() = default;
     TreeNodeW* addChildNode(std::unique_ptr<TreeNodeW> child) override;
     std::vector<TreeNodeW*> childrenNodes();
-    bool isSelected();
     void showNode() override;
     void closeNode() override;
     void checkNode() override;
     void uncheckNode() override;
     Wt::WInteractWidget* getTitle() override;
+    void performAction(Action action) override;
 
-  private:
+  protected:
     std::vector<TreeNodeW*> children_;
     Wt::WIconPair* icon_;
     Wt::WText* label_;

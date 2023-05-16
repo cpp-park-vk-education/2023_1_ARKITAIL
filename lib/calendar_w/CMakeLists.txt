@@ -9,7 +9,6 @@ target_link_libraries(calendar_w PUBLIC
                       week_w
                       month_w
                       tree_w
-                      utils
                       calendula_compiler_flags)
 if(BUILD_TESTS)
   add_subdirectory(tests)
