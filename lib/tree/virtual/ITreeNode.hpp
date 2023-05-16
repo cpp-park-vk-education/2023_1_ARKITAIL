@@ -1,12 +1,12 @@
 #pragma once
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 #include "Node.hpp"
 
 class ITreeNode {
-public:
+  public:
     virtual const Node& getNode() = 0;
     virtual ITreeNode* getParent() = 0;
 
@@ -19,7 +19,5 @@ public:
     virtual void check() = 0;
     virtual void uncheck() = 0;
 
-	virtual std::unique_ptr<ITreeNode> removeChild(ITreeNode* child);
-
+    virtual std::unique_ptr<ITreeNode> removeChild(ITreeNode* child) = 0;
 };
-

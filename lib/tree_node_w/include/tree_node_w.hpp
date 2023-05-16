@@ -9,15 +9,15 @@
 
 #include "Calendar.hpp"
 #include "Directory.hpp"
+#include "ITreeNode.hpp"
 #include "Node.hpp"
 #include "Tree.hpp"
-#include "TreeNode.hpp"
 #include "User.hpp"
 #include "options_w.hpp"
 
 class TreeNodeW : public Wt::WContainerWidget {
   public:
-    TreeNodeW(TreeNode* node);
+    TreeNodeW(ITreeNode* node);
     virtual ~TreeNodeW() = default;
     virtual void checkNode() = 0;
     virtual void uncheckNode() = 0;
@@ -33,7 +33,7 @@ class TreeNodeW : public Wt::WContainerWidget {
     void uncheckParentNodes();
     virtual Wt::WInteractWidget* getTitle() = 0;
 
-    virtual std::unique_ptr<TreeNodeW> makeTreeNodeWidget(TreeNode* node);
+    virtual std::unique_ptr<TreeNodeW> makeTreeNodeWidget(ITreeNode* node);
     TreeNodeW* addOptions(std::unique_ptr<OptionsW> options);
     TreeNodeW* addToolTip(std::string description, std::vector<std::string> tags);
     TreeNodeW* addToolTip(std::string description, std::vector<std::string> tags, User author);
@@ -45,7 +45,7 @@ class TreeNodeW : public Wt::WContainerWidget {
     Wt::WHBoxLayout* node_block_;
     Wt::WCheckBox* check_box_;
     TreeNodeW* parent_;
-    TreeNode* node_;
+    ITreeNode* node_;
     std::unique_ptr<Wt::WPopupWidget> tool_tip_;
 
   private:

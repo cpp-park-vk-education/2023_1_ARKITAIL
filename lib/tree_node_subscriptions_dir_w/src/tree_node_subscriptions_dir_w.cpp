@@ -10,9 +10,9 @@
 #include "tree_node_dir_w.hpp"
 #include "tree_node_w.hpp"
 
-TreeNodeSubscriptionsDirW::TreeNodeSubscriptionsDirW(std::string label, TreeNode* node) : TreeNodeDirW(label, node) {}
+TreeNodeSubscriptionsDirW::TreeNodeSubscriptionsDirW(std::string label, ITreeNode* node) : TreeNodeDirW(label, node) {}
 
-std::unique_ptr<TreeNodeW> TreeNodeSubscriptionsDirW::makeTreeNodeWidget(TreeNode* node) {
+std::unique_ptr<TreeNodeW> TreeNodeSubscriptionsDirW::makeTreeNodeWidget(ITreeNode* node) {
     std::unique_ptr<TreeNodeW> res;
     NodeType node_type = node->getNode().type;
     std::vector<std::string> tags;

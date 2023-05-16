@@ -9,12 +9,12 @@
 #include <Wt/WPopupWidget.h>
 #include <Wt/WPushButton.h>
 
+#include "ITreeNode.hpp"
 #include "Managers.hpp"
 #include "Node.hpp"
 #include "Profile.hpp"
 #include "ProfileManager.hpp"
 #include "Tree.hpp"
-#include "TreeNode.hpp"
 #include "User.hpp"
 #include "options_calendars_dir_w.hpp"
 #include "options_personal_calendar_w.hpp"
@@ -27,7 +27,7 @@
 #include "tree_node_public_group_w.hpp"
 #include "tree_node_subscriptions_dir_w.hpp"
 
-TreeNodeW::TreeNodeW(TreeNode* node) : parent_(nullptr), node_(node) {
+TreeNodeW::TreeNodeW(ITreeNode* node) : parent_(nullptr), node_(node) {
     auto node_block = addWidget(std::make_unique<Wt::WContainerWidget>());
     node_block->addStyleClass("p-0");
     node_block_ = node_block->setLayout(std::make_unique<Wt::WHBoxLayout>());
@@ -116,7 +116,7 @@ TreeNodeW* TreeNodeW::hideCheckBox() {
     return this;
 }
 
-std::unique_ptr<TreeNodeW> TreeNodeW::makeTreeNodeWidget(TreeNode* tree_node) {
+std::unique_ptr<TreeNodeW> TreeNodeW::makeTreeNodeWidget(ITreeNode* tree_node) {
     std::unique_ptr<TreeNodeW> res;
     Node node = tree_node->getNode();
     std::vector<std::string> tags;

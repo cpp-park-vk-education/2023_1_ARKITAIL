@@ -12,8 +12,8 @@
 
 class TreeNodeOtherDirW : public TreeNodeDirW {
   public:
-    TreeNodeOtherDirW(std::string label, TreeNode* node);
+    TreeNodeOtherDirW(std::string label, ITreeNode* node);
     ~TreeNodeOtherDirW() = default;
 
-    std::unique_ptr<TreeNodeW> makeTreeNodeWidget(TreeNode* node) override;
+    std::unique_ptr<TreeNodeW> makeTreeNodeWidget(ITreeNode* node) override;
 };

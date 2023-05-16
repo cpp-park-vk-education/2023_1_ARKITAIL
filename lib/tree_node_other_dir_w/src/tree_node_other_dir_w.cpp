@@ -7,6 +7,6 @@
 #include "Wt/WText.h"
 #include "tree_node_dir_w.hpp"
 
-TreeNodeOtherDirW::TreeNodeOtherDirW(std::string label, TreeNode* node) : TreeNodeDirW(label, node) {}
+TreeNodeOtherDirW::TreeNodeOtherDirW(std::string label, ITreeNode* node) : TreeNodeDirW(label, node) {}
 
-std::unique_ptr<TreeNodeW> TreeNodeOtherDirW::makeTreeNodeWidget(TreeNode* node) {}
+std::unique_ptr<TreeNodeW> TreeNodeOtherDirW::makeTreeNodeWidget(ITreeNode* node) {}

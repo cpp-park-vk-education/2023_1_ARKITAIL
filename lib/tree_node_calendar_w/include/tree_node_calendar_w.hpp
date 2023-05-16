@@ -6,7 +6,7 @@
 
 class TreeNodeCalendarW : public TreeNodeLeafW {
   public:
-    TreeNodeCalendarW(std::string label, TreeNode* node);
+    TreeNodeCalendarW(std::string label, ITreeNode* node);
     ~TreeNodeCalendarW() = default;
     Wt::WInteractWidget* getTitle() override;
     void performAction(Action action) override;

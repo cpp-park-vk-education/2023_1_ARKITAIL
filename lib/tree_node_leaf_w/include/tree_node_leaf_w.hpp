@@ -9,7 +9,7 @@
 
 class TreeNodeLeafW : public TreeNodeW {
   public:
-    TreeNodeLeafW(TreeNode* node);
+    TreeNodeLeafW(ITreeNode* node);
     ~TreeNodeLeafW() = default;
 
     void showNode() override;
