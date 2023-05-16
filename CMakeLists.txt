@@ -18,10 +18,13 @@ target_compile_options(calendula_compiler_flags INTERFACE
     "$<BUILD_INTERFACE:-g;-std=c++17;-Wall;-Wextra;-Wformat=2;-Wunused>"
 )
 
-add_executable(Calendula src/main.cpp)
 add_subdirectory(lib)
 
+add_executable(Calendula.wt src/main.cpp)
 target_link_libraries(
-    Calendula PUBLIC
+    Calendula.wt
+    PUBLIC
+    wthttp
+    application
     calendula_compiler_flags
 )

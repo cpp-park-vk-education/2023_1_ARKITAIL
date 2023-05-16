@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<messages>
+  <message id="calendar-settings">
+    <div class="row m-3">
+      <div class="col">
+        <label class="form-label" for="${id:title}">
+          Название
+        </label>
+        ${title}
+        <div class="form-text">
+          ${title-info}
+        </div>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col">
+        <label class="form-label" for="${id:description}">
+          Описание
+        </label>
+        ${description}
+        <div class="form-text">
+          ${description-info}
+        </div>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col-6">
+        <label class="form-label" for="${id:visibility}">
+          Видимость
+        </label>
+        ${visibility}
+        <div class="form-text">
+          ${visibility-info}
+        </div>
+      </div>
+      <div class="offset-2 col-4">
+        <label class="form-label" for="${id:color}">
+          Цвет
+        </label>
+        ${color}
+        <div class="form-text">
+          ${color-info}
+        </div>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="offset-9">
+        ${submit-button}
+        <span class="help-inline">
+          ${submit-info}
+        </span>
+      </div>
+    </div>
+  </message>
+  <message id="calendar-import">
+    <div class="row m-3">
+      <div class="col">
+        <label class="form-label" for="${id:import-icalendar}">
+          В формате iCalendar
+        </label>
+        ${import-icalendar}
+        <div class="form-text">
+          ${import-icalendar-info}
+        </div>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="offset-7">
+        ${submit-button}
+        <span class="help-inline">
+          ${submit-info}
+        </span>
+      </div>
+    </div>
+  </message>
+</messages>

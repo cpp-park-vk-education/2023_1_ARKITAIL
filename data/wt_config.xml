@@ -1,0 +1,4 @@
+<server>
+    <application-settings location="*">
+    </application-settings>
+</server>

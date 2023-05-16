@@ -53,11 +53,11 @@ Session::Session(const std::string& conn_info) {
   users_ = std::make_unique<UserDatabase>(*this);
 }
 
-Wt::Auth::AbstractUserDatabase& Session::GetUsers() {
+Wt::Auth::AbstractUserDatabase& Session::users() {
   return *users_;
 }
 
-Wt::Auth::Login& Session::GetLogin() {
+Wt::Auth::Login& Session::login() {
   return login_;
 }
 

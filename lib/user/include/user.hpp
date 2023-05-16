@@ -11,7 +11,7 @@ class User {
   // ...
   
   template <class Action>
-  void persist(Action& a) {
+  void persist([[maybe_unused]] Action& a) {
     // ...
   }
 };
