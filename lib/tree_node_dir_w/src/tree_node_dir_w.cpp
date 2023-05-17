@@ -7,7 +7,7 @@
 #include "Wt/WText.h"
 #include "tree_node_w.hpp"
 
-TreeNodeDirW::TreeNodeDirW(std::string label, TreeNode* node) : TreeNodeW(node) {
+TreeNodeDirW::TreeNodeDirW(std::string label, ITreeNode* node) : TreeNodeW(node) {
     icon_ = node_block_->insertWidget(
         0, std::make_unique<Wt::WIconPair>("/static/icons/nav-plus.svg", "/static/icons/nav-minus.svg"), 0);
     icon_->addStyleClass("me-1");
@@ -29,7 +29,7 @@ std::vector<TreeNodeW*> TreeNodeDirW::childrenNodes() { return children_; }
 
 void TreeNodeDirW::showNode() {
     if (childrenNodes().empty()) {
-        std::vector<TreeNode*> node_children = node_->getChildren();
+        std::vector<ITreeNode*> node_children = node_->getChildren();
         for (auto&& node_child : node_children) {
             addChildNode(this->makeTreeNodeWidget(node_child));
         }

@@ -12,7 +12,7 @@
 
 class TreeNodeDirW : public TreeNodeW {
   public:
-    TreeNodeDirW(std::string label, TreeNode* node);
+    TreeNodeDirW(std::string label, ITreeNode* node);
     ~TreeNodeDirW() = default;
     TreeNodeW* addChildNode(std::unique_ptr<TreeNodeW> child) override;
     std::vector<TreeNodeW*> childrenNodes();

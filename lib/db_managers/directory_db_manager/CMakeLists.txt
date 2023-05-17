@@ -1,4 +1,4 @@
-set(MODULE_NAME )
+set(MODULE_NAME directory_db_manager)
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 

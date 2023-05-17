@@ -19,7 +19,7 @@ public:
     virtual void check() = 0;
     virtual void uncheck() = 0;
 
-	virtual std::unique_ptr<ITreeNode> removeChild(ITreeNode* child);
+    virtual std::unique_ptr<ITreeNode> removeChild(ITreeNode* child) = 0;
 
 };
 

@@ -23,7 +23,7 @@
 #include "tree_node_public_group_w.hpp"
 #include "tree_node_subscriptions_dir_w.hpp"
 
-TreeNodeW::TreeNodeW(TreeNode* node) : parent_(nullptr), node_(node) {
+TreeNodeW::TreeNodeW(ITreeNode* node) : parent_(nullptr), node_(node) {
     auto node_block = addWidget(std::make_unique<Wt::WContainerWidget>());
     node_block->addStyleClass("p-0");
     node_block_ = node_block->setLayout(std::make_unique<Wt::WHBoxLayout>());
@@ -95,7 +95,6 @@ TreeNodeW* TreeNodeW::endNode() {
 }
 
 void TreeNodeW::removeNode() { this->clear(); }
-
 void TreeNodeW::addParent(TreeNodeW* parent) { parent_ = parent; }
 
 bool TreeNodeW::isRoot() { return this == parent_; }
@@ -112,7 +111,7 @@ TreeNodeW* TreeNodeW::hideCheckBox() {
     return this;
 }
 
-std::unique_ptr<TreeNodeW> TreeNodeW::makeTreeNodeWidget(TreeNode* tree_node) {
+std::unique_ptr<TreeNodeW> TreeNodeW::makeTreeNodeWidget(ITreeNode* tree_node) {
     std::unique_ptr<TreeNodeW> res;
     // тут
     Node* node;
