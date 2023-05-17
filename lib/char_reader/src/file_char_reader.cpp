@@ -1,4 +1,4 @@
-#include "char_reader.hpp"
+#include "file_char_reader.hpp"
 
 FileCharReader::FileCharReader(std::ifstream&& fs)
   : fs_(std::move(fs)) {

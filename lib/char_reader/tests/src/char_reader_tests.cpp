@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-#include "char_reader.hpp"
+#include "file_char_reader.hpp"
 
 const std::string kPath = "../../../../data/";
 

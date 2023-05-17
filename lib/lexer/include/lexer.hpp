@@ -3,7 +3,7 @@
 #include <deque>
 #include <string>
 
-#include "char_reader.hpp"
+#include "i_char_reader.hpp"
 
 enum class Tag;
 

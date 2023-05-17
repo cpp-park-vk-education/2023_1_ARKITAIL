@@ -1,6 +1,5 @@
 #include "parser.hpp"
 
-#include <cassert>
 #include <memory>
 
 #include "lexer.hpp"
@@ -45,7 +44,12 @@ StreamUptr iCalendarParser::ParseStream() {
 
   // *component
   while (lexer_->Peek().tag != Tag::kEof) {
-    components.push_back(ParseComponent());
+    ComponentUptr component = ParseComponent();
+    if (component) {
+      components.push_back(std::move(component));
+    } else {
+      return nullptr;
+    }
   }
 
   return std::make_unique<StreamNode>(std::move(components));
@@ -94,12 +98,22 @@ ComponentUptr iCalendarParser::ParseComponent() {
   // *property
   while (lexer_->Peek() != kBegin
       && lexer_->Peek() != kEnd) {
-    properties.push_back(ParseProperty());
+    PropertyUptr property = ParseProperty();
+    if (property) {
+      properties.push_back(std::move(property));
+    } else {
+      return nullptr;
+    }
   }
 
   // *component
   while (lexer_->Peek() != kEnd) {
-    components.push_back(ParseComponent());
+    ComponentUptr component = ParseComponent();
+    if (component) {
+      components.push_back(std::move(component));
+    } else {
+      return nullptr;
+    }
   }
 
   // "END"
@@ -154,7 +168,12 @@ PropertyUptr iCalendarParser::ParseProperty() {
 
   // *parameter
   while (lexer_->Peek() != kColon) {
-    parameters.push_back(ParseParameter());
+    ParameterUptr parameter = ParseParameter();
+    if (parameter) {
+      parameters.push_back(std::move(parameter));
+    } else {
+      return nullptr;
+    }
   }
 
   // ":"
@@ -162,6 +181,9 @@ PropertyUptr iCalendarParser::ParseProperty() {
 
   // value
   value = ParseValue();
+  if (!value) {
+    return nullptr;
+  }
 
   // "\r"
   if (lexer_->Peek() != kCarriageReturn) {
@@ -192,6 +214,9 @@ ParameterUptr iCalendarParser::ParseParameter() {
 
   // pair-value
   pair_value = ParsePairValue();
+  if (!pair_value) {
+    return nullptr;
+  }
 
   return std::make_unique<ParameterNode>(std::move(pair_value));
 }
@@ -209,14 +234,24 @@ IValueUptr iCalendarParser::ParseValue() {
     std::vector<IValueUptr> values;
 
     // pair-value
-    values.push_back(ParsePairValue());
-
+    PairValueUptr pair_value = ParsePairValue();
+    if (pair_value) {
+      values.push_back(std::move(pair_value));
+    } else {
+      return nullptr;
+    }
+    
     while (lexer_->Peek() == kSemicolon) {
       // ";"
       lexer_->Get();
 
       // pair-value
-      values.push_back(ParsePairValue());
+      PairValueUptr pair_value = ParsePairValue();
+      if (pair_value) {
+        values.push_back(std::move(pair_value));
+      } else {
+        return nullptr;
+      }
     }
     
     return std::make_unique<CompositeValue>(std::move(values));

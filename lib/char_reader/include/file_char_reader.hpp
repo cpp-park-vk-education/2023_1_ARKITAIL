@@ -3,15 +3,7 @@
 #include <cstddef>
 #include <fstream>
 
-class ICharReader {
- public:
-  virtual char Peek(std::size_t k = 0) = 0;
-  virtual char Get(std::size_t k = 0) = 0;
-
-  virtual bool IsEof() = 0;
-
-  virtual ~ICharReader() = default;
-};
+#include "i_char_reader.hpp"
 
 class FileCharReader : public ICharReader {
  public:
@@ -19,7 +11,6 @@ class FileCharReader : public ICharReader {
 
   char Peek(std::size_t k = 0) override;
   char Get(std::size_t k = 0) override;
-
   bool IsEof() override;
   
  private:

@@ -4,7 +4,7 @@
 #include <sstream>
 #include <string>
 
-#include "char_reader.hpp"
+#include "i_char_reader.hpp"
 #include "lexer.hpp"
 
 class StringStubCharReader : public ICharReader {

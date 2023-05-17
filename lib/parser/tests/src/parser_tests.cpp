@@ -5,7 +5,7 @@
 #include <vector>
 #include <queue>
 
-#include "char_reader.hpp"
+#include "i_char_reader.hpp"
 #include "lexer.hpp"
 #include "parser.hpp"
 
@@ -59,6 +59,7 @@ TEST_F(iCalendarParserTest, EmptyStream) {
   char_reader_.set_ss(std::move(ss));
 
   StreamUptr root = parser_.Parse();
+  ASSERT_TRUE(root);
 
   std::vector<ComponentUptr>& stream_components = root->components();
   ASSERT_EQ(stream_components.size(), 0);
@@ -70,6 +71,7 @@ TEST_F(iCalendarParserTest, EmptyCalendar) {
   char_reader_.set_ss(std::move(ss));
 
   StreamUptr root = parser_.Parse();
+  ASSERT_TRUE(root);
 
   std::vector<ComponentUptr>& stream_components = root->components();
   ASSERT_EQ(stream_components.size(), 1);
@@ -90,6 +92,7 @@ TEST_F(iCalendarParserTest, EmptyCalendars) {
   char_reader_.set_ss(std::move(ss));
 
   StreamUptr root = parser_.Parse();
+  ASSERT_TRUE(root);
 
   std::vector<ComponentUptr>& stream_components = root->components();
   ASSERT_EQ(stream_components.size(), 2);
@@ -111,6 +114,7 @@ TEST_F(iCalendarParserTest, CalendarWithProperties) {
   char_reader_.set_ss(std::move(ss));
 
   StreamUptr root = parser_.Parse();
+  ASSERT_TRUE(root);
 
   std::vector<ComponentUptr>& stream_components = root->components();
   ASSERT_EQ(stream_components.size(), 1);
@@ -161,6 +165,7 @@ TEST_F(iCalendarParserTest, CalendarWithEmptyEvent) {
   char_reader_.set_ss(std::move(ss));
 
   StreamUptr root = parser_.Parse();
+  ASSERT_TRUE(root);
 
   std::vector<ComponentUptr>& stream_components = root->components();
   ASSERT_EQ(stream_components.size(), 1);
@@ -221,6 +226,7 @@ TEST_F(iCalendarParserTest, CalendarWithEmptyEvents) {
   char_reader_.set_ss(std::move(ss));
 
   StreamUptr root = parser_.Parse();
+  ASSERT_TRUE(root);
 
   std::vector<ComponentUptr>& stream_components = root->components();
   ASSERT_EQ(stream_components.size(), 1);
@@ -303,6 +309,7 @@ TEST_F(iCalendarParserTest, CalendarWithEvents) {
   char_reader_.set_ss(std::move(ss));
 
   StreamUptr root = parser_.Parse();
+  ASSERT_TRUE(root);
 
   std::vector<ComponentUptr>& stream_components = root->components();
   ASSERT_EQ(stream_components.size(), 1);
