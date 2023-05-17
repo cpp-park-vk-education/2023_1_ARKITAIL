@@ -6,7 +6,7 @@
 
 class TreeNodeProfileW : public TreeNodeLeafW {
   public:
-    TreeNodeProfileW(std::string label, TreeNode* node);
+    TreeNodeProfileW(std::string label, ITreeNode* node);
     ~TreeNodeProfileW() = default;
     Wt::WInteractWidget* getTitle() override;
 

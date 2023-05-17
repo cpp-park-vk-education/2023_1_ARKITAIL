@@ -7,6 +7,6 @@
 #include "Wt/WText.h"
 #include "tree_node_dir_w.hpp"
 
-TreeNodePublicGroupW::TreeNodePublicGroupW(std::string label, TreeNode* node) : TreeNodeDirW(label, node) {}
+TreeNodePublicGroupW::TreeNodePublicGroupW(std::string label, ITreeNode* node) : TreeNodeDirW(label, node) {}
 
-std::unique_ptr<TreeNodeW> TreeNodePublicGroupW::makeTreeNodeWidget(TreeNode* node) {}
+std::unique_ptr<TreeNodeW> TreeNodePublicGroupW::makeTreeNodeWidget(ITreeNode* node) {}

@@ -12,8 +12,8 @@
 
 class TreeNodeSubscriptionsGroupW : public TreeNodeDirW {
   public:
-    TreeNodeSubscriptionsGroupW(std::string label, TreeNode* node);
+    TreeNodeSubscriptionsGroupW(std::string label, ITreeNode* node);
     ~TreeNodeSubscriptionsGroupW() = default;
 
-    std::unique_ptr<TreeNodeW> makeTreeNodeWidget(TreeNode* node) override;
+    std::unique_ptr<TreeNodeW> makeTreeNodeWidget(ITreeNode* node) override;
 };

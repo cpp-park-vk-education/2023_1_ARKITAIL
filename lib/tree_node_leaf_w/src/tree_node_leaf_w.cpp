@@ -4,7 +4,7 @@
 
 #include "tree_node_w.hpp"
 
-TreeNodeLeafW::TreeNodeLeafW(TreeNode* node) : TreeNodeW(node) {}
+TreeNodeLeafW::TreeNodeLeafW(ITreeNode* node) : TreeNodeW(node) {}
 
 void TreeNodeLeafW::checkNode() { check_box_->setChecked(true); }
 

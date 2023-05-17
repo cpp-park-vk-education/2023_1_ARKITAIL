@@ -8,9 +8,9 @@
 
 #include <memory>
 
+#include "ITreeNode.hpp"
 #include "Node.hpp"
 #include "Tree.hpp"
-#include "TreeNode.hpp"
 #include "options_calendars_dir_w.hpp"
 #include "options_personal_calendar_w.hpp"
 #include "options_subscription_w.hpp"

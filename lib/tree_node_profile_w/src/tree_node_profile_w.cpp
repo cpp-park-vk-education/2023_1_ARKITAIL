@@ -3,7 +3,7 @@
 #include "Wt/WInPlaceEdit.h"
 #include "Wt/WLineEdit.h"
 
-TreeNodeProfileW::TreeNodeProfileW(std::string label, TreeNode* node) : TreeNodeLeafW(node) {
+TreeNodeProfileW::TreeNodeProfileW(std::string label, ITreeNode* node) : TreeNodeLeafW(node) {
     title_ = Wt::WString(label);
     label_ = node_block_->addWidget(std::make_unique<Wt::WInPlaceEdit>(false, label));
     label_->setPlaceholderText("Название");

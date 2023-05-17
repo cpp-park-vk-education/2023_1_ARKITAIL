@@ -12,8 +12,8 @@
 
 class TreeNodePublicGroupW : public TreeNodeDirW {
   public:
-    TreeNodePublicGroupW(std::string label, TreeNode* node);
+    TreeNodePublicGroupW(std::string label, ITreeNode* node);
     ~TreeNodePublicGroupW() = default;
 
-    std::unique_ptr<TreeNodeW> makeTreeNodeWidget(TreeNode* node) override;
+    std::unique_ptr<TreeNodeW> makeTreeNodeWidget(ITreeNode* node) override;
 };
