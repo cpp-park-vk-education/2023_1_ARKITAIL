@@ -4,7 +4,7 @@
 #include <string>
 
 class Calendar {
-public:
+  public:
     Calendar();
 
     size_t id;
@@ -13,6 +13,4 @@ public:
 
     std::string name;
     std::string description;
-
 };
-

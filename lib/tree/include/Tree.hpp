@@ -6,7 +6,8 @@
 #include "TreeNodeMock.hpp"
 
 class Tree {
-public:
+  public:
+    Tree();
     Tree(const Node& node);
 
     ITreeNode* getRoot();
@@ -18,9 +19,7 @@ public:
 
     size_t checked();
 
-private:
+  private:
     std::unique_ptr<ITreeNode> root_;
     size_t checked_;
-    
 };
-

@@ -1,0 +1,4 @@
+add_subdirectory(comment_w)
+add_subdirectory(comments_container_w)
+add_subdirectory(event_d)
+add_subdirectory(event_w)
