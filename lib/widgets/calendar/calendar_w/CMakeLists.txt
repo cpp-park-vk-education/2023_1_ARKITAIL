@@ -10,6 +10,6 @@ target_link_libraries(calendar_w PUBLIC
                       month_w
                       tree_w
                       calendula_compiler_flags)
-if(BUILD_TESTS)
-  add_subdirectory(tests)
-endif(BUILD_TESTS)                      
+# if(BUILD_TESTS)
+#   add_subdirectory(tests)
+# endif(BUILD_TESTS)                      

@@ -12,25 +12,20 @@
 
 #include "i_calendar_header_w.hpp"
 
-class CalendarHeaderW : public InterfaceCalendarHeaderW {
+class CalendarHeaderW : public ICalendarHeaderW {
   public:
     CalendarHeaderW();
     ~CalendarHeaderW() = default;
 
-    Wt::Signal<Wt::WDate>& selectedDateChanged() override {
-        return change_selected_date_;
-    }
-    Wt::Signal<Range>& rangeChanged() override {
-        return change_range_;
-    }
-    Wt::Signal<>& eventAdded() override {
-        return added_event_;
-    }
+    Wt::Signal<Wt::WDate>& selectedDateChanged() override;
+    Wt::Signal<Range>& rangeChanged() override;
+    Wt::Signal<>& eventAdded() override;
+
     void setRange() override;
     Wt::WString makeTitle() override;
-    void setSelectedDate(std::unique_ptr<Wt::WDate> new_date) {
-        selected_date_ = std::move(new_date);
-    }
+
+    void setSelectedDate(std::unique_ptr<Wt::WDate> new_date);
+    void setOptionsRange(int i);
 
   protected:
     Range range_;
@@ -42,13 +37,12 @@ class CalendarHeaderW : public InterfaceCalendarHeaderW {
     Wt::WContainerWidget* container_option_range_;
     Wt::Signal<> added_event_;
     Wt::Signal<Wt::WDate> change_selected_date_;
+    Wt::Signal<Range> change_range_;
     Wt::WComboBox* option_range_;
 
     virtual void addConnections() override;
 
   private:
-    Wt::Signal<Range> change_range_;
-
     void addStyle() override;
     void switchToToday() override;
     void switchToPrev() override;

@@ -100,4 +100,24 @@ void CalendarHeaderW::switchToNext() {
     calendar_title_->setText(makeTitle());
 }
 
+Wt::Signal<Wt::WDate>& CalendarHeaderW::selectedDateChanged() {
+    return change_selected_date_;
+}
+
+Wt::Signal<Range>& CalendarHeaderW::rangeChanged() {
+    return change_range_;
+}
+
+Wt::Signal<>& CalendarHeaderW::eventAdded() {
+    return added_event_;
+}
+
+void CalendarHeaderW::setSelectedDate(std::unique_ptr<Wt::WDate> new_date) {
+    selected_date_ = std::move(new_date);
+}
+
+void CalendarHeaderW::setOptionsRange(int i) {
+    option_range_->setCurrentIndex(i);
+}
+
 void CalendarHeaderW::addConnections() {}

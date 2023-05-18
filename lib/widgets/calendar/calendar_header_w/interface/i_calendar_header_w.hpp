@@ -13,9 +13,9 @@ enum Range {
     DAY
 };
 
-class InterfaceCalendarHeaderW : public Wt::WContainerWidget {
+class ICalendarHeaderW : public Wt::WContainerWidget {
   public:
-    virtual ~InterfaceCalendarHeaderW() = default;
+    virtual ~ICalendarHeaderW() = default;
 
     virtual Wt::Signal<Wt::WDate>& selectedDateChanged() = 0;
     virtual Wt::Signal<Range>& rangeChanged() = 0;

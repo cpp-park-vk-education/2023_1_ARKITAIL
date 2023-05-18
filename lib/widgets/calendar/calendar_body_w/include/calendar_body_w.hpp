@@ -8,7 +8,7 @@
 
 #include "i_calendar_body_w.hpp"
 
-class CalendarBodyW : public InterfaceCalendarBodyW {
+class CalendarBodyW : public ICalendarBodyW {
   public:
     CalendarBodyW();
     ~CalendarBodyW() = default;

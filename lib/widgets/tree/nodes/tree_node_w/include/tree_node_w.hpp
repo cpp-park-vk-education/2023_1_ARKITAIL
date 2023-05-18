@@ -14,8 +14,11 @@
 #include "Tree.hpp"
 #include "User.hpp"
 #include "options_w.hpp"
+#include "tree_node_w_builder.hpp"
 
 class TreeNodeW : public Wt::WContainerWidget {
+    friend class TreeNodeWBuilder;
+
   public:
     TreeNodeW(ITreeNode* node);
     virtual ~TreeNodeW() = default;
