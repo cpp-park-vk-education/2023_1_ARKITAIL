@@ -54,10 +54,10 @@ class CalendarWTest : public ::testing::Test {
     void TearDown() override {}
 
     CalendarWMock calendar;
-    CalendarHeaderStub* header;
-    ICalendarBodyW* calendar_body_day;
-    ICalendarBodyW* calendar_body_week;
-    ICalendarBodyW* calendar_body_month;
+    CalendarHeaderStub header;
+    ICalendarBodyW calendar_body_day;
+    ICalendarBodyW calendar_body_week;
+    ICalendarBodyW calendar_body_month;
 };
 
 TEST_F(CalendarWTest, CallUpdateRangeDayCalendar) {

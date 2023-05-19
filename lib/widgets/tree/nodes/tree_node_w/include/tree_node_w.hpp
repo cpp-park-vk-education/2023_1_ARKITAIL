@@ -28,9 +28,7 @@ class TreeNodeW : public Wt::WContainerWidget {
     virtual void closeNode() = 0;
     virtual void performAction(Action action) = 0;
 
-    virtual TreeNodeW* addChildNode(std::unique_ptr<TreeNodeW> child) {
-        return child.get();
-    }
+    virtual TreeNodeW* addChildNode(std::unique_ptr<TreeNodeW> child);
     void addParent(TreeNodeW* parent_node);
 
     void removeNode();
@@ -38,12 +36,6 @@ class TreeNodeW : public Wt::WContainerWidget {
     void uncheckParentNodes();
 
     virtual std::unique_ptr<TreeNodeW> makeTreeNodeWidget(ITreeNode* node);
-    TreeNodeW* addOptions(std::unique_ptr<OptionsW> options);
-    TreeNodeW* addToolTip(std::string description, std::vector<std::string> tags);
-    TreeNodeW* addToolTip(std::string description, std::vector<std::string> tags, User author);
-    TreeNodeW* addHead(std::unique_ptr<Wt::WWidget>);
-    TreeNodeW* addCheckBox();
-    TreeNodeW* endNode();
 
   protected:
     Wt::WContainerWidget* header_container_;
