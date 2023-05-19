@@ -12,6 +12,7 @@ target_link_libraries(
 	PUBLIC
 	calendar
 	event
+	db_managers
 )
 
 if (BUILD_TESTS)

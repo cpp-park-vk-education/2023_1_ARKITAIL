@@ -1,3 +1,4 @@
+add_subdirectory(db_managers)
 add_subdirectory(user_db_manager)
 add_subdirectory(node_db_manager)
 add_subdirectory(directory_db_manager)

@@ -1,6 +1,9 @@
 #pragma once
 
-#include ""
+#include <vector>
+
+#include "Calendar.hpp"
+#include "Event.hpp"
 
 class ICalendarDbManager {
 public:
@@ -10,5 +13,6 @@ public:
     virtual void remove(size_t) = 0;
 
     virtual std::vector<Event> getEvents(size_t) = 0;
+
 };
 
