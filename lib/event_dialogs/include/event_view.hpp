@@ -7,6 +7,7 @@
 #include <Wt/WDateEdit.h>
 #include <Wt/WLineEdit.h>
 #include <Wt/WPushButton.h>
+#include <Wt/WSpinBox.h>
 #include <Wt/WTemplateFormView.h>
 #include <Wt/WTextArea.h>
 #include <Wt/WTimeEdit.h>
@@ -28,16 +29,19 @@ class EventView : public Wt::WTemplateFormView {
   
   std::shared_ptr<EventModel> model_;
   
-  Wt::WLineEdit* title_;
+  Wt::WLineEdit* summary_;
   Wt::WTextArea* description_;
   Wt::WComboBox* calendars_;
 
-  Wt::WDateEdit* begin_date_;
-  Wt::WTimeEdit* begin_time_;
+  Wt::WDateEdit* start_date_;
+  Wt::WTimeEdit* start_time_;
   Wt::WDateEdit* end_date_;
   Wt::WTimeEdit* end_time_;
+  Wt::WCheckBox* is_all_day_;
   
-  Wt::WComboBox* repeat_;
+  Wt::WCheckBox* is_recurrent_;
+  Wt::WComboBox* frequency_;
+  Wt::WSpinBox* interval_;
   Wt::WDateEdit* until_;
 
   Wt::WPushButton* button_;

@@ -4,6 +4,8 @@
 #include <Wt/WBootstrap5Theme.h>
 #include <Wt/WBreak.h>
 #include <Wt/WContainerWidget.h>
+#include <Wt/WDate.h>
+#include <Wt/WDateTime.h>
 #include <Wt/WGlobal.h>
 #include <Wt/WPushButton.h>
 #include <Wt/WString.h>
@@ -91,12 +93,13 @@ Application::Application(const Wt::WEnvironment& env)
     "Название события",
     "Описания события",
     "Приватный календарь 1",
-    "16.05.2023",
-    "18:00:00",
-    "16.05.2023",
-    "18:30:00",
-    "Ежедневно",
-    "31.05.2023",
+    Wt::WDateTime::currentDateTime(),
+    Wt::WDateTime::currentDateTime().addDays(1),
+    true,
+    true,
+    "По неделям",
+    2,
+    Wt::WDate::currentDate().addMonths(5)
   };
   auto event_edit = std::make_unique<Wt::WPushButton>("Редактировать событие");
   event_edit->clicked().connect([=]{

@@ -84,7 +84,7 @@ std::shared_ptr<Event> CalendarConverter::FromIcalendarEvent(
     if (property->name() == "SUMMARY") {
       TextValue* value = dynamic_cast<TextValue*>(property->value().get());
       if (value) {
-        event.title = value->text();
+        event.summary = value->text();
       }
     } else if (property->name() == "DESCRIPTION") {
       TextValue* value = dynamic_cast<TextValue*>(property->value().get());

@@ -1,10 +1,12 @@
 #include "event_view.hpp"
 
-#include <Wt/WComboBox.h>
 #include <memory>
 #include <vector>
 
+#include <Wt/WCheckBox.h>
+#include <Wt/WComboBox.h>
 #include <Wt/WDateEdit.h>
+#include <Wt/WGlobal.h>
 #include <Wt/WLineEdit.h>
 #include <Wt/WPushButton.h>
 #include <Wt/WString.h>
@@ -27,9 +29,9 @@ EventView::EventView(
 
   addFunction("id", &WTemplate::Functions::id);
 
-  auto title = std::make_unique<Wt::WLineEdit>();
-  title_ = title.get();
-  setFormWidget(EventModel::kTitle, std::move(title));
+  auto summary = std::make_unique<Wt::WLineEdit>();
+  summary_ = summary.get();
+  setFormWidget(EventModel::kSummary, std::move(summary));
 
   auto description = std::make_unique<Wt::WTextArea>();
   description_ = description.get();
@@ -45,13 +47,13 @@ EventView::EventView(
   calendars_ = calendars.get();
   setFormWidget(EventModel::kCalendars, std::move(calendars));
 
-  auto begin_date = std::make_unique<Wt::WDateEdit>();
-  begin_date_ = begin_date.get();
-  setFormWidget(EventModel::kBeginDate, std::move(begin_date));
+  auto start_date = std::make_unique<Wt::WDateEdit>();
+  start_date_ = start_date.get();
+  setFormWidget(EventModel::kStartDate, std::move(start_date));
 
   auto begin_time = std::make_unique<Wt::WTimeEdit>();
-  begin_time_ = begin_time.get();
-  setFormWidget(EventModel::kBeginTime, std::move(begin_time));
+  start_time_ = begin_time.get();
+  setFormWidget(EventModel::kStartTime, std::move(begin_time));
 
   auto end_date = std::make_unique<Wt::WDateEdit>();
   end_date_ = end_date.get();
@@ -61,14 +63,45 @@ EventView::EventView(
   end_time_ = end_time.get();
   setFormWidget(EventModel::kEndTime, std::move(end_time));
 
-  auto repeat = std::make_unique<Wt::WComboBox>();
-  repeat->addItem("Не повторять");
-  repeat->addItem("Ежедневно");
-  repeat->addItem("По неделям");
-  repeat->addItem("По месяцам");
-  repeat->addItem("По годам");
-  repeat_ = repeat.get();
-  setFormWidget(EventModel::kRepeat, std::move(repeat));
+  auto is_all_day = std::make_unique<Wt::WCheckBox>("Весь день");
+  is_all_day_ = is_all_day.get();
+  is_all_day_->changed().connect([=] {
+    if (is_all_day_->checkState() == Wt::CheckState::Checked) {
+      start_time_->setEnabled(false);
+      end_time_->setEnabled(false);
+    } else if (is_all_day_->checkState() == Wt::CheckState::Unchecked) {
+      start_time_->setEnabled(true);
+      end_time_->setEnabled(true);
+    }
+  });
+  setFormWidget(EventModel::kIsAllDay, std::move(is_all_day));
+
+  auto is_recurrent = std::make_unique<Wt::WCheckBox>("Повторять");
+  is_recurrent_ = is_recurrent.get();
+  is_recurrent_->changed().connect([=] {
+    if (is_recurrent_->checkState() == Wt::CheckState::Checked) {
+      frequency_->setEnabled(true);
+      interval_->setEnabled(true);
+      until_->setEnabled(true);
+    } else if (is_recurrent_->checkState() == Wt::CheckState::Unchecked) {
+      frequency_->setEnabled(false);
+      interval_->setEnabled(false);
+      until_->setEnabled(false);
+    }
+  });
+  setFormWidget(EventModel::kIsRecurrent, std::move(is_recurrent));
+
+  auto frequency = std::make_unique<Wt::WComboBox>();
+  frequency->addItem("По дням");
+  frequency->addItem("По неделям");
+  frequency->addItem("По месяцам");
+  frequency->addItem("По годам");
+  frequency_ = frequency.get();
+  setFormWidget(EventModel::kFrequency, std::move(frequency));
+
+  auto interval = std::make_unique<Wt::WSpinBox>();
+  interval_ = interval.get();
+  setFormWidget(EventModel::kInterval, std::move(interval));
 
   auto until = std::make_unique<Wt::WDateEdit>();
   until_ = until.get();

@@ -20,7 +20,7 @@ void EventDialog::Show(
   dialog->setWindowTitle("Событие");
   dialog->setMovable(false);
   dialog->setClosable(true);
-  dialog->setMinimumSize(500, 600);
+  dialog->setMinimumSize(600, 600);
 
   dialog->contents()->addWidget(
       std::make_unique<EventView>(public_calendars, private_calendars, event));

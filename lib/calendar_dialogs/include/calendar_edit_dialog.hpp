@@ -1,10 +1,15 @@
 #pragma once
 
+#include <memory>
+
 #include <Wt/WObject.h>
 
 #include "calendar.hpp"
+#include "calendar_dialog.hpp"
 
-class EditCalendarDialog {
+class EditCalendarDialog : private CalendarDialog {
  public:
-   static void Show(Wt::WObject* parent, std::shared_ptr<Calendar> calendar);
+   static void Show(
+       Wt::WObject* parent,
+       CalendarSptr calendar);
 };

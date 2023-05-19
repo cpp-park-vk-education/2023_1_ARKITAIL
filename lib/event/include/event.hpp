@@ -3,21 +3,25 @@
 #include <memory>
 
 #include <Wt/WDateTime.h>
+#include <Wt/WDate.h>
 #include <Wt/WString.h>
 
 struct Event {
-  Wt::WString title;
+  Wt::WString summary;
   Wt::WString description;
+
+  // каким-то образом событие должно
+  // знать о своём календаре...
   Wt::WString calendar;
-  Wt::WString begin_date;
-  Wt::WString begin_time;
-  Wt::WString end_date;
-  Wt::WString end_time;
-  Wt::WString repeat;
-  Wt::WString until;
 
   Wt::WDateTime start;
   Wt::WDateTime end;
+  bool is_all_day;
+
+  bool is_recurrent;
+  Wt::WString frequency;
+  std::size_t interval;
+  Wt::WDate until;
 };
 
 using EventSptr = std::shared_ptr<Event>;

@@ -2,7 +2,9 @@
 
 #include <Wt/WObject.h>
 
-class CreateCalendarDialog {
+#include "calendar_dialog.hpp"
+
+class CreateCalendarDialog : protected CalendarDialog {
  public:
    static void Show(Wt::WObject* parent);
 };

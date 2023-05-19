@@ -52,6 +52,7 @@
       </div>
     </div>
   </message>
+
   <message id="calendar-import">
     <div class="row m-3">
       <div class="col">
@@ -73,28 +74,24 @@
       </div>
     </div>
   </message>
+
   <message id="calendar-export">
     <div class="row m-3">
       <div class="col">
-        <label class="form-label" for="${id:export-icalendar}">
-          В формате iCalendar
-        </label>
         ${export-icalendar}
-        <div class="form-text">
-          ${export-icalendar-info}
-        </div>
       </div>
     </div>
   </message>
+
   <message id="event">
     <div class="row m-3">
       <div class="col">
-        <label class="form-label" for="${id:title}">
+        <label class="form-label" for="${id:summary}">
           Название
         </label>
-        ${title}
+        ${summary}
         <div class="form-text">
-          ${title-info}
+          ${summary-info}
         </div>
       </div>
     </div>
@@ -121,56 +118,107 @@
       </div>
     </div>
     <div class="row m-3">
-      <div class="col-6">
-        <label class="form-label" for="${id:begin-date}">
-          Дата начала
-        </label>
-        ${begin-date}
-        <div class="form-text">
-          ${begin-date-info}
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <label class="form-label" for="${id:start-date}">
+              Дата
+            </label>
+            <span>
+              и
+            </span>
+            <label class="form-label" for="${id:start-time}">
+              время
+            </label>
+            <span>
+              начала
+            </span>
+          </div>
         </div>
-      </div>
-      <div class="col-6">
-        <label class="form-label" for="${id:begin-time}">
-          Время начала
-        </label>
-        ${begin-time}
-        <div class="form-text">
-          ${begin-time-info}
-        </div>
-      </div>
-    </div>
-    <div class="row m-3">
-      <div class="col-6">
-        <label class="form-label" for="${id:end-date}">
-          Дата окончания
-        </label>
-        ${end-date}
-        <div class="form-text">
-          ${end-date-info}
-        </div>
-      </div>
-      <div class="col-6">
-        <label class="form-label" for="${id:end-time}">
-          Время окончания
-        </label>
-        ${end-time}
-        <div class="form-text">
-          ${end-time-info}
+        <div class="row">
+          <div class="col">
+            ${start-date}
+            <div class="form-text">
+              ${start-date-info}
+            </div>
+          </div>
+          <div class="col">
+            ${start-time}
+            <div class="form-text">
+              ${start-time-info}
+            </div>
+          </div>
         </div>
       </div>
     </div>
     <div class="row m-3">
-      <div class="col-6">
-        <label class="form-label" for="${id:repeat}">
-          Повторять
-        </label>
-        ${repeat}
-        <div class="form-text">
-          ${repeat-info}
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <label class="form-label" for="${id:end-date}">
+              Дата
+            </label>
+            <span>
+              и
+            </span>
+            <label class="form-label" for="${id:end-time}">
+              время
+            </label>
+            <span>
+              окончания
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            ${end-date}
+            <div class="form-text">
+              ${end-date-info}
+            </div>
+          </div>
+          <div class="col">
+            ${end-time}
+            <div class="form-text">
+              ${end-time-info}
+            </div>
+          </div>
         </div>
       </div>
-      <div class="col-6">
+    </div>
+    <div class="row m-3">
+      <div class="col">
+        ${is-all-day}
+        <div class="form-text">
+          ${is-all-day-info}
+        </div>
+      </div>
+      <div class="col">
+        ${is-recurrent}
+        <div class="form-text">
+          ${is-recurrent-info}
+        </div>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col">
+        <label class="form-label" for="${id:frequency}">
+          Период
+        </label>
+        ${frequency}
+        <div class="form-text">
+          ${frequency-info}
+        </div>
+      </div>
+      <div class="col">
+        <label class="form-label" for="${id:interval}">
+          Интервал
+        </label>
+        ${interval}
+        <div class="form-text">
+          ${interval-info}
+        </div>
+      </div>
+      <div class="col">
         <label class="form-label" for="${id:until}">
           До
         </label>
