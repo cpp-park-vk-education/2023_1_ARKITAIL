@@ -7,9 +7,20 @@
 
 CalendarDbManagerMock::CalendarDbManagerMock() :
 	data_(),
-	aid_(1){
+	aid_(){
 	
 	data_.emplace_back(0, 0, 0, "", "");
+
+	data_.emplace_back(1, 8, 0, "PrivateCalendar", "desc");
+	data_.emplace_back(2, 9, 0, "PrivateCalendar", "desc");
+	data_.emplace_back(3, 11, 0, "PublicCalendar", "desc");
+	data_.emplace_back(4, 12, 0, "PublicCalendar", "desc");
+	data_.emplace_back(5, 20, 1, "PrivateCalendar", "desc");
+	data_.emplace_back(6, 21, 1, "PrivateCalendar", "desc");
+	data_.emplace_back(7, 23, 1, "PublicCalendar", "desc");
+	data_.emplace_back(8, 24, 1, "PublicCalendar", "desc");
+
+	aid_ = data_.size();
 }
 
 const Calendar& CalendarDbManagerMock::get(size_t calendar_id) {

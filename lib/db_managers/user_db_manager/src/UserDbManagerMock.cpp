@@ -3,7 +3,8 @@
 UserDbManagerMock::UserDbManagerMock() :
 	data_() {
 
-	data_.emplace_back(0, 0, "uma_op", "bannikovtop@gmail.com", "UmaOp", "Arkitail");
+	data_.emplace_back(0, 1, "uma_op", "bannikovtop@gmail.com", "UmaOp", "Arkitail");
+	data_.emplace_back(1, 2, "uma_test", "test@gmail.com", "Test", "Test");
 }
 
 const User& UserDbManagerMock::get() {
