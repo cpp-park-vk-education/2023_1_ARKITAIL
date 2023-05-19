@@ -1,28 +1,13 @@
 add_subdirectory(widgets)
 
 add_subdirectory(application)
-add_subdirectory(session_scope_map)
-add_subdirectory(unmet_deps)
-add_subdirectory(swapable)
-add_subdirectory(connections_mediator)
-
-add_subdirectory(calendar)
-add_subdirectory(event)
-add_subdirectory(user)
-add_subdirectory(tag)
-add_subdirectory(directory)
-add_subdirectory(node)
-add_subdirectory(tree)
-add_subdirectory(profile)
-add_subdirectory(comment)
+add_subdirectory(search_page)
 
 add_subdirectory(managers)
-add_subdirectory(directory_manager)
-add_subdirectory(user_manager)
-add_subdirectory(calendar_manager)
-add_subdirectory(profile_manager)
-add_subdirectory(tag_manager)
-add_subdirectory(event_manager)
-add_subdirectory(comment_manager)
-add_subdirectory(node_manager)
+add_subdirectory(entities)
+add_subdirectory(utils)
+
+add_subdirectory(db_managers)
+
+add_subdirectory(unmet_deps)
 
