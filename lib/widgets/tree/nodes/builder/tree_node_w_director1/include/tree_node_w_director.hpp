@@ -1,0 +1,18 @@
+#pragma once
+
+#include <memory>
+
+#include "ITreeNode.hpp"
+#include "Node.hpp"
+
+class TreeNodeW;
+
+class TreeNodeWDirector {
+  public:
+    TreeNodeWDirector();
+
+    std::unique_ptr<TreeNodeW> createNode(TreeNodeWBuilder& builder, ITreeNode* this_node,
+                                          TreeNodeW* parent_node) {
+        builder
+    }
+};
