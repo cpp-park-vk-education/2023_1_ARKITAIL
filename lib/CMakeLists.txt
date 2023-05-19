@@ -1,7 +1,6 @@
 add_subdirectory(widgets)
 
 add_subdirectory(application)
-add_subdirectory(search_page)
 
 add_subdirectory(managers)
 add_subdirectory(entities)

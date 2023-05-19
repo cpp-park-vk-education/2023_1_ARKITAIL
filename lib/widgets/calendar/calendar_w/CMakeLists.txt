@@ -9,7 +9,8 @@ target_link_libraries(calendar_w PUBLIC
                       week_w
                       month_w
                       tree_w
-                      calendula_compiler_flags)
+                      calendula_compiler_flags
+                      managers)
 # if(BUILD_TESTS)
 #   add_subdirectory(tests)
 # endif(BUILD_TESTS)                      

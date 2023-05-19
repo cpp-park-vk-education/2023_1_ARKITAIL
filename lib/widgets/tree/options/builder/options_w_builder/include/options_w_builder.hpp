@@ -6,7 +6,7 @@
 
 class OptionsW;
 
-class OptionsWBuilder : OptionsWBuilderBase {
+class OptionsWBuilder : public OptionsWBuilderBase {
   public:
     OptionsWBuilder();
     ~OptionsWBuilder() = default;

@@ -8,6 +8,7 @@
 
 #include <memory>
 
+#include "Managers.hpp"
 #include "calendar_body_w.hpp"
 #include "calendar_header_w.hpp"
 #include "day_w.hpp"
@@ -22,8 +23,11 @@ CalendarW::CalendarW() :
     tree_panel->setStyleClass("start-0");
     auto tree_panel_layout = tree_panel->setLayout(std::make_unique<Wt::WHBoxLayout>());
     tree_ = tree_panel_layout->addWidget(std::make_unique<TreeW>());
-    tree_->setRoot();
-    // tree_->setRoot(Node(0, 0, 0, NodeType::ROOT));
+    // tree_->setRoot();
+    std::cout << "11\n\n" << std::endl;
+
+    tree_->setRoot(
+        Managers::instance().node_manager->get(Managers::instance().user_manager->get().root_id));
     show_tree_button_ =
         tree_panel_layout->addWidget(std::make_unique<Wt::WPushButton>(Wt::WString(">")));
     show_tree_button_->setStyleClass("btn-light rounded-end rounded-0 border-start-0");
