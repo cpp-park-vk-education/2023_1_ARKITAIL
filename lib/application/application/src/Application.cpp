@@ -1,3 +1,5 @@
+#include "Application.hpp"
+
 #include <Wt/WBootstrap5Theme.h>
 #include <Wt/WContainerWidget.h>
 #include <Wt/WText.h>
@@ -6,25 +8,31 @@
 #include <string>
 #include <thread>
 
+#include "SessionScopeMap.hpp"
 #include "main_p.hpp"
 #include "navbar_w.hpp"
 #include "other_p.hpp"
-#include "Application.hpp"
-#include "SessionScopeMap.hpp"
 
-Application::Application(const Wt::WEnvironment& env)
-    : Wt::WApplication(env), session_(), pages_(), cur_swap_(), cur_page_(nullptr) {
+Application::Application(const Wt::WEnvironment& env) :
+    Wt::WApplication(env),
+    session_(),
+    pages_(),
+    cur_swap_(),
+    cur_page_(nullptr) {
     setTitle("Calendula");
     setTheme(std::make_unique<Wt::WBootstrap5Theme>());
     useStyleSheet("/static/style.css");
 
     navbar_ = root()->addWidget(std::make_unique<NavbarW>());
     // Some initial widgets configuration
-    pages_.emplace("/calendars", std::make_unique<MainP>()).first->second.set_destination(&cur_swap_);
+    pages_.emplace("/calendars", std::make_unique<MainP>())
+        .first->second.set_destination(&cur_swap_);
     navbar_->addLink("Calendars", "/calendars");
-    pages_.emplace("/profile", std::make_unique<OtherP>()).first->second.set_destination(&cur_swap_);
+    pages_.emplace("/profile", std::make_unique<OtherP>())
+        .first->second.set_destination(&cur_swap_);
     navbar_->addLink("My Profile", "/profile");
-    pages_.emplace("/search", std::make_unique<Wt::WContainerWidget>()).first->second.set_destination(&cur_swap_);
+    pages_.emplace("/search", std::make_unique<Wt::WContainerWidget>())
+        .first->second.set_destination(&cur_swap_);
     navbar_->addLink("Search", "/search");
 
     // Main page configuration
@@ -46,6 +54,4 @@ void Application::route(const std::string& internalPath) {
     pages_[internalPath].build_destination();
     cur_swap_.swap();
     cur_page_ = root()->addWidget(cur_swap_.get_content());
-
 }
-

@@ -1,0 +1,3 @@
+add_subdirectory(tree_node_dir_w)
+add_subdirectory(tree_node_other_dir_w) 
+add_subdirectory(tree_node_subscriptions_dir_w) 

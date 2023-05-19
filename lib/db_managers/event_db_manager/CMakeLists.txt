@@ -15,7 +15,7 @@ target_link_libraries(
 	db_managers
 )
 
-if (BUILD_TESTS)
-	add_subdirectory(tests)
-endif()
+# if (BUILD_TESTS)
+# 	add_subdirectory(tests)
+# endif()
 

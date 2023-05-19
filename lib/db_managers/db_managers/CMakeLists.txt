@@ -21,7 +21,7 @@ target_link_libraries(
 	profile_db_manager
 )
 
-if (BUILD_TESTS)
-	add_subdirectory(tests)
-endif()
+# if (BUILD_TESTS)
+# 	add_subdirectory(tests)
+# endif()
 

@@ -1,9 +1,10 @@
+#include "Tree.hpp"
+
 #include <queue>
 #include <vector>
 
 #include "Event.hpp"
 #include "Managers.hpp"
-#include "Tree.hpp"
 #include "Node.hpp"
 
 Tree::Tree(const Node& node) :
@@ -21,12 +22,12 @@ std::vector<Event> Tree::getCheckedEvents() {
     q.push(getRoot());
 
     while (!q.empty()) {
-        if ((q.front()->getNode().type & (NodeType::PUBLIC_CALENDAR | NodeType::PRIVATE_CALENDAR)) && q.front()->isChecked())
+        if ((q.front()->getNode().type & (NodeType::PUBLIC_CALENDAR | NodeType::PRIVATE_CALENDAR)) &&
+            q.front()->isChecked())
             for (auto e : Managers::instance().calendar_manager->getEvents(q.front()->getNode().resource_id))
                 v.push_back(e);
 
-        for (auto c : q.front()->getChildren())
-            q.push(c);
+        for (auto c : q.front()->getChildren()) q.push(c);
 
         q.pop();
     }
@@ -43,15 +44,14 @@ std::vector<Event> Tree::checkNode(ITreeNode* node) {
     while (!q.empty()) {
         if (q.front()->isChecked()) {
             q.front()->check();
-            
+
             if (q.front()->getNode().type & (NodeType::PUBLIC_DIRECTORY | NodeType::PUBLIC_DIRECTORY))
                 for (auto e : Managers::instance().calendar_manager->getEvents(q.front()->getNode().resource_id))
                     v.push_back(e);
-            
-            for (auto c : q.front()->getChildren())
-                q.push(c);
+
+            for (auto c : q.front()->getChildren()) q.push(c);
         }
-            
+
         q.pop();
     }
 
@@ -70,4 +70,3 @@ void Tree::uncheckNode(ITreeNode* node) {
 size_t Tree::checked() {
     return checked_;
 }
-
