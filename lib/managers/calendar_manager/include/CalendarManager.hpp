@@ -2,7 +2,6 @@
 
 #include <vector>
 
-#include "UnmetDeps.hpp"
 #include "ICalendarManager.hpp"
 #include "Event.hpp"
 #include "Calendar.hpp"
@@ -15,9 +14,6 @@ public:
 	void remove(size_t) override;
 
     std::vector<Event> getEvents(size_t calendar_id) override;
-
-private:
-    ICalendarDbManager* manager_;
 
 };
 

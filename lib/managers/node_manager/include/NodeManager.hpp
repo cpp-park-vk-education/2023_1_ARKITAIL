@@ -20,8 +20,5 @@ public:
 	void unsubscribe(size_t node_id) override;
 	std::vector<Node> getChildren(size_t node_id) override;
 
-private:
-	INodeDbManager* manager_;
-
 };
 

@@ -12,7 +12,7 @@ target_link_libraries(
 	${MODULE_NAME}
 	PUBLIC
 	managers
-	unmet_deps
+	db_managers
 	node
 )
 

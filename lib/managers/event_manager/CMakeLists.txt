@@ -12,7 +12,7 @@ target_link_libraries(
 	${MODULE_NAME}
 	PUBLIC
 	managers
+	db_managers
 	event
-	unmet_deps
 )
 

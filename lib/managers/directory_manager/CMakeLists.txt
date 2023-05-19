@@ -14,5 +14,6 @@ target_link_libraries(
 	directory
 	event
 	managers
-	unmet_deps)
+	db_managers
+)
 

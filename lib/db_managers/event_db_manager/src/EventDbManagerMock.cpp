@@ -46,7 +46,7 @@ void EventDbManagerMock::remove(size_t event_id) {
 			data_.erase(e);
 }
 
-std::vector<Comment> getComments(size_t event_id) {
+std::vector<Comment> EventDbManagerMock::getComments(size_t event_id) {
 	return DbManagers::instance().comment_dbm->getByEvent(event_id);
 }
 

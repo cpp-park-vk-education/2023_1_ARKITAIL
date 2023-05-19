@@ -2,7 +2,6 @@
 
 #include <vector>
 
-#include "UnmetDeps.hpp"
 #include "IDirectoryManager.hpp"
 #include "Directory.hpp"
 #include "Event.hpp"
@@ -15,9 +14,6 @@ public:
 	void remove(size_t directory_id) override;
 
 	std::vector<Event> getEvents(size_t directory_id) override;
-
-private:
-	IDirectoryDbManager* manager_; 
 
 };
 

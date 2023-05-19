@@ -12,8 +12,8 @@ target_link_libraries(
 	${MODULE_NAME}
 	PRIVATE
 	managers
+	db_managers
 	calendar
 	event
-	unmet_deps
 )
 

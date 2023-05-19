@@ -18,8 +18,5 @@ public:
 	std::vector<Comment> getComments(size_t event_id) override;
 	std::chrono::time_point<clock_t> parseTime(std::string str_time) override;
 
-private:
-    IEventDbManager* manager_;
-
 };
 
