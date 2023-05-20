@@ -18,7 +18,7 @@ class PairValue;
 class CompositeValue;
 
 class IParser;
-class iCalendarParser;
+class IcalendarParser;
 
 using StreamUptr = std::unique_ptr<StreamNode>;
 using ComponentUptr = std::unique_ptr<ComponentNode>;
@@ -167,7 +167,7 @@ class IParser {
   virtual ~IParser() = default;
 };
 
-class iCalendarParser : public IParser {
+class IcalendarParser : public IParser {
  public:
   std::unique_ptr<StreamNode> Parse() override;
 

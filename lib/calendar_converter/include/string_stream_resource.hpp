@@ -1,19 +1,21 @@
 #pragma once
 
-#include <sstream>
+#include <memory>
 
-#include <Wt/WStreamResource.h>
+#include <Wt/WResource.h>
 #include <Wt/Http/Request.h>
 #include <Wt/Http/Response.h>
 
-class StringStreamResource : public Wt::WStreamResource {
+#include "i_char_reader.hpp"
+
+class StringStreamResource : public Wt::WResource {
  public:
-  StringStreamResource(std::stringstream&& ss);
+  StringStreamResource(std::unique_ptr<ICharReader>&& char_reader);
   ~StringStreamResource();
 
   void handleRequest(
       const Wt::Http::Request& request,
-      Wt::Http::Response& response) ;
+      Wt::Http::Response& response) override;
  private:
-  std::stringstream ss_;
+  std::unique_ptr<ICharReader> char_reader_;
 };

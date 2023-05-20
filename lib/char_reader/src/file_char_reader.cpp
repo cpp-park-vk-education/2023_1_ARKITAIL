@@ -1,5 +1,9 @@
 #include "file_char_reader.hpp"
 
+#include <fstream>
+
+// TODO(affeeal): избавиться от дублирования функциональности
+// классов StringCharReader и StringCharReader
 FileCharReader::FileCharReader(std::ifstream&& fs)
   : fs_(std::move(fs)) {
 }
@@ -21,4 +25,8 @@ char FileCharReader::Get(std::size_t k) {
 
 bool FileCharReader::IsEof() {
   return (fs_.rdbuf()->in_avail() == 0);
+}
+
+void FileCharReader::set_fs(std::ifstream&& fs) {
+  fs_ = std::move(fs);
 }

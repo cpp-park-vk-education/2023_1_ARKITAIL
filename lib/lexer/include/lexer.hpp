@@ -10,7 +10,7 @@ enum class Tag;
 struct Lexem;
 
 class ILexer;
-class iCalendarLexer;
+class IcalendarLexer;
 
 extern const Lexem kEof;
 
@@ -57,9 +57,9 @@ class ILexer {
   virtual ~ILexer() = default;
 };
 
-class iCalendarLexer : public ILexer {
+class IcalendarLexer : public ILexer {
  public:
-  iCalendarLexer() : character_reader_(nullptr) {
+  IcalendarLexer() : character_reader_(nullptr) {
   }
 
   Lexem Get(std::size_t k = 0) override;

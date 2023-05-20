@@ -12,13 +12,13 @@
 
 void EditCalendarDialog::Show(
     Wt::WObject* parent,
-    std::shared_ptr<Calendar> calendar) {
+    CalendarSptr calendar) {
   auto tabs = std::make_unique<Wt::WTabWidget>();
   tabs->addTab(
       std::make_unique<CalendarSettingsView>(calendar),
       "Создать");
   tabs->addTab(
-      std::make_unique<CalendarExportTemplate>("calendar-export"),
+      std::make_unique<CalendarExportTemplate>(calendar),
       "Экспортировать");
   ShowInternal(parent, std::move(tabs));
 }

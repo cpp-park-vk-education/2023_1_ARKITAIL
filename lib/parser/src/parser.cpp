@@ -30,16 +30,16 @@ name           = *( ALPHA / DIGIT / "-" )
 text           = любые символы, за исключением ";", "=" и "\r"
 */
 
-StreamUptr iCalendarParser::Parse() {
+StreamUptr IcalendarParser::Parse() {
   return ParseStream();
 }
 
-void iCalendarParser::set_lexer(ILexer &lexer) {
+void IcalendarParser::set_lexer(ILexer &lexer) {
   lexer_ = &lexer;
 }
 
 // stream = *component
-StreamUptr iCalendarParser::ParseStream() {
+StreamUptr IcalendarParser::ParseStream() {
   std::vector<ComponentUptr> components;
 
   // *component
@@ -59,7 +59,7 @@ StreamUptr iCalendarParser::ParseStream() {
 //             *property
 //             *component
 //             "END" ":" name "\r" "\n"
-ComponentUptr iCalendarParser::ParseComponent() {
+ComponentUptr IcalendarParser::ParseComponent() {
   std::string name = "";
   std::vector<PropertyUptr> properties;
   std::vector<ComponentUptr> components;
@@ -154,7 +154,7 @@ ComponentUptr iCalendarParser::ParseComponent() {
 }
 
 // property = name *parameter ":" value "\r" "\n"
-PropertyUptr iCalendarParser::ParseProperty() {
+PropertyUptr IcalendarParser::ParseProperty() {
   std::string name = "";
   std::vector<ParameterUptr> parameters;
   IValueUptr value = nullptr;
@@ -203,7 +203,7 @@ PropertyUptr iCalendarParser::ParseProperty() {
 }
 
 // parameter = ";" pair-value
-ParameterUptr iCalendarParser::ParseParameter() {
+ParameterUptr IcalendarParser::ParseParameter() {
   PairValueUptr pair_value = nullptr;
 
   // ";"
@@ -222,7 +222,7 @@ ParameterUptr iCalendarParser::ParseParameter() {
 }
 
 // value = text / ( pair-value *( ";" pair-value ) )
-IValueUptr iCalendarParser::ParseValue() {
+IValueUptr IcalendarParser::ParseValue() {
   if (lexer_->Peek(1) != kEqual) {
     // text
     if (lexer_->Peek().tag != Tag::kIdentifier) {
@@ -259,7 +259,7 @@ IValueUptr iCalendarParser::ParseValue() {
 }
 
 // pair-value = name "=" text
-PairValueUptr iCalendarParser::ParsePairValue() {
+PairValueUptr IcalendarParser::ParsePairValue() {
   std::string name = "";
   std::string text = "";
 
@@ -286,7 +286,7 @@ PairValueUptr iCalendarParser::ParsePairValue() {
                                      std::move(text));
 }
 
-bool iCalendarParser::IsName(const std::string& name) const {
+bool IcalendarParser::IsName(const std::string& name) const {
   for (auto ch : name) {
     if (!('a' <= ch && ch <= 'z')
         && !('A' <= ch && ch <= 'z')

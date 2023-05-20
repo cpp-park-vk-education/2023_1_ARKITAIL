@@ -1,13 +1,15 @@
 #include "string_stream_resource.hpp"
 
-#include <iostream>
+#include <Wt/WResource.h>
+
 #include <sstream>
 
-#include <Wt/WStreamResource.h>
+#include "i_char_reader.hpp"
 
-StringStreamResource::StringStreamResource(std::stringstream&& ss)
-  : Wt::WStreamResource(),
-    ss_(std::move(ss)) {
+StringStreamResource::StringStreamResource(
+    std::unique_ptr<ICharReader>&& char_reader)
+    : Wt::WResource(),
+      char_reader_(std::move(char_reader)) {
   suggestFileName("calendar.ics");
 }
 
@@ -16,8 +18,15 @@ StringStreamResource::~StringStreamResource() {
 }
 
 void StringStreamResource::handleRequest(
-    const Wt::Http::Request &request,
+    [[maybe_unused]] const Wt::Http::Request &request,
     Wt::Http::Response &response) {
-  std::cout << "???" << std::endl;
-  handleRequestPiecewise(request, response, ss_);
+  response.setMimeType("text/calendar");
+
+  // TODO(affeeal): исправить на изъятие
+  // буффера у char_reader:
+  std::stringstream ss;
+  while (!char_reader_->IsEof()) {
+    ss << char_reader_->Get();
+  }
+  response.out() << ss.str();
 }

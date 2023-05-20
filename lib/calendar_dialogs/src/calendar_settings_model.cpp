@@ -23,7 +23,7 @@ CalendarSettingsModel::CalendarSettingsModel(
   setValidator(kTitleField, CreateTitleValidator());
 
   if (calendar) {
-    setValue(kTitleField, calendar->title);
+    setValue(kTitleField, calendar->summary);
     setValue(kDescriptionField, calendar->description);
     setValue(kVisibilityField, calendar->visibility);
     setValue(kColorField, calendar->color);
@@ -43,7 +43,7 @@ std::shared_ptr<Wt::WValidator> CalendarSettingsModel::CreateTitleValidator() {
 std::shared_ptr<Calendar> CalendarSettingsModel::GetData() const {
   auto calendar = std::make_shared<Calendar>();
 
-  calendar->title = Wt::asString(value(kTitleField));
+  calendar->summary = Wt::asString(value(kTitleField));
   calendar->description = Wt::asString(value(kDescriptionField));
   calendar->visibility = Wt::asString(value(kVisibilityField));
   calendar->color = Wt::asString(value(kColorField));

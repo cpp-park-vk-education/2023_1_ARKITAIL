@@ -5,11 +5,11 @@
 #include "event.hpp"
 
 struct Calendar {
-  Wt::WString title;
+  Wt::WString summary;
   Wt::WString description;
   Wt::WString visibility;
   Wt::WString color;
-  std::vector<EventSptr> events;
+  std::vector<std::size_t> event_ids;
 };
 
 using CalendarSptr = std::shared_ptr<Calendar>;

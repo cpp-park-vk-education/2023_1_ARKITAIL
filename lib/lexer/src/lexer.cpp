@@ -26,7 +26,7 @@ const Lexem kLineFeed(Tag::kDelimiter, "\n");
 
 // выбрасывает (k+1) лексему и возвращает k-ю
 // по умолчанию k = 0
-Lexem iCalendarLexer::Get(std::size_t k) {
+Lexem IcalendarLexer::Get(std::size_t k) {
   if (got_lexems_.size() <= k) {
     PushLacking(k - got_lexems_.size() + 1);
   }
@@ -42,7 +42,7 @@ Lexem iCalendarLexer::Get(std::size_t k) {
 
 // подглядывает за k-й лексемой
 // по умолчанию k = 0
-Lexem iCalendarLexer::Peek(std::size_t k) {
+Lexem IcalendarLexer::Peek(std::size_t k) {
   if (got_lexems_.size() <= k) {
     PushLacking(k - got_lexems_.size() + 1);
   }
@@ -50,13 +50,13 @@ Lexem iCalendarLexer::Peek(std::size_t k) {
   return got_lexems_[k];
 }
 
-void iCalendarLexer::PushLacking(std::size_t k) {
+void IcalendarLexer::PushLacking(std::size_t k) {
   for (std::size_t i = 0; i < k; i++) {
     got_lexems_.push_back(GetInternal());
   }
 }
 
-Lexem iCalendarLexer::GetInternal() {
+Lexem IcalendarLexer::GetInternal() {
   if (character_reader_->IsEof()) {
     return Lexem(Tag::kEof);
   }
@@ -73,7 +73,7 @@ Lexem iCalendarLexer::GetInternal() {
   return GetIdentificator();
 }
 
-Lexem iCalendarLexer::GetIdentificator() {
+Lexem IcalendarLexer::GetIdentificator() {
   std::string result = "";
 
   while (!character_reader_->IsEof()
@@ -84,11 +84,11 @@ Lexem iCalendarLexer::GetIdentificator() {
   return Lexem(Tag::kIdentifier, std::move(result));
 }
 
-bool iCalendarLexer::IsDelimiter(char character) const {
+bool IcalendarLexer::IsDelimiter(char character) const {
   return (std::find(std::begin(kDelimiters), std::end(kDelimiters), character)
           != kDelimiters.end());
 }
 
-void iCalendarLexer::set_character_reader(ICharReader& character_reader) {
+void IcalendarLexer::set_character_reader(ICharReader& character_reader) {
   character_reader_ = &character_reader;
 }

@@ -5,41 +5,14 @@
 #include <vector>
 #include <queue>
 
-#include "i_char_reader.hpp"
+#include "string_char_reader.hpp"
 #include "lexer.hpp"
 #include "parser.hpp"
 
 // TODO(affeeal): вынести StringStubCharReader и FileCharReader
 // в один класс
 
-class StringStubCharReader : public ICharReader {
- public:
-  char Peek(std::size_t k = 0) override {
-    auto pos = ss_.tellg();
-    ss_.seekg(k, ss_.cur);
-    char ch = ss_.peek();
-    ss_.seekg(pos);
-    return ch;
-  }
-
-  char Get(std::size_t k = 0) override {
-    ss_.seekg(k, ss_.cur);
-    return ss_.get();
-  }
-
-  bool IsEof() override {
-    return (ss_.rdbuf()->in_avail() == 0);
-  }
-
-  void set_ss(std::stringstream&& ss) {
-    ss_ = std::move(ss);
-  }
-
- private:
-  std::stringstream ss_;
-};
-
-class iCalendarParserTest : public ::testing::Test {
+class IcalendarParserTest : public ::testing::Test {
  protected:
   void SetUp() override {
     lexer_.set_character_reader(char_reader_);
@@ -49,12 +22,12 @@ class iCalendarParserTest : public ::testing::Test {
   void TearDown() override {
   }
 
-  StringStubCharReader char_reader_;
-  iCalendarLexer lexer_;
-  iCalendarParser parser_;
+  StringCharReader char_reader_;
+  IcalendarLexer lexer_;
+  IcalendarParser parser_;
 };
 
-TEST_F(iCalendarParserTest, EmptyStream) {
+TEST_F(IcalendarParserTest, EmptyStream) {
   std::stringstream ss("");
   char_reader_.set_ss(std::move(ss));
 
@@ -65,7 +38,7 @@ TEST_F(iCalendarParserTest, EmptyStream) {
   ASSERT_EQ(stream_components.size(), 0);
 }
 
-TEST_F(iCalendarParserTest, EmptyCalendar) {
+TEST_F(IcalendarParserTest, EmptyCalendar) {
   std::stringstream ss("BEGIN:VCALENDAR\r\n"
                        "END:VCALENDAR\r\n");
   char_reader_.set_ss(std::move(ss));
@@ -84,7 +57,7 @@ TEST_F(iCalendarParserTest, EmptyCalendar) {
   EXPECT_TRUE(calendar->properties().empty());
 }
 
-TEST_F(iCalendarParserTest, EmptyCalendars) {
+TEST_F(IcalendarParserTest, EmptyCalendars) {
   std::stringstream ss("BEGIN:VCALENDAR\r\n"
                        "END:VCALENDAR\r\n"
                        "BEGIN:VCALENDAR\r\n"
@@ -106,7 +79,7 @@ TEST_F(iCalendarParserTest, EmptyCalendars) {
   }
 }
 
-TEST_F(iCalendarParserTest, CalendarWithProperties) {
+TEST_F(IcalendarParserTest, CalendarWithProperties) {
   std::stringstream ss("BEGIN:VCALENDAR\r\n"
                        "VERSION:2.0\r\n"
                        "PRODID:students.bmstu.ru\r\n"
@@ -155,7 +128,7 @@ TEST_F(iCalendarParserTest, CalendarWithProperties) {
   EXPECT_TRUE(calendar->components().empty());
 }
 
-TEST_F(iCalendarParserTest, CalendarWithEmptyEvent) {
+TEST_F(IcalendarParserTest, CalendarWithEmptyEvent) {
   std::stringstream ss("BEGIN:VCALENDAR\r\n"
                        "VERSION:2.0\r\n"
                        "PRODID:students.bmstu.ru\r\n"
@@ -214,7 +187,7 @@ TEST_F(iCalendarParserTest, CalendarWithEmptyEvent) {
   EXPECT_TRUE(event->components().empty());
 }
 
-TEST_F(iCalendarParserTest, CalendarWithEmptyEvents) {
+TEST_F(IcalendarParserTest, CalendarWithEmptyEvents) {
   std::stringstream ss("BEGIN:VCALENDAR\r\n"
                        "VERSION:2.0\r\n"
                        "PRODID:students.bmstu.ru\r\n"
@@ -276,7 +249,7 @@ TEST_F(iCalendarParserTest, CalendarWithEmptyEvents) {
   }
 }
 
-TEST_F(iCalendarParserTest, CalendarWithEvents) {
+TEST_F(IcalendarParserTest, CalendarWithEvents) {
   std::stringstream ss(
       "BEGIN:VCALENDAR\r\n"
       "VERSION:2.0\r\n"

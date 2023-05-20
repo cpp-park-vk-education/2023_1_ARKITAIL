@@ -13,5 +13,8 @@ class ICalendarConverter {
   virtual std::vector<CalendarSptr> IcalendarToCalendar(
       std::unique_ptr<ICharReader>&& char_reader) = 0;
 
+  virtual std::unique_ptr<ICharReader> CalendarToIcalendar(
+      std::vector<CalendarSptr>&& calendars) = 0;
+
   virtual ~ICalendarConverter() = default;
 };

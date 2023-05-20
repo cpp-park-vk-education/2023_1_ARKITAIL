@@ -4,7 +4,9 @@
 
 #include <Wt/WTemplate.h>
 
+#include "calendar.hpp"
+
 class CalendarExportTemplate : public Wt::WTemplate {
  public:
-  CalendarExportTemplate(const std::string& key);
+  CalendarExportTemplate(CalendarSptr calendar);
 };

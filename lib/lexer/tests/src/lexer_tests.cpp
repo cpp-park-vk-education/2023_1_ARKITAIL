@@ -4,51 +4,23 @@
 #include <sstream>
 #include <string>
 
-#include "i_char_reader.hpp"
+#include "string_char_reader.hpp"
 #include "lexer.hpp"
 
-class StringStubCharReader : public ICharReader {
- public:
-  char Peek(std::size_t k = 0) override {
-    auto pos = ss_.tellg();
-    ss_.seekg(k, ss_.cur);
-    char ch = ss_.peek();
-    ss_.seekg(pos);
-    return ch;
-  }
-
-  char Get(std::size_t k = 0) override {
-    ss_.seekg(k, ss_.cur);
-    return ss_.get();
-  }
-
-  bool IsEof() override {
-    return (ss_.rdbuf()->in_avail() == 0);
-  }
-
-  void set_ss(std::stringstream&& ss) {
-    ss_ = std::move(ss);
-  }
-
- private:
-  std::stringstream ss_;
-};
-
-class iCalendarLexerTest : public ::testing::Test {
+class IcalendarLexerTest : public ::testing::Test {
  protected:
   void SetUp() override {
-    lexer_ = iCalendarLexer();
     lexer_.set_character_reader(char_reader_);
   }
 
   void TearDown() override {
   }
 
-  StringStubCharReader char_reader_;
-  iCalendarLexer lexer_;
+  StringCharReader char_reader_;
+  IcalendarLexer lexer_;
 };
 
-TEST_F(iCalendarLexerTest, Empty) {
+TEST_F(IcalendarLexerTest, Empty) {
   std::stringstream ss("");
   char_reader_.set_ss(std::move(ss));
   
@@ -56,7 +28,7 @@ TEST_F(iCalendarLexerTest, Empty) {
   EXPECT_EQ(lexer_.Get(), Lexem(Tag::kEof, ""));
 }
 
-TEST_F(iCalendarLexerTest, CommonLine) {
+TEST_F(IcalendarLexerTest, CommonLine) {
   std::stringstream ss("BEGIN:VCALENDAR\r\n");
   char_reader_.set_ss(std::move(ss));
   
@@ -71,7 +43,7 @@ TEST_F(iCalendarLexerTest, CommonLine) {
   EXPECT_EQ(lexer_.Get(), kEof);
 }
 
-TEST_F(iCalendarLexerTest, LineWithParameters) {
+TEST_F(IcalendarLexerTest, LineWithParameters) {
   std::stringstream ss("RRULE:FREQ=WEEKLY;UNTIL=20230605\r\n");
   char_reader_.set_ss(std::move(ss));
 
@@ -89,7 +61,7 @@ TEST_F(iCalendarLexerTest, LineWithParameters) {
   EXPECT_EQ(lexer_.Get(), kEof);
 }
 
-TEST_F(iCalendarLexerTest, RequestKthLexem) {
+TEST_F(IcalendarLexerTest, RequestKthLexem) {
   std::stringstream ss("RRULE:FREQ=MONTHLY\r\n");
   char_reader_.set_ss(std::move(ss));
 

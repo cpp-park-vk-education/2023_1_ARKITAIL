@@ -39,10 +39,10 @@ EventView::EventView(
 
   auto calendars = std::make_unique<Wt::WComboBox>();
   for (auto calendar : public_calendars) {
-    calendars->addItem(calendar->title);
+    calendars->addItem(calendar->summary);
   }
   for (auto calendar : private_calendars) {
-    calendars->addItem(calendar->title);
+    calendars->addItem(calendar->summary);
   }
   calendars_ = calendars.get();
   setFormWidget(EventModel::kCalendars, std::move(calendars));
