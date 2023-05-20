@@ -19,24 +19,22 @@
 
 CalendarW::CalendarW() :
     calendars_(3) {
-
+    std::cout << "TYPIC1\n\n" << std::endl;
     auto mgr = SessionScopeMap::instance().get()->managers();
-    
+
     auto layout = setLayout(std::make_unique<Wt::WHBoxLayout>());
     auto tree_panel = layout->addWidget(std::make_unique<Wt::WContainerWidget>());
     tree_panel->setStyleClass("start-0");
     auto tree_panel_layout = tree_panel->setLayout(std::make_unique<Wt::WHBoxLayout>());
     tree_ = tree_panel_layout->addWidget(std::make_unique<TreeW>());
     tree_->setRoot();
+    std::cout << "TYPIC\n\n" << std::endl;
 
-    auto managers = &Managers::instance();
-    std::cout << "\nManagers::instance()\n\n" << std::endl;
-
-    auto node_manager = managers->node_manager.get();
-    std::cout << "Managers::instance().node_manager\n\n" << std::endl;
-
-    auto user_manager = managers->user_manager.get();
+    auto user_manager = mgr->user_manager();
     std::cout << "Managers::instance().user_manager\n\n" << std::endl;
+
+    auto node_manager = mgr->node_manager();
+    std::cout << "Managers::instance().node_manager\n\n" << std::endl;
 
     auto id = user_manager->get().root_id;
     std::cout << "user_manager->get().root_id\n\n" << std::endl;

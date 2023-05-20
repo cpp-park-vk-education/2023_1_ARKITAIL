@@ -16,4 +16,5 @@ target_link_libraries(tree_node_w_analyst  PUBLIC
                       profile
                       profile_manager
                       in_place_edit_title
+                      session_scope_map
                       )
