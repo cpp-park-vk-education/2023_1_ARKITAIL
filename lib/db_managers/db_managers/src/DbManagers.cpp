@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iostream>
 #include <thread>
 
 #include "DbManagers.hpp"
@@ -24,7 +25,10 @@ DbManagers::DbManagers(
 	event_dbm_(std::move(event_dbm)),
 	comment_dbm_(std::move(comment_dbm)),
 	tag_dbm_(std::move(tag_dbm)),
-	profile_dbm_(std::move(profile_dbm)) {}
+	profile_dbm_(std::move(profile_dbm)) {
+
+	std::cout << "Here4" << std::endl;
+}
 
 IUserDbManager* DbManagers::user_dbm() {
 	return user_dbm_.get();
