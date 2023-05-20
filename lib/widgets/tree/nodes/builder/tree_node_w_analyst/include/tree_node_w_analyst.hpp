@@ -68,7 +68,7 @@ class TreeNodeWAnalyst {
     TreeNodeWAnalyst();
     ~TreeNodeWAnalyst() = default;
 
-    TreeNodeWConvertedData& analyseTreeNodeDirWChild(ITreeNode* tree_node);
-    TreeNodeWConvertedData& analyseTreeNodeOtherDirWChild(ITreeNode* tree_node);
-    TreeNodeWConvertedData& analyseTreeNodeSubscriptionDirWChild(ITreeNode* tree_node);
+    TreeNodeWConvertedData analyseTreeNodeDirWChild(ITreeNode* tree_node);
+    TreeNodeWConvertedData analyseTreeNodeOtherDirWChild(ITreeNode* tree_node);
+    TreeNodeWConvertedData analyseTreeNodeSubscriptionDirWChild(ITreeNode* tree_node);
 };
