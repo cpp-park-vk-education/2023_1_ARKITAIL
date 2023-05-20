@@ -30,22 +30,22 @@ TreeNodeWBuilder::TreeNodeWBuilder() :
     tree_node_w() {}
 
 TreeNodeWBuilder* TreeNodeWBuilder::createTreeNodeDirW(ITreeNode* node) {
-    tree_node_w = std::make_unique<TreeNodeDirW>(node);
+    // tree_node_w.swap(std::make_unique<TreeNodeDirW>(node));
     return this;
 }
 
 TreeNodeWBuilder* TreeNodeWBuilder::createTreeNodeLeafW(ITreeNode* node) {
-    tree_node_w = std::make_unique<TreeNodeLeafW>(node);
+    // tree_node_w.swap(std::make_unique<TreeNodeLeafW>(node));
     return this;
 }
 
 TreeNodeWBuilder* TreeNodeWBuilder::createTreeNodeOtherDirW(ITreeNode* node) {
-    tree_node_w = std::make_unique<TreeNodeOtherDirW>(node);
+    // tree_node_w.swap(std::make_unique<TreeNodeOtherDirW>(node));
     return this;
 }
 
 TreeNodeWBuilder* TreeNodeWBuilder::createTreeNodeSubscriptionsDirW(ITreeNode* node) {
-    tree_node_w = std::make_unique<TreeNodeSubscriptionsDirW>(node);
+    // tree_node_w.swap(std::make_unique<TreeNodeSubscriptionsDirW>(node));
     return this;
 }
 
@@ -71,9 +71,9 @@ TreeNodeWBuilder* TreeNodeWBuilder::addOptions(std::unique_ptr<OptionsW> options
     tree_node_w->options_button_ =
         tree_node_w->node_block_->addWidget(std::make_unique<Wt::WPushButton>("•••"));
     tree_node_w->options_button_->addStyleClass("p-1 py-0 border-0 btn-light");
-    options.get()->selectedOption().connect([=] {
-        std::cout << "\nclick option\n";
-    });
+    // options.get()->selectedOption().connect([=] { проблема
+    //     std::cout << "\nclick option\n";
+    // });
     tree_node_w->options_button_->setMenu(std::move(options));
     tree_node_w->options_button_->toggleStyleClass("dropdown-toggle", false);
     return this;

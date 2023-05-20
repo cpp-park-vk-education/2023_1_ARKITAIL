@@ -12,10 +12,12 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeDirWChild(ITreeNode* tre
     std::vector<std::string> tags;
     // OptionsWBuilder options_builder;
     auto mgr = SessionScopeMap::instance().get()->managers();
+    User user = mgr->user_manager()->get();
 
     if (node.type & (NodeType::PRIVATE_CALENDAR | NodeType::PUBLIC_CALENDAR)) {
         Calendar child = mgr->calendar_manager()->get(node.resource_id);
-        return TreeNodeWConvertedData();
+        return TreeNodeWConvertedData{TreeNodeWType::PERSONAL_CALENDAR, child.name,
+                                      child.description, tags, user.nickname};
         // TreeNodeWBuilder()
         //     .createTreeNodeLeafW(tree_node)
         //     ->addHead(std::make_unique<Wt::WText>(child.name))
@@ -28,6 +30,8 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeDirWChild(ITreeNode* tre
 
     } else if (node.type & NodeType::PROFILE) {
         // Profile child = mgr->profile_manager()->get(node.resource_id);
+        // return TreeNodeWConvertedData{TreeNodeWType::DIR, child.name, "", tags,
+        //                              user.nickname};
         // return TreeNodeWBuilder()
         //     .createTreeNodeProfileW(tree_node)
         //     ->addHead(std::make_unique<InPlaceEditTitle>(child.name))
@@ -36,7 +40,8 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeDirWChild(ITreeNode* tre
         //     ->getTreeNodeW();
     } else if (node.type & (NodeType::PRIVATE_DIRECTORY | NodeType::PUBLIC_DIRECTORY)) {
         Directory child = mgr->directory_manager()->get(node.resource_id);
-        return TreeNodeWConvertedData();
+        return TreeNodeWConvertedData{TreeNodeWType::DIR, child.name, child.description, tags,
+                                      user.nickname};
         // TreeNodeWBuilder()
         //     .createTreeNodeDirW(tree_node)
         //     ->addHead(std::make_unique<Wt::WText>(child.name))

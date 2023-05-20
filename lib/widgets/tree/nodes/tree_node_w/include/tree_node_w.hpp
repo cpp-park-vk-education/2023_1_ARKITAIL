@@ -37,6 +37,13 @@ class TreeNodeW : public Wt::WContainerWidget {
 
     virtual std::unique_ptr<TreeNodeW> makeTreeNodeWidget(ITreeNode* node);
 
+    TreeNodeW* addOptions(std::unique_ptr<OptionsW> options);
+    TreeNodeW* addToolTip(std::string description, std::vector<std::string> tags);
+    TreeNodeW* addToolTip(std::string description, std::vector<std::string> tags, User author);
+    TreeNodeW* addHead(std::unique_ptr<Wt::WWidget>);
+    TreeNodeW* addCheckBox();
+    TreeNodeW* endNode();
+
   protected:
     Wt::WContainerWidget* header_container_;
     Wt::WPushButton* options_button_;
