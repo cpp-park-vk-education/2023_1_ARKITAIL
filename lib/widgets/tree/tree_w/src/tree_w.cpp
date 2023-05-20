@@ -6,6 +6,7 @@
 #include <Wt/WLineEdit.h>
 #include <Wt/WPushButton.h>
 
+#include <algorithm>
 #include <memory>
 #include <string>
 
@@ -14,6 +15,7 @@
 #include "Node.hpp"
 #include "SessionScopeMap.hpp"
 #include "Tree.hpp"
+#include "TreeNode.hpp"
 #include "tree_node_dir_w.hpp"
 #include "tree_node_leaf_w.hpp"
 #include "tree_node_other_dir_w.hpp"
@@ -82,11 +84,13 @@ void TreeW::setRoot() {
 }
 
 void TreeW::setRoot(const Node& node) {
+
     auto mgr = SessionScopeMap::instance().get()->managers();
-    std::cout << "12\n" << std::endl;
     tree_manager_ = std::make_unique<Tree>(node);
+    root_ = new TreeNodeDirW(tree_manager_->getRoot());
 
     auto tree_node = tree_manager_->getRoot();
+    std::cout << tree_node << std::endl;
 
     if (node.type & NodeType::PUBLIC_CALENDAR) {
         std::cout << "22\n" << std::endl;
@@ -95,9 +99,14 @@ void TreeW::setRoot(const Node& node) {
         root_ = addWidget(root_->makeTreeNodeWidget(tree_node));
 
     } else {
+        std::cout << "22\n" << std::endl;
         auto directory = mgr->directory_manager()->get(node.resource_id);
+        std::cout << "23\n" << std::endl;
+        std::cout << root_ << std::endl;
+        auto n = root_->makeTreeNodeWidget(tree_node);
+        std::cout << "Addr: " << n.get() << std::endl;
         if (node.type & NodeType::ROOT) {
-            root_ = addWidget(root_->makeTreeNodeWidget(tree_node));
+            root_ = addWidget(std::move(n));
         } else {
             root_ = addWidget(root_->makeTreeNodeWidget(tree_node));
         }

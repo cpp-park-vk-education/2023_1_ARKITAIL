@@ -7,20 +7,9 @@
 #include "Event.hpp"
 
 CalendarDbManagerMock::CalendarDbManagerMock(std::shared_ptr<DbMock> db) :
-	db_(),
+	db_(db),
 	aid_(){
 	
-	db_->calendars.emplace_back(0, 0, 0, "", "");
-
-	db_->calendars.emplace_back(1, 8, 0, "PrivateCalendar", "desc");
-	db_->calendars.emplace_back(2, 9, 0, "PrivateCalendar", "desc");
-	db_->calendars.emplace_back(3, 11, 0, "PublicCalendar", "desc");
-	db_->calendars.emplace_back(4, 12, 0, "PublicCalendar", "desc");
-	db_->calendars.emplace_back(5, 20, 1, "PrivateCalendar", "desc");
-	db_->calendars.emplace_back(6, 21, 1, "PrivateCalendar", "desc");
-	db_->calendars.emplace_back(7, 23, 1, "PublicCalendar", "desc");
-	db_->calendars.emplace_back(8, 24, 1, "PublicCalendar", "desc");
-
 	aid_ = db_->calendars.size();
 }
 

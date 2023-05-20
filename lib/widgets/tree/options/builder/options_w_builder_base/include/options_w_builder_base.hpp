@@ -6,8 +6,6 @@ class OptionsW;
 
 class OptionsWBuilderBase {
   public:
-    virtual ~OptionsWBuilderBase() = 0;
-
     OptionsWBuilderBase* createOptionsW();
 
     virtual OptionsWBuilderBase* addOptionRemove();

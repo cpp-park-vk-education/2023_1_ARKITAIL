@@ -64,9 +64,12 @@ void TreeNodeW::uncheckParentNodes() {
 }
 
 std::unique_ptr<TreeNodeW> TreeNodeW::makeTreeNodeWidget(ITreeNode* tree_node) {
+    std::cout << "ROOT" << std::endl;
     auto mgr = SessionScopeMap::instance().get()->managers();
-
+    std::cout << "ROOT" << std::endl;
     Node node = tree_node->getNode();
+    std::cout << "ROOT" << std::endl;
+
     std::vector<std::string> tags;
     OptionsWBuilder options_builder;
 
@@ -94,7 +97,9 @@ std::unique_ptr<TreeNodeW> TreeNodeW::makeTreeNodeWidget(ITreeNode* tree_node) {
             ->getTreeNodeW();
 
     } else if (node.type & (NodeType::ROOT | NodeType::PRIVATE_GROUP | NodeType::PUBLIC_GROUP)) {
+        std::cout << "ROOT" << std::endl;
         Directory child = mgr->directory_manager()->get(node.resource_id);
+        std::cout << "ROOT" << std::endl;
         return TreeNodeWBuilder()
             .createTreeNodeDirW(tree_node)
             ->addHead(std::make_unique<Wt::WText>(child.name))

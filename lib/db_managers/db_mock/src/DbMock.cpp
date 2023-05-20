@@ -47,7 +47,16 @@ DbMock::DbMock() {
 	directories.emplace_back(12, 18, 1, "TestProfile", "desc");
 	directories.emplace_back(13, 19, 1, "PrivateDirectory", "desc");
 	directories.emplace_back(14, 22, 1, "PublicDirectory", "desc");
-
+	
+	calendars.emplace_back(0, 0, 0, "", "");
+	calendars.emplace_back(1, 8, 0, "PrivateCalendar", "desc");
+	calendars.emplace_back(2, 9, 0, "PrivateCalendar", "desc");
+	calendars.emplace_back(3, 11, 0, "PublicCalendar", "desc");
+	calendars.emplace_back(4, 12, 0, "PublicCalendar", "desc");
+	calendars.emplace_back(5, 20, 1, "PrivateCalendar", "desc");
+	calendars.emplace_back(6, 21, 1, "PrivateCalendar", "desc");
+	calendars.emplace_back(7, 23, 1, "PublicCalendar", "desc");
+	calendars.emplace_back(8, 24, 1, "PublicCalendar", "desc");
 
 }
 
