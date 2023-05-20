@@ -1,17 +1,14 @@
 #include "UserDbManagerMock.hpp"
+#include "DbMock.hpp"
 
-UserDbManagerMock::UserDbManagerMock() :
-	data_() {
-
-	data_.emplace_back(0, 1, "uma_op", "bannikovtop@gmail.com", "UmaOp", "Arkitail");
-	data_.emplace_back(1, 2, "uma_test", "test@gmail.com", "Test", "Test");
-}
+UserDbManagerMock::UserDbManagerMock(std::shared_ptr<DbMock> db) :
+	db_(db) {}
 
 const User& UserDbManagerMock::get() {
-	return data_[0];
+	return db_->users[0];
 }
 
 const User& UserDbManagerMock::get(size_t user_id) {
-	return data_[user_id];
+	return db_->users[user_id];
 }
 

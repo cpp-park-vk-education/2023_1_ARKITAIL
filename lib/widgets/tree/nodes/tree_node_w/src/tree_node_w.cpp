@@ -19,6 +19,7 @@
 #include "Managers.hpp"
 #include "Node.hpp"
 #include "Profile.hpp"
+#include "SessionScopeMap.hpp"
 #include "User.hpp"
 #include "in_place_edit_title.hpp"
 #include "options_w.hpp"
@@ -63,35 +64,37 @@ void TreeNodeW::uncheckParentNodes() {
 }
 
 std::unique_ptr<TreeNodeW> TreeNodeW::makeTreeNodeWidget(ITreeNode* tree_node) {
+    auto mgr = SessionScopeMap::instance().get()->managers();
+
     Node node = tree_node->getNode();
     std::vector<std::string> tags;
     OptionsWBuilder options_builder;
 
     if (node.type & (NodeType::PRIVATE_CALENDAR | NodeType::PUBLIC_CALENDAR)) {
-        Calendar child = Managers::instance().calendar_manager->get(node.resource_id);
+        Calendar child = mgr->calendar_manager()->get(node.resource_id);
         return TreeNodeWBuilder()
             .createTreeNodeLeafW(tree_node)
             ->addHead(std::make_unique<Wt::WText>(child.name))
             ->addOptions(
-                std::move(OptionsWDirector().createOptionsPersonalCalendarW(options_builder)))
+                OptionsWDirector().createOptionsPersonalCalendarW(options_builder))
             ->addToolTip(child.description, tags)
             ->addParent(this)
             ->endNode()
             ->getTreeNodeW();
 
     } else if (node.type & (NodeType::PRIVATE_DIRECTORY | NodeType::PUBLIC_DIRECTORY)) {
-        Directory child = Managers::instance().directory_manager->get(node.resource_id);
+        Directory child = mgr->directory_manager()->get(node.resource_id);
         return TreeNodeWBuilder()
             .createTreeNodeDirW(tree_node)
             ->addHead(std::make_unique<Wt::WText>(child.name))
-            ->addOptions(std::move(OptionsWDirector().createOptionsCalendarsDirW(options_builder)))
+            ->addOptions(OptionsWDirector().createOptionsCalendarsDirW(options_builder))
             ->addToolTip(child.description, tags)
             ->addParent(this)
             ->endNode()
             ->getTreeNodeW();
 
     } else if (node.type & (NodeType::ROOT | NodeType::PRIVATE_GROUP | NodeType::PUBLIC_GROUP)) {
-        Directory child = Managers::instance().directory_manager->get(node.resource_id);
+        Directory child = mgr->directory_manager()->get(node.resource_id);
         return TreeNodeWBuilder()
             .createTreeNodeDirW(tree_node)
             ->addHead(std::make_unique<Wt::WText>(child.name))
@@ -100,7 +103,7 @@ std::unique_ptr<TreeNodeW> TreeNodeW::makeTreeNodeWidget(ITreeNode* tree_node) {
             ->getTreeNodeW();
 
     } else if (node.type & (NodeType::PROFILE_GROUP)) {
-        Directory child = Managers::instance().directory_manager->get(node.resource_id);
+        Directory child = mgr->directory_manager()->get(node.resource_id);
         return TreeNodeWBuilder()
             .createTreeNodeDirW(tree_node)
             ->addHead(std::make_unique<Wt::WText>(child.name))
@@ -109,7 +112,7 @@ std::unique_ptr<TreeNodeW> TreeNodeW::makeTreeNodeWidget(ITreeNode* tree_node) {
             ->getTreeNodeW();
 
     } else if (node.type & NodeType::SUBSCRIPTIONS_GROUP) {
-        Directory child = Managers::instance().directory_manager->get(node.resource_id);
+        Directory child = mgr->directory_manager()->get(node.resource_id);
         return TreeNodeWBuilder()
             .createTreeNodeSubscriptionsDirW(tree_node)
             ->addHead(std::make_unique<Wt::WText>(child.name))

@@ -11,7 +11,5 @@ public:
 	virtual void update(const Comment& comment) = 0;
 	virtual void remove(size_t comment_id) = 0;
 
-	virtual std::vector<Comment> getByEvent(size_t event_id) = 0;  // mock assistance
-
 };
 

@@ -1,10 +1,13 @@
 #pragma once
 
+#include <memory>
+
+#include "DbMock.hpp"
 #include "ICalendarDbManager.hpp"
 
 class CalendarDbManagerMock : public ICalendarDbManager {
 public:
-    CalendarDbManagerMock();
+    CalendarDbManagerMock(std::shared_ptr<DbMock> db);
 
     const Calendar& get(size_t);
     size_t add(const Calendar&);
@@ -14,7 +17,7 @@ public:
     std::vector<Event> getEvents(size_t);
 
 private:
-    std::vector<Calendar> data_;
+    std::shared_ptr<DbMock> db_;
     size_t aid_;
 
 };

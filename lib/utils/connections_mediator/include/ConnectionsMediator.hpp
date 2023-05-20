@@ -9,8 +9,6 @@ class ConnectionsMediator {
 public:
 	ConnectionsMediator();
 
-	static ConnectionsMediator& instance();
-
 	void connect();
 	
 	// Declare your connetion points there 

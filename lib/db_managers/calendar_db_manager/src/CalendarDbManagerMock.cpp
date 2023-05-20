@@ -1,38 +1,39 @@
 #include "CalendarDbManagerMock.hpp"
 #include "DbManagers.hpp"
+#include "DbMock.hpp"
 #include "EventDbManagerMock.hpp"
 #include "CalendarDbManagerMock.hpp"
 #include "Calendar.hpp"
 #include "Event.hpp"
 
-CalendarDbManagerMock::CalendarDbManagerMock() :
-	data_(),
+CalendarDbManagerMock::CalendarDbManagerMock(std::shared_ptr<DbMock> db) :
+	db_(),
 	aid_(){
 	
-	data_.emplace_back(0, 0, 0, "", "");
+	db_->calendars.emplace_back(0, 0, 0, "", "");
 
-	data_.emplace_back(1, 8, 0, "PrivateCalendar", "desc");
-	data_.emplace_back(2, 9, 0, "PrivateCalendar", "desc");
-	data_.emplace_back(3, 11, 0, "PublicCalendar", "desc");
-	data_.emplace_back(4, 12, 0, "PublicCalendar", "desc");
-	data_.emplace_back(5, 20, 1, "PrivateCalendar", "desc");
-	data_.emplace_back(6, 21, 1, "PrivateCalendar", "desc");
-	data_.emplace_back(7, 23, 1, "PublicCalendar", "desc");
-	data_.emplace_back(8, 24, 1, "PublicCalendar", "desc");
+	db_->calendars.emplace_back(1, 8, 0, "PrivateCalendar", "desc");
+	db_->calendars.emplace_back(2, 9, 0, "PrivateCalendar", "desc");
+	db_->calendars.emplace_back(3, 11, 0, "PublicCalendar", "desc");
+	db_->calendars.emplace_back(4, 12, 0, "PublicCalendar", "desc");
+	db_->calendars.emplace_back(5, 20, 1, "PrivateCalendar", "desc");
+	db_->calendars.emplace_back(6, 21, 1, "PrivateCalendar", "desc");
+	db_->calendars.emplace_back(7, 23, 1, "PublicCalendar", "desc");
+	db_->calendars.emplace_back(8, 24, 1, "PublicCalendar", "desc");
 
-	aid_ = data_.size();
+	aid_ = db_->calendars.size();
 }
 
 const Calendar& CalendarDbManagerMock::get(size_t calendar_id) {
-	for (auto e = data_.begin() + 1; e != data_.end(); e++)
+	for (auto e = db_->calendars.begin() + 1; e != db_->calendars.end(); e++)
 		if (e->id == calendar_id)
 			return *e;
 	
-	return data_[0];
+	return db_->calendars[0];
 }
 
 size_t CalendarDbManagerMock::add(const Calendar& calendar) {
-	data_.emplace_back(
+	db_->calendars.emplace_back(
 		aid_,
 		calendar.node_id,
 		calendar.owner_id,
@@ -44,19 +45,25 @@ size_t CalendarDbManagerMock::add(const Calendar& calendar) {
 }
 
 void CalendarDbManagerMock::update(const Calendar& calendar) {
-	for (auto e : data_)
+	for (auto e : db_->calendars)
 		if (e.id == calendar.id)
 			e = calendar;
 }
 
 void CalendarDbManagerMock::remove(size_t calendar_id) {
-	for (auto e = data_.begin() + 1; e != data_.end(); e++)
+	for (auto e = db_->calendars.begin() + 1; e != db_->calendars.end(); e++)
 		if (e->id == calendar_id)
-			data_.erase(e);
+			db_->calendars.erase(e);
 }
 
 std::vector<Event> CalendarDbManagerMock::getEvents(size_t calendar_id) {
-	return DbManagers::instance().event_dbm->getByCalendar(calendar_id);
+	std::vector<Event> events;
+
+	for (auto e = db_->events.begin() + 1; e != db_->events.end(); e++)
+		if (e->calendar_id == calendar_id)
+			events.push_back(*e);
+
+	return events;
 }
 
 

@@ -40,13 +40,3 @@ void CommentDbManagerMock::remove(size_t comment_id) {
 			data_.erase(e);
 }
 
-std::vector<Comment> CommentDbManagerMock::getByEvent(size_t event_id) {
-	std::vector<Comment> comments;
-
-	for (auto e = data_.begin() + 1; e != data_.end(); e++)
-		if (e->event_id == event_id)
-			comments.push_back(*e);
-
-	return comments;
-}
-

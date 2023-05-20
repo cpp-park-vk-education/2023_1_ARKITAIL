@@ -12,6 +12,7 @@
 #include "ITreeNode.hpp"
 #include "Managers.hpp"
 #include "Node.hpp"
+#include "SessionScopeMap.hpp"
 #include "Tree.hpp"
 #include "tree_node_dir_w.hpp"
 #include "tree_node_leaf_w.hpp"
@@ -81,22 +82,24 @@ void TreeW::setRoot() {
 }
 
 void TreeW::setRoot(const Node& node) {
+    auto mgr = SessionScopeMap::instance().get()->managers();
     std::cout << "12\n" << std::endl;
     tree_manager_ = std::make_unique<Tree>(node);
 
     auto tree_node = tree_manager_->getRoot();
+
     if (node.type & NodeType::PUBLIC_CALENDAR) {
         std::cout << "22\n" << std::endl;
-        auto calendar = Managers::instance().calendar_manager->get(node.resource_id);
+        auto calendar = mgr->calendar_manager()->get(node.resource_id);
         std::cout << "33\n" << std::endl;
-        root_ = addWidget(std::move(root_->makeTreeNodeWidget(tree_node)));
+        root_ = addWidget(root_->makeTreeNodeWidget(tree_node));
 
     } else {
-        auto directory = Managers::instance().directory_manager->get(node.resource_id);
+        auto directory = mgr->directory_manager()->get(node.resource_id);
         if (node.type & NodeType::ROOT) {
-            root_ = addWidget(std::move(root_->makeTreeNodeWidget(tree_node)));
+            root_ = addWidget(root_->makeTreeNodeWidget(tree_node));
         } else {
-            root_ = addWidget(std::move(root_->makeTreeNodeWidget(tree_node)));
+            root_ = addWidget(root_->makeTreeNodeWidget(tree_node));
         }
     }
 }
