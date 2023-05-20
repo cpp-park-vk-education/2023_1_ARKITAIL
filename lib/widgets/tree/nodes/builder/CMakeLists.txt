@@ -1,2 +1,3 @@
+add_subdirectory(tree_node_w_analyst)
 add_subdirectory(tree_node_w_builder)
-# add_subdirectory(tree_node_w_director)
+add_subdirectory(tree_node_w_director)

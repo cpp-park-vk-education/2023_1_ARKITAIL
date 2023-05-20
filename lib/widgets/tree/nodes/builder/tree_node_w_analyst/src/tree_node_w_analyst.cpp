@@ -1,0 +1,78 @@
+#include "tree_node_w_analyst.hpp"
+
+TreeNodeWAnalyst::TreeNodeWAnalyst() {}
+
+TreeNodeWConvertedData& TreeNodeWAnalyst::analyseTreeNodeDirWChild(ITreeNode* tree_node) {
+    Node node = tree_node->getNode();
+    std::vector<std::string> tags;
+    OptionsWBuilder options_builder;
+
+    if (node.type & (NodeType::PRIVATE_CALENDAR | NodeType::PUBLIC_CALENDAR)) {
+        Calendar child = Managers::instance().calendar_manager->get(node.resource_id);
+        return TreeNodeWConvertedData();
+        TreeNodeWBuilder()
+            .createTreeNodeLeafW(tree_node)
+            ->addHead(std::make_unique<Wt::WText>(child.name))
+            ->addOptions(
+                std::move(OptionsWDirector().createOptionsPersonalCalendarW(options_builder)))
+            ->addToolTip(child.description, tags)
+            ->addParent(this)
+            ->endNode()
+            ->getTreeNodeW();
+
+    } else if (node.type & NodeType::PROFILE) {
+        // Profile child = Managers::instance().profile_manager->get(node.resource_id);
+        // return TreeNodeWBuilder()
+        //     .createTreeNodeProfileW(tree_node)
+        //     ->addHead(std::make_unique<InPlaceEditTitle>(child.name))
+        //     ->addParent(this)
+        //     ->endNode()
+        //     ->getTreeNodeW();
+    } else if (node.type & (NodeType::PRIVATE_DIRECTORY | NodeType::PUBLIC_DIRECTORY)) {
+        Directory child = Managers::instance().directory_manager->get(node.resource_id);
+        return TreeNodeWConvertedData();
+        TreeNodeWBuilder()
+            .createTreeNodeDirW(tree_node)
+            ->addHead(std::make_unique<Wt::WText>(child.name))
+            ->addOptions(std::move(OptionsWDirector().createOptionsCalendarsDirW(options_builder)))
+            ->addToolTip(child.description, tags)
+            ->addParent(this)
+            ->endNode()
+            ->getTreeNodeW();
+
+    } else if (node.type & (NodeType::ROOT | NodeType::PRIVATE_GROUP | NodeType::PUBLIC_GROUP)) {
+        Directory child = Managers::instance().directory_manager->get(node.resource_id);
+        return TreeNodeWConvertedData();
+        TreeNodeWBuilder()
+            .createTreeNodeDirW(tree_node)
+            ->addHead(std::make_unique<Wt::WText>(child.name))
+            ->addParent(this)
+            ->endNode()
+            ->getTreeNodeW();
+
+    } else if (node.type & (NodeType::PROFILE_GROUP)) {
+        Directory child = Managers::instance().directory_manager->get(node.resource_id);
+        return TreeNodeWConvertedData();
+        TreeNodeWBuilder()
+            .createTreeNodeDirW(tree_node)
+            ->addHead(std::make_unique<Wt::WText>(child.name))
+            ->addParent(this)
+            ->endNode()
+            ->getTreeNodeW();
+
+    } else if (node.type & NodeType::SUBSCRIPTIONS_GROUP) {
+        Directory child = Managers::instance().directory_manager->get(node.resource_id);
+        return TreeNodeWConvertedData();
+        TreeNodeWBuilder()
+            .createTreeNodeSubscriptionsDirW(tree_node)
+            ->addHead(std::make_unique<Wt::WText>(child.name))
+            ->addParent(this)
+            ->endNode()
+            ->getTreeNodeW();
+    }
+}
+
+TreeNodeWConvertedData& TreeNodeWAnalyst::analyseTreeNodeOtherDirWChild(ITreeNode* tree_node) {}
+
+TreeNodeWConvertedData& TreeNodeWAnalyst::analyseTreeNodeSubscriptionDirWChild(
+    ITreeNode* tree_node) {}

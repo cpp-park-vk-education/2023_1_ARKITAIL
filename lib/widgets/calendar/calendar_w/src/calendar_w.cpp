@@ -23,11 +23,26 @@ CalendarW::CalendarW() :
     tree_panel->setStyleClass("start-0");
     auto tree_panel_layout = tree_panel->setLayout(std::make_unique<Wt::WHBoxLayout>());
     tree_ = tree_panel_layout->addWidget(std::make_unique<TreeW>());
-    // tree_->setRoot();
-    std::cout << "11\n\n" << std::endl;
+    tree_->setRoot();
 
-    tree_->setRoot(
-        Managers::instance().node_manager->get(Managers::instance().user_manager->get().root_id));
+    auto managers = &Managers::instance();
+    std::cout << "\nManagers::instance()\n\n" << std::endl;
+
+    auto node_manager = managers->node_manager.get();
+    std::cout << "Managers::instance().node_manager\n\n" << std::endl;
+
+    auto user_manager = managers->user_manager.get();
+    std::cout << "Managers::instance().user_manager\n\n" << std::endl;
+
+    auto id = user_manager->get().root_id;
+    std::cout << "user_manager->get().root_id\n\n" << std::endl;
+
+    auto node = node_manager->get(id);
+    std::cout << "node_manager->get(id)\n\n" << std::endl;
+
+    tree_->setRoot(node);
+    std::cout << "tree_->setRoot(node)\n\n" << std::endl;
+
     show_tree_button_ =
         tree_panel_layout->addWidget(std::make_unique<Wt::WPushButton>(Wt::WString(">")));
     show_tree_button_->setStyleClass("btn-light rounded-end rounded-0 border-start-0");
