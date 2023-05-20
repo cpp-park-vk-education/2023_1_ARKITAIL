@@ -1,18 +1,21 @@
 #pragma once
 
+#include <vector>
+#include <memory>
+
+#include "DbMock.hpp"
 #include "IUserDbManager.hpp"
 #include "User.hpp"
-#include <vector>
 
 class UserDbManagerMock : public IUserDbManager {
 public:
-    UserDbManagerMock();
+    UserDbManagerMock(std::shared_ptr<DbMock> db);
 
     const User& get() override;
     const User& get(size_t user_id) override;
 
 private:
-    std::vector<User> data_;
+    std::shared_ptr<DbMock> db_;
 
 };
 

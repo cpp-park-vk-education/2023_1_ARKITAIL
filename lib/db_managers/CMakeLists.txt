@@ -7,4 +7,5 @@ add_subdirectory(event_db_manager)
 add_subdirectory(tag_db_manager)
 add_subdirectory(comment_db_manager)
 add_subdirectory(profile_db_manager)
+add_subdirectory(db_mock)
 

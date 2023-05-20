@@ -9,12 +9,24 @@ Managers::Managers(
 	std::unique_ptr<IDirectoryManager> directory_manager,
 	std::unique_ptr<ICalendarManager> calendar_manager
 ) :
-	user_manager(std::move(user_manager)),
-	node_manager(std::move(node_manager)),
-	directory_manager(std::move(directory_manager)),
-	calendar_manager(std::move(calendar_manager)) {}
+	user_manager_(std::move(user_manager)),
+	node_manager_(std::move(node_manager)),
+	directory_manager_(std::move(directory_manager)),
+	calendar_manager_(std::move(calendar_manager)) {}
 
-Managers& Managers::instance() {
-	return SessionScopeMap::instance().get(std::this_thread::get_id())->managers;
+IUserManager* Managers::user_manager() {
+	return user_manager_.get();
+}
+
+INodeManager* Managers::node_manager() {
+	return node_manager_.get();
+}
+
+IDirectoryManager* Managers::directory_manager() {
+	return directory_manager_.get();
+}
+
+ICalendarManager* Managers::calendar_manager() {
+	return calendar_manager_.get();
 }
 

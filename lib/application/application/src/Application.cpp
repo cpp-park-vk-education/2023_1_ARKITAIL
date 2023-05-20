@@ -42,10 +42,7 @@ Application::Application(const Wt::WEnvironment& env) :
 
     internalPathChanged().connect(this, &Application::route);
 
-    SessionScopeMap::instance().add(std::this_thread::get_id());
-
     // Connections mediator connections establishing
-    ConnectionsMediator::instance().connect();
 }
 
 void Application::route(const std::string& internalPath) {

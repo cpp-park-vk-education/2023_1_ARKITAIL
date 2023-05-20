@@ -9,6 +9,7 @@
 #include <memory>
 
 #include "Managers.hpp"
+#include "SessionScopeMap.hpp"
 #include "calendar_body_w.hpp"
 #include "calendar_header_w.hpp"
 #include "day_w.hpp"
@@ -18,6 +19,9 @@
 
 CalendarW::CalendarW() :
     calendars_(3) {
+
+    auto mgr = SessionScopeMap::instance().get()->managers();
+    
     auto layout = setLayout(std::make_unique<Wt::WHBoxLayout>());
     auto tree_panel = layout->addWidget(std::make_unique<Wt::WContainerWidget>());
     tree_panel->setStyleClass("start-0");
@@ -27,7 +31,7 @@ CalendarW::CalendarW() :
     std::cout << "11\n\n" << std::endl;
 
     tree_->setRoot(
-        Managers::instance().node_manager->get(Managers::instance().user_manager->get().root_id));
+        mgr->node_manager()->get(mgr->user_manager()->get().root_id));
     show_tree_button_ =
         tree_panel_layout->addWidget(std::make_unique<Wt::WPushButton>(Wt::WString(">")));
     show_tree_button_->setStyleClass("btn-light rounded-end rounded-0 border-start-0");

@@ -6,6 +6,7 @@
 #include "Event.hpp"
 #include "Managers.hpp"
 #include "Node.hpp"
+#include "SessionScopeMap.hpp"
 
 Tree::Tree(const Node& node) :
     root_(std::make_unique<TreeNodeMock>(node, nullptr)),
@@ -16,6 +17,8 @@ ITreeNode* Tree::getRoot() {
 }
 
 std::vector<Event> Tree::getCheckedEvents() {
+    auto mgr = SessionScopeMap::instance().get()->managers();
+    
     std::queue<ITreeNode*> q;
     std::vector<Event> v;
 
@@ -24,7 +27,7 @@ std::vector<Event> Tree::getCheckedEvents() {
     while (!q.empty()) {
         if ((q.front()->getNode().type & (NodeType::PUBLIC_CALENDAR | NodeType::PRIVATE_CALENDAR)) &&
             q.front()->isChecked())
-            for (auto e : Managers::instance().calendar_manager->getEvents(q.front()->getNode().resource_id))
+            for (auto e : mgr->calendar_manager()->getEvents(q.front()->getNode().resource_id))
                 v.push_back(e);
 
         for (auto c : q.front()->getChildren()) q.push(c);
@@ -36,6 +39,8 @@ std::vector<Event> Tree::getCheckedEvents() {
 }
 
 std::vector<Event> Tree::checkNode(ITreeNode* node) {
+    auto mgr = SessionScopeMap::instance().get()->managers();
+
     std::queue<ITreeNode*> q;
     std::vector<Event> v;
 
@@ -46,7 +51,7 @@ std::vector<Event> Tree::checkNode(ITreeNode* node) {
             q.front()->check();
 
             if (q.front()->getNode().type & (NodeType::PUBLIC_DIRECTORY | NodeType::PUBLIC_DIRECTORY))
-                for (auto e : Managers::instance().calendar_manager->getEvents(q.front()->getNode().resource_id))
+                for (auto e : mgr->calendar_manager()->getEvents(q.front()->getNode().resource_id))
                     v.push_back(e);
 
             for (auto c : q.front()->getChildren()) q.push(c);

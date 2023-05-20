@@ -3,11 +3,14 @@
 #include <memory>
 #include <vector>
 
+#include "SessionScopeMap.hpp"
 #include "ITreeNode.hpp"
 #include "Managers.hpp"
 
 TreeNode::TreeNode(const Node& node, ITreeNode* parent) : node_(node), children_(), checked_(false), parent_(parent) {
-    for (auto c : Managers::instance().node_manager->getChildren(node.id))
+    auto mgr = SessionScopeMap::instance().get()->managers();
+
+    for (auto c : mgr->node_manager()->getChildren(node.id))
         children_.emplace_back(std::make_unique<TreeNode>(c, this));
 }
 

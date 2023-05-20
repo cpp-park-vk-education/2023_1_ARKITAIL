@@ -9,10 +9,14 @@ target_include_directories(${MODULE_NAME} PUBLIC ${INCLUDE_DIR})
 
 target_link_libraries(
 	${MODULE_NAME}
-	PRIVATE
+	PUBLIC
 	managers
 	db_managers
 	calendar
 	event
 )
+
+if (BUILD_TESTS)
+	add_subdirectory(tests)
+endif()
 
