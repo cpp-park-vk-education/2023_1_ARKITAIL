@@ -26,7 +26,7 @@ build: # Use a generated recipe to build artifacts.
 
 .PHONY: test
 test: # Run all Google tests.
-	ctest --test-dir build/ --output-on-failure
+	ctest --test-dir build/
 
 # TODO: coverage, lint
 
@@ -48,10 +48,11 @@ remove: # Remove development container and down all dependences.
 
 .PHONY: debug
 debug: # Run application
-	./build/Calendula.wt \
+	./build/Calendula \
 		--docroot . \
 		--http-address 0.0.0.0 \
 		--http-port 8080 \
 		--resources-dir=/usr/local/share/Wt/resources
 
 # TODO: prod
+

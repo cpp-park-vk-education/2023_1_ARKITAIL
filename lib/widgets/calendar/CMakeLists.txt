@@ -1,0 +1,7 @@
+add_subdirectory(calendar_body_w) 
+add_subdirectory(calendar_header_w) 
+add_subdirectory(calendar_w)
+add_subdirectory(day_w)
+add_subdirectory(month_w)
+add_subdirectory(personal_calendar_header_w)
+add_subdirectory(week_w)

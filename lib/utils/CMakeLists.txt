@@ -1,6 +1,9 @@
-add_library(utils src/utils.cpp)
+add_subdirectory(connections_mediator)
+add_subdirectory(tree)
+add_subdirectory(utils)
 
-target_include_directories(utils PUBLIC include)
+add_subdirectory(calendar_converter)
 
-target_link_libraries(utils PUBLIC
-                      calendula_compiler_flags)
+add_subdirectory(character_reader)
+add_subdirectory(lexer)
+add_subdirectory(parser)

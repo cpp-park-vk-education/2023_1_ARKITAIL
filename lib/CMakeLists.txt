@@ -1,17 +1,12 @@
-add_subdirectory(calendar)
-add_subdirectory(event)
-add_subdirectory(user)
+add_subdirectory(widgets)
+add_subdirectory(dialogs)
 
-add_subdirectory(session)
 add_subdirectory(application)
 
-add_subdirectory(char_reader)
-add_subdirectory(lexer)
-add_subdirectory(parser)
-
+add_subdirectory(managers)
+add_subdirectory(entities)
 add_subdirectory(utils)
 
-add_subdirectory(calendar_dialogs)
-add_subdirectory(event_dialogs)
+add_subdirectory(db_managers)
 
-add_subdirectory(calendar_converter)
+add_subdirectory(unmet_deps)
