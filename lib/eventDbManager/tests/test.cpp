@@ -32,7 +32,7 @@ TEST(EventManagerTest, AddEvent) {
 
   session.mapClass<events>("events");
 
-  // session.createTables();
+  //session.createTables();
 
   typedef dbo::collection<dbo::ptr<events>> Events;
   Events eventss = session.find<events>();
@@ -58,7 +58,7 @@ TEST(EventManagerTest, AddEvent) {
   transaction.commit();
 }
 
-TEST(EventManagerTest1, RemoveAndGEtEvent) {
+TEST(EventManagerTest1, RemoveAndGetEvent) {
 
   // Создание мок-объекта Session
   MockSession session;
@@ -80,14 +80,56 @@ TEST(EventManagerTest1, RemoveAndGEtEvent) {
   EventManager manager(session);
 
   // Создание тестовых данных
-  int id = 6;
+  int id;
+  std::cin >> id;
 
   using ::testing::Return;
   // Ожидание вызова метода add у мока Session с передачей события
   // EXPECT_CALL(session, add(testing::_));
-  //manager.remove(id);
+  manager.remove(id);
   Ret_Event ret;
   ret = manager.get(id);
-  EXPECT_EQ(ret.name, "Test2 Event");
+  EXPECT_EQ(ret.name, "error");
   transaction.commit();
+}
+
+
+TEST(EventManagerTest1, UpdateAndGetEvent) {
+
+  // Создание мок-объекта Session
+  MockSession session;
+  std::unique_ptr<dbo::backend::Postgres> pg{new dbo::backend::Postgres(
+      "host=localhost port=5432 dbname=for_project_ARKITAIL user=antiho "
+      "password=qwerty")};
+  session.setConnection(std::move(pg));
+  dbo::Transaction transaction(session);
+  session.mapClass<calendars>("calendars");
+
+  session.mapClass<events>("events");
+
+  // session.createTables();
+
+  typedef dbo::collection<dbo::ptr<events>> Events;
+  Events eventss = session.find<events>();
+
+  // Создание объекта EventManager с использованием мока Session
+  EventManager manager(session);
+    int id;
+  std::cin >> id;
+  Ret_Event ret;
+  ret.event_id = id;
+  ret.name = "Test Update Event";
+  ret.t_start = {1, 2, 3, 4, 5, 2000};
+  ret.t_end = {7, 8, 9, 10, 11, 2000};
+  ret.description = "Test Description";
+  ret.calendar_id = 1;
+  // Создание тестовых данных
+
+
+  using ::testing::Return;
+  // Ожидание вызова метода add у мока Session с передачей события
+  // EXPECT_CALL(session, add(testing::_));
+  manager.update(ret);
+  ret = manager.get(id);
+  EXPECT_NE(ret.name, "error");  transaction.commit();
 }

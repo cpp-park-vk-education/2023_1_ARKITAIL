@@ -3,6 +3,7 @@
 #include "mainModel.hpp"
 
 struct Ret_User{
+  int user_id;
     std::string login;
     std::string email;
     std::string nickname;

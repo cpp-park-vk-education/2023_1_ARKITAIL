@@ -3,6 +3,7 @@
 #include "mainModel.hpp"
 
 struct Ret_Event {
+  int event_id;
   std::string name;
   std::array<int, 6> t_start;
   std::array<int, 6> t_end;
@@ -11,6 +12,7 @@ struct Ret_Event {
 };
 
 struct Ret_Calen {
+  int calendar_id;
   int user_id;
   std::string name;
   std::string description;
@@ -19,9 +21,9 @@ struct Ret_Calen {
 
 class CalendarManager {
 public:
-  int add(Ret_Calen&);
+  int add(Ret_Calen &);
   void remove(const int id);
-  void update(Ret_Calen&);
+  void update(Ret_Calen &);
   Ret_Calen get(const int id);
 
   std::vector<Ret_Event> getEvents(const int id);

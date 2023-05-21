@@ -30,7 +30,9 @@ void EventManager::remove(const int id) {
   dbo::Transaction transaction(session_);
 
   dbo::ptr<events> event = session_.find<events>().where("id = ?").bind(id);
-
+  if (!event) {
+    return;
+  }
   event.remove();
   transaction.commit();
 }
@@ -39,8 +41,10 @@ void EventManager::update(Ret_Event &ret) {
   dbo::Transaction transaction(session_);
 
   dbo::ptr<events> event =
-      session_.find<events>().where("name = ?").bind(ret.name);
-
+      session_.find<events>().where("id = ?").bind(ret.event_id);
+  if (!event) {
+    return;
+  }
   event.modify()->name = ret.name;
   event.modify()->description = ret.description;
   event.modify()->calendar =
@@ -62,6 +66,10 @@ Ret_Event EventManager::get(const int id) {
   Ret_Event ret;
 
   dbo::ptr<events> event = session_.find<events>().where("id = ?").bind(id);
+  if (!event) {
+    ret.name = "error";
+    return ret;
+  }
   ret.name = event->name;
 
   ret.description = event->description;

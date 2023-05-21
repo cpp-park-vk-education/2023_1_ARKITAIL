@@ -4,6 +4,7 @@
 
 
 struct Ret_Prof {
+  int prof_id;
   std::string name;
   int node_id;
 };

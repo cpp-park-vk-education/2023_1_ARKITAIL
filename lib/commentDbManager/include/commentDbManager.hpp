@@ -4,6 +4,7 @@
 
 
 struct Ret_Comm {
+  int com_id;
   std::string name;
   std::string text;
   int event_id;

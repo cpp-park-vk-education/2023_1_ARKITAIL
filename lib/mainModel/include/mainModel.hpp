@@ -129,9 +129,6 @@ std::vector<unsigned char> read_file(const std::string &filename) {
                                     std::istreambuf_iterator<char>());
 }
 
-class users;
-using AuthInfo = Wt::Auth::Dbo::AuthInfo<users>;
-
 class users {
 public:
   int root_id;

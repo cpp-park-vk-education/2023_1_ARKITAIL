@@ -3,6 +3,7 @@
 #include "mainModel.hpp"
 
 struct Ret_Dir {
+  int dir_id;
   std::string name;
   std::string description;
   int node_id;

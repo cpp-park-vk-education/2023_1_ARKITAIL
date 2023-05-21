@@ -3,6 +3,7 @@
 #include "mainModel.hpp"
 
 struct Ret_Tag {
+  int tag_id;
   std::string name;
 };
 
