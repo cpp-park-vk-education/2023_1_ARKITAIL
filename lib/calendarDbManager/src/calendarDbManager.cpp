@@ -6,8 +6,8 @@ int CalendarManager::add(Ret_Calen &ret) {
   std::unique_ptr<calendars> calendar{new calendars()};
   calendar->name = ret.name;
   calendar->description = ret.description;
-  // calendar->node = session_.find<nodes>().where("id = ?").bind(ret.node_id);
-  // calendar->user = session_.find<users>().where("id = ?").bind(ret.user_id);
+  calendar->node = session_.find<nodes>().where("id = ?").bind(ret.node_id);
+  calendar->user = session_.find<users>().where("id = ?").bind(ret.user_id);
 
   dbo::ptr<calendars> calendarPtr = session_.add(std::move(calendar));
   calendarPtr = session_.find<calendars>().where("name = ?").bind(ret.name);
@@ -40,10 +40,10 @@ void CalendarManager::update(Ret_Calen &ret) {
   }
   calendar.modify()->name = ret.name;
   calendar.modify()->description = ret.description;
-  // calendar.modify()->node =
-  //     session_.find<nodes>().where("id = ?").bind(ret.node_id);
-  // calendar.modify()->user =
-  //     session_.find<users>().where("id = ?").bind(ret.user_id);
+  calendar.modify()->node =
+      session_.find<nodes>().where("id = ?").bind(ret.node_id);
+  calendar.modify()->user =
+      session_.find<users>().where("id = ?").bind(ret.user_id);
 
   transaction.commit();
 }
@@ -59,8 +59,8 @@ Ret_Calen CalendarManager::get(const int id) {
   }
   ret.name = calendar->name;
   ret.description = calendar->description;
-  // ret.node_id = calendar->node.id();
-  // ret.user_id = calendar->user.id();
+  ret.node_id = calendar->node.id();
+  ret.user_id = calendar->user.id();
 
   transaction.commit();
 
@@ -86,7 +86,7 @@ std::vector<Ret_Event> CalendarManager::getEvents(const int id) {
 
     ret.name = eve->name;
     ret.description = eve->description;
-    // ret.calendar_id = eve->calendar.id();
+    ret.calendar_id = eve->calendar.id();
     std::tm tm_res_start = *std::localtime(&eve->time_start);
 
     ret.t_start = {tm_res_start.tm_sec,  tm_res_start.tm_min,
