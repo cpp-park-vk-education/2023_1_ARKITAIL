@@ -14,22 +14,31 @@
 #include "Tree.hpp"
 #include "User.hpp"
 #include "options_w.hpp"
-#include "tree_node_w_builder.hpp"
+#include "tree_node_dir_w_builder.hpp"
+#include "tree_node_leaf_w_builder.hpp"
+#include "tree_node_other_dir_w_builder.hpp"
+#include "tree_node_sub_dir_w_builder.hpp"
+#include "tree_node_w_builder_base.hpp"
 
 class TreeNodeW : public Wt::WContainerWidget {
-    friend class TreeNodeWBuilder;
+    friend class TreeNodeWBuilderBase;
+    friend class TreeNodeLeafWBuilder;
+    friend class TreeNodeDirWBuilder;
+    friend class TreeNodeOtherDirWBuilder;
+    friend class TreeNodeSubDirWBuilder;
 
   public:
+    TreeNodeW();
     TreeNodeW(ITreeNode* node);
     virtual ~TreeNodeW() = default;
-    virtual void checkNode() = 0;
-    virtual void uncheckNode() = 0;
-    virtual void showNode() = 0;
-    virtual void closeNode() = 0;
-    virtual void performAction(Action action) = 0;
+    virtual void checkNode();
+    virtual void uncheckNode();
+    virtual void showNode();
+    virtual void closeNode();
+    virtual void performAction(Action action);
 
     virtual TreeNodeW* addChildNode(std::unique_ptr<TreeNodeW> child);
-    void addParent(TreeNodeW* parent_node);
+    TreeNodeW* addParent(TreeNodeW* parent_node);
 
     void removeNode();
     bool isRoot();

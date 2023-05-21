@@ -1,4 +1,4 @@
-#include "tree_node_w_builder.hpp"
+#include "tree_node_w_builder_base.hpp"
 
 #include <Wt/WAnchor.h>
 #include <Wt/WBreak.h>
@@ -26,37 +26,37 @@
 #include "tree_node_subscriptions_dir_w.hpp"
 #include "tree_node_w.hpp"
 
-TreeNodeWBuilder::TreeNodeWBuilder() :
+TreeNodeWBuilderBase::TreeNodeWBuilderBase() :
     tree_node_w() {}
 
-TreeNodeWBuilder* TreeNodeWBuilder::createTreeNodeDirW(ITreeNode* node) {
-    // tree_node_w.swap(std::make_unique<TreeNodeDirW>(node));
-    return this;
-}
+// TreeNodeWBuilderBase* TreeNodeWBuilderBase::createTreeNodeDirW(ITreeNode* node) {
+//     // tree_node_w.swap(std::make_unique<TreeNodeDirW>(node));
+//     return this;
+// }
 
-TreeNodeWBuilder* TreeNodeWBuilder::createTreeNodeLeafW(ITreeNode* node) {
-    // tree_node_w.swap(std::make_unique<TreeNodeLeafW>(node));
-    return this;
-}
+// TreeNodeWBuilderBase* TreeNodeWBuilderBase::createTreeNodeLeafW(ITreeNode* node) {
+//     // tree_node_w.swap(std::make_unique<TreeNodeLeafW>(node));
+//     return this;
+// }
 
-TreeNodeWBuilder* TreeNodeWBuilder::createTreeNodeOtherDirW(ITreeNode* node) {
-    // tree_node_w.swap(std::make_unique<TreeNodeOtherDirW>(node));
-    return this;
-}
+// TreeNodeWBuilderBase* TreeNodeWBuilderBase::createTreeNodeOtherDirW(ITreeNode* node) {
+//     // tree_node_w.swap(std::make_unique<TreeNodeOtherDirW>(node));
+//     return this;
+// }
 
-TreeNodeWBuilder* TreeNodeWBuilder::createTreeNodeSubscriptionsDirW(ITreeNode* node) {
-    // tree_node_w.swap(std::make_unique<TreeNodeSubscriptionsDirW>(node));
-    return this;
-}
+// TreeNodeWBuilderBase* TreeNodeWBuilderBase::createTreeNodeSubscriptionsDirW(ITreeNode* node) {
+//     // tree_node_w.swap(std::make_unique<TreeNodeSubscriptionsDirW>(node));
+//     return this;
+// }
 
-TreeNodeWBuilder* TreeNodeWBuilder::addHead(std::unique_ptr<Wt::WWidget> head) {
+TreeNodeWBuilderBase* TreeNodeWBuilderBase::addHead(std::unique_ptr<Wt::WWidget> head) {
     tree_node_w->header_container_ =
         tree_node_w->node_block_->addWidget(std::make_unique<Wt::WContainerWidget>());
     tree_node_w->header_container_->addWidget(std::move(head));
     return this;
 }
 
-TreeNodeWBuilder* TreeNodeWBuilder::addCheckBox() {
+TreeNodeWBuilderBase* TreeNodeWBuilderBase::addCheckBox() {
     tree_node_w->check_box_container =
         tree_node_w->node_block_->addWidget(std::make_unique<Wt::WContainerWidget>());
     tree_node_w->check_box_container->addStyleClass("my-auto");
@@ -67,7 +67,7 @@ TreeNodeWBuilder* TreeNodeWBuilder::addCheckBox() {
     return this;
 }
 
-TreeNodeWBuilder* TreeNodeWBuilder::addOptions(std::unique_ptr<OptionsW> options) {
+TreeNodeWBuilderBase* TreeNodeWBuilderBase::addOptions(std::unique_ptr<OptionsW> options) {
     tree_node_w->options_button_ =
         tree_node_w->node_block_->addWidget(std::make_unique<Wt::WPushButton>("•••"));
     tree_node_w->options_button_->addStyleClass("p-1 py-0 border-0 btn-light");
@@ -79,15 +79,15 @@ TreeNodeWBuilder* TreeNodeWBuilder::addOptions(std::unique_ptr<OptionsW> options
     return this;
 }
 
-TreeNodeWBuilder* TreeNodeWBuilder::addToolTip(std::string description,
-                                               std::vector<std::string> tags) {
+TreeNodeWBuilderBase* TreeNodeWBuilderBase::addToolTip(std::string description,
+                                                       std::vector<std::string> tags) {
     auto content = std::make_unique<Wt::WContainerWidget>();
     addToolTip(std::move(fillToolTipContainer(std::move(content), description, tags)));
     return this;
 }
 
-TreeNodeWBuilder* TreeNodeWBuilder::addToolTip(std::string description,
-                                               std::vector<std::string> tags, User author) {
+TreeNodeWBuilderBase* TreeNodeWBuilderBase::addToolTip(std::string description,
+                                                       std::vector<std::string> tags, User author) {
     auto content = std::make_unique<Wt::WContainerWidget>();
 
     auto author_ptr = content->addWidget(std::make_unique<Wt::WAnchor>(
@@ -103,17 +103,17 @@ TreeNodeWBuilder* TreeNodeWBuilder::addToolTip(std::string description,
     return this;
 }
 
-TreeNodeWBuilder* TreeNodeWBuilder::addParent(TreeNodeW* parent_node) {
+TreeNodeWBuilderBase* TreeNodeWBuilderBase::addParent(TreeNodeW* parent_node) {
     tree_node_w->parent_ = parent_node;
     return this;
 }
 
-TreeNodeWBuilder* TreeNodeWBuilder::endNode() {
+TreeNodeWBuilderBase* TreeNodeWBuilderBase::endNode() {
     tree_node_w->node_block_->addStretch(1);
     return this;
 }
 
-std::unique_ptr<Wt::WContainerWidget> TreeNodeWBuilder::fillToolTipContainer(
+std::unique_ptr<Wt::WContainerWidget> TreeNodeWBuilderBase::fillToolTipContainer(
     std::unique_ptr<Wt::WContainerWidget> content, std::string description,
     std::vector<std::string> tags) {
     content->setMaximumSize(Wt::WLength(300), Wt::WLength::Auto);
@@ -135,15 +135,11 @@ std::unique_ptr<Wt::WContainerWidget> TreeNodeWBuilder::fillToolTipContainer(
     return content;
 }
 
-void TreeNodeWBuilder::addToolTip(std::unique_ptr<Wt::WContainerWidget> content) {
+void TreeNodeWBuilderBase::addToolTip(std::unique_ptr<Wt::WContainerWidget> content) {
     tree_node_w->tool_tip_ = std::make_unique<Wt::WPopupWidget>(std::move(content));
     tree_node_w->tool_tip_->setTransient(false, 5);
     tree_node_w->tool_tip_->setAnchorWidget(tree_node_w->header_container_);
     tree_node_w->header_container_->mouseWentOver().connect([=] {
         tree_node_w->tool_tip_->setHidden(false);
     });
-}
-
-std::unique_ptr<TreeNodeW> TreeNodeWBuilder::getTreeNodeW() {
-    return std::move(tree_node_w);
 }

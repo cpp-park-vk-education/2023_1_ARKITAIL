@@ -7,6 +7,8 @@
 #include "Wt/WText.h"
 #include "tree_node_w.hpp"
 
+TreeNodeDirW::TreeNodeDirW() {}
+
 TreeNodeDirW::TreeNodeDirW(ITreeNode* node) :
     TreeNodeW(node) {
     icon_ =

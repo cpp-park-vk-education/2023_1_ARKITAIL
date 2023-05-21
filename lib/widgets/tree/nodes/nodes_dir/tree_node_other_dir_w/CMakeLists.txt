@@ -6,7 +6,7 @@ target_link_libraries(tree_node_other_dir_w  PUBLIC
                       calendula_compiler_flags
                       options_w
                       tree_node_w
+                      tree_node_leaf_w
                       managers
-                      tree_node_w_builder
-                      tree_node_w_builder
+                       tree_node_w_builder_base
                       )

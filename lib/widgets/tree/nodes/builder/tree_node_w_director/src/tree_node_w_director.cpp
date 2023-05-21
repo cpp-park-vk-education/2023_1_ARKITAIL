@@ -5,7 +5,7 @@
 
 #include "ITreeNode.hpp"
 #include "Node.hpp"
-#include "tree_node_w_builder.hpp"
+#include "tree_node_w_builder_base.hpp"
 
 TreeNodeWDirector::TreeNodeWDirector() {}
 

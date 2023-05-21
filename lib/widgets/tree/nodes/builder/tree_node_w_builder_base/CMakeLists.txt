@@ -1,8 +1,8 @@
-add_library(tree_node_w_builder  src/tree_node_w_builder.cpp)
+add_library(tree_node_w_builder_base  src/tree_node_w_builder_base.cpp)
 
-target_include_directories(tree_node_w_builder  PUBLIC include)
+target_include_directories(tree_node_w_builder_base  PUBLIC include)
 
-target_link_libraries(tree_node_w_builder  PUBLIC
+target_link_libraries(tree_node_w_builder_base  PUBLIC
                       calendula_compiler_flags
                       options_w
                       tree_node_dir_w

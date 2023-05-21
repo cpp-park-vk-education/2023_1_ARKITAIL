@@ -2,16 +2,17 @@
 
 #include <memory>
 
-#include "options_w_builder_base.hpp"
+#include "options_w_builder.hpp"
 class OptionsW;
 
 class OptionsWDirector {
   public:
     OptionsWDirector();
 
-    std::unique_ptr<OptionsW> createOptionsProfileW(OptionsWBuilderBase& builder);
-    std::unique_ptr<OptionsW> createOptionsCalendarsDirW(OptionsWBuilderBase& builder);
-    std::unique_ptr<OptionsW> createOptionsPersonalCalendarW(OptionsWBuilderBase& builder);
-    std::unique_ptr<OptionsW> createOptionsSubscriptionW(OptionsWBuilderBase& builder);
-    std::unique_ptr<OptionsW> createOptionsUnsubscriptionW(OptionsWBuilderBase& builder);
+    std::unique_ptr<OptionsW> createOptionsProfileW(OptionsWBuilder& builder);
+    std::unique_ptr<OptionsW> createOptionsCalendarsDirW(OptionsWBuilder& builder);
+    std::unique_ptr<OptionsW> createOptionsGroupW(OptionsWBuilder& builder);
+    std::unique_ptr<OptionsW> createOptionsPersonalCalendarW(OptionsWBuilder& builder);
+    std::unique_ptr<OptionsW> createOptionsSubscriptionW(OptionsWBuilder& builder);
+    std::unique_ptr<OptionsW> createOptionsUnsubscriptionW(OptionsWBuilder& builder);
 };

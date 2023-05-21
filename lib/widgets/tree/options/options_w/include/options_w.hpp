@@ -4,8 +4,6 @@
 #include <Wt/WPopupMenu.h>
 #include <Wt/WPushButton.h>
 
-#include "options_w_builder.hpp"
-
 enum Action {
     REMOVE = 0,
     SUBSCRIBE,
@@ -17,8 +15,6 @@ enum Action {
 };
 
 class OptionsW : public Wt::WPopupMenu {
-    friend class OptionsWBuilder;
-
   public:
     OptionsW();
     ~OptionsW() = default;
@@ -32,6 +28,5 @@ class OptionsW : public Wt::WPopupMenu {
     OptionsW* addOptionSubscribe();
     OptionsW* addOptionUnsubscribe();
 
-  private:
     Wt::Signal<Action> select_option_;
 };

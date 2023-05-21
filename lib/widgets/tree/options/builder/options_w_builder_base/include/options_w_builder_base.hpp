@@ -2,10 +2,14 @@
 
 #include <memory>
 
-class OptionsW;
+#include "options_w.hpp"
+
+// class OptionsW;
 
 class OptionsWBuilderBase {
   public:
+    OptionsWBuilderBase();
+    ~OptionsWBuilderBase() = default;
     OptionsWBuilderBase* createOptionsW();
 
     virtual OptionsWBuilderBase* addOptionRemove();
