@@ -5,7 +5,7 @@
 
 #include "ITreeNode.hpp"
 #include "Tag.hpp"
-
+#include "User.hpp"
 // |1| |2| |3| |4'5'6'7'8| |9'10|
 
 // 1) checkBox
@@ -81,10 +81,10 @@ enum TreeNodeWType {
         Components::CHECKBOX | Components::LABEL | Components::OPTIONS_PROFILE,  // профиль
     PERSONAL_CALENDAR =
         Components::CHECKBOX | Components::OPTIONS_PERSONAL_CALENDAR,  // свой календарь
-    OTHER_SUB_CALENDAR =
+    OTHER_CALENDAR_SUB =
         Components::CHECKBOX |
         Components::OPTIONS_SUB,  // календарь в чужом профиле, на который можно подписаться
-    OTHER_UNSUB_CALENDAR =
+    OTHER_CALENDAR_UNSUB =
         Components::CHECKBOX |
         Components::OPTIONS_UNSUB,  // календарь в чужом профиле, от которого можно отписаться
     SUB_CALENDAR =
@@ -101,7 +101,8 @@ struct TreeNodeWConvertedData {
     std::string description;
     // std::vector<Tag> tags;
     std::vector<std::string> tags;
-    std::string user_nickname;
+    User author;
+    ITreeNode* tree_node;
 };
 
 class TreeNodeWAnalyst {

@@ -111,9 +111,5 @@ std::unique_ptr<Wt::WContainerWidget> TreeNodeWBuilderBase::fillToolTipContainer
 
 void TreeNodeWBuilderBase::addToolTip(std::unique_ptr<Wt::WContainerWidget> content) {
     tree_node_w->tool_tip_ = std::make_unique<Wt::WPopupWidget>(std::move(content));
-    tree_node_w->tool_tip_->setTransient(false, 5);
-    tree_node_w->tool_tip_->setAnchorWidget(tree_node_w->header_container_);
-    tree_node_w->header_container_->mouseWentOver().connect([=] {
-        tree_node_w->tool_tip_->setHidden(false);
-    });
+    tree_node_w->addToolTipSignal();
 }
