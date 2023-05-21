@@ -1,4 +1,5 @@
 #include "Tree.hpp"
+#include "TreeNode.hpp"
 
 #include <queue>
 #include <vector>
@@ -9,7 +10,7 @@
 #include "SessionScopeMap.hpp"
 
 Tree::Tree(const Node& node) :
-    root_(std::make_unique<TreeNodeMock>(node, nullptr)),
+    root_(std::make_unique<TreeNode>(node, nullptr)),
     checked_(0) {}
 
 ITreeNode* Tree::getRoot() {

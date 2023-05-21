@@ -8,13 +8,13 @@
 
 class TreeNode : public ITreeNode {
 public:
-    TreeNode(const Node& node, ITreeNode* parent);
+    TreeNode(Node node, ITreeNode* parent);
 
-    const Node& getNode();
+    Node getNode();
     ITreeNode* getParent();
 
     std::vector<ITreeNode*> getChildren();
-    ITreeNode* addChild(const Node& node);
+    ITreeNode* addChild(Node node);
     std::unique_ptr<ITreeNode> remove();
 
     bool isChecked();
@@ -25,7 +25,7 @@ public:
 private:
     std::unique_ptr<ITreeNode> removeChild(ITreeNode* child);
 
-    const Node& node_;
+    Node node_;
     ITreeNode* parent_;
     std::vector<std::unique_ptr<ITreeNode>> children_;
     bool checked_;

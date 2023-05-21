@@ -198,17 +198,17 @@ std::unique_ptr<TreeNodeW> TreeNodeW::makeTreeNodeWidget(ITreeNode* tree_node) {
         // res.get()->addHead(std::make_unique<Wt::WText>(child.name));
 
     } else if (node.type & NodeType::SUBSCRIPTIONS_GROUP) {
-        Directory child = mgr->directory_manager()->get(node.resource_id);
-        res = std::make_unique<TreeNodeSubscriptionsDirW>(tree_node);
+        // Directory child = mgr->directory_manager()->get(node.resource_id);
+        // res = std::make_unique<TreeNodeSubscriptionsDirW>(tree_node);
 
     } else if (node.type & NodeType::PROFILE) {
         // res = std::make_unique<TreeNodeProfileW>(tree_node);
         // res.get()->addHead(std::make_unique<InPlaceEditTitle>(child.name));
     }
-    res.get()->endNode()->addParent(this);
+    // res.get()->endNode()->addParent(this);
     std::cout << "children" << std::endl;
-    for (auto&& child : tree_node->getChildren()) {
-        std::cout << "child: " << (mgr->directory_manager()->get(child->getNode().resource_id)).name
+    for (auto child : tree_node->getChildren()) {
+        std::cout << "child: " << mgr->directory_manager()->get(child->getNode().resource_id).name
                   << std::endl;
         res.get()->addChild(res->makeTreeNodeWidget(child));
     }
