@@ -227,6 +227,8 @@ std::unique_ptr<TreeNodeW> TreeNodeW::makeTreeNodeWidget(ITreeNode* tree_node) {
         //     ->addParent(this)
         //     ->endNode()
         //     ->getTreeNodeW();
+        // Directory child = mgr->directory_manager()->get(node.resource_id);
+        // res = std::make_unique<TreeNodeSubscriptionsDirW>(tree_node);
 
     } else if (node.type & NodeType::PROFILE) {
         // Profile child = Managers::instance().profile_manager->get(node.resource_id);
@@ -237,10 +239,10 @@ std::unique_ptr<TreeNodeW> TreeNodeW::makeTreeNodeWidget(ITreeNode* tree_node) {
         //     ->endNode()
         //     ->getTreeNodeW();
     }
-
+    // res.get()->endNode()->addParent(this);
     std::cout << "children" << std::endl;
-    for (auto&& child : tree_node->getChildren()) {
-        std::cout << "child: " << (mgr->directory_manager()->get(child->getNode().resource_id)).name
+    for (auto child : tree_node->getChildren()) {
+        std::cout << "child: " << mgr->directory_manager()->get(child->getNode().resource_id).name
                   << std::endl;
         res.get()->addChild(res->makeTreeNodeWidget(child));
     }

@@ -43,7 +43,7 @@ std::vector<Node> NodeDbManagerMock::getChildren(size_t node_id) {
 	std::vector<Node> children;
 
 	for (auto e : db_->nodes)
-		if (e.parent_id == node_id)
+		if (e.parent_id == node_id && e.id != node_id)
 			children.push_back(e);
 
 	return children;

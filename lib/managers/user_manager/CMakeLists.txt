@@ -7,13 +7,21 @@ file(GLOB SOURCES ${SOURCE_DIR}/*.cpp)
 add_library(${MODULE_NAME} STATIC ${SOURCES})
 target_include_directories(${MODULE_NAME} PUBLIC ${INCLUDE_DIR})
 
-target_link_libraries(${MODULE_NAME} PRIVATE
+target_link_libraries(
+	${MODULE_NAME}
+	PUBLIC
 	managers
 	user
 	db_managers
 )
 
 if (BUILD_TESTS)
+	target_link_libraries(
+		${MODULE_NAME}
+		PUBLIC
+		db_mock
+	)
+
 	add_subdirectory(tests)
 endif()
 
