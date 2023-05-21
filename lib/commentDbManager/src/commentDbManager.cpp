@@ -9,6 +9,8 @@ int CommentManager::add(Ret_Comm &ret) {
   comment->event = session_.find<events>().where("id = ?").bind(ret.event_id);
 
   dbo::ptr<comments> commentPtr = session_.add(std::move(comment));
+  commentPtr = session_.find<comments>().where("name = ?").bind(ret.name);
+
   id = commentPtr.id();
   transaction.commit();
 

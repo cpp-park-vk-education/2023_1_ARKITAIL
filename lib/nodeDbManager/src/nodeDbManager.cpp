@@ -10,6 +10,8 @@ int NodeManager::add(Ret_Node &ret) {
   node->type = ret.type;
 
   dbo::ptr<nodes> nodePtr = session_.add(std::move(node));
+      nodePtr = session_.find<nodes>().where("resource_id = ?").bind(ret.resource_id);
+
   id = nodePtr.id();
   transaction.commit();
 

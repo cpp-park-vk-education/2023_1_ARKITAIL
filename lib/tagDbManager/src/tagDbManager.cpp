@@ -7,6 +7,8 @@ int TagManager::add(Ret_Tag &ret) {
   tag->name = ret.name;
 
   dbo::ptr<tags> tagPtr = session_.add(std::move(tag));
+      tagPtr = session_.find<tags>().where("name = ?").bind(ret.name);
+
   id = tagPtr.id();
   transaction.commit();
 

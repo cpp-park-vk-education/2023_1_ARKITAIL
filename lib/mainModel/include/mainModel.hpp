@@ -13,18 +13,18 @@ class comments;
 
 class calendars {
 public:
-  dbo::ptr<users> user; // Owner
+  //dbo::ptr<users> user; // Owner
   std::string name;     // name
   std::string description;
   dbo::collection<dbo::ptr<events>> event; // event
-  dbo::ptr<nodes> node;                    // p_node
+  //dbo::ptr<nodes> node;                    // p_node
 
   template <class Action> void persist(Action &a) {
     dbo::field(a, name, "name");
     dbo::hasMany(a, event, dbo::ManyToOne, "calendar");
     dbo::field(a, description, "description");
-    dbo::belongsTo(a, user, "user");
-    dbo::belongsTo(a, node, "node");
+    //dbo::belongsTo(a, user, "user");
+    //dbo::belongsTo(a, node, "node");
   }
 };
 
@@ -71,7 +71,7 @@ public:
   std::time_t time_start;
   std::time_t time_end;
   std::string description;
-  //dbo::ptr<calendars> calendar;
+  dbo::ptr<calendars> calendar;
   dbo::collection<dbo::ptr<comments>> comment;
 
   template <class Action> void persist(Action &a) {
@@ -79,7 +79,7 @@ public:
     dbo::field(a, time_start, "time_start");
     dbo::field(a, time_end, "time_end");
     dbo::field(a, description, "description");
-    //dbo::belongsTo(a, calendar, "calendar");
+    dbo::belongsTo(a, calendar, "calendar");
   }
 };
 

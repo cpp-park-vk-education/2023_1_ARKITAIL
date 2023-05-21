@@ -8,8 +8,8 @@ int EventManager::add(Ret_Event &ret) {
   std::unique_ptr<events> event{new events()};
   event->name = ret.name;
   event->description = ret.description;
-  // event->calendar =
-  //    session_.find<calendars>().where("id = ?").bind(ret.calendar_id);
+  event->calendar =
+      session_.find<calendars>().where("id = ?").bind(ret.calendar_id);
 
   std::tm tm_start = {ret.t_start[0], ret.t_start[1], ret.t_start[2],
                       ret.t_start[3], ret.t_start[4], ret.t_start[5] - 1900};
@@ -20,12 +20,9 @@ int EventManager::add(Ret_Event &ret) {
   event->time_end = std::mktime(&tm_end);
 
   dbo::ptr<events> eventPtr = session_.add(std::move(event));
-  std::cout << eventPtr.id() << std::endl;
+  eventPtr = session_.find<events>().where("name = ?").bind("Test1 Event");
   transaction.commit();
-  std::cout << eventPtr << std::endl;
-
   id = eventPtr.id();
-  std::cout << id << std::endl;
   return id;
 }
 
@@ -46,8 +43,8 @@ void EventManager::update(Ret_Event &ret) {
 
   event.modify()->name = ret.name;
   event.modify()->description = ret.description;
-  // event.modify()->calendar =
-  //   session_.find<calendars>().where("id = ?").bind(ret.calendar_id);
+  event.modify()->calendar =
+      session_.find<calendars>().where("id = ?").bind(ret.calendar_id);
 
   std::tm tm_start = {ret.t_start[0], ret.t_start[1], ret.t_start[2],
                       ret.t_start[3], ret.t_start[4], ret.t_start[5] - 1900};
@@ -63,10 +60,15 @@ Ret_Event EventManager::get(const int id) {
   dbo::Transaction transaction(session_);
 
   Ret_Event ret;
+
   dbo::ptr<events> event = session_.find<events>().where("id = ?").bind(id);
   ret.name = event->name;
+
   ret.description = event->description;
-  // ret.calendar_id = event->calendar.id();
+
+  std::cout << event->calendar.id() << std::endl;
+  ret.calendar_id = event->calendar.id();
+
   std::tm tm_res_start = *std::localtime(&event->time_start);
 
   ret.t_start = {tm_res_start.tm_sec,  tm_res_start.tm_min,

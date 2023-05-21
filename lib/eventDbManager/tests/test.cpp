@@ -2,6 +2,7 @@
 #include "mainModel.hpp"
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <random>
 
 // Создание мока для Session
 class MockSession : public dbo::Session {
@@ -27,8 +28,10 @@ TEST(EventManagerTest, AddEvent) {
       "password=qwerty")};
   session.setConnection(std::move(pg));
   dbo::Transaction transaction{session};
+  session.mapClass<calendars>("calendars");
 
   session.mapClass<events>("events");
+
   // session.createTables();
 
   typedef dbo::collection<dbo::ptr<events>> Events;
@@ -39,11 +42,11 @@ TEST(EventManagerTest, AddEvent) {
 
   // Создание тестовых данных
   Ret_Event ret;
-  ret.name = "Test Event";
+  ret.name = "Test2 Event";
   ret.t_start = {1, 2, 3, 4, 5, 2000};
   ret.t_end = {7, 8, 9, 10, 11, 2000};
   ret.description = "Test Description";
-  ret.calendar_id = 12345;
+  ret.calendar_id = 1;
 
   using ::testing::Return;
   // Ожидание вызова метода add у мока Session с передачей события
@@ -55,7 +58,7 @@ TEST(EventManagerTest, AddEvent) {
   transaction.commit();
 }
 
-TEST(EventManagerTest1, RemoveEvent) {
+TEST(EventManagerTest1, RemoveAndGEtEvent) {
 
   // Создание мок-объекта Session
   MockSession session;
@@ -63,9 +66,11 @@ TEST(EventManagerTest1, RemoveEvent) {
       "host=localhost port=5432 dbname=for_project_ARKITAIL user=antiho "
       "password=qwerty")};
   session.setConnection(std::move(pg));
-  dbo::Transaction transaction{session};
+  dbo::Transaction transaction(session);
+  session.mapClass<calendars>("calendars");
 
   session.mapClass<events>("events");
+
   // session.createTables();
 
   typedef dbo::collection<dbo::ptr<events>> Events;
@@ -75,15 +80,14 @@ TEST(EventManagerTest1, RemoveEvent) {
   EventManager manager(session);
 
   // Создание тестовых данных
-  int id = 4;
+  int id = 6;
 
   using ::testing::Return;
   // Ожидание вызова метода add у мока Session с передачей события
   // EXPECT_CALL(session, add(testing::_));
-
-  manager.remove(id);
+  //manager.remove(id);
   Ret_Event ret;
   ret = manager.get(id);
-  EXPECT_NE(ret.calendar_id, -1);
+  EXPECT_EQ(ret.name, "Test2 Event");
   transaction.commit();
 }

@@ -9,6 +9,8 @@ int DirectoryManager::add(Ret_Dir &ret) {
   direct->node = session_.find<nodes>().where("id = ?").bind(ret.node_id);
 
   dbo::ptr<directory> directPtr = session_.add(std::move(direct));
+      directPtr = session_.find<directory>().where("name = ?").bind(ret.name);
+
   id = directPtr.id();
   transaction.commit();
 
