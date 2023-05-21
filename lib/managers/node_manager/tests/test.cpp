@@ -2,6 +2,7 @@
 
 #include "DbMock.hpp"
 #include "DbManagers.hpp"
+#include "EventManager.hpp"
 #include "UserDbManagerMock.hpp"
 #include "NodeDbManagerMock.hpp"
 #include "DirectoryDbManagerMock.hpp"
@@ -19,6 +20,14 @@
 
 #include "User.hpp"
 #include "Node.hpp"
+
+static bool operator==(const Node& lhs, const Node& rhs) {
+	return 
+		lhs.id == rhs.id &&
+		lhs.parent_id == rhs.parent_id &&
+		lhs.resource_id == rhs.resource_id &&
+		lhs.type == rhs.type;
+}
 
 class ManagersSuit : public ::testing::Test {
 protected:
@@ -40,7 +49,8 @@ protected:
 			std::make_unique<UserManager>(db_managers),
 			std::make_unique<NodeManager>(db_managers),
 			std::make_unique<DirectoryManager>(db_managers),
-			std::make_unique<CalendarManager>(db_managers)
+			std::make_unique<CalendarManager>(db_managers),
+			std::make_unique<EventManager>(db_managers)
 		);
 
 	}
@@ -87,4 +97,37 @@ TEST_F(ManagersSuit, GetChildrens) {
 		EXPECT_EQ(e->type, g->type);
 	}
 }
+
+// Разрешено, но не имеет смысла
+TEST_F(ManagersSuit, AddNodeToCurrentUser) {
+	auto user = managers->user_manager()->get();
+
+	Node new_node = {
+		0,
+		3,
+		0,
+		NodeType::PRIVATE_DIRECTORY
+	}
+}
+
+// Запрещено
+TEST_F(ManagersSuit, AddNodeToOthrerUser) {}
+
+TEST_F(ManagersSuit, UpdateNodeForCurrentUser) {}
+TEST_F(ManagersSuit, UpdareNodeForOtherUser) {}
+
+TEST_F(ManagersSuit, RemoveNodeFromCurrentUser) {}
+TEST_F(ManagersSuit, RemoveNodeFromOtherUser) {}
+
+TEST_F(ManagersSuit, DISABLED_TagNode) {}
+
+TEST_F(ManagersSuit, MoveNodeInsideUserTree) {}
+TEST_F(ManagersSuit, MoveNodeBetweenUserTrees) {}
+
+TEST_F(ManagersSuit, SubscribeToPublic) {}
+TEST_F(ManagersSuit, SubscribeToPrivate) {}
+
+TEST_F(ManagersSuit, Unsubscribe) {}
+
+TEST_F(ManagersSuit, GetChildren) {}
 

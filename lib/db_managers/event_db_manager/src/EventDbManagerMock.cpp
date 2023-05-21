@@ -10,11 +10,7 @@
 
 EventDbManagerMock::EventDbManagerMock(std::shared_ptr<DbMock> db) :
 	db_(db),
-	aid_(db->events.size()) {
-
-	db_->events.emplace_back(0, 0, "", "", std::chrono::steady_clock::now(), std::chrono::steady_clock::now());
-	
-}
+	aid_(db->events.size()) {}
 
 const Event& EventDbManagerMock::get(size_t event_id) {
 	for (auto e = db_->events.begin() + 1; e != db_->events.end(); e++)

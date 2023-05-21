@@ -22,6 +22,7 @@
 #include "Managers.hpp"
 #include "SessionScopeMap.hpp"
 #include "SessionScope.hpp"
+#include "EventManager.hpp"
 
 SessionScopeMap::SessionScopeMap() {}
 
@@ -66,7 +67,8 @@ void SessionScopeMap::add(std::thread::id tid) {
 					std::make_unique<UserManager>(db),
 					std::make_unique<NodeManager>(db),
 					std::make_unique<DirectoryManager>(db),
-					std::make_unique<CalendarManager>(db)
+					std::make_unique<CalendarManager>(db),
+					std::make_unique<EventManager>(db)
 				),
 				std::make_unique<ConnectionsMediator>()
 			)

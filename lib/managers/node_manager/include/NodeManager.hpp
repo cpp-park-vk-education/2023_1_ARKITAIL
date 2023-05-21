@@ -8,6 +8,7 @@
 #include "Node.hpp"
 #include "Tag.hpp"
 
+// Проверки доступа
 class NodeManager : public INodeManager {
 public:
 	NodeManager(std::shared_ptr<IDbManagers> db);
@@ -15,6 +16,8 @@ public:
 	const Node& get(size_t node_id) override;
 	size_t add(const Node& node) override;
 	void update(const Node& node) override;
+
+	// Рекурсивное удаление ноды и связанных с ней ресурсов
 	void remove(size_t node_id) override;
 
 	void tag(const Tag& tag, size_t node_id) override;

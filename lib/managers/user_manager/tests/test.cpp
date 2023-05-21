@@ -8,6 +8,7 @@
 #include "DirectoryDbManagerMock.hpp"
 #include "DirectoryManager.hpp"
 #include "EventDbManagerMock.hpp"
+#include "EventManager.hpp"
 #include "Managers.hpp"
 #include "NodeDbManagerMock.hpp"
 #include "NodeManager.hpp"
@@ -40,7 +41,8 @@ protected:
 			std::make_unique<UserManager>(db_managers),
 			std::make_unique<NodeManager>(db_managers),
 			std::make_unique<DirectoryManager>(db_managers),
-			std::make_unique<CalendarManager>(db_managers)
+			std::make_unique<CalendarManager>(db_managers),
+			std::make_unique<EventManager>(db_managers)
 		);
 
 	}

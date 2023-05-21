@@ -1,12 +1,13 @@
 #include <chrono>
 #include <string>
+#include <memory>
 
 #include "DbManagers.hpp"
 #include "Event.hpp"
 #include "EventManager.hpp"
 #include "IDbManagers.hpp"
 
-EventManager::EventManager(IDbManagers* db) :
+EventManager::EventManager(std::shared_ptr<IDbManagers> db) :
     db_(db) {}
 
 const Event& EventManager::get(size_t event_id) {
