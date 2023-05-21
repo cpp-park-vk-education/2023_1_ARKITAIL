@@ -22,7 +22,9 @@ void CommentManager::remove(const int id) {
 
   dbo::ptr<comments> comment =
       session_.find<comments>().where("id = ?").bind(id);
-
+  if (!comment) {
+    return;
+  }
   comment.remove();
   transaction.commit();
 }
@@ -33,6 +35,10 @@ Ret_Comm CommentManager::get(const int id) {
   Ret_Comm ret;
   dbo::ptr<comments> comment =
       session_.find<comments>().where("id = ?").bind(id);
+  if (!comment) {
+    ret.name = "error";
+    return ret;
+  }
   ret.name = comment->name;
   ret.text = comment->text;
   ret.event_id = comment->event.id();

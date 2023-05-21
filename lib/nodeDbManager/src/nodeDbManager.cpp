@@ -10,7 +10,7 @@ int NodeManager::add(Ret_Node &ret) {
   node->type = ret.type;
 
   dbo::ptr<nodes> nodePtr = session_.add(std::move(node));
-      nodePtr = session_.find<nodes>().where("resource_id = ?").bind(ret.resource_id);
+  nodePtr = session_.find<nodes>().where("node_id = ?").bind(ret.node_id);
 
   id = nodePtr.id();
   transaction.commit();
@@ -22,7 +22,9 @@ void NodeManager::remove(const int id) {
   dbo::Transaction transaction(session_);
 
   dbo::ptr<nodes> node = session_.find<nodes>().where("id = ?").bind(id);
-
+  if (!node) {
+    return;
+  }
   node.remove();
   transaction.commit();
 }
@@ -32,7 +34,9 @@ void NodeManager::update(Ret_Node &ret) {
 
   dbo::ptr<nodes> node =
       session_.find<nodes>().where("resource_id = ?").bind(ret.resource_id);
-
+  if (!node) {
+    return;
+  }
   node.modify()->parent =
       session_.find<nodes>().where("id = ?").bind(ret.parent_id);
   node.modify()->resource_id = ret.resource_id;
@@ -47,6 +51,9 @@ Ret_Node NodeManager::get(const int id) {
   std::vector<int> tagv;
   Ret_Node ret;
   dbo::ptr<nodes> node = session_.find<nodes>().where("id = ?").bind(id);
+  if (!node) {
+    return ret;
+  }
   ret.parent_id = node->parent.id();
   ret.type = node->type;
   ret.resource_id = node->resource_id;
@@ -66,7 +73,9 @@ void NodeManager::tag(const int id, Ret_Tag &rec) {
 
   dbo::ptr<tags> tag = session_.find<tags>().where("name = ?").bind(rec.name);
   dbo::ptr<nodes> node = session_.find<nodes>().where("id = ?").bind(id);
-
+  if (!node) {
+    return;
+  }
   if (!tag) {
     tag = session_.add(std::unique_ptr<tags>{new tags()});
     tag.modify()->name = rec.name;
@@ -82,7 +91,9 @@ void NodeManager::move(const int id, const int destination_id) {
   dbo::Transaction transaction(session_);
 
   dbo::ptr<nodes> node = session_.find<nodes>().where("id = ?").bind(id);
-
+  if (!node) {
+    return;
+  }
   node.modify()->parent =
       session_.find<nodes>().where("id = ?").bind(destination_id);
 

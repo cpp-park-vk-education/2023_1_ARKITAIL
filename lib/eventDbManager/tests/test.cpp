@@ -29,7 +29,7 @@ TEST(EventManagerTest, AddEvent) {
   session.setConnection(std::move(pg));
   dbo::Transaction transaction{session};
   session.mapClass<calendars>("calendars");
-
+  session.mapClass<users>("users");
   session.mapClass<events>("events");
 
   //session.createTables();
@@ -42,7 +42,7 @@ TEST(EventManagerTest, AddEvent) {
 
   // Создание тестовых данных
   Ret_Event ret;
-  ret.name = "Test2 Event";
+  ret.name = "Test1 Event";
   ret.t_start = {1, 2, 3, 4, 5, 2000};
   ret.t_end = {7, 8, 9, 10, 11, 2000};
   ret.description = "Test Description";
@@ -68,6 +68,7 @@ TEST(EventManagerTest1, RemoveAndGetEvent) {
   session.setConnection(std::move(pg));
   dbo::Transaction transaction(session);
   session.mapClass<calendars>("calendars");
+  session.mapClass<users>("users");
 
   session.mapClass<events>("events");
 
@@ -104,6 +105,7 @@ TEST(EventManagerTest1, UpdateAndGetEvent) {
   session.setConnection(std::move(pg));
   dbo::Transaction transaction(session);
   session.mapClass<calendars>("calendars");
+  session.mapClass<users>("users");
 
   session.mapClass<events>("events");
 

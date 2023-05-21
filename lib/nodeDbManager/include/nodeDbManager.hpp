@@ -9,6 +9,7 @@ struct Ret_Tag {
 };
 
 struct Ret_Node {
+  int node_id;
   int parent_id;
   Type type;
   int resource_id;

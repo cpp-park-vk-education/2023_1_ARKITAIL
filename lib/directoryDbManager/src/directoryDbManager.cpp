@@ -9,7 +9,7 @@ int DirectoryManager::add(Ret_Dir &ret) {
   direct->node = session_.find<nodes>().where("id = ?").bind(ret.node_id);
 
   dbo::ptr<directory> directPtr = session_.add(std::move(direct));
-      directPtr = session_.find<directory>().where("name = ?").bind(ret.name);
+  directPtr = session_.find<directory>().where("name = ?").bind(ret.name);
 
   id = directPtr.id();
   transaction.commit();
@@ -22,7 +22,9 @@ void DirectoryManager::remove(const int id) {
 
   dbo::ptr<directory> direct =
       session_.find<directory>().where("id = ?").bind(id);
-
+  if (!direct) {
+    return;
+  }
   direct.remove();
   transaction.commit();
 }
@@ -32,7 +34,9 @@ void DirectoryManager::update(Ret_Dir &ret) {
 
   dbo::ptr<directory> direct =
       session_.find<directory>().where("name = ?").bind(ret.name);
-
+  if (!direct) {
+    return;
+  }
   direct.modify()->name = ret.name;
   direct.modify()->description = ret.description;
   direct.modify()->node =
@@ -47,6 +51,10 @@ Ret_Dir DirectoryManager::get(const int id) {
   Ret_Dir ret;
   dbo::ptr<directory> direct =
       session_.find<directory>().where("id = ?").bind(id);
+  if (!direct) {
+    ret.name = "error";
+    return ret;
+  }
   ret.name = direct->name;
   ret.description = direct->description;
   ret.node_id = direct->node.id();
