@@ -8,6 +8,8 @@ class events;
 class nodes;
 class directory;
 class tags;
+class profiles;
+class comments;
 
 class calendars {
 public:
@@ -23,6 +25,30 @@ public:
     dbo::field(a, description, "description");
     dbo::belongsTo(a, user, "user");
     dbo::belongsTo(a, node, "node");
+  }
+};
+
+class profiles {
+public:
+  std::string name;
+  dbo::ptr<nodes> node;
+
+  template <class Action> void persist(Action &a) {
+    dbo::field(a, name, "name");
+    dbo::belongsTo(a, node, "node");
+  }
+};
+
+class comments {
+public:
+  std::string name;
+  std::string text;
+  dbo::ptr<events> event;
+
+  template <class Action> void persist(Action &a) {
+    dbo::field(a, name, "name");
+    dbo::field(a, text, "text");
+    dbo::belongsTo(a, event, "event");
   }
 };
 
@@ -45,14 +71,15 @@ public:
   std::time_t time_start;
   std::time_t time_end;
   std::string description;
-  dbo::ptr<calendars> calendar;
+  //dbo::ptr<calendars> calendar;
+  dbo::collection<dbo::ptr<comments>> comment;
 
   template <class Action> void persist(Action &a) {
     dbo::field(a, name, "name");
     dbo::field(a, time_start, "time_start");
     dbo::field(a, time_end, "time_end");
     dbo::field(a, description, "description");
-    dbo::belongsTo(a, calendar, "calendar");
+    //dbo::belongsTo(a, calendar, "calendar");
   }
 };
 

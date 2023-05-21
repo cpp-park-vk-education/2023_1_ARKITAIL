@@ -10,6 +10,7 @@
 #include <Wt/Auth/Dbo/AuthInfo.h>
 #include <Wt/Dbo/Session.h>
 #include <Wt/Dbo/ptr.h>
+#include <gtest/gtest.h>
 #include <fstream>
 #include <vector>
 

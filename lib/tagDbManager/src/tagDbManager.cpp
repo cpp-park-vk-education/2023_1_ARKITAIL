@@ -12,5 +12,22 @@ int TagManager::add(Ret_Tag &ret) {
 
   return id;
 }
-void TagManager::remote(const int id) {}
-Ret_Tag TagManager::get(const int id) {}
+void TagManager::remote(const int id) {
+  dbo::Transaction transaction(session_);
+
+  dbo::ptr<tags> tag = session_.find<tags>().where("id = ?").bind(id);
+
+  tag.remove();
+  transaction.commit();
+}
+Ret_Tag TagManager::get(const int id) {
+  dbo::Transaction transaction(session_);
+
+  Ret_Tag ret;
+  dbo::ptr<tags> tag =
+      session_.find<tags>().where("id = ?").bind(id);
+  ret.name = tag->name;
+
+  transaction.commit();
+  return ret;
+}

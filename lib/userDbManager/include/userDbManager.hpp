@@ -2,12 +2,18 @@
 
 #include "mainModel.hpp"
 
+struct Ret_User{
+    std::string login;
+    std::string email;
+    std::string nickname;
+    std::string description;
+};
+
 class UserManager {
 public:
-    users addUser(users);
-    users deleteUser(int id);
-    users updateUser(users);
-    users getByLogin(std::string login);
-    bool authenticate(dbo::Auth::Identity& Identity);
-    void logout();
+    Ret_User get(const int id);
+
+private:
+  int id;
+  dbo::Session &session_;
 };

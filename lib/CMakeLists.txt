@@ -5,6 +5,8 @@ add_subdirectory(eventDbManager)
 add_subdirectory(nodeDbManager)
 add_subdirectory(tagDbManager)
 add_subdirectory(userDbManager)
+add_subdirectory(profileDbManager)
+add_subdirectory(commentDbManager)
 
 
 add_subdirectory(mainModel)
