@@ -9,17 +9,19 @@
 #include <Wt/WString.h>
 
 #include "ICharacterReader.hpp"
+#include "IStreamBuffer.hpp"
+
 #include "Calendar.hpp"
 #include "Event.hpp"
-#include "StringCharacterReader.hpp"
+#include "IstreamCharacterReader.hpp"
 #include "Lexer.hpp"
 #include "Parser.hpp"
 
 const std::string kDateTimeFormat = "yyyyMMdd'T'hhmmss'Z'";
 const std::string kDateFormat = "yyyyMMdd";
 
-std::vector<CalendarSptr> CalendarConverter::IcalendarToCalendar(
-    std::unique_ptr<ICharReader>&& char_reader) {
+std::vector<CalendarSptr> CalendarConverter::IcalendarToCalendars(
+    std::unique_ptr<ICharacterReader>&& char_reader) {
   // установка связей между char_reader, lexer, parser
   IcalendarLexer lexer;
   lexer.set_character_reader(*char_reader);
@@ -180,8 +182,8 @@ Wt::WDate CalendarConverter::FromIcalendarDate(
   return Wt::WDate::fromString(icalendar_date, kDateFormat);
 }
 
-std::unique_ptr<ICharReader> CalendarConverter::CalendarToIcalendar(
-    std::vector<CalendarSptr>&& calendars) {
+std::unique_ptr<IStreamBuffer> CalendarConverter::CalendarsToIcalendar(
+    const std::vector<CalendarSptr>& calendars) {
   std::stringstream ss;
 
   for (CalendarSptr calendar : calendars) {
@@ -220,7 +222,7 @@ std::unique_ptr<ICharReader> CalendarConverter::CalendarToIcalendar(
     Write(ss, "END", "VCALENDAR");
   }
 
-  return std::make_unique<StringCharacterReader>(std::move(ss));
+  return std::make_unique<IstreamCharacterReader>(ss.rdbuf());
 }
 
 void CalendarConverter::Write(

@@ -10,13 +10,14 @@
 #include "Calendar.hpp"
 #include "CalendarConverter.hpp"
 #include "StringStreamResource.hpp"
+#include "IstreamCharacterReader.hpp"
 
 CalendarExportTemplate::CalendarExportTemplate(CalendarSptr calendar)
     : Wt::WTemplate(Wt::WString::tr("calendar-export")) {
   CalendarConverter converter;
-  auto char_reader = converter.CalendarToIcalendar(
+  auto buffer = converter.CalendarsToIcalendar(
       std::vector<CalendarSptr> { calendar });
-  auto resource = std::make_shared<StringStreamResource>(std::move(char_reader));
+  auto resource = std::make_shared<StringStreamResource>(std::move(buffer));
   Wt::WLink link(resource);
   auto anchor = std::make_unique<Wt::WAnchor>(
       link,

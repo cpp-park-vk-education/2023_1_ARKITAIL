@@ -3,18 +3,18 @@
 #include <memory>
 #include <vector>
 
-#include "Calendar.hpp"
 #include "ICharacterReader.hpp"
+#include "IStreamBuffer.hpp"
+
+#include "Calendar.hpp"
 
 class ICalendarConverter {
  public:
-  // iCalendar stream может содержать несколько календарей,
-  // поэтому возвращаем вектор
-  virtual std::vector<CalendarSptr> IcalendarToCalendar(
-      std::unique_ptr<ICharReader>&& char_reader) = 0;
+  virtual std::vector<CalendarSptr> IcalendarToCalendars(
+      std::unique_ptr<ICharacterReader>&& reader) = 0;
 
-  virtual std::unique_ptr<ICharReader> CalendarToIcalendar(
-      std::vector<CalendarSptr>&& calendars) = 0;
+  virtual std::unique_ptr<IStreamBuffer> CalendarsToIcalendar(
+      const std::vector<CalendarSptr>& calendars) = 0;
 
   virtual ~ICalendarConverter() = default;
 };

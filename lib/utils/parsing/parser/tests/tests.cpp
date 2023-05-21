@@ -5,31 +5,28 @@
 #include <vector>
 #include <queue>
 
-#include "StringCharacterReader.hpp"
+#include "IstreamCharacterReader.hpp"
 #include "Lexer.hpp"
 #include "Parser.hpp"
-
-// TODO(affeeal): вынести StringStubCharReader и FileCharReader
-// в один класс
 
 class IcalendarParserTest : public ::testing::Test {
  protected:
   void SetUp() override {
-    lexer_.set_character_reader(char_reader_);
+    lexer_.set_character_reader(reader_);
     parser_.set_lexer(lexer_);
   }
 
   void TearDown() override {
   }
 
-  StringCharacterReader char_reader_;
+  IstreamCharacterReader reader_;
   IcalendarLexer lexer_;
   IcalendarParser parser_;
 };
 
 TEST_F(IcalendarParserTest, EmptyStream) {
   std::stringstream ss("");
-  char_reader_.set_ss(std::move(ss));
+  reader_.SetBuffer(ss.rdbuf());
 
   StreamUptr root = parser_.Parse();
   ASSERT_TRUE(root);
@@ -41,7 +38,7 @@ TEST_F(IcalendarParserTest, EmptyStream) {
 TEST_F(IcalendarParserTest, EmptyCalendar) {
   std::stringstream ss("BEGIN:VCALENDAR\r\n"
                        "END:VCALENDAR\r\n");
-  char_reader_.set_ss(std::move(ss));
+  reader_.SetBuffer(ss.rdbuf());
 
   StreamUptr root = parser_.Parse();
   ASSERT_TRUE(root);
@@ -62,7 +59,7 @@ TEST_F(IcalendarParserTest, EmptyCalendars) {
                        "END:VCALENDAR\r\n"
                        "BEGIN:VCALENDAR\r\n"
                        "END:VCALENDAR\r\n");
-  char_reader_.set_ss(std::move(ss));
+  reader_.SetBuffer(ss.rdbuf());
 
   StreamUptr root = parser_.Parse();
   ASSERT_TRUE(root);
@@ -84,7 +81,7 @@ TEST_F(IcalendarParserTest, CalendarWithProperties) {
                        "VERSION:2.0\r\n"
                        "PRODID:students.bmstu.ru\r\n"
                        "END:VCALENDAR\r\n");
-  char_reader_.set_ss(std::move(ss));
+  reader_.SetBuffer(ss.rdbuf());
 
   StreamUptr root = parser_.Parse();
   ASSERT_TRUE(root);
@@ -135,7 +132,7 @@ TEST_F(IcalendarParserTest, CalendarWithEmptyEvent) {
                        "BEGIN:VEVENT\r\n"
                        "END:VEVENT\r\n"
                        "END:VCALENDAR\r\n");
-  char_reader_.set_ss(std::move(ss));
+  reader_.SetBuffer(ss.rdbuf());
 
   StreamUptr root = parser_.Parse();
   ASSERT_TRUE(root);
@@ -196,7 +193,7 @@ TEST_F(IcalendarParserTest, CalendarWithEmptyEvents) {
                        "BEGIN:VEVENT\r\n"
                        "END:VEVENT\r\n"
                        "END:VCALENDAR\r\n");
-  char_reader_.set_ss(std::move(ss));
+  reader_.SetBuffer(ss.rdbuf());
 
   StreamUptr root = parser_.Parse();
   ASSERT_TRUE(root);
@@ -279,7 +276,7 @@ TEST_F(IcalendarParserTest, CalendarWithEvents) {
       "RRULE:FREQ=WEEKLY;INTERVAL=1;UNTIL=20230605\r\n"
       "END:VEVENT\r\n"
       "END:VCALENDAR\r\n");
-  char_reader_.set_ss(std::move(ss));
+  reader_.SetBuffer(ss.rdbuf());
 
   StreamUptr root = parser_.Parse();
   ASSERT_TRUE(root);

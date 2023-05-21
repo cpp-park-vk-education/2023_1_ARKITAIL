@@ -4,25 +4,25 @@
 #include <sstream>
 #include <string>
 
-#include "StringCharacterReader.hpp"
+#include "IstreamCharacterReader.hpp"
 #include "Lexer.hpp"
 
 class IcalendarLexerTest : public ::testing::Test {
  protected:
   void SetUp() override {
-    lexer_.set_character_reader(char_reader_);
+    lexer_.set_character_reader(reader_);
   }
 
   void TearDown() override {
   }
 
-  StringCharacterReader char_reader_;
+  IstreamCharacterReader reader_;
   IcalendarLexer lexer_;
 };
 
 TEST_F(IcalendarLexerTest, Empty) {
   std::stringstream ss("");
-  char_reader_.set_ss(std::move(ss));
+  reader_.SetBuffer(ss.rdbuf());
   
   EXPECT_EQ(lexer_.Peek(), Lexem(Tag::kEof, ""));
   EXPECT_EQ(lexer_.Get(), Lexem(Tag::kEof, ""));
@@ -30,7 +30,7 @@ TEST_F(IcalendarLexerTest, Empty) {
 
 TEST_F(IcalendarLexerTest, CommonLine) {
   std::stringstream ss("BEGIN:VCALENDAR\r\n");
-  char_reader_.set_ss(std::move(ss));
+  reader_.SetBuffer(ss.rdbuf());
   
   EXPECT_EQ(lexer_.Get(), kBegin);
   EXPECT_EQ(lexer_.Peek(), kColon);
@@ -45,7 +45,7 @@ TEST_F(IcalendarLexerTest, CommonLine) {
 
 TEST_F(IcalendarLexerTest, LineWithParameters) {
   std::stringstream ss("RRULE:FREQ=WEEKLY;UNTIL=20230605\r\n");
-  char_reader_.set_ss(std::move(ss));
+  reader_.SetBuffer(ss.rdbuf());
 
   EXPECT_EQ(lexer_.Get(), Lexem(Tag::kIdentifier, "RRULE"));
   EXPECT_EQ(lexer_.Get(), kColon);
@@ -63,7 +63,7 @@ TEST_F(IcalendarLexerTest, LineWithParameters) {
 
 TEST_F(IcalendarLexerTest, RequestKthLexem) {
   std::stringstream ss("RRULE:FREQ=MONTHLY\r\n");
-  char_reader_.set_ss(std::move(ss));
+  reader_.SetBuffer(ss.rdbuf());
 
   EXPECT_EQ(lexer_.Get(1), kColon);
   EXPECT_EQ(lexer_.Peek(), Lexem(Tag::kIdentifier, "FREQ"));

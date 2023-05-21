@@ -11,8 +11,8 @@
 #include "Calendar.hpp"
 #include "CalendarImportModel.hpp"
 #include "CalendarConverter.hpp"
-#include "FileCharacterReader.hpp"
 #include "ICharacterReader.hpp"
+#include "IstreamCharacterReader.hpp"
 
 CalendarImportView::CalendarImportView() {
   model_ = std::make_shared<CalendarImportModel>();
@@ -46,8 +46,8 @@ void CalendarImportView::HandleInput() {
 
   std::ifstream icalendar(import_iCalendar_->spoolFileName());
   CalendarConverter converter;
-  std::vector<CalendarSptr> calendars = converter.IcalendarToCalendar(
-      std::make_unique<FileCharacterReader>(std::move(icalendar)));
+  std::vector<CalendarSptr> calendars = converter.IcalendarToCalendars(
+      std::make_unique<IstreamCharacterReader>(icalendar.rdbuf()));
 
   for (CalendarSptr calendar : calendars) {
     calendar_created_.emit(calendar);

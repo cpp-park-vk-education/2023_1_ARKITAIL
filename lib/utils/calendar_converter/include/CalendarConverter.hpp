@@ -9,19 +9,21 @@
 #include <Wt/WDate.h>
 #include <Wt/WString.h>
 
-#include "Event.hpp"
 #include "ICalendarConverter.hpp"
 #include "ICharacterReader.hpp"
+#include "IStreamBuffer.hpp"
+
+#include "Event.hpp"
 #include "Calendar.hpp"
 #include "Parser.hpp"
 
 class CalendarConverter : ICalendarConverter {
  public:
-   std::vector<CalendarSptr> IcalendarToCalendar(
-       std::unique_ptr<ICharReader>&& char_reader) override;
+   std::vector<CalendarSptr> IcalendarToCalendars(
+       std::unique_ptr<ICharacterReader>&& reader) override;
 
-  std::unique_ptr<ICharReader> CalendarToIcalendar(
-      std::vector<CalendarSptr>&& calendars) override;
+  std::unique_ptr<IStreamBuffer> CalendarsToIcalendar(
+      const std::vector<CalendarSptr>& calendars) override;
  private:
   EventSptr FromIcalendarEvent(const ComponentUptr& icalendar_event);
   Wt::WDateTime FromIcalendarDateTime(const std::string& icalendar_date_time);

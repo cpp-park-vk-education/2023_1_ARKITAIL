@@ -4,6 +4,8 @@
 #include <array>
 #include <deque>
 
+#include "ICharacterReader.hpp"
+
 const std::size_t kDelimitersSize = 5;
 const std::array<char, kDelimitersSize> kDelimiters { 
   ':',
@@ -89,6 +91,6 @@ bool IcalendarLexer::IsDelimiter(char character) const {
           != kDelimiters.end());
 }
 
-void IcalendarLexer::set_character_reader(ICharReader& character_reader) {
+void IcalendarLexer::set_character_reader(ICharacterReader& character_reader) {
   character_reader_ = &character_reader;
 }
