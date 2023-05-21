@@ -32,10 +32,9 @@ std::unique_ptr<TreeNodeW> TreeNodeSubscriptionsDirW::makeTreeNodeWidget(ITreeNo
         Calendar child = mgr->calendar_manager()->get(tree_node->getNode().resource_id);
         res = std::make_unique<TreeNodeLeafW>(tree_node);
         res.get()
+            ->addCheckBox()
             ->addHead(std::make_unique<Wt::WText>(child.name))
-            ->addOptions(OptionsWDirector().createOptionsUnsubscriptionW(options_builder))
             ->addToolTip(child.description, tags, mgr->user_manager()->get(child.owner_id))
-            ->addParent(this)
             ->endNode();
         // return TreeNodeLeafWBuilder()
         //     .createTreeNodeW(node)
@@ -50,10 +49,9 @@ std::unique_ptr<TreeNodeW> TreeNodeSubscriptionsDirW::makeTreeNodeWidget(ITreeNo
         Directory child = mgr->directory_manager()->get(tree_node->getNode().resource_id);
         res = std::make_unique<TreeNodeSubscriptionsDirW>(tree_node);
         res.get()
+            ->addCheckBox()
             ->addHead(std::make_unique<Wt::WText>(child.name))
-            ->addOptions(OptionsWDirector().createOptionsUnsubscriptionW(options_builder))
-            ->addToolTip(child.description, tags, mgr->user_manager()->get(child.owner_id))
-            ->addParent(this)
+            // ->addToolTip(child.description, tags, mgr->user_manager()->get(child.owner_id))
             ->endNode();
         // return TreeNodeSubDirWBuilder()
         //     .createTreeNodeW(node)
@@ -64,5 +62,5 @@ std::unique_ptr<TreeNodeW> TreeNodeSubscriptionsDirW::makeTreeNodeWidget(ITreeNo
         //     ->endNode()
         //     ->getTreeNodeW();
     }
-    return std::move(res);
+    return res;
 }

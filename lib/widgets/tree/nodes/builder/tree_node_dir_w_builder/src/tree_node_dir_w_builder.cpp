@@ -15,7 +15,7 @@ TreeNodeDirWBuilder* TreeNodeDirWBuilder::createTreeNodeW(ITreeNode* node) {
 }
 
 std::unique_ptr<TreeNodeW> TreeNodeDirWBuilder::getTreeNodeW() {
-    std::unique_ptr<TreeNodeW> tmp = std::make_unique<TreeNodeDirW>(node);
+    std::unique_ptr<TreeNodeW> tmp = std::make_unique<TreeNodeDirW>(node_);
     tmp.swap(tree_node_w);
-    return std::move(tmp);
+    return tmp;
 }

@@ -36,12 +36,16 @@ std::vector<TreeNodeW*> TreeNodeDirW::childrenNodes() {
 
 void TreeNodeDirW::showNode() {
     if (childrenNodes().empty()) {
-        std::vector<ITreeNode*> node_children = node_->getChildren();
-        for (auto&& node_child : node_children) {
-            addChildNode(this->makeTreeNodeWidget(node_child));
+        for (auto&& node_child : node_->getChildren()) {
+            auto child_block = addChildNode(this->makeTreeNodeWidget(node_child));
+            if (isCanCheck() && check_box_->isChecked()) {
+                child_block->checkNode();
+            }
         }
+
     } else {
         for (auto&& child : childrenNodes()) {
+            std::cout << "t\n";
             child->setHidden(false);
         }
     }

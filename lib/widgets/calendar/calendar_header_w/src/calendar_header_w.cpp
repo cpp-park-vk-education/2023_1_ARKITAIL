@@ -12,6 +12,7 @@
 
 CalendarHeaderW::CalendarHeaderW() {
     selected_date_ = std::make_unique<Wt::WDate>(std::chrono::system_clock::now());
+    range_ = Range::WEEK;
     auto button_box = addNew<Wt::WContainerWidget>();
     button_box->addStyleClass("my-2 me-2 my-lg-0 d-flex justify-content-center");
     today_button_ = button_box->addNew<Wt::WPushButton>("Сегодня");

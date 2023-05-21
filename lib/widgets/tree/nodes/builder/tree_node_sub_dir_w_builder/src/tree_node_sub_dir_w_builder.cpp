@@ -15,7 +15,7 @@ TreeNodeSubDirWBuilder* TreeNodeSubDirWBuilder::createTreeNodeW(ITreeNode* node)
 }
 
 std::unique_ptr<TreeNodeW> TreeNodeSubDirWBuilder::getTreeNodeW() {
-    std::unique_ptr<TreeNodeW> tmp = std::make_unique<TreeNodeSubscriptionsDirW>(node);
+    std::unique_ptr<TreeNodeW> tmp = std::make_unique<TreeNodeSubscriptionsDirW>(node_);
     tree_node_w.swap(tmp);
-    return std::move(tmp);
+    return tmp;
 }

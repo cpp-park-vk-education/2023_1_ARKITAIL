@@ -4,8 +4,6 @@
 
 #include "options_w.hpp"
 
-// class OptionsW;
-
 class OptionsWBuilderBase {
   public:
     OptionsWBuilderBase();

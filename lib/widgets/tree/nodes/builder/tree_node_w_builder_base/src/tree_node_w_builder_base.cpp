@@ -50,15 +50,11 @@ TreeNodeWBuilderBase::TreeNodeWBuilderBase() :
 // }
 
 TreeNodeWBuilderBase* TreeNodeWBuilderBase::addHead(std::unique_ptr<Wt::WWidget> head) {
-    tree_node_w->header_container_ =
-        tree_node_w->node_block_->addWidget(std::make_unique<Wt::WContainerWidget>());
     tree_node_w->header_container_->addWidget(std::move(head));
     return this;
 }
 
 TreeNodeWBuilderBase* TreeNodeWBuilderBase::addCheckBox() {
-    tree_node_w->check_box_container =
-        tree_node_w->node_block_->addWidget(std::make_unique<Wt::WContainerWidget>());
     tree_node_w->check_box_container->addStyleClass("my-auto");
     tree_node_w->check_box_ =
         tree_node_w->check_box_container->addWidget(std::make_unique<Wt::WCheckBox>());
@@ -71,9 +67,9 @@ TreeNodeWBuilderBase* TreeNodeWBuilderBase::addOptions(std::unique_ptr<OptionsW>
     tree_node_w->options_button_ =
         tree_node_w->node_block_->addWidget(std::make_unique<Wt::WPushButton>("•••"));
     tree_node_w->options_button_->addStyleClass("p-1 py-0 border-0 btn-light");
-    // options.get()->selectedOption().connect([=] { проблема
-    //     std::cout << "\nclick option\n";
-    // });
+    options.get()->selectedOption().connect([=] {
+        std::cout << "\nclick option\n";
+    });
     tree_node_w->options_button_->setMenu(std::move(options));
     tree_node_w->options_button_->toggleStyleClass("dropdown-toggle", false);
     return this;

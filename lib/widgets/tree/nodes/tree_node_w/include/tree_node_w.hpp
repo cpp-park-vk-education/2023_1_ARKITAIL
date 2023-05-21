@@ -42,7 +42,9 @@ class TreeNodeW : public Wt::WContainerWidget {
 
     void removeNode();
     bool isRoot();
+    bool isCanCheck();
     void uncheckParentNodes();
+    NodeType getType();
 
     virtual std::unique_ptr<TreeNodeW> makeTreeNodeWidget(ITreeNode* node);
 

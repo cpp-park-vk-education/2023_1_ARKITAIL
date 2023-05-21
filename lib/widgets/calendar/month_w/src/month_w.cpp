@@ -11,6 +11,7 @@ MonthW::MonthW() {
 
 void MonthW::update(Wt::WDate selected_date) {
     auto begin_week_day = std::make_unique<Wt::WDate>(selected_date);
+    auto first_day = Wt::WDate(selected_date.year(), selected_date.month(), 1);
     table_->clear();
 
     for (unsigned i = 1; i < 6; ++i) {
@@ -22,8 +23,12 @@ void MonthW::update(Wt::WDate selected_date) {
         table_->elementAt(0, i++)->addNew<Wt::WText>(weekday);
         begin_week_day = std::make_unique<Wt::WDate>(begin_week_day->addDays(1));
     }
+    std::cout << first_day.toString("dd MMMM yyyy");
 
-    for (int day = 1; day < selected_date.daysTo(selected_date.addMonths(1)); day++) {
-        table_->elementAt(1 + (day) / 7, (day) % 7 + 1)->addNew<Wt::WText>(std::to_string(day));
+    for (int day = 1 + first_day.dayOfWeek();
+         day < selected_date.daysTo(selected_date.addMonths(1).addDays(first_day.dayOfWeek()));
+         day++) {
+        table_->elementAt(1 + (day) / 7, (day) % 7 + 1)
+            ->addNew<Wt::WText>(std::to_string(day - first_day.dayOfWeek()));
     }
 }

@@ -36,7 +36,7 @@ OptionsWBuilderBase* OptionsWBuilderBase::addOptionUnsubscribe() {
 }
 
 std::unique_ptr<OptionsW> OptionsWBuilderBase::getOptionsW() {
-    auto options_w_ = std::make_unique<OptionsW>();
-    options_w_.swap(options_w);
-    return std::move(options_w_);
+    auto tmp = std::make_unique<OptionsW>();
+    tmp.swap(options_w);
+    return tmp;
 }

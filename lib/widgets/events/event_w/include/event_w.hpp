@@ -13,7 +13,7 @@
 
 class EventW {
   public:
-    EventW(int id, const std::string &title, Wt::WColor color, Wt::WDateTime begin,
+    EventW(int id, const std::string& title, Wt::WColor color, Wt::WDateTime begin,
            Wt::WDateTime end) :
         id_(id),
         title_(title),
@@ -23,7 +23,9 @@ class EventW {
 
     ~EventW() = default;
 
-    void makeEventWidget(Wt::WTable *table, Wt::WDate begin_of_week);
+    void makeDayEventWidget(Wt::WTable* table, Wt::WDate day);
+    void makeWeekEventWidget(Wt::WTable* table, Wt::WDate begin_of_week);
+    void makeMonthEventWidget(Wt::WTable* table, Wt::WDate begin_of_month);
 
   private:
     int id_;
@@ -32,8 +34,8 @@ class EventW {
     Wt::WDateTime begin_;
     Wt::WDateTime end_;
 
-    void addDialog(Wt::WPushButton *eventWidget);
+    void addDialog(Wt::WPushButton* eventWidget);
     void makeEventLargePartWidget(std::string title, std::string style_class,
-                                  Wt::WTableCell *event_cell);
-    void makeEventSmallPartWidget(Wt::WTableCell *event_cell);
+                                  Wt::WTableCell* event_cell);
+    void makeEventSmallPartWidget(Wt::WTableCell* event_cell, std::string style_class);
 };

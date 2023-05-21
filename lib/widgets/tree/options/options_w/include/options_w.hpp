@@ -5,7 +5,7 @@
 #include <Wt/WPushButton.h>
 
 enum Action {
-    REMOVE = 0,
+    REMOVE,
     SUBSCRIBE,
     UNSUBSCRIBE,
     GO_TO_AUTHOR,
@@ -21,6 +21,10 @@ class OptionsW : public Wt::WPopupMenu {
 
     Wt::Signal<Action>& selectedOption();
 
+    void emitS(Action a) {
+        std::cout << "\n\nui\n\n" << a;
+        select_option_.emit(a);
+    }
     OptionsW* addOptionRemove();
     OptionsW* addOptionEdit();
     OptionsW* addOptionAddCalendar();

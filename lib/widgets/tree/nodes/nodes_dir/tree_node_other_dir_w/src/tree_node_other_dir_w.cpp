@@ -30,11 +30,11 @@ std::unique_ptr<TreeNodeW> TreeNodeOtherDirW::makeTreeNodeWidget(ITreeNode* tree
         Calendar child = mgr->calendar_manager()->get(tree_node->getNode().resource_id);
         res = std::make_unique<TreeNodeLeafW>(tree_node);
         res.get()
+            ->addCheckBox()
             ->addHead(std::make_unique<Wt::WText>(child.name))
             ->addOptions(OptionsWDirector().createOptionsUnsubscriptionW(
                 options_builder))  //Нужна проверка на подписку
             ->addToolTip(child.description, tags, mgr->user_manager()->get(child.owner_id))
-            ->addParent(this)
             ->endNode();
         // return TreeNodeLeafWBuilder()
         //     .createTreeNodeW(tree_node)
@@ -48,16 +48,15 @@ std::unique_ptr<TreeNodeW> TreeNodeOtherDirW::makeTreeNodeWidget(ITreeNode* tree
 
     } else if (node_type & NodeType::PUBLIC_DIRECTORY) {
         Directory child = mgr->directory_manager()->get(tree_node->getNode().resource_id);
-        res = std::move(
-            TreeNodeDirWBuilder()
-                .createTreeNodeW(tree_node)
-                ->addHead(std::make_unique<Wt::WText>(child.name))
-                ->addOptions(OptionsWDirector().createOptionsUnsubscriptionW(
-                    options_builder))  //Нужна проверка на подписку
-                ->addToolTip(child.description, tags, mgr->user_manager()->get(child.owner_id))
-                ->addParent(this)
-                ->endNode()
-                ->getTreeNodeW());
+        res = TreeNodeDirWBuilder()
+                  .createTreeNodeW(tree_node)
+                  ->addCheckBox()
+                  ->addHead(std::make_unique<Wt::WText>(child.name))
+                  ->addOptions(OptionsWDirector().createOptionsUnsubscriptionW(
+                      options_builder))  //Нужна проверка на подписку
+                  ->addToolTip(child.description, tags, mgr->user_manager()->get(child.owner_id))
+                  ->endNode()
+                  ->getTreeNodeW();
     }
-    return std::move(res);
+    return res;
 }

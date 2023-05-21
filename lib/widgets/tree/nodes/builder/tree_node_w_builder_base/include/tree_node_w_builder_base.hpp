@@ -11,7 +11,7 @@ class TreeNodeW;
 class TreeNodeWBuilderBase {
   protected:
     std::unique_ptr<TreeNodeW> tree_node_w;
-    ITreeNode* node;
+    ITreeNode* node_;
 
   public:
     TreeNodeWBuilderBase();
