@@ -21,16 +21,7 @@ class OptionsW : public Wt::WPopupMenu {
 
     Wt::Signal<Action>& selectedOption();
 
-    void emitS(Action a) {
-        std::cout << "\n\nui\n\n" << a;
-        select_option_.emit(a);
-    }
-    OptionsW* addOptionRemove();
-    OptionsW* addOptionEdit();
-    OptionsW* addOptionAddCalendar();
-    OptionsW* addOptionAddDirectory();
-    OptionsW* addOptionSubscribe();
-    OptionsW* addOptionUnsubscribe();
+    void addSignal(int item_index, Action action);
 
     Wt::Signal<Action> select_option_;
 };

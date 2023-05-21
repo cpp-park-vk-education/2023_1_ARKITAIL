@@ -20,5 +20,6 @@ class OptionsWBuilderBase {
     std::unique_ptr<OptionsW> getOptionsW();
 
   protected:
-    std::unique_ptr<OptionsW> options_w;
+    size_t options_count_;
+    std::unique_ptr<OptionsW> options_w_;
 };

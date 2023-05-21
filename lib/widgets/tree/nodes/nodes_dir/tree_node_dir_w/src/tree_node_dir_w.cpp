@@ -5,6 +5,8 @@
 #include "Wt/WContainerWidget.h"
 #include "Wt/WIconPair.h"
 #include "Wt/WText.h"
+#include "options_w_builder.hpp"
+#include "options_w_director.hpp"
 #include "tree_node_w.hpp"
 
 TreeNodeDirW::TreeNodeDirW() {}
@@ -70,5 +72,3 @@ void TreeNodeDirW::uncheckNode() {
         child->uncheckNode();
     }
 }
-
-void TreeNodeDirW::performAction(Action action) {}

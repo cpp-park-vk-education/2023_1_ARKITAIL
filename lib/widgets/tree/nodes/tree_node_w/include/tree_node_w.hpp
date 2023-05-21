@@ -47,7 +47,7 @@ class TreeNodeW : public Wt::WContainerWidget {
     NodeType getType();
 
     virtual std::unique_ptr<TreeNodeW> makeTreeNodeWidget(ITreeNode* node);
-
+    void setOptions(std::unique_ptr<OptionsW> options);
     TreeNodeW* addOptions(std::unique_ptr<OptionsW> options);
     TreeNodeW* addToolTip(std::string description, std::vector<std::string> tags);
     TreeNodeW* addToolTip(std::string description, std::vector<std::string> tags, User author);

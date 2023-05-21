@@ -13,10 +13,6 @@ class TreeNodeLeafW : public TreeNodeW {
     TreeNodeLeafW(ITreeNode* node);
     ~TreeNodeLeafW() = default;
 
-    void showNode() override;
-    void closeNode() override;
     void checkNode() override;
     void uncheckNode() override;
-
-    void performAction(Action action) override;
 };
