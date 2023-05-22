@@ -2,7 +2,9 @@
 #include <vector>
 #include <memory>
 
+#include "Calendar.hpp"
 #include "DbManagers.hpp"
+#include "Directory.hpp"
 #include "IDbManagers.hpp"
 #include "Managers.hpp"
 #include "NodeManager.hpp"
@@ -24,7 +26,64 @@ const Node& NodeManager::get(size_t node_id) {
 // В ноду типа SUBSCRIPTIONS_GROUP
 // можно добавить только MOUNT
 // В ноды ROOT, MOUNT, PUBLIC_CALENDAR, PRIVATE_CALENDAR добавить ничего нельзя
+// Ресурсом MOUNT может быть только нодой с ресурсом PUBLIC_{DIRECTORY | CALENDAR}
 size_t NodeManager::add(const Node& node) {
+	User user = db_->user_dbm()->get();
+
+	if (node.type & (PRIVATE_DIRECTORY | PUBLIC_DIRECTORY)) {
+		Node parent_node = db_->node_dbm()->get(node.parent_id);
+
+		if (!(parent_node.type & (PRIVATE_GROUP | PRIVATE_DIRECTORY) && node.type & PRIVATE_DIRECTORY ||
+			parent_node.type & (PUBLIC_GROUP | PUBLIC_DIRECTORY) && node.type & PUBLIC_DIRECTORY))
+			return 0;
+
+		Directory parent_directory = db_->directory_dbm()->get(parent_node.resource_id);
+
+		if (user.id != parent_directory.owner_id)
+			return 0;
+
+		Directory directory = db_->directory_dbm()->get(node.resource_id);
+
+		if (user.id != directory.owner_id)
+			return 0;
+
+	} else if (node.type & (PRIVATE_CALENDAR | PUBLIC_CALENDAR)) {
+		Node parent_node = db_->node_dbm()->get(node.parent_id);
+
+		if (!(parent_node.type & (PRIVATE_GROUP | PRIVATE_DIRECTORY) && node.type & PRIVATE_CALENDAR ||
+			parent_node.type & (PUBLIC_GROUP | PUBLIC_DIRECTORY) && node.type & PUBLIC_CALENDAR))
+			return 0;
+
+		Directory parent_directory = db_->directory_dbm()->get(parent_node.resource_id);
+
+		if (user.id != parent_directory.owner_id)
+			return 0;
+
+		Calendar calendar = db_->calendar_dbm()->get(node.resource_id);
+
+		if (user.id != calendar.owner_id)
+			return 0;
+
+	} else if (node.type & MOUNT) {
+		Node parent_node = db_->node_dbm()->get(node.parent_id);
+
+		if ((parent_node.type & SUBSCRIPTIONS_GROUP) == 0)
+			return 0;
+
+		Directory subscription_group = db_->directory_dbm()->get(parent_node.resource_id);
+
+		if (user.id != subscription_group.owner_id)
+			return 0;
+
+		Node resource_node = db_->node_dbm()->get(node.resource_id);
+		
+		if ((resource_node.type & (PUBLIC_DIRECTORY | PUBLIC_CALENDAR)) == 0)
+			return 0;
+
+	} else {
+		return 0;
+	}
+	
 	return db_->node_dbm()->add(node);
 }
 

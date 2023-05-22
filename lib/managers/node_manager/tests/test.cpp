@@ -90,15 +90,12 @@ TEST_F(ManagersSuit, GetChildrens) {
 
 	EXPECT_FALSE(got.empty());
 
-	for (auto e = expected.begin(), g = got.begin(); e != expected.end() && g != got.end(); e++, g++) {
-		EXPECT_EQ(e->id, g->id);
-		EXPECT_EQ(e->parent_id, g->parent_id);
-		EXPECT_EQ(e->resource_id, g->resource_id);
-		EXPECT_EQ(e->type, g->type);
-	}
+	for (auto e = expected.begin(), g = got.begin(); e != expected.end() && g != got.end(); e++, g++)
+		EXPECT_TRUE(*e == *g);
 }
 
-// Разрешено, но не имеет смысла
+// Разрешено
+// Проверить добавление невалидных нод
 TEST_F(ManagersSuit, AddNodeToCurrentUser) {
 	auto user = managers->user_manager()->get();
 
@@ -107,11 +104,28 @@ TEST_F(ManagersSuit, AddNodeToCurrentUser) {
 		3,
 		0,
 		NodeType::PRIVATE_DIRECTORY
-	}
+	};
+
+	new_node.id = managers->node_manager()->add(new_node);
+	auto node = managers->node_manager()->get(new_node.id);
+
+	EXPECT_TRUE(node == new_node);
 }
 
 // Запрещено
-TEST_F(ManagersSuit, AddNodeToOthrerUser) {}
+TEST_F(ManagersSuit, AddNodeToOthrerUser) {
+	auto user = managers->user_manager()->get();
+
+	Node new_node = {
+		0,
+		15,
+		0,
+		NodeType::PRIVATE_DIRECTORY
+	};
+
+	size_t new_node_id = managers->node_manager()->add(new_node);
+	EXPECT_EQ(new_node_id, 0);
+}
 
 TEST_F(ManagersSuit, UpdateNodeForCurrentUser) {}
 TEST_F(ManagersSuit, UpdareNodeForOtherUser) {}

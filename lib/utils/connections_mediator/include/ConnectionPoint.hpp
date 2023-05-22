@@ -19,11 +19,15 @@ private:
 template<typename Signal, typename Target, typename... Args>
 void ConnectionPoint<Signal, Target, Args...>::add_receiver(Target* t, void(Target::*m)(Args...)) {
 	receivers_.push_back(std::make_pair(t, m));
+	for (auto sndr : senders_)
+		sndr->connect(receivers_.back().first, receivers_.back().second);
 }
 
 template<typename Signal, typename Target, typename... Args>
 void ConnectionPoint<Signal, Target, Args...>::add_sender(Signal* s) {
 	senders_.push_back(s);
+	for (auto rcvr : receivers_)
+		senders_.back()->connect(rcvr.first, rcvr.second);
 }
 
 template<typename Signal, typename Target, typename... Args>
