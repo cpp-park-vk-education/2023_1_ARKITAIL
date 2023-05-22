@@ -68,49 +68,46 @@ TEST_F(CalendarWTest, CallUpdateRangeDayCalendar) {
     EXPECT_FALSE(calendar_body_month->isHidden());
 }
 
-// TEST_F(CalendarWTest, CallUpdateRangeWeekCalendar) {
-//     auto calendar = std::make_unique<CalendarWMock>();
-//     auto header = calendar->addHeader(std::make_unique<CalendarHeaderStub>());
-//     auto calendar_body_day = calendar->addCalendarBodyDay(std::make_unique<CalendarBodyMock>());
-//     auto calendar_body_week =
-//     calendar->addCalendarBodyWeek(std::make_unique<CalendarBodyMock>()); auto calendar_body_month
-//     = calendar->addCalendarBodyMonth(std::make_unique<CalendarBodyMock>());
-//     calendar->addConnections();
-//     calendar->setHeaderRange();
-//     EXPECT_CALL(calendar, setCalendarRange(Range::WEEK)).Times(1);
-//     header->emitRangeChanged(Range::WEEK);
-//     EXPECT_FALSE(calendar_body_day->isHidden());
-//     EXPECT_TRUE(calendar_body_week->isHidden());
-//     EXPECT_FALSE(calendar_body_month->isHidden());
-// }
+TEST_F(CalendarWTest, CallUpdateRangeWeekCalendar) {
+    auto calendar = std::make_unique<CalendarWMock>();
+    auto header = calendar->addHeader(std::make_unique<CalendarHeaderStub>());
+    auto calendar_body_day = calendar->addCalendarBodyDay(std::make_unique<CalendarBodyMock>());
+    auto calendar_body_week = calendar->addCalendarBodyWeek(std::make_unique<CalendarBodyMock>());
+    auto calendar_body_month = calendar->addCalendarBodyMonth(std::make_unique<CalendarBodyMock>());
+    calendar->addConnections();
+    calendar->setHeaderRange();
+    EXPECT_CALL(calendar, setCalendarRange(Range::WEEK)).Times(1);
+    header->emitRangeChanged(Range::WEEK);
+    EXPECT_FALSE(calendar_body_day->isHidden());
+    EXPECT_TRUE(calendar_body_week->isHidden());
+    EXPECT_FALSE(calendar_body_month->isHidden());
+}
 
-// TEST_F(CalendarWTest, CallUpdateRangeMonthCalendar) {
-//     auto calendar = std::make_unique<CalendarWMock>();
-//     auto header = calendar->addHeader(std::make_unique<CalendarHeaderStub>());
-//     auto calendar_body_day = calendar->addCalendarBodyDay(std::make_unique<CalendarBodyMock>());
-//     auto calendar_body_week =
-//     calendar->addCalendarBodyWeek(std::make_unique<CalendarBodyMock>()); auto calendar_body_month
-//     = calendar->addCalendarBodyMonth(std::make_unique<CalendarBodyMock>());
-//     calendar->addConnections();
-//     calendar->setHeaderRange();
-//     EXPECT_CALL(calendar, setCalendarRange(Range::MONTH)).Times(1);
-//     header->emitRangeChanged(Range::MONTH);
-//     EXPECT_FALSE(calendar_body_day->isHidden());
-//     EXPECT_FALSE(calendar_body_week->isHidden());
-//     EXPECT_TRUE(calendar_body_month->isHidden());
-// }
+TEST_F(CalendarWTest, CallUpdateRangeMonthCalendar) {
+    auto calendar = std::make_unique<CalendarWMock>();
+    auto header = calendar->addHeader(std::make_unique<CalendarHeaderStub>());
+    auto calendar_body_day = calendar->addCalendarBodyDay(std::make_unique<CalendarBodyMock>());
+    auto calendar_body_week = calendar->addCalendarBodyWeek(std::make_unique<CalendarBodyMock>());
+    auto calendar_body_month = calendar->addCalendarBodyMonth(std::make_unique<CalendarBodyMock>());
+    calendar->addConnections();
+    calendar->setHeaderRange();
+    EXPECT_CALL(calendar, setCalendarRange(Range::MONTH)).Times(1);
+    header->emitRangeChanged(Range::MONTH);
+    EXPECT_FALSE(calendar_body_day->isHidden());
+    EXPECT_FALSE(calendar_body_week->isHidden());
+    EXPECT_TRUE(calendar_body_month->isHidden());
+}
 
-// TEST_F(CalendarWTest, CallUpdateDateCalendarBodyWeek) {
-//     auto calendar = std::make_unique<CalendarW>();
-//     auto header = calendar->addHeader(std::make_unique<CalendarHeaderStub>());
-//     auto calendar_body_day = calendar->addCalendarBodyDay(std::make_unique<CalendarBodyMock>());
-//     auto calendar_body_week =
-//     calendar->addCalendarBodyWeek(std::make_unique<CalendarBodyMock>()); auto calendar_body_month
-//     = calendar->addCalendarBodyMonth(std::make_unique<CalendarBodyMock>());
-//     calendar->addConnections();
-//     calendar->setHeaderRange();
-//     auto date = Wt::WDate(25, 2, 2003);
-//     EXPECT_CALL(*calendar_body_week, updateCalendar(date)).Times(1);
-//     header->setSelectedDate(date);
-//     header->emitSelectedDateChanged();
-// }
+TEST_F(CalendarWTest, CallUpdateDateCalendarBodyWeek) {
+    auto calendar = std::make_unique<CalendarW>();
+    auto header = calendar->addHeader(std::make_unique<CalendarHeaderStub>());
+    auto calendar_body_day = calendar->addCalendarBodyDay(std::make_unique<CalendarBodyMock>());
+    auto calendar_body_week = calendar->addCalendarBodyWeek(std::make_unique<CalendarBodyMock>());
+    auto calendar_body_month = calendar->addCalendarBodyMonth(std::make_unique<CalendarBodyMock>());
+    calendar->addConnections();
+    calendar->setHeaderRange();
+    auto date = Wt::WDate(25, 2, 2003);
+    EXPECT_CALL(*calendar_body_week, updateCalendar(date)).Times(1);
+    header->setSelectedDate(date);
+    header->emitSelectedDateChanged();
+}

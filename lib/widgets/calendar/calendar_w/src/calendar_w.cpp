@@ -6,6 +6,7 @@
 #include <Wt/WPushButton.h>
 #include <Wt/WString.h>
 
+#include <map>
 #include <memory>
 
 #include "Managers.hpp"
@@ -17,42 +18,29 @@
 #include "tree_w.hpp"
 #include "week_w.hpp"
 
-CalendarW::CalendarW() :
-    calendars_(3) {
-    std::cout << "TYPIC1\n\n" << std::endl;
-    auto mgr = SessionScopeMap::instance().get()->managers();
-
+CalendarW::CalendarW() {
     auto layout = setLayout(std::make_unique<Wt::WHBoxLayout>());
+
     auto tree_panel = layout->addWidget(std::make_unique<Wt::WContainerWidget>());
     tree_panel->setStyleClass("start-0");
-    auto tree_panel_layout = tree_panel->setLayout(std::make_unique<Wt::WHBoxLayout>());
-    tree_ = tree_panel_layout->addWidget(std::make_unique<TreeW>());
-    tree_->setRoot();
-    std::cout << "TYPIC\n\n" << std::endl;
 
-    auto user_manager = mgr->user_manager();
-    std::cout << "Managers::instance().user_manager\n\n" << std::endl;
+    tree_panel_layout = tree_panel->setLayout(std::make_unique<Wt::WHBoxLayout>());
 
-    auto node_manager = mgr->node_manager();
-    std::cout << "Managers::instance().node_manager\n\n" << std::endl;
+    calendar_box_ = layout->addWidget(std::make_unique<WContainerWidget>(), 1);
+}
 
-    auto id = user_manager->get().root_id;
-    std::cout << "user_manager->get().root_id\n\n" << std::endl;
+TreeW* CalendarW::addTree(std::unique_ptr<TreeW> tree) {
+    tree_ = tree_panel_layout->addWidget(std::move(tree));
 
-    auto node = node_manager->get(id);
-    std::cout << "node_manager->get(id)\n\n" << std::endl;
-
+    // В дальнейшем метод setRoot будет вызываться по сигналу перехода на страницу
+    auto mgr = SessionScopeMap::instance().get()->managers();
+    auto node = mgr->node_manager()->get(mgr->user_manager()->get().root_id);
     tree_->setRoot(node);
-    std::cout << "tree_->setRoot(node)\n\n" << std::endl;
 
     show_tree_button_ =
         tree_panel_layout->addWidget(std::make_unique<Wt::WPushButton>(Wt::WString(">")));
     show_tree_button_->setStyleClass("btn-light rounded-end rounded-0 border-start-0");
-    calendar_box_ = layout->addWidget(std::make_unique<WContainerWidget>(), 1);
-}
-
-void CalendarW::setHeaderRange() {
-    header_->setRange();
+    return tree_;
 }
 
 ICalendarHeaderW* CalendarW::addHeader(std::unique_ptr<ICalendarHeaderW> header) {
@@ -79,8 +67,9 @@ ICalendarBodyW* CalendarW::addCalendarBodyMonth(std::unique_ptr<ICalendarBodyW> 
 void CalendarW::addConnections() {
     show_tree_button_->clicked().connect(this, &CalendarW::showTree);
     header_->rangeChanged().connect(this, &CalendarW::setCalendarRange);
-    for (auto&& calendar : calendars_) {
-        header_->selectedDateChanged().connect(calendar, &ICalendarBodyW::updateCalendar);
+
+    for (auto calendar : calendars_) {
+        header_->selectedDateChanged().connect(calendar.second, &ICalendarBodyW::updateCalendar);
     }
 }
 

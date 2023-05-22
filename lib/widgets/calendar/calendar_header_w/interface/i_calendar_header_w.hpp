@@ -8,7 +8,7 @@
 #include <memory>
 
 enum Range {
-    MONTH = 0,
+    MONTH,
     WEEK,
     DAY
 };
@@ -29,4 +29,5 @@ class ICalendarHeaderW : public Wt::WContainerWidget {
     virtual void switchToToday() = 0;
     virtual void switchToPrev() = 0;
     virtual void switchToNext() = 0;
+    virtual void balanceSelectedDate() = 0;
 };

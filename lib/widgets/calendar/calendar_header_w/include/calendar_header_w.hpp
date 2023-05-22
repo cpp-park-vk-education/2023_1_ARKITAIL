@@ -24,12 +24,12 @@ class CalendarHeaderW : public ICalendarHeaderW {
     void setRange() override;
     Wt::WString makeTitle() override;
 
-    void setSelectedDate(std::unique_ptr<Wt::WDate> new_date);
+    void setSelectedDate(Wt::WDate new_date);
     void setOptionsRange(int i);
 
   protected:
     Range range_;
-    std::unique_ptr<Wt::WDate> selected_date_;
+    Wt::WDate selected_date_;
     Wt::WPushButton* today_button_;
     Wt::WPushButton* prev_button_;
     Wt::WPushButton* next_button_;
@@ -47,4 +47,5 @@ class CalendarHeaderW : public ICalendarHeaderW {
     void switchToToday() override;
     void switchToPrev() override;
     void switchToNext() override;
+    void balanceSelectedDate() override;
 };

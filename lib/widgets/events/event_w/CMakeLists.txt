@@ -4,4 +4,5 @@ target_include_directories(event_w PUBLIC include)
 
 target_link_libraries(event_w PUBLIC
                       calendula_compiler_flags
-                      event_d)
+                      event_d
+                      time_utils)

@@ -7,7 +7,7 @@
 class CalendarHeaderWTest : public ::testing::Test {
   protected:
     void SetUp() override {
-        header_.setSelectedDate(std::make_unique<Wt::WDate>(25, 2, 2003));
+        header_.setSelectedDate(Wt::WDate(25, 2, 2003));
     }
 
     void TearDown() override {}
@@ -27,7 +27,7 @@ TEST_F(CalendarHeaderWTest, WeekRangeTitle) {
 
 TEST_F(CalendarHeaderWTest, DayRangeTitle) {
     header_.setOptionsRange(2);
-    header_.setSelectedDate(std::make_unique<Wt::WDate>(25, 2, 2003));
+    header_.setSelectedDate(Wt::WDate(25, 2, 2003));
     ASSERT_EQ(header_.makeTitle().toUTF8(), "25 February");
 }
 
