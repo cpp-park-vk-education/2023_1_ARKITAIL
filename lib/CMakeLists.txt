@@ -10,3 +10,15 @@ add_subdirectory(commentDbManager)
 
 
 add_subdirectory(mainModel)
+add_subdirectory(widgets)
+
+add_subdirectory(application)
+
+add_subdirectory(managers)
+add_subdirectory(entities)
+add_subdirectory(utils)
+
+add_subdirectory(db_managers)
+
+add_subdirectory(unmet_deps)
+

@@ -1,3 +1,6 @@
 build
+dummy
 .cache
-.devcontainer.json
+*.json
+*.sh
+
