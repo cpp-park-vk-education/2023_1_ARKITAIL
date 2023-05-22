@@ -2,7 +2,7 @@
 
 #include "mainModel.hpp"
 
-struct Ret_Dir {
+struct RetDir {
   int dir_id;
   std::string name;
   std::string description;
@@ -11,12 +11,12 @@ struct Ret_Dir {
 
 class DirectoryManager {
 public:
-  int add(Ret_Dir &);
-  void remove(const int id);
-  void update(Ret_Dir &);
-  Ret_Dir get(const int id);
+  int Add(RetDir &);
+  void Remove(int id);
+  void Update(RetDir &);
+  RetDir Get(int id);
 
 private:
-  int id;
+  int id_;
   dbo::Session &session_;
 };

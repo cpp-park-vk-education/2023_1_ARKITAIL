@@ -2,36 +2,36 @@
 
 #include "baseForAll.hpp"
 
-class users;
-class calendars;
-class events;
-class nodes;
-class directory;
-class tags;
-class profiles;
-class comments;
+class Users;
+class Calendars;
+class Events;
+class Nodes;
+class Directories;
+class Tags;
+class Profiles;
+class Comments;
 
-class calendars {
+class Calendars {
 public:
-  dbo::ptr<users> user; // Owner
+  dbo::ptr<Users> user; // Owner
   std::string name;     // name
   std::string description;
-  dbo::collection<dbo::ptr<events>> event; // event
-  dbo::ptr<nodes> node;                    // p_node
+  dbo::collection<dbo::ptr<Events>> event; // event
+  dbo::ptr<Nodes> node;                    // p_node
 
   template <class Action> void persist(Action &a) {
     dbo::field(a, name, "name");
     dbo::hasMany(a, event, dbo::ManyToOne, "calendar");
     dbo::field(a, description, "description");
-    dbo::belongsTo(a, user, "user");
+    dbo::belongsTo(a, user, "User");
     //dbo::belongsTo(a, node, "node");
   }
 };
 
-class profiles {
+class Profiles {
 public:
   std::string name;
-  dbo::ptr<nodes> node;
+  dbo::ptr<Nodes> node;
 
   template <class Action> void persist(Action &a) {
     dbo::field(a, name, "name");
@@ -39,11 +39,11 @@ public:
   }
 };
 
-class comments {
+class Comments {
 public:
   std::string name;
   std::string text;
-  dbo::ptr<events> event;
+  dbo::ptr<Events> event;
 
   template <class Action> void persist(Action &a) {
     dbo::field(a, name, "name");
@@ -52,11 +52,11 @@ public:
   }
 };
 
-class directory {
+class Directories {
 public:
   std::string name;
   std::string description;
-  dbo::ptr<nodes> node;
+  dbo::ptr<Nodes> node;
 
   template <class Action> void persist(Action &a) {
     dbo::field(a, name, "name");
@@ -65,14 +65,14 @@ public:
   }
 };
 
-class events {
+class Events {
 public:
   std::string name;
   Wt::WDateTime time_start;
   Wt::WDateTime time_end;
   std::string description;
-  dbo::ptr<calendars> calendar;
-  dbo::collection<dbo::ptr<comments>> comment;
+  dbo::ptr<Calendars> calendar;
+  dbo::collection<dbo::ptr<Comments>> comment;
 
   template <class Action> void persist(Action &a) {
     dbo::field(a, name, "name");
@@ -85,41 +85,41 @@ public:
 
 enum class Type {
   Root = 0,
-  Private_Group = 1,
-  Private_Directory = 2,
-  Private_Calendar = 3,
-  Public_Group = 4,
-  Public_Directory = 5,
-  Public_Calendar = 6,
-  Subscription_Group = 7,
+  PrivateGroup = 1,
+  PrivateDirectory = 2,
+  PrivateCalendar = 3,
+  PublicGroup = 4,
+  PublicDirectory = 5,
+  PublicCalendar = 6,
+  SubscriptionGroup = 7,
   Mount = 8,
-  Profile_Group = 9,
+  ProfileGroup = 9,
   Profile = 10
 };
 
-class nodes {
+class Nodes {
 public:
   Type type;
-  dbo::ptr<nodes> parent;
-  dbo::collection<dbo::ptr<tags>> tag;
+  dbo::ptr<Nodes> parent;
+  dbo::collection<dbo::ptr<Tags>> tag;
   int resource_id;
 
   template <class Action> void persist(Action &a) {
     dbo::field(a, type, "type");
     dbo::belongsTo(a, parent, "parent");
-    dbo::hasMany(a, tag, dbo::ManyToMany, "node_tags");
+    dbo::hasMany(a, tag, dbo::ManyToMany, "NodeTags");
     dbo::field(a, resource_id, "resource_id");
   }
 };
 
-class tags {
+class Tags {
 public:
   std::string name;
-  dbo::collection<dbo::ptr<nodes>> node;
+  dbo::collection<dbo::ptr<Nodes>> node;
 
   template <class Action> void persist(Action &a) {
     dbo::field(a, name, "name");
-    dbo::hasMany(a, node, dbo::ManyToMany, "node_tags");
+    dbo::hasMany(a, node, dbo::ManyToMany, "NodeTags");
   }
 };
 
@@ -129,7 +129,7 @@ std::vector<unsigned char> read_file(const std::string &filename) {
                                     std::istreambuf_iterator<char>());
 }
 
-class users {
+class Users {
 public:
   int root_id;
   std::string login;
@@ -138,7 +138,7 @@ public:
   std::string description;
   std::string password;
   std::vector<unsigned char> avatar;
-  dbo::collection<dbo::ptr<calendars>> calendar;
+  dbo::collection<dbo::ptr<Calendars>> calendar;
 
   template <class Action> void persist(Action &a) {
     dbo::field(a, login, "login");
@@ -147,6 +147,6 @@ public:
     dbo::field(a, description, "description");
     dbo::field(a, password, "password");
     dbo::field(a, avatar, "avatar");
-    dbo::hasMany(a, calendar, dbo::ManyToOne, "user");
+    dbo::hasMany(a, calendar, dbo::ManyToOne, "User");
   }
 };

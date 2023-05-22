@@ -2,7 +2,7 @@
 
 #include "mainModel.hpp"
 
-struct Ret_User{
+struct RetUser{
   int user_id;
     std::string login;
     std::string email;
@@ -12,9 +12,9 @@ struct Ret_User{
 
 class UserManager {
 public:
-    Ret_User get(const int id);
+    RetUser Get(int id);
 
 private:
-  int id;
+  int id_;
   dbo::Session &session_;
 };

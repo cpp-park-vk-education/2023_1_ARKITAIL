@@ -1,28 +1,28 @@
 #include "calendarDbManager.hpp"
 
-int CalendarManager::add(Ret_Calen &ret) {
+int CalendarManager::Add(RetCalen &ret) {
   dbo::Transaction transaction(session_);
 
-  std::unique_ptr<calendars> calendar{new calendars()};
+  std::unique_ptr<Calendars> calendar{new Calendars()};
   calendar->name = ret.name;
   calendar->description = ret.description;
-  calendar->node = session_.find<nodes>().where("id = ?").bind(ret.node_id);
-  calendar->user = session_.find<users>().where("id = ?").bind(ret.user_id);
+  calendar->node = session_.find<Nodes>().where("id = ?").bind(ret.node_id);
+  calendar->user = session_.find<Users>().where("id = ?").bind(ret.user_id);
 
-  dbo::ptr<calendars> calendarPtr = session_.add(std::move(calendar));
+  dbo::ptr<Calendars> calendarPtr = session_.add(std::move(calendar));
   session_.flush();
   transaction.commit();
-  id = calendarPtr.id();
-  return id;
+  id_ = calendarPtr.id();
+  return id_;
 
-  return id;
+  return id_;
 }
 
-void CalendarManager::remove(const int id) {
+void CalendarManager::Remove(int id) {
   dbo::Transaction transaction(session_);
 
-  dbo::ptr<calendars> calendar =
-      session_.find<calendars>().where("id = ?").bind(id);
+  dbo::ptr<Calendars> calendar =
+      session_.find<Calendars>().where("id = ?").bind(id);
   if (!calendar) {
     return;
   }
@@ -30,29 +30,29 @@ void CalendarManager::remove(const int id) {
   transaction.commit();
 }
 
-void CalendarManager::update(Ret_Calen &ret) {
+void CalendarManager::Update(RetCalen &ret) {
   dbo::Transaction transaction(session_);
 
-  dbo::ptr<calendars> calendar =
-      session_.find<calendars>().where("name = ?").bind(ret.name);
+  dbo::ptr<Calendars> calendar =
+      session_.find<Calendars>().where("name = ?").bind(ret.name);
   if (!calendar) {
     return;
   }
   calendar.modify()->name = ret.name;
   calendar.modify()->description = ret.description;
   calendar.modify()->node =
-      session_.find<nodes>().where("id = ?").bind(ret.node_id);
+      session_.find<Nodes>().where("id = ?").bind(ret.node_id);
   calendar.modify()->user =
-      session_.find<users>().where("id = ?").bind(ret.user_id);
+      session_.find<Users>().where("id = ?").bind(ret.user_id);
 
   transaction.commit();
 }
-Ret_Calen CalendarManager::get(const int id) {
+RetCalen CalendarManager::Get(int id) {
   dbo::Transaction transaction(session_);
 
-  Ret_Calen ret;
-  dbo::ptr<calendars> calendar =
-      session_.find<calendars>().where("id = ?").bind(id);
+  RetCalen ret;
+  dbo::ptr<Calendars> calendar =
+      session_.find<Calendars>().where("id = ?").bind(id);
   if (!calendar) {
     ret.name = "error";
     return ret;
@@ -67,22 +67,22 @@ Ret_Calen CalendarManager::get(const int id) {
   return ret;
 }
 
-std::vector<Ret_Event> CalendarManager::getEvents(const int id) {
+std::vector<RetEvent> CalendarManager::GetEvents(int id) {
 
-  Ret_Event ret;
-  std::vector<Ret_Event> v;
+  RetEvent ret;
+  std::vector<RetEvent> v;
 
   dbo::Transaction transaction(session_);
-  dbo::ptr<calendars> calendar =
-      session_.find<calendars>().where("id = ?").bind(id);
-  dbo::collection<dbo::ptr<events>> event =
-      session_.find<events>().where("calendar_id = ?").bind(id);
+  dbo::ptr<Calendars> calendar =
+      session_.find<Calendars>().where("id = ?").bind(id);
+  dbo::collection<dbo::ptr<Events>> event =
+      session_.find<Events>().where("calendar_id = ?").bind(id);
   if (!calendar) {
     ret.name = "error";
     v.push_back(ret);
     return v;
   }
-  for (const dbo::ptr<events> &eve : event) {
+  for (const dbo::ptr<Events> &eve : event) {
 
     ret.name = eve->name;
     ret.description = eve->description;

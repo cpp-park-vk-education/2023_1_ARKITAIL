@@ -1,26 +1,24 @@
 #include "profileDbManager.hpp"
 
-int ProfileManager::add(Ret_Prof &ret) {
+int ProfileManager::Add(RetProf &ret) {
   dbo::Transaction transaction(session_);
 
-  std::unique_ptr<profiles> profile{new profiles()};
+  std::unique_ptr<Profiles> profile{new Profiles()};
   profile->name = ret.name;
-  profile->node = session_.find<nodes>().where("id = ?").bind(ret.node_id);
+  profile->node = session_.find<Nodes>().where("id = ?").bind(ret.node_id);
 
-  dbo::ptr<profiles> profilePtr = session_.add(std::move(profile));
+  dbo::ptr<Profiles> profilePtr = session_.add(std::move(profile));
   session_.flush();
   transaction.commit();
-  id = profilePtr.id();
-  return id;
-
-  return id;
+  id_ = profilePtr.id();
+  return id_;
 }
 
-void ProfileManager::remove(const int id) {
+void ProfileManager::Remove(int id) {
   dbo::Transaction transaction(session_);
 
-  dbo::ptr<profiles> profile =
-      session_.find<profiles>().where("id = ?").bind(id);
+  dbo::ptr<Profiles> profile =
+      session_.find<Profiles>().where("id = ?").bind(id);
   if (!profile) {
     return;
   }
@@ -28,12 +26,12 @@ void ProfileManager::remove(const int id) {
   transaction.commit();
 }
 
-Ret_Prof ProfileManager::get(const int id) {
+RetProf ProfileManager::Get(int id) {
   dbo::Transaction transaction(session_);
 
-  Ret_Prof ret;
-  dbo::ptr<profiles> profile =
-      session_.find<profiles>().where("id = ?").bind(id);
+  RetProf ret;
+  dbo::ptr<Profiles> profile =
+      session_.find<Profiles>().where("id = ?").bind(id);
   if (!profile) {
     ret.name = "error";
     return ret;

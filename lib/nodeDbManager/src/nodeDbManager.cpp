@@ -1,27 +1,27 @@
 #include "nodeDbManager.hpp"
 
-int NodeManager::add(Ret_Node &ret) {
-  Ret_Tag t_ret;
+int NodeManager::Add(RetNode &ret) {
+  RetTag t_ret;
   dbo::Transaction transaction(session_);
 
-  std::unique_ptr<nodes> node{new nodes()};
-  node->parent = session_.find<nodes>().where("id = ?").bind(ret.parent_id);
+  std::unique_ptr<Nodes> node{new Nodes()};
+  node->parent = session_.find<Nodes>().where("id = ?").bind(ret.parent_id);
   node->resource_id = ret.resource_id;
   node->type = ret.type;
 
-  dbo::ptr<nodes> nodePtr = session_.add(std::move(node));
-  nodePtr = session_.find<nodes>().where("node_id = ?").bind(ret.node_id);
+  dbo::ptr<Nodes> nodePtr = session_.add(std::move(node));
+  nodePtr = session_.find<Nodes>().where("node_id = ?").bind(ret.node_id);
 
   session_.flush();
   transaction.commit();
-  id = nodePtr.id();
-  return id;
+  id_ = nodePtr.id();
+  return id_;
 }
 
-void NodeManager::remove(const int id) {
+void NodeManager::Remove(int id) {
   dbo::Transaction transaction(session_);
 
-  dbo::ptr<nodes> node = session_.find<nodes>().where("id = ?").bind(id);
+  dbo::ptr<Nodes> node = session_.find<Nodes>().where("id = ?").bind(id);
   if (!node) {
     return;
   }
@@ -29,28 +29,28 @@ void NodeManager::remove(const int id) {
   transaction.commit();
 }
 
-void NodeManager::update(Ret_Node &ret) {
+void NodeManager::Update(RetNode &ret) {
   dbo::Transaction transaction(session_);
 
-  dbo::ptr<nodes> node =
-      session_.find<nodes>().where("resource_id = ?").bind(ret.resource_id);
+  dbo::ptr<Nodes> node =
+      session_.find<Nodes>().where("resource_id = ?").bind(ret.resource_id);
   if (!node) {
     return;
   }
   node.modify()->parent =
-      session_.find<nodes>().where("id = ?").bind(ret.parent_id);
+      session_.find<Nodes>().where("id = ?").bind(ret.parent_id);
   node.modify()->resource_id = ret.resource_id;
   node.modify()->type = ret.type;
 
   transaction.commit();
 }
 
-Ret_Node NodeManager::get(const int id) {
+RetNode NodeManager::Get(int id) {
   dbo::Transaction transaction(session_);
 
   std::vector<int> tagv;
-  Ret_Node ret;
-  dbo::ptr<nodes> node = session_.find<nodes>().where("id = ?").bind(id);
+  RetNode ret;
+  dbo::ptr<Nodes> node = session_.find<Nodes>().where("id = ?").bind(id);
   if (!node) {
     return ret;
   }
@@ -58,7 +58,7 @@ Ret_Node NodeManager::get(const int id) {
   ret.type = node->type;
   ret.resource_id = node->resource_id;
   for (int i = 0; i < node->tag.size(); ++i) {
-    dbo::ptr<tags> id = session_.find<tags>().where("node_id = ?").bind(id);
+    dbo::ptr<Tags> id = session_.find<Tags>().where("node_id = ?").bind(id);
     tagv.push_back(id.id());
   }
   ret.tag_id = tagv;
@@ -68,16 +68,16 @@ Ret_Node NodeManager::get(const int id) {
   return ret;
 }
 
-void NodeManager::tag(const int id, Ret_Tag &rec) {
+void NodeManager::Tag(int id, RetTag &rec) {
   dbo::Transaction transaction(session_);
 
-  dbo::ptr<tags> tag = session_.find<tags>().where("name = ?").bind(rec.name);
-  dbo::ptr<nodes> node = session_.find<nodes>().where("id = ?").bind(id);
+  dbo::ptr<Tags> tag = session_.find<Tags>().where("name = ?").bind(rec.name);
+  dbo::ptr<Nodes> node = session_.find<Nodes>().where("id = ?").bind(id);
   if (!node) {
     return;
   }
   if (!tag) {
-    tag = session_.add(std::unique_ptr<tags>{new tags()});
+    tag = session_.add(std::unique_ptr<Tags>{new Tags()});
     tag.modify()->name = rec.name;
   }
 
@@ -87,26 +87,26 @@ void NodeManager::tag(const int id, Ret_Tag &rec) {
   transaction.commit();
 }
 
-void NodeManager::move(const int id, const int destination_id) {
+void NodeManager::Move(int id, const int destination_id) {
   dbo::Transaction transaction(session_);
 
-  dbo::ptr<nodes> node = session_.find<nodes>().where("id = ?").bind(id);
+  dbo::ptr<Nodes> node = session_.find<Nodes>().where("id = ?").bind(id);
   if (!node) {
     return;
   }
   node.modify()->parent =
-      session_.find<nodes>().where("id = ?").bind(destination_id);
+      session_.find<Nodes>().where("id = ?").bind(destination_id);
 
   transaction.commit();
 }
 
-std::vector<Ret_Node> NodeManager::getChildren(const int id) {
+std::vector<RetNode> NodeManager::GetChildren(int id) {
   dbo::Transaction transaction(session_);
-  Ret_Node ret;
-  std::vector<Ret_Node> children;
-  dbo::collection<dbo::ptr<nodes>> node =
-      session_.find<nodes>().where("parent = ?").bind(id);
-  for (const dbo::ptr<nodes> &nod : node) {
+  RetNode ret;
+  std::vector<RetNode> children;
+  dbo::collection<dbo::ptr<Nodes>> node =
+      session_.find<Nodes>().where("parent = ?").bind(id);
+  for (const dbo::ptr<Nodes> &nod : node) {
     std::vector<int> tagg;
     ret.parent_id = id;
     ret.resource_id = nod->resource_id;

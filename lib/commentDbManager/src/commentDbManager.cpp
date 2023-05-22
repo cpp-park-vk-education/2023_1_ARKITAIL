@@ -1,27 +1,25 @@
 #include "commentDbManager.hpp"
 
-int CommentManager::add(Ret_Comm &ret) {
+int CommentManager::Add(RetComm &ret) {
   dbo::Transaction transaction(session_);
 
-  std::unique_ptr<comments> comment{new comments()};
+  std::unique_ptr<Comments> comment{new Comments()};
   comment->name = ret.name;
   comment->text = ret.text;
-  comment->event = session_.find<events>().where("id = ?").bind(ret.event_id);
+  comment->event = session_.find<Events>().where("id = ?").bind(ret.event_id);
 
-  dbo::ptr<comments> commentPtr = session_.add(std::move(comment));
+  dbo::ptr<Comments> commentPtr = session_.add(std::move(comment));
   session_.flush();
   transaction.commit();
-  id = commentPtr.id();
-  return id;
-
-  return id;
+  id_ = commentPtr.id();
+  return id_;
 }
 
-void CommentManager::remove(const int id) {
+void CommentManager::Remove(int id) {
   dbo::Transaction transaction(session_);
 
-  dbo::ptr<comments> comment =
-      session_.find<comments>().where("id = ?").bind(id);
+  dbo::ptr<Comments> comment =
+      session_.find<Comments>().where("id = ?").bind(id);
   if (!comment) {
     return;
   }
@@ -29,12 +27,12 @@ void CommentManager::remove(const int id) {
   transaction.commit();
 }
 
-Ret_Comm CommentManager::get(const int id) {
+RetComm CommentManager::Get(int id) {
   dbo::Transaction transaction(session_);
 
-  Ret_Comm ret;
-  dbo::ptr<comments> comment =
-      session_.find<comments>().where("id = ?").bind(id);
+  RetComm ret;
+  dbo::ptr<Comments> comment =
+      session_.find<Comments>().where("id = ?").bind(id);
   if (!comment) {
     ret.name = "error";
     return ret;

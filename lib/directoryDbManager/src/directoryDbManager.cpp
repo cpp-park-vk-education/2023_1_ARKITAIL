@@ -1,25 +1,25 @@
 #include "directoryDbManager.hpp"
 
-int DirectoryManager::add(Ret_Dir &ret) {
+int DirectoryManager::Add(RetDir &ret) {
   dbo::Transaction transaction(session_);
 
-  std::unique_ptr<directory> direct{new directory()};
+  std::unique_ptr<Directories> direct{new Directories()};
   direct->name = ret.name;
   direct->description = ret.description;
-  direct->node = session_.find<nodes>().where("id = ?").bind(ret.node_id);
+  direct->node = session_.find<Nodes>().where("id = ?").bind(ret.node_id);
 
-  dbo::ptr<directory> directPtr = session_.add(std::move(direct));
+  dbo::ptr<Directories> directPtr = session_.add(std::move(direct));
   session_.flush();
   transaction.commit();
-  id = directPtr.id();
-  return id;
+  id_ = directPtr.id();
+  return id_;
 }
 
-void DirectoryManager::remove(const int id) {
+void DirectoryManager::Remove(int id) {
   dbo::Transaction transaction(session_);
 
-  dbo::ptr<directory> direct =
-      session_.find<directory>().where("id = ?").bind(id);
+  dbo::ptr<Directories> direct =
+      session_.find<Directories>().where("id = ?").bind(id);
   if (!direct) {
     return;
   }
@@ -27,28 +27,28 @@ void DirectoryManager::remove(const int id) {
   transaction.commit();
 }
 
-void DirectoryManager::update(Ret_Dir &ret) {
+void DirectoryManager::Update(RetDir &ret) {
   dbo::Transaction transaction(session_);
 
-  dbo::ptr<directory> direct =
-      session_.find<directory>().where("name = ?").bind(ret.name);
+  dbo::ptr<Directories> direct =
+      session_.find<Directories>().where("name = ?").bind(ret.name);
   if (!direct) {
     return;
   }
   direct.modify()->name = ret.name;
   direct.modify()->description = ret.description;
   direct.modify()->node =
-      session_.find<nodes>().where("id = ?").bind(ret.node_id);
+      session_.find<Nodes>().where("id = ?").bind(ret.node_id);
 
   transaction.commit();
 }
 
-Ret_Dir DirectoryManager::get(const int id) {
+RetDir DirectoryManager::Get(int id) {
   dbo::Transaction transaction(session_);
 
-  Ret_Dir ret;
-  dbo::ptr<directory> direct =
-      session_.find<directory>().where("id = ?").bind(id);
+  RetDir ret;
+  dbo::ptr<Directories> direct =
+      session_.find<Directories>().where("id = ?").bind(id);
   if (!direct) {
     ret.name = "error";
     return ret;

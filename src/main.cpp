@@ -312,8 +312,8 @@ int main() {
   Events eventss = session.find<events>();
 
   // Получаем список ивентов из базы данных
-  typedef dbo::collection<dbo::ptr<calendars>> Calendars;
-  Calendars calendarss = session.find<calendars>();
+  //typedef dbo::collection<dbo::ptr<calendars>> Calendars;
+  //Calendars calendarss = session.find<calendars>();
 
   // std::unique_ptr<users> user{new users()};
   // user->login = "Joeb";

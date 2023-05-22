@@ -3,7 +3,7 @@
 #include "mainModel.hpp"
 
 
-struct Ret_Prof {
+struct RetProf {
   int prof_id;
   std::string name;
   int node_id;
@@ -11,12 +11,12 @@ struct Ret_Prof {
 
 class ProfileManager {
 public:
-  int add(Ret_Prof&);
-  void remove(const int id);
-  Ret_Prof get(const int id);
+  int Add(RetProf&);
+  void Remove(int id);
+  RetProf Get(int id);
 
 
 private:
-  int id;
+  int id_;
   dbo::Session &session_;
 };

@@ -2,7 +2,7 @@
 
 #include "mainModel.hpp"
 
-struct Ret_Tag {
+struct RetTag {
   int tag_id;
   std::string name;
 };
@@ -11,11 +11,11 @@ class TagManager {
 public:
   TagManager(dbo::Session &session) : session_(session) {}
 
-  int add(Ret_Tag &);
-  void remote(const int id);
-  Ret_Tag get(const int id);
+  int Add(RetTag &);
+  void Remove(int id);
+  RetTag Get(int id);
 
 private:
-  int id;
+  int id_;
   dbo::Session &session_;
 };

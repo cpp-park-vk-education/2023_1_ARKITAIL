@@ -2,13 +2,13 @@
 
 #include "mainModel.hpp"
 
-struct Ret_Tag {
+struct RetTag {
   int tag_id;
   std::string name;
   std::vector<int> node_id;
 };
 
-struct Ret_Node {
+struct RetNode {
   int node_id;
   int parent_id;
   Type type;
@@ -18,17 +18,17 @@ struct Ret_Node {
 
 class NodeManager {
 public:
-  int add(Ret_Node &);
-  void remove(const int id);
-  void update(Ret_Node &);
-  Ret_Node get(const int id);
+  int Add(RetNode &);
+  void Remove(int id);
+  void Update(RetNode &);
+  RetNode Get(int id);
 
-  void tag(const int id, Ret_Tag &);
-  void move(const int id, const int destination_id);
-  std::vector<Ret_Node> getChildren(const int id);
+  void Tag(int id, RetTag &);
+  void Move(int id, const int destination_id);
+  std::vector<RetNode> GetChildren(int id);
 
 private:
-  int id;
-  int destination_id;
+  int id_;
+  int destination_id_;
   dbo::Session &session_;
 };

@@ -3,7 +3,7 @@
 #include "mainModel.hpp"
 
 
-struct Ret_Comm {
+struct RetComm {
   int com_id;
   std::string name;
   std::string text;
@@ -12,12 +12,12 @@ struct Ret_Comm {
 
 class CommentManager {
 public:
-  int add(Ret_Comm&);
-  void remove(const int id);
-  Ret_Comm get(const int id);
+  int Add(RetComm&);
+  void Remove(int id);
+  RetComm Get(int id);
 
 
 private:
-  int id;
+  int id_;
   dbo::Session &session_;
 };

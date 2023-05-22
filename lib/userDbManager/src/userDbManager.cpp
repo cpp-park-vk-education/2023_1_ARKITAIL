@@ -1,11 +1,11 @@
 #include "userDbManager.hpp"
 
-Ret_User UserManager::get(const int id) {
+RetUser UserManager::Get(int id) {
   dbo::Transaction transaction(session_);
 
-  Ret_User ret;
-  dbo::ptr<users> user =
-      session_.find<users>().where("id = ?").bind(id);
+  RetUser ret;
+  dbo::ptr<Users> user =
+      session_.find<Users>().where("id = ?").bind(id);
   ret.email = user->email;
   ret.login = user->login;
   ret.nickname = user->nickname;
