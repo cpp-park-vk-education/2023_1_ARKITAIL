@@ -1,6 +1,6 @@
 #include "CalendarDbManager.hpp"
 
-int CalendarDbManager::Add(Calendar &ret) {
+int CalendarDbManager::add(const Calendar &ret) {
   dbo::Transaction transaction(session_);
 
   std::unique_ptr<Calendars> calendar{new Calendars()};
@@ -16,9 +16,9 @@ int CalendarDbManager::Add(Calendar &ret) {
   return id_;
 }
 
-void CalendarDbManager::Remove(int id) {
+void CalendarDbManager::remove(int) {
   dbo::Transaction transaction(session_);
-
+  int id;
   dbo::ptr<Calendars> calendar =
       session_.find<Calendars>().where("id = ?").bind(id);
   if (!calendar) {
@@ -28,7 +28,7 @@ void CalendarDbManager::Remove(int id) {
   transaction.commit();
 }
 
-void CalendarDbManager::Update(Calendar &ret) {
+void CalendarDbManager::update(const Calendar &ret) {
   dbo::Transaction transaction(session_);
 
   dbo::ptr<Calendars> calendar =
@@ -43,9 +43,9 @@ void CalendarDbManager::Update(Calendar &ret) {
 
   transaction.commit();
 }
-Calendar CalendarDbManager::Get(int id) {
+const Calendar &CalendarDbManager::get(int) {
   dbo::Transaction transaction(session_);
-
+  int id;
   Calendar ret;
   dbo::ptr<Calendars> calendar =
       session_.find<Calendars>().where("id = ?").bind(id);
@@ -62,10 +62,10 @@ Calendar CalendarDbManager::Get(int id) {
   return ret;
 }
 
-std::vector<RetEvent> CalendarDbManager::GetEvents(int id) {
-
-  RetEvent ret;
-  std::vector<RetEvent> v;
+std::vector<Event> CalendarDbManager::getEvents(int) {
+  int id;
+  Event ret;
+  std::vector<Event> v;
 
   dbo::Transaction transaction(session_);
   dbo::ptr<Calendars> calendar =
@@ -82,8 +82,8 @@ std::vector<RetEvent> CalendarDbManager::GetEvents(int id) {
     ret.name = eve->name;
     ret.description = eve->description;
     ret.calendar_id = eve->calendar.id();
-    ret.t_start = eve->time_start.toString().toUTF8();
-    ret.t_end = eve->time_end.toString().toUTF8();
+    ret.begin_point = eve->time_start.toString().toUTF8();
+    ret.end_point = eve->time_end.toString().toUTF8();
 
     v.push_back(ret);
   }

@@ -13,8 +13,8 @@ Event::Event(
     int calendar_id,
     std::string name,
     std::string description,
-    std::chrono::time_point<std::chrono::steady_clock> begin_point,
-    std::chrono::time_point<std::chrono::steady_clock> end_point
+    std::string begin_point,
+    std::string end_point
 ) : 
 	id(id),
 	calendar_id(calendar_id),

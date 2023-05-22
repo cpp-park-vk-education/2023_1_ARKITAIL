@@ -3,26 +3,17 @@
 #include "ICalendarDbManager.hpp"
 #include "mainModel.hpp"
 
-struct RetEvent {
-  int event_id;
-  std::string name;
-  std::string t_start;
-  std::string t_end;
-  std::string description;
-  int calendar_id;
-};
-
 
 class CalendarDbManager: public ICalendarDbManager {
 public:
   CalendarDbManager(dbo::Session &session) : session_(session) {}
 
-  int Add(Calendar &);
-  void Remove(int id);
-  void Update(Calendar &);
-  Calendar Get(int id);
+  int add(const Calendar &);
+  void remove(int);
+  void update(const Calendar &);
+  const Calendar& get(int);
 
-  std::vector<RetEvent> GetEvents(int id);
+  std::vector<Event> getEvents(int);
 
 private:
   int id_;
