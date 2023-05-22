@@ -22,6 +22,7 @@ Application::Application(const Wt::WEnvironment& env) :
     setTitle("Calendula");
     setTheme(std::make_unique<Wt::WBootstrap5Theme>());
     useStyleSheet("/static/style.css");
+    messageResourceBundle().use(appRoot() + "data/templates");
 
     navbar_ = root()->addWidget(std::make_unique<NavbarW>());
     // Some initial widgets configuration

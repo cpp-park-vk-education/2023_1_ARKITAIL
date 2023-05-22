@@ -5,6 +5,7 @@
 
 #include "ICharacterReader.hpp"
 
+namespace parsing {
 enum class Tag;
 
 struct Lexem;
@@ -76,3 +77,4 @@ class IcalendarLexer : public ILexer {
   ICharacterReader* character_reader_;
   std::deque<Lexem> got_lexems_;
 };
+} // namespace parsing

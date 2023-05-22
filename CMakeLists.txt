@@ -8,7 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(WT_CONNECTOR "wthttp" CACHE STRING "Connector used (wthttp or wtfcgi)")
 
-option(BUILD_TESTS "build tests" OFF)
+option(BUILD_TESTS "build tests" ON)
 if(BUILD_TESTS)
     find_package(GTest REQUIRED)
     enable_testing()

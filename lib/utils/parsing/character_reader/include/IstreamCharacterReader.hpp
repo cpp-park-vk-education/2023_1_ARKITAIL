@@ -6,6 +6,7 @@
 #include "ICharacterReader.hpp"
 #include "IStreamBuffer.hpp"
 
+namespace parsing {
 class IstreamCharacterReader : public ICharacterReader,
                                public IStreamBuffer,
                                protected std::istream {
@@ -22,3 +23,4 @@ class IstreamCharacterReader : public ICharacterReader,
   virtual void SetBuffer(std::streambuf* buffer) override;
   virtual std::streambuf* Buffer() override;
 };
+} // namespace parsing

@@ -12,6 +12,7 @@
 
 class TreeNodeOtherDirW : public TreeNodeDirW {
   public:
+    TreeNodeOtherDirW();
     TreeNodeOtherDirW(ITreeNode* node);
     ~TreeNodeOtherDirW() = default;
 

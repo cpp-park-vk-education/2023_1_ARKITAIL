@@ -9,6 +9,7 @@
 #include "DbMock.hpp"
 #include "DirectoryDbManagerMock.hpp"
 #include "EventDbManagerMock.hpp"
+#include "EventManager.hpp"
 #include "NodeDbManagerMock.hpp"
 #include "ProfileDbManagerMock.hpp"
 #include "TagDbManagerMock.hpp"
@@ -66,7 +67,8 @@ void SessionScopeMap::add(std::thread::id tid) {
 					std::make_unique<UserManager>(db),
 					std::make_unique<NodeManager>(db),
 					std::make_unique<DirectoryManager>(db),
-					std::make_unique<CalendarManager>(db)
+					std::make_unique<CalendarManager>(db),
+					std::make_unique<EventManager>(db)
 				),
 				std::make_unique<ConnectionsMediator>()
 			)

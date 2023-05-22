@@ -9,6 +9,7 @@
 
 class TreeNodeLeafW : public TreeNodeW {
   public:
+    TreeNodeLeafW();
     TreeNodeLeafW(ITreeNode* node);
     ~TreeNodeLeafW() = default;
 

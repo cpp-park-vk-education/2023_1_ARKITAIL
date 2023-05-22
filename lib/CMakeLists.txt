@@ -1,5 +1,5 @@
 add_subdirectory(widgets)
-add_subdirectory(dialogs)
+add_subdirectory(dialog)
 
 add_subdirectory(application)
 

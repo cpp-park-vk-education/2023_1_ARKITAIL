@@ -7,7 +7,7 @@
 #include "IStreamBuffer.hpp"
 
 StringStreamResource::StringStreamResource(
-    std::unique_ptr<IStreamBuffer>&& buffer)
+    std::unique_ptr<parsing::IStreamBuffer>&& buffer)
     : Wt::WStreamResource("text/calendar"),
       is_(buffer->Buffer()) {
   suggestFileName("calendar.ics");

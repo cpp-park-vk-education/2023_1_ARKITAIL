@@ -4,6 +4,7 @@
 
 #include "Lexer.hpp"
 
+namespace parsing {
 /*
 stream         = *component
 
@@ -297,3 +298,4 @@ bool IcalendarParser::IsName(const std::string& name) const {
   }
   return true;
 }
+} // namespace parsing

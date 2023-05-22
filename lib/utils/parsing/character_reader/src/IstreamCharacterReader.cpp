@@ -3,6 +3,7 @@
 #include <istream>
 #include <streambuf>
 
+namespace parsing {
 IstreamCharacterReader::IstreamCharacterReader(std::streambuf* rdbuf)
   : std::istream(rdbuf) {
 }
@@ -33,3 +34,4 @@ void IstreamCharacterReader::SetBuffer(std::streambuf* buffer) {
 std::streambuf* IstreamCharacterReader::Buffer() {
   return rdbuf();
 }
+} // namespace parsing

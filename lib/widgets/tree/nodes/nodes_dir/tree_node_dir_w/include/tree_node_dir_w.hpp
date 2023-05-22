@@ -12,6 +12,7 @@
 
 class TreeNodeDirW : public TreeNodeW {
   public:
+    TreeNodeDirW();
     TreeNodeDirW(ITreeNode* node);
     ~TreeNodeDirW() = default;
     TreeNodeW* addChildNode(std::unique_ptr<TreeNodeW> child) override;

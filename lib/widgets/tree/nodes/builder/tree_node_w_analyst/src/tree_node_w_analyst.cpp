@@ -15,9 +15,9 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeDirWChild(ITreeNode* tre
     User user = mgr->user_manager()->get();
 
     if (node.type & (NodeType::PRIVATE_CALENDAR | NodeType::PUBLIC_CALENDAR)) {
-        Calendar child = mgr->calendar_manager()->get(node.resource_id);
-        return TreeNodeWConvertedData{TreeNodeWType::PERSONAL_CALENDAR, child.summary().toUTF8(),
-                                      child.description().toUTF8(), tags, user.nickname() };
+        CalendarSptr child = mgr->calendar_manager()->get(node.resource_id);
+        return TreeNodeWConvertedData{TreeNodeWType::PERSONAL_CALENDAR, child->summary,
+                                      child->description, tags, user.nickname };
         // TreeNodeWBuilder()
         //     .createTreeNodeLeafW(tree_node)
         //     ->addHead(std::make_unique<Wt::WText>(child.name))
@@ -41,7 +41,7 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeDirWChild(ITreeNode* tre
     } else if (node.type & (NodeType::PRIVATE_DIRECTORY | NodeType::PUBLIC_DIRECTORY)) {
         Directory child = mgr->directory_manager()->get(node.resource_id);
         return TreeNodeWConvertedData{TreeNodeWType::DIR, child.name, child.description, tags,
-                                      user.nickname()};
+                                      user.nickname};
         // TreeNodeWBuilder()
         //     .createTreeNodeDirW(tree_node)
         //     ->addHead(std::make_unique<Wt::WText>(child.name))

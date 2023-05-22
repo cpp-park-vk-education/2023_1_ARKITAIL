@@ -10,9 +10,10 @@ target_include_directories(${MODULE_NAME} PUBLIC ${INCLUDE_DIR})
 target_link_libraries(
 	${MODULE_NAME}
 	PUBLIC
+  calendar
   character_reader
+  event
   lexer
   parser
-  calendar
-  event
+  session_scope_map
 )

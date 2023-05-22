@@ -62,7 +62,7 @@ void NodeManager::move(size_t node_id, size_t destination_id) {
 void NodeManager::subscribe(size_t node_id) {
 	const User& user = db_->user_dbm()->get();
 
-	for (auto subg : db_->node_dbm()->getChildren(user.root_id())) {
+	for (auto subg : db_->node_dbm()->getChildren(user.root_id)) {
 		if (subg.type & NodeType::SUBSCRIPTIONS_GROUP) {
 			Node mount_node = {
 				0,
@@ -81,7 +81,7 @@ void NodeManager::subscribe(size_t node_id) {
 void NodeManager::unsubscribe(size_t node_id) {
 	const User& user = db_->user_dbm()->get();
 
-	for (auto subg : db_->node_dbm()->getChildren(user.root_id()))
+	for (auto subg : db_->node_dbm()->getChildren(user.root_id))
 		if (subg.type & NodeType::SUBSCRIPTIONS_GROUP) {
 			for (auto sub : db_->node_dbm()->getChildren(subg.id))
 				if (sub.resource_id == node_id) {

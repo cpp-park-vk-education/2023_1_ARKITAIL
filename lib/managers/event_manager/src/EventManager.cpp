@@ -6,18 +6,18 @@
 #include "EventManager.hpp"
 #include "IDbManagers.hpp"
 
-EventManager::EventManager(IDbManagers* db) :
+EventManager::EventManager(std::shared_ptr<IDbManagers> db) :
     db_(db) {}
 
-const Event& EventManager::get(size_t event_id) {
+EventSptr EventManager::get(size_t event_id) {
     return db_->event_dbm()->get(event_id);
 }
 
-size_t EventManager::add(const Event& event) {
+size_t EventManager::add(EventSptr event) {
     return db_->event_dbm()->add(event);
 }
 
-void EventManager::update(const Event& event) {
+void EventManager::update(EventSptr event) {
     db_->event_dbm()->update(event);
 }
 

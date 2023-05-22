@@ -8,7 +8,7 @@
 
 TEST(IstreamCharacterReaderTest, Empty) {
   std::stringstream ss("");
-  IstreamCharacterReader reader(ss.rdbuf());
+  parsing::IstreamCharacterReader reader(ss.rdbuf());
 
   EXPECT_EQ(reader.IsEof(), true);
 
@@ -21,7 +21,7 @@ TEST(IstreamCharacterReaderTest, Empty) {
 
 TEST(FileCharacterReaderTest, NonEmpty) {
   std::stringstream ss("BEGIN:VCALENDAR\r\n");
-  IstreamCharacterReader reader(ss.rdbuf());
+  parsing::IstreamCharacterReader reader(ss.rdbuf());
 
   EXPECT_EQ(reader.IsEof(), false);
 

@@ -2,6 +2,7 @@
 
 #include <cstddef>
 
+namespace parsing {
 class ICharacterReader {
  public:
   virtual char Peek(std::size_t k = 0) = 0;
@@ -10,3 +11,4 @@ class ICharacterReader {
 
   virtual ~ICharacterReader() = default;
 };
+} // namespace parsing

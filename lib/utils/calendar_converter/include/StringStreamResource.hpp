@@ -11,7 +11,7 @@
 
 class StringStreamResource : public Wt::WStreamResource{
  public:
-  StringStreamResource(std::unique_ptr<IStreamBuffer>&& buffer);
+  StringStreamResource(std::unique_ptr<parsing::IStreamBuffer>&& buffer);
   ~StringStreamResource();
 
   void handleRequest(

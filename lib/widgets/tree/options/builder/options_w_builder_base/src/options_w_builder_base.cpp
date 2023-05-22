@@ -4,6 +4,8 @@
 
 #include "options_w.hpp"
 
+OptionsWBuilderBase::OptionsWBuilderBase() {}
+
 OptionsWBuilderBase* OptionsWBuilderBase::createOptionsW() {
     options_w = std::make_unique<OptionsW>();
     return this;
@@ -34,5 +36,7 @@ OptionsWBuilderBase* OptionsWBuilderBase::addOptionUnsubscribe() {
 }
 
 std::unique_ptr<OptionsW> OptionsWBuilderBase::getOptionsW() {
-    return std::move(options_w);
+    auto tmp = std::make_unique<OptionsW>();
+    tmp.swap(options_w);
+    return tmp;
 }

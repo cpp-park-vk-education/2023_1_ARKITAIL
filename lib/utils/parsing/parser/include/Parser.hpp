@@ -6,6 +6,7 @@
 
 #include "Lexer.hpp"
 
+namespace parsing {
 class INode;
 class StreamNode;
 class ComponentNode;
@@ -185,3 +186,5 @@ class IcalendarParser : public IParser {
 
   ILexer* lexer_;
 };
+} // namespace parsing
+

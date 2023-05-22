@@ -16,6 +16,10 @@ target_link_libraries(tree_node_w  PUBLIC
                       profile
                       profile_manager
                       in_place_edit_title
-                      tree_node_w_builder
+                      tree_node_w_builder_base
+                      tree_node_dir_w_builder
+                      tree_node_sub_dir_w_builder
+                      tree_node_other_dir_w_builder
+                      tree_node_leaf_w_builder
                       options_w_director
                       )

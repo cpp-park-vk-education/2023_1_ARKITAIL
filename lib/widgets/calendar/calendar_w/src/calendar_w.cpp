@@ -36,7 +36,7 @@ CalendarW::CalendarW() :
     auto node_manager = mgr->node_manager();
     std::cout << "Managers::instance().node_manager\n\n" << std::endl;
 
-    auto id = user_manager->get().root_id();
+    auto id = user_manager->get().root_id;
     std::cout << "user_manager->get().root_id\n\n" << std::endl;
 
     auto node = node_manager->get(id);

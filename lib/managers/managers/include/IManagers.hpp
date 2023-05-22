@@ -2,6 +2,7 @@
 
 #include "ICalendarManager.hpp"
 #include "IDirectoryManager.hpp"
+#include "IEventManager.hpp"
 #include "INodeManager.hpp"
 #include "IUserManager.hpp"
 
@@ -11,6 +12,7 @@ public:
 	virtual INodeManager* node_manager() = 0;
 	virtual IDirectoryManager* directory_manager() = 0;
 	virtual ICalendarManager* calendar_manager() = 0;
+  virtual IEventManager* event_manager() = 0;
 
 	virtual ~IManagers() {}
 

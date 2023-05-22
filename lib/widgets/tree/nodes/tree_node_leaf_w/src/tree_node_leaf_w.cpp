@@ -4,6 +4,8 @@
 
 #include "tree_node_w.hpp"
 
+TreeNodeLeafW::TreeNodeLeafW() {}
+
 TreeNodeLeafW::TreeNodeLeafW(ITreeNode* node) :
     TreeNodeW(node) {}
 

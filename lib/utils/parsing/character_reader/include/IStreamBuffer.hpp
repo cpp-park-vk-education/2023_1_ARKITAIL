@@ -2,6 +2,7 @@
 
 #include <streambuf>
 
+namespace parsing {
 class IStreamBuffer {
  public:
   virtual void SetBuffer(std::streambuf* buffer) = 0;
@@ -9,3 +10,4 @@ class IStreamBuffer {
 
   virtual ~IStreamBuffer() = default;
 };
+} // namespace parsing

@@ -9,7 +9,6 @@
 #include <Wt/WDate.h>
 #include <Wt/WString.h>
 
-#include "ICalendarConverter.hpp"
 #include "ICharacterReader.hpp"
 #include "IStreamBuffer.hpp"
 
@@ -17,24 +16,28 @@
 #include "Calendar.hpp"
 #include "Parser.hpp"
 
-class CalendarConverter : ICalendarConverter {
+class CalendarConverter {
  public:
-   std::vector<CalendarSptr> IcalendarToCalendars(
-       std::unique_ptr<ICharacterReader>&& reader) override;
+   // метод принимает ICharacterReader, из которого лексер будет получать
+   // символы, и возвращает вектор id'шников сохранённых календарей
+   static std::vector<size_t> IcalendarToCalendars(
+       std::unique_ptr<parsing::ICharacterReader>&& reader);
 
-  std::unique_ptr<IStreamBuffer> CalendarsToIcalendar(
-      const std::vector<CalendarSptr>& calendars) override;
+   // метод принимает вектор id'шников календарей, по которым будет получать
+   // эти календари у CalendarManager
+  static std::unique_ptr<parsing::IStreamBuffer> CalendarsToIcalendar(
+      const std::vector<size_t>& calendars);
  private:
-  EventSptr FromIcalendarEvent(const ComponentUptr& icalendar_event);
-  Wt::WDateTime FromIcalendarDateTime(const std::string& icalendar_date_time);
-  Wt::WDate FromIcalendarDate(const std::string& icalendar_date);
+  static EventSptr FromIcalendarEvent(const parsing::ComponentUptr& icalendar_event);
+  static Wt::WDateTime FromIcalendarDateTime(const std::string& icalendar_date_time);
+  static Wt::WDate FromIcalendarDate(const std::string& icalendar_date);
   
-  void Write(
+  static void Write(
     std::stringstream& ss,
     const Wt::WString& name,
     const Wt::WString& value);
 
-  Wt::WString FromCalendarDateTime(const Wt::WDateTime& date_time);
-  Wt::WString FromCalendarRrule(const EventSptr event);
-  Wt::WString FromCalendarDate(const Wt::WDate& date);
+  static Wt::WString FromCalendarDateTime(const Wt::WDateTime& date_time);
+  static Wt::WString FromCalendarRrule(const EventSptr event);
+  static Wt::WString FromCalendarDate(const Wt::WDate& date);
 };

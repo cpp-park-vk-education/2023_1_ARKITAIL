@@ -6,6 +6,7 @@
 
 #include "ICharacterReader.hpp"
 
+namespace parsing {
 const std::size_t kDelimitersSize = 5;
 const std::array<char, kDelimitersSize> kDelimiters { 
   ':',
@@ -94,3 +95,4 @@ bool IcalendarLexer::IsDelimiter(char character) const {
 void IcalendarLexer::set_character_reader(ICharacterReader& character_reader) {
   character_reader_ = &character_reader;
 }
+} // namespace parsing
