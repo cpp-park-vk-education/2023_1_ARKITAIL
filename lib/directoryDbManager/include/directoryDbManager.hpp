@@ -6,6 +6,8 @@ struct RetDir {
   int dir_id;
   std::string name;
   std::string description;
+  int owner_id;
+  int node_id;
 };
 
 class DirectoryManager {

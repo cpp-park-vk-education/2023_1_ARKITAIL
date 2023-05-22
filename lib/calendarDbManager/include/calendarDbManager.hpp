@@ -16,6 +16,7 @@ struct RetCalen {
   int user_id;
   std::string name;
   std::string description;
+  int node_id;
 };
 
 class CalendarManager {

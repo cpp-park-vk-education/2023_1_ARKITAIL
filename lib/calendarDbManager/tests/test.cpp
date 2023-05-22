@@ -47,6 +47,7 @@ TEST(CalendarManagerTest, AddCalendar) {
   ret.name = "Test5 Calendar";
   ret.user_id = 1;
   ret.description = "Test Description";
+  ret.node_id = 1;
 
   using ::testing::Return;
   // Ожидание вызова метода add у мока Session с передачей события
@@ -128,6 +129,7 @@ TEST(CalendarManagerTest, UpdateAndGetEvent) {
   ret.name = "Test3 Update Calendar";
   ret.user_id = 1;
   ret.description = "Test Description";
+  ret.node_id = 1;
 
   using ::testing::Return;
   // Ожидание вызова метода add у мока Session с передачей события

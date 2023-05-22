@@ -11,6 +11,7 @@ target_link_libraries(
 	${MODULE_NAME}
 	PUBLIC
 	comment
+	mainModel
 )
 
 # if (BUILD_TESTS)

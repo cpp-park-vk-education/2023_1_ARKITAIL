@@ -57,7 +57,7 @@ TEST(NodeManagerTest, AddNodeAndTag) {
   // EXPECT_CALL(session, add(testing::_));
 
   int nodeId = manager.Add(ret);
-  manager.Tag(2, rett);
+  manager.Tag(3, rett);
 
   EXPECT_NE(nodeId, -1);
   transaction.commit();

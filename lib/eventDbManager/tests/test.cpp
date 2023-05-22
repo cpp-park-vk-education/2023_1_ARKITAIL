@@ -30,6 +30,8 @@ TEST(EventManagerTest, AddEvent) {
   session.mapClass<Calendars>("Calendars");
   session.mapClass<Users>("Users");
   session.mapClass<Events>("Events");
+  session.mapClass<Nodes>("Nodes");
+  session.mapClass<Tags>("Tags");
 
   //session.createTables();
 
@@ -68,7 +70,8 @@ TEST(EventManagerTest, RemoveAndGetEvent) {
   dbo::Transaction transaction(session);
   session.mapClass<Calendars>("Calendars");
   session.mapClass<Users>("Users");
-
+  session.mapClass<Nodes>("Nodes");
+  session.mapClass<Tags>("Tags");
   session.mapClass<Events>("Events");
 
   // session.createTables();
@@ -104,7 +107,8 @@ TEST(EventManagerTest, UpdateAndGetEvent) {
   dbo::Transaction transaction(session);
   session.mapClass<Calendars>("Calendars");
   session.mapClass<Users>("Users");
-
+  session.mapClass<Nodes>("Nodes");
+  session.mapClass<Tags>("Tags");
   session.mapClass<Events>("Events");
 
   //session.createTables();

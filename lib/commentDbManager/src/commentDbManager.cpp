@@ -4,7 +4,6 @@ int CommentManager::Add(RetComm &ret) {
   dbo::Transaction transaction(session_);
 
   std::unique_ptr<Comments> comment{new Comments()};
-  comment->name = ret.name;
   comment->text = ret.text;
   comment->event = session_.find<Events>().where("id = ?").bind(ret.event_id);
 
@@ -37,7 +36,6 @@ RetComm CommentManager::Get(int id) {
     ret.name = "error";
     return ret;
   }
-  ret.name = comment->name;
   ret.text = comment->text;
   ret.event_id = comment->event.id();
 

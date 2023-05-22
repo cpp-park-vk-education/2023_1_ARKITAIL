@@ -24,7 +24,7 @@ public:
     dbo::hasMany(a, event, dbo::ManyToOne, "calendar");
     dbo::field(a, description, "description");
     dbo::belongsTo(a, user, "User");
-    //dbo::belongsTo(a, node, "node");
+    dbo::belongsTo(a, node, "node");
   }
 };
 
@@ -41,12 +41,10 @@ public:
 
 class Comments {
 public:
-  std::string name;
   std::string text;
   dbo::ptr<Events> event;
 
   template <class Action> void persist(Action &a) {
-    dbo::field(a, name, "name");
     dbo::field(a, text, "text");
     dbo::belongsTo(a, event, "event");
   }
@@ -54,12 +52,14 @@ public:
 
 class Directories {
 public:
+  dbo::ptr<Users> user; // Owner
   std::string name;
   std::string description;
   dbo::ptr<Nodes> node;
 
   template <class Action> void persist(Action &a) {
     dbo::field(a, name, "name");
+    dbo::belongsTo(a, user, "User");
     dbo::field(a, description, "description");
     dbo::belongsTo(a, node, "node");
   }

@@ -9,7 +9,6 @@ public:
 
 	const Comment& get(int comment_id);
 	int add(const Comment& comment);
-	void update(const Comment& comment);
 	void remove(int comment_id);
 
 private:
