@@ -20,13 +20,13 @@ class Node {
   public:
     Node() = default;
 
-    Node(size_t id, size_t parent_id, size_t rosource_id, NodeType type);
+    Node(int id, int parent_id, int rosource_id, NodeType type);
 
     Node(const Node& node);
 
-    size_t id;
-    size_t parent_id;
-    size_t resource_id;
+    int id;
+    int parent_id;
+    int resource_id;
 
     NodeType type;
 };

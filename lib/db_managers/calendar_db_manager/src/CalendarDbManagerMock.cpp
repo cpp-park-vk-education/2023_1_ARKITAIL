@@ -13,7 +13,7 @@ CalendarDbManagerMock::CalendarDbManagerMock(std::shared_ptr<DbMock> db) :
 	aid_ = db_->calendars.size();
 }
 
-const Calendar& CalendarDbManagerMock::get(size_t calendar_id) {
+const Calendar& CalendarDbManagerMock::get(int calendar_id) {
 	for (auto e = db_->calendars.begin() + 1; e != db_->calendars.end(); e++)
 		if (e->id == calendar_id)
 			return *e;
@@ -21,7 +21,7 @@ const Calendar& CalendarDbManagerMock::get(size_t calendar_id) {
 	return db_->calendars[0];
 }
 
-size_t CalendarDbManagerMock::add(const Calendar& calendar) {
+int CalendarDbManagerMock::add(const Calendar& calendar) {
 	db_->calendars.emplace_back(
 		aid_,
 		calendar.node_id,
@@ -39,13 +39,13 @@ void CalendarDbManagerMock::update(const Calendar& calendar) {
 			e = calendar;
 }
 
-void CalendarDbManagerMock::remove(size_t calendar_id) {
+void CalendarDbManagerMock::remove(int calendar_id) {
 	for (auto e = db_->calendars.begin() + 1; e != db_->calendars.end(); e++)
 		if (e->id == calendar_id)
 			db_->calendars.erase(e);
 }
 
-std::vector<Event> CalendarDbManagerMock::getEvents(size_t calendar_id) {
+std::vector<Event> CalendarDbManagerMock::getEvents(int calendar_id) {
 	std::vector<Event> events;
 
 	for (auto e = db_->events.begin() + 1; e != db_->events.end(); e++)

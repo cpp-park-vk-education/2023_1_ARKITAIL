@@ -13,6 +13,7 @@ target_link_libraries(
 	calendar
 	event
 	db_managers
+	mainModel
 )
 
 if (BUILD_TESTS)

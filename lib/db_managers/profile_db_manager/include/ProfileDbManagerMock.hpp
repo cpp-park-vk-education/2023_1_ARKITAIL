@@ -9,14 +9,14 @@ class ProfileDbManagerMock : public IProfileDbManager {
 public:
 	ProfileDbManagerMock();
 
-	const Profile& get(size_t profile_id);
-	size_t add(const Profile& profile);
+	const Profile& get(int profile_id);
+	int add(const Profile& profile);
 	void update(const Profile& profile);
-	void remove(size_t profile_id);
+	void remove(int profile_id);
 
 private:
 	std::vector<Profile> data_;
-	size_t aid_;
+	int aid_;
 
 };
 

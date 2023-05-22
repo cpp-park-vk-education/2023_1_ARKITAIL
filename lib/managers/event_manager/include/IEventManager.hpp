@@ -11,12 +11,12 @@ class IEventManager {
 public:
 	using clock_t = std::chrono::steady_clock;
 
-	virtual const Event& get(size_t) = 0;
-	virtual size_t add(const Event&) = 0;
+	virtual const Event& get(int) = 0;
+	virtual int add(const Event&) = 0;
 	virtual void update(const Event&) = 0;
-	virtual void remove(size_t) = 0;
+	virtual void remove(int) = 0;
 
-	virtual std::vector<Comment> getComments(size_t) = 0;
+	virtual std::vector<Comment> getComments(int) = 0;
 	virtual std::chrono::time_point<clock_t> parseTime(std::string) = 0;
 
 };

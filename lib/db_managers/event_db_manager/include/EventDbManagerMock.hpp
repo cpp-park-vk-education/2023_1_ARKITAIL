@@ -12,16 +12,16 @@ class EventDbManagerMock : public IEventDbManager {
 public:
     EventDbManagerMock(std::shared_ptr<DbMock> db);
 
-    const Event& get(size_t);
-    size_t add(const Event&);
+    const Event& get(int);
+    int add(const Event&);
     void update(const Event&);
-    void remove(size_t);
+    void remove(int);
 
-    std::vector<Comment> getComments(size_t);
+    std::vector<Comment> getComments(int);
     
 private:
     std::shared_ptr<DbMock> db_;
-    size_t aid_;
+    int aid_;
 
 };
 

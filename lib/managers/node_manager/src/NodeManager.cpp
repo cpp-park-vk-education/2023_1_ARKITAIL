@@ -13,7 +13,7 @@ NodeManager::NodeManager(std::shared_ptr<IDbManagers> db) :
 
 // TODO(uma_op): Проверку доступа можно осуществить, получением связанного ресурса
 // и сравнения айди текущего пользователя и владельца ресурса
-const Node& NodeManager::get(size_t node_id) {
+const Node& NodeManager::get(int node_id) {
 	return db_->node_dbm()->get(node_id);
 }
 
@@ -24,7 +24,7 @@ const Node& NodeManager::get(size_t node_id) {
 // В ноду типа SUBSCRIPTIONS_GROUP
 // можно добавить только MOUNT
 // В ноды ROOT, MOUNT, PUBLIC_CALENDAR, PRIVATE_CALENDAR добавить ничего нельзя
-size_t NodeManager::add(const Node& node) {
+int NodeManager::add(const Node& node) {
 	return db_->node_dbm()->add(node);
 }
 
@@ -35,7 +35,7 @@ void NodeManager::update(const Node& node) {
 }
 
 // TODO(uma_op): Удалять запрещено типы ROOT, {PRIVATE | PUBLIC | SUBSCRIPTIONS | PROFILE}_GROUP
-void NodeManager::remove(size_t node_id) {
+void NodeManager::remove(int node_id) {
 	const Node& node = db_->node_dbm()->get(node_id);
 
 	std::queue<Node> subtree;
@@ -61,14 +61,14 @@ void NodeManager::remove(size_t node_id) {
 	}
 }
 
-void NodeManager::tag(const Tag& tag, size_t node_id) {
+void NodeManager::tag(const Tag& tag, int node_id) {
 	// TODO(uma_op): IMPLEMENT ME
 }
 
 // TODO(uma_op): Проверка соответствию типов
 // Проверка на то, что перемещение осуществляется только внутри дерева одного пользователя
 // и в ноды с валидными типами
-void NodeManager::move(size_t node_id, size_t destination_id) {
+void NodeManager::move(int node_id, int destination_id) {
 	const Node& mv_node = db_->node_dbm()->get(node_id); 
 	Node mvd_node = mv_node;
 	mvd_node.parent_id = destination_id;
@@ -76,7 +76,7 @@ void NodeManager::move(size_t node_id, size_t destination_id) {
 
 // TODO(uma_op): Проверка на права доступа
 // Подписка может осуществиться только на PUBLIC_{DIRECTORY | CALENDAR}
-void NodeManager::subscribe(size_t node_id) {
+void NodeManager::subscribe(int node_id) {
 	const User& user = db_->user_dbm()->get();
 
 	for (auto subg : db_->node_dbm()->getChildren(user.root_id)) {
@@ -97,7 +97,7 @@ void NodeManager::subscribe(size_t node_id) {
 
 // Отписка является одной из самых безобидных операций
 // и не требует никаких проверок
-void NodeManager::unsubscribe(size_t node_id) {
+void NodeManager::unsubscribe(int node_id) {
 	const User& user = db_->user_dbm()->get();
 
 	for (auto subg : db_->node_dbm()->getChildren(user.root_id))
@@ -113,7 +113,7 @@ void NodeManager::unsubscribe(size_t node_id) {
 }
 
 // TODO(uma_op) Получение детей так же как и получение требует лишь проверки прав доступа
-std::vector<Node> NodeManager::getChildren(size_t node_id) {
+std::vector<Node> NodeManager::getChildren(int node_id) {
 	return db_->node_dbm()->getChildren(node_id);
 }
 

@@ -11,7 +11,7 @@
 DirectoryManager::DirectoryManager(std::shared_ptr<IDbManagers> db) :
     db_(db) {}
 
-const Directory& DirectoryManager::get(size_t directory_id) {
+const Directory& DirectoryManager::get(int directory_id) {
     return db_->directory_dbm()->get(directory_id);
 }
 
@@ -23,8 +23,8 @@ const Directory& DirectoryManager::get(size_t directory_id) {
 // Остальные поля не участвуют в добавлении опускаются 
 //
 // parent_id является полем Directory::id родительской директории
-size_t DirectoryManager::add(const Directory& directory, size_t parent_id) {
-    size_t new_dir_id = db_->directory_dbm()->add(directory);
+int DirectoryManager::add(const Directory& directory, int parent_id) {
+    int new_dir_id = db_->directory_dbm()->add(directory);
 
     //  Добавляемая директория наследует тип родительской
     const Node& parent_node = db_->node_dbm()->get(db_->directory_dbm()->get(parent_id).node_id);
@@ -43,11 +43,11 @@ void DirectoryManager::update(const Directory& directory) {
     // TODO(uma_op): IMPLEMENT ME
 }
 
-void DirectoryManager::remove(size_t directory_id) {
+void DirectoryManager::remove(int directory_id) {
     db_->node_dbm()->remove(db_->directory_dbm()->get(directory_id).node_id);
 }
 
-std::vector<Event> DirectoryManager::getEvents(size_t directory_id) {
+std::vector<Event> DirectoryManager::getEvents(int directory_id) {
     // TODO(uma_op): IMPLEMENT ME
 
     return std::vector<Event>();

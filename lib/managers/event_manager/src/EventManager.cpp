@@ -10,11 +10,11 @@
 EventManager::EventManager(std::shared_ptr<IDbManagers> db) :
     db_(db) {}
 
-const Event& EventManager::get(size_t event_id) {
+const Event& EventManager::get(int event_id) {
     return db_->event_dbm()->get(event_id);
 }
 
-size_t EventManager::add(const Event& event) {
+int EventManager::add(const Event& event) {
     return db_->event_dbm()->add(event);
 }
 
@@ -22,11 +22,11 @@ void EventManager::update(const Event& event) {
     db_->event_dbm()->update(event);
 }
 
-void EventManager::remove(size_t event_id) {
+void EventManager::remove(int event_id) {
     db_->event_dbm()->remove(event_id);
 }
 
-std::vector<Comment> EventManager::getComments(size_t event_id) {
+std::vector<Comment> EventManager::getComments(int event_id) {
     return db_->event_dbm()->getComments(event_id);
 }
 

@@ -7,12 +7,12 @@
 
 class IDirectoryManager {
 public:
-	virtual const Directory& get(size_t directory_id) = 0;
-	virtual size_t add(const Directory& directory, size_t directory_id) = 0;
+	virtual const Directory& get(int directory_id) = 0;
+	virtual int add(const Directory& directory, int directory_id) = 0;
 	virtual void update(const Directory& directory) = 0;
-	virtual void remove(size_t directory_id) = 0;
+	virtual void remove(int directory_id) = 0;
 
-	virtual std::vector<Event> getEvents(size_t directory_id) = 0;
+	virtual std::vector<Event> getEvents(int directory_id) = 0;
 	
 };
 

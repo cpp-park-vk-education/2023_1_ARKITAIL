@@ -6,10 +6,10 @@
 class User {
 public:
     User();
-    User(size_t id, size_t root_id, std::string login, std::string email, std::string nickname, std::string description);
+    User(int id, int root_id, std::string login, std::string email, std::string nickname, std::string description);
 
-    size_t id;
-    size_t root_id;
+    int id;
+    int root_id;
 
     std::string login;
     std::string email;

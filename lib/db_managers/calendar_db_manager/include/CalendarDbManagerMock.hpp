@@ -9,16 +9,16 @@ class CalendarDbManagerMock : public ICalendarDbManager {
 public:
     CalendarDbManagerMock(std::shared_ptr<DbMock> db);
 
-    const Calendar& get(size_t);
-    size_t add(const Calendar&);
+    const Calendar& get(int);
+    int add(const Calendar&);
     void update(const Calendar&);
-    void remove(size_t);
+    void remove(int);
 
-    std::vector<Event> getEvents(size_t);
+    std::vector<Event> getEvents(int);
 
 private:
     std::shared_ptr<DbMock> db_;
-    size_t aid_;
+    int aid_;
 
 };
 

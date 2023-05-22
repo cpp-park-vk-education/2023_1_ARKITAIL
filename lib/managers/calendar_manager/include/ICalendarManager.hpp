@@ -7,12 +7,12 @@
 
 class ICalendarManager {
 public:
-	virtual const Calendar& get(size_t calendar_id) = 0;
-	virtual size_t add(const Calendar& calendar) = 0;  // Maybe returns error code 
-	virtual void remove(size_t calendar_id) = 0;
+	virtual const Calendar& get(int calendar_id) = 0;
+	virtual int add(const Calendar& calendar) = 0;  // Maybe returns error code 
+	virtual void remove(int calendar_id) = 0;
 	virtual void update(const Calendar& calendar) = 0;
 
-	virtual std::vector<Event> getEvents(size_t calendar_id) = 0;
+	virtual std::vector<Event> getEvents(int calendar_id) = 0;
 
 };
 

@@ -7,12 +7,12 @@
 
 class IEventDbManager {
 public:
-    virtual const Event& get(size_t) = 0;
-    virtual size_t add(const Event&) = 0;
+    virtual const Event& get(int) = 0;
+    virtual int add(const Event&) = 0;
     virtual void update(const Event&) = 0;
-    virtual void remove(size_t) = 0;
+    virtual void remove(int) = 0;
 
-    virtual std::vector<Comment> getComments(size_t) = 0;
+    virtual std::vector<Comment> getComments(int) = 0;
 
 };
 

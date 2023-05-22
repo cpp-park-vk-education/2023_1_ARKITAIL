@@ -12,12 +12,12 @@ class CalendarManager : public ICalendarManager {
 public:
     CalendarManager(std::shared_ptr<IDbManagers> db);
 
-    const Calendar& get(size_t) override;
-    size_t add(const Calendar&) override;
+    const Calendar& get(int) override;
+    int add(const Calendar&) override;
     void update(const Calendar&) override;
-    void remove(size_t) override;
+    void remove(int) override;
 
-    std::vector<Event> getEvents(size_t calendar_id) override;
+    std::vector<Event> getEvents(int calendar_id) override;
 
 private:
     std::shared_ptr<IDbManagers> db_;

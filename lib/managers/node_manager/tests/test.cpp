@@ -107,7 +107,7 @@ TEST_F(ManagersSuit, AddNodeToCurrentUser) {
 		3,
 		0,
 		NodeType::PRIVATE_DIRECTORY
-	}
+	};
 }
 
 // Запрещено

@@ -12,7 +12,7 @@ public:
     UserDbManagerMock(std::shared_ptr<DbMock> db);
 
     const User& get() override;
-    const User& get(size_t user_id) override;
+    const User& get(int user_id) override;
 
 private:
     std::shared_ptr<DbMock> db_;
