@@ -68,8 +68,8 @@ public:
 class events {
 public:
   std::string name;
-  std::time_t time_start;
-  std::time_t time_end;
+  Wt::WDateTime time_start;
+  Wt::WDateTime time_end;
   std::string description;
   dbo::ptr<calendars> calendar;
   dbo::collection<dbo::ptr<comments>> comment;

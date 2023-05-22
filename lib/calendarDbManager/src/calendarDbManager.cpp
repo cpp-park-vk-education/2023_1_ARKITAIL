@@ -87,16 +87,8 @@ std::vector<Ret_Event> CalendarManager::getEvents(const int id) {
     ret.name = eve->name;
     ret.description = eve->description;
     ret.calendar_id = eve->calendar.id();
-    std::tm tm_res_start = *std::localtime(&eve->time_start);
-
-    ret.t_start = {tm_res_start.tm_sec,  tm_res_start.tm_min,
-                   tm_res_start.tm_hour, tm_res_start.tm_mday,
-                   tm_res_start.tm_mon,  tm_res_start.tm_year + 1900};
-    std::tm tm_res_end = *std::localtime(&eve->time_end);
-
-    ret.t_end = {tm_res_end.tm_sec,  tm_res_end.tm_min,
-                 tm_res_end.tm_hour, tm_res_end.tm_mday,
-                 tm_res_end.tm_mon,  tm_res_end.tm_year + 1900};
+    ret.t_start = eve->time_start.toString().toUTF8();
+    ret.t_end = eve->time_end.toString().toUTF8();
 
     v.push_back(ret);
   }

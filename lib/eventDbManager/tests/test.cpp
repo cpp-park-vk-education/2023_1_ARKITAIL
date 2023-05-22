@@ -42,9 +42,9 @@ TEST(EventManagerTest, AddEvent) {
 
   // Создание тестовых данных
   Ret_Event ret;
-  ret.name = "Test1 Event";
-  ret.t_start = {1, 2, 3, 4, 5, 2000};
-  ret.t_end = {7, 8, 9, 10, 11, 2000};
+  ret.name = "Test2 Event";
+  ret.t_start = "Wed Aug 29 23:15:43 2007";
+  ret.t_end = "Wed Aug 29 23:15:43 2008";
   ret.description = "Test Description";
   ret.calendar_id = 1;
 
@@ -109,7 +109,7 @@ TEST(EventManagerTest1, UpdateAndGetEvent) {
 
   session.mapClass<events>("events");
 
-  // session.createTables();
+  //session.createTables();
 
   typedef dbo::collection<dbo::ptr<events>> Events;
   Events eventss = session.find<events>();
@@ -121,8 +121,8 @@ TEST(EventManagerTest1, UpdateAndGetEvent) {
   Ret_Event ret;
   ret.event_id = id;
   ret.name = "Test Update Event";
-  ret.t_start = {1, 2, 3, 4, 5, 2000};
-  ret.t_end = {7, 8, 9, 10, 11, 2000};
+  ret.t_start = "Wed Aug 29 2008";
+  ret.t_end = "Wed Aug 29 2007";
   ret.description = "Test Description";
   ret.calendar_id = 1;
   // Создание тестовых данных

@@ -5,8 +5,8 @@
 struct Ret_Event {
   int event_id;
   std::string name;
-  std::array<int, 6> t_start;
-  std::array<int, 6> t_end;
+  std::string t_start;
+  std::string t_end;
   std::string description;
   int calendar_id;
 };

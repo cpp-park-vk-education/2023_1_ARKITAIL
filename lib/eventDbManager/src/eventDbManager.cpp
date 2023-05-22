@@ -10,15 +10,11 @@ int EventManager::add(Ret_Event &ret) {
   event->description = ret.description;
   event->calendar =
       session_.find<calendars>().where("id = ?").bind(ret.calendar_id);
-
-  std::tm tm_start = {ret.t_start[0], ret.t_start[1], ret.t_start[2],
-                      ret.t_start[3], ret.t_start[4], ret.t_start[5] - 1900};
-  
-  event->time_start = std::mktime(&tm_start);
-
-  std::tm tm_end = {ret.t_end[0], ret.t_end[1], ret.t_end[2],
-                    ret.t_end[3], ret.t_end[4], ret.t_end[5] - 1900};
-  event->time_end = std::mktime(&tm_end);
+  Wt::WString time_help =  Wt::WString::fromUTF8(ret.t_start);
+  event->time_start = Wt::WDateTime::fromString(time_help);
+  std::cout << time_help << std::endl;
+  time_help =  Wt::WString::fromUTF8(ret.t_end);
+  event->time_end = Wt::WDateTime::fromString(ret.t_end);
 
   dbo::ptr<events> eventPtr = session_.add(std::move(event));
   eventPtr = session_.find<events>().where("name = ?").bind("Test1 Event");
@@ -51,13 +47,8 @@ void EventManager::update(Ret_Event &ret) {
   event.modify()->calendar =
       session_.find<calendars>().where("id = ?").bind(ret.calendar_id);
 
-  std::tm tm_start = {ret.t_start[0], ret.t_start[1], ret.t_start[2],
-                      ret.t_start[3], ret.t_start[4], ret.t_start[5] - 1900};
-  event.modify()->time_start = std::mktime(&tm_start);
-
-  std::tm tm_end = {ret.t_end[0], ret.t_end[1], ret.t_end[2],
-                    ret.t_end[3], ret.t_end[4], ret.t_end[5] - 1900};
-  event.modify()->time_end = std::mktime(&tm_end);
+  event.modify()->time_start = Wt::WDateTime::fromString(ret.t_start);
+  event.modify()->time_end = Wt::WDateTime::fromString(ret.t_end);
 
   transaction.commit();
 }
@@ -78,16 +69,8 @@ Ret_Event EventManager::get(const int id) {
   std::cout << event->calendar.id() << std::endl;
   ret.calendar_id = event->calendar.id();
 
-  std::tm tm_res_start = *std::localtime(&event->time_start);
-
-  ret.t_start = {tm_res_start.tm_sec,  tm_res_start.tm_min,
-                 tm_res_start.tm_hour, tm_res_start.tm_mday,
-                 tm_res_start.tm_mon,  tm_res_start.tm_year + 1900};
-  std::tm tm_res_end = *std::localtime(&event->time_end);
-
-  ret.t_end = {tm_res_end.tm_sec,  tm_res_end.tm_min,
-               tm_res_end.tm_hour, tm_res_end.tm_mday,
-               tm_res_end.tm_mon,  tm_res_end.tm_year + 1900};
+  ret.t_start = event->time_start.toString().toUTF8();
+  ret.t_end = event->time_end.toString().toUTF8();
 
   transaction.commit();
 
