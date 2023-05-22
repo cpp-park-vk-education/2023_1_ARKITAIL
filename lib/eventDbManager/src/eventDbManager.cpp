@@ -17,7 +17,7 @@ int EventManager::add(Ret_Event &ret) {
   event->time_end = Wt::WDateTime::fromString(ret.t_end);
 
   dbo::ptr<events> eventPtr = session_.add(std::move(event));
-  eventPtr = session_.find<events>().where("name = ?").bind("Test1 Event");
+  session_.flush();
   transaction.commit();
   id = eventPtr.id();
   return id;

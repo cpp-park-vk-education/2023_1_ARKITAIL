@@ -10,10 +10,10 @@ int CalendarManager::add(Ret_Calen &ret) {
   calendar->user = session_.find<users>().where("id = ?").bind(ret.user_id);
 
   dbo::ptr<calendars> calendarPtr = session_.add(std::move(calendar));
-  calendarPtr = session_.find<calendars>().where("name = ?").bind(ret.name);
-
-  id = calendarPtr.id();
+  session_.flush();
   transaction.commit();
+  id = calendarPtr.id();
+  return id;
 
   return id;
 }

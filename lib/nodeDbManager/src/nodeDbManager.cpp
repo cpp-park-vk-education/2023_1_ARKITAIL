@@ -12,9 +12,9 @@ int NodeManager::add(Ret_Node &ret) {
   dbo::ptr<nodes> nodePtr = session_.add(std::move(node));
   nodePtr = session_.find<nodes>().where("node_id = ?").bind(ret.node_id);
 
-  id = nodePtr.id();
+  session_.flush();
   transaction.commit();
-
+  id = nodePtr.id();
   return id;
 }
 

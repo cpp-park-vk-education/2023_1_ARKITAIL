@@ -1,137 +1,184 @@
-// #include "eventDbManager.hpp"
-// #include "mainModel.hpp"
-// #include <gmock/gmock.h>
-// #include <gtest/gtest.h>
-// #include <random>
+#include "calendarDbManager.hpp"
+#include "mainModel.hpp"
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
 
-// // Создание мока для Session
-// class MockSession : public dbo::Session {
+// Создание мока для Session
+class MockSession : public dbo::Session {
 
-// public:
-//   MOCK_METHOD(int, addCalendar, (const Ret_Event &));
-//   MOCK_METHOD(void, removeCalendar, (int));
-//   MOCK_METHOD(void, updateCalendar, (const Ret_Event &));
-//   MOCK_METHOD(Ret_Event, getCalendar, (int));
-// };
-// bool operator==(const Ret_Event &lhs, const Ret_Event &rhs) {
-//   return lhs.name == rhs.name && lhs.t_start == rhs.t_start &&
-//          lhs.t_end == rhs.t_end && lhs.description == rhs.description &&
-//          lhs.calendar_id == rhs.calendar_id;
-// };
-// // Тестирование метода add класса EventManager с использованием мока Session
-// TEST(EventManagerTest, AddEvent) {
+public:
+  MOCK_METHOD(int, addCalendar, (const Ret_Event &));
+  MOCK_METHOD(void, removeCalendar, (int));
+  MOCK_METHOD(void, updateCalendar, (const Ret_Event &));
+  MOCK_METHOD(Ret_Event, getCalendar, (int));
+};
+bool operator==(const Ret_Calen &lhs, const Ret_Calen &rhs) {
+  return lhs.name == rhs.name && lhs.node_id == rhs.node_id &&
+         lhs.user_id == rhs.user_id && lhs.description == rhs.description &&
+         lhs.calendar_id == rhs.calendar_id;
+};
+TEST(CalendarManagerTest, AddCalendar) {
 
-//   // Создание мок-объекта Session
-//   MockSession session;
-//   std::unique_ptr<dbo::backend::Postgres> pg{new dbo::backend::Postgres(
-//       "host=localhost port=5432 dbname=for_project_ARKITAIL user=antiho "
-//       "password=qwerty")};
-//   session.setConnection(std::move(pg));
-//   dbo::Transaction transaction{session};
-//   session.mapClass<calendars>("calendars");
-//   session.mapClass<users>("users");
-//   session.mapClass<events>("events");
+  // Создание мок-объекта Session
+  MockSession session;
+  std::unique_ptr<dbo::backend::Postgres> pg{new dbo::backend::Postgres(
+      "host=localhost port=5432 dbname=for_project_ARKITAIL user=antiho "
+      "password=qwerty")};
+  session.setConnection(std::move(pg));
+  dbo::Transaction transaction{session};
+  session.mapClass<calendars>("calendars");
+  session.mapClass<users>("users");
+  session.mapClass<events>("events");
+  session.mapClass<nodes>("nodes");
+  session.mapClass<tags>("tags");
 
-//   //session.createTables();
+  // session.createTables();
 
-//   typedef dbo::collection<dbo::ptr<events>> Events;
-//   Events eventss = session.find<events>();
+  typedef dbo::collection<dbo::ptr<events>> Events;
+  Events eventss = session.find<events>();
 
-//   // Создание объекта EventManager с использованием мока Session
-//   EventManager manager(session);
+  typedef dbo::collection<dbo::ptr<calendars>> Calendars;
+  Calendars clendarss = session.find<calendars>();
 
-//   // Создание тестовых данных
-//   Ret_Event ret;
-//   ret.name = "Test1 Event";
-//   ret.t_start = {1, 2, 3, 4, 5, 2000};
-//   ret.t_end = {7, 8, 9, 10, 11, 2000};
-//   ret.description = "Test Description";
-//   ret.calendar_id = 1;
+  // Создание объекта EventManager с использованием мока Session
+  CalendarManager manager(session);
 
-//   using ::testing::Return;
-//   // Ожидание вызова метода add у мока Session с передачей события
-//   // EXPECT_CALL(session, add(testing::_));
+  // Создание тестовых данных
+  Ret_Calen ret;
+  ret.name = "Test5 Calendar";
+  ret.user_id = 1;
+  ret.node_id = 1;
+  ret.description = "Test Description";
 
-//   int eventId = manager.add(ret);
+  using ::testing::Return;
+  // Ожидание вызова метода add у мока Session с передачей события
+  // EXPECT_CALL(session, add(testing::_));
 
-//   EXPECT_NE(eventId, -1);
-//   transaction.commit();
-// }
+  int calendarId = manager.add(ret);
 
-// TEST(EventManagerTest1, RemoveAndGetEvent) {
+  EXPECT_NE(calendarId, -1);
+  transaction.commit();
+}
 
-//   // Создание мок-объекта Session
-//   MockSession session;
-//   std::unique_ptr<dbo::backend::Postgres> pg{new dbo::backend::Postgres(
-//       "host=localhost port=5432 dbname=for_project_ARKITAIL user=antiho "
-//       "password=qwerty")};
-//   session.setConnection(std::move(pg));
-//   dbo::Transaction transaction(session);
-//   session.mapClass<calendars>("calendars");
-//   session.mapClass<users>("users");
+TEST(CalendarManagerTest, RemoveAndGetCalendar) {
 
-//   session.mapClass<events>("events");
+  // Создание мок-объекта Session
+  MockSession session;
+  std::unique_ptr<dbo::backend::Postgres> pg{new dbo::backend::Postgres(
+      "host=localhost port=5432 dbname=for_project_ARKITAIL user=antiho "
+      "password=qwerty")};
+  session.setConnection(std::move(pg));
+  dbo::Transaction transaction{session};
+  session.mapClass<calendars>("calendars");
+  session.mapClass<users>("users");
+  session.mapClass<events>("events");
+  session.mapClass<nodes>("nodes");
+  session.mapClass<tags>("tags");
 
-//   // session.createTables();
+  // session.createTables();
 
-//   typedef dbo::collection<dbo::ptr<events>> Events;
-//   Events eventss = session.find<events>();
+  typedef dbo::collection<dbo::ptr<events>> Events;
+  Events eventss = session.find<events>();
 
-//   // Создание объекта EventManager с использованием мока Session
-//   EventManager manager(session);
+  typedef dbo::collection<dbo::ptr<calendars>> Calendars;
+  Calendars clendarss = session.find<calendars>();
 
-//   // Создание тестовых данных
-//   int id;
-//   std::cin >> id;
+  // Создание объекта EventManager с использованием мока Session
+  CalendarManager manager(session);
 
-//   using ::testing::Return;
-//   // Ожидание вызова метода add у мока Session с передачей события
-//   // EXPECT_CALL(session, add(testing::_));
-//   manager.remove(id);
-//   Ret_Event ret;
-//   ret = manager.get(id);
-//   EXPECT_EQ(ret.name, "error");
-//   transaction.commit();
-// }
+  int id = 100;
 
+  using ::testing::Return;
+  // Ожидание вызова метода add у мока Session с передачей события
+  // EXPECT_CALL(session, add(testing::_));
+  manager.remove(id);
+  Ret_Calen ret;
+  ret = manager.get(id);
+  EXPECT_EQ(ret.name, "error");
+  transaction.commit();
+}
 
-// TEST(EventManagerTest1, UpdateAndGetEvent) {
+TEST(CalendarManagerTest, UpdateAndGetEvent) {
+  // Создание мок-объекта Session
+  MockSession session;
+  std::unique_ptr<dbo::backend::Postgres> pg{new dbo::backend::Postgres(
+      "host=localhost port=5432 dbname=for_project_ARKITAIL user=antiho "
+      "password=qwerty")};
+  session.setConnection(std::move(pg));
+  dbo::Transaction transaction{session};
+  session.mapClass<calendars>("calendars");
+  session.mapClass<users>("users");
+  session.mapClass<events>("events");
+  session.mapClass<nodes>("nodes");
+  session.mapClass<tags>("tags");
 
-//   // Создание мок-объекта Session
-//   MockSession session;
-//   std::unique_ptr<dbo::backend::Postgres> pg{new dbo::backend::Postgres(
-//       "host=localhost port=5432 dbname=for_project_ARKITAIL user=antiho "
-//       "password=qwerty")};
-//   session.setConnection(std::move(pg));
-//   dbo::Transaction transaction(session);
-//   session.mapClass<calendars>("calendars");
-//   session.mapClass<users>("users");
+  // session.createTables();
 
-//   session.mapClass<events>("events");
+  typedef dbo::collection<dbo::ptr<events>> Events;
+  Events eventss = session.find<events>();
 
-//   // session.createTables();
+  typedef dbo::collection<dbo::ptr<calendars>> Calendars;
+  Calendars clendarss = session.find<calendars>();
 
-//   typedef dbo::collection<dbo::ptr<events>> Events;
-//   Events eventss = session.find<events>();
+  // Создание объекта EventManager с использованием мока Session
+  CalendarManager manager(session);
 
-//   // Создание объекта EventManager с использованием мока Session
-//   EventManager manager(session);
-//     int id;
-//   std::cin >> id;
-//   Ret_Event ret;
-//   ret.event_id = id;
-//   ret.name = "Test Update Event";
-//   ret.t_start = {1, 2, 3, 4, 5, 2000};
-//   ret.t_end = {7, 8, 9, 10, 11, 2000};
-//   ret.description = "Test Description";
-//   ret.calendar_id = 1;
-//   // Создание тестовых данных
+  // Создание тестовых данных
+  int id;
+  std::cin >> id;
+  Ret_Calen ret;
+  ret.name = "Test3 Update Calendar";
+  ret.user_id = 1;
+  ret.node_id = 1;
+  ret.description = "Test Description";
 
+  using ::testing::Return;
+  // Ожидание вызова метода add у мока Session с передачей события
+  // EXPECT_CALL(session, add(testing::_));
 
-//   using ::testing::Return;
-//   // Ожидание вызова метода add у мока Session с передачей события
-//   // EXPECT_CALL(session, add(testing::_));
-//   manager.update(ret);
-//   ret = manager.get(id);
-//   EXPECT_NE(ret.name, "error");  transaction.commit();
-// }
+  manager.update(ret);
+  ret = manager.get(id);
+  EXPECT_NE(ret.name, "error");
+  transaction.commit();
+}
+
+TEST(CalendarManagerTest, GetEventFromCalendar) {
+  // Создание мок-объекта Session
+  MockSession session;
+  std::unique_ptr<dbo::backend::Postgres> pg{new dbo::backend::Postgres(
+      "host=localhost port=5432 dbname=for_project_ARKITAIL user=antiho "
+      "password=qwerty")};
+  session.setConnection(std::move(pg));
+  dbo::Transaction transaction{session};
+  session.mapClass<calendars>("calendars");
+  session.mapClass<users>("users");
+  session.mapClass<events>("events");
+  session.mapClass<nodes>("nodes");
+  session.mapClass<tags>("tags");
+
+  // session.createTables();
+
+  typedef dbo::collection<dbo::ptr<events>> Events;
+  Events eventss = session.find<events>();
+
+  typedef dbo::collection<dbo::ptr<calendars>> Calendars;
+  Calendars clendarss = session.find<calendars>();
+
+  // Создание объекта EventManager с использованием мока Session
+  CalendarManager manager(session);
+
+  // Создание тестовых данных
+  int id;
+  std::cin >> id;
+
+  Ret_Event ret;
+  std::vector<Ret_Event> v;
+
+  using ::testing::Return;
+  // Ожидание вызова метода add у мока Session с передачей события
+  // EXPECT_CALL(session, add(testing::_));
+
+  v = manager.getEvents(id);
+  EXPECT_EQ(v.size(), 7);
+  transaction.commit();
+}

@@ -2,7 +2,6 @@
 #include "mainModel.hpp"
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <random>
 
 // Создание мока для Session
 class MockSession : public dbo::Session {
@@ -42,11 +41,11 @@ TEST(EventManagerTest, AddEvent) {
 
   // Создание тестовых данных
   Ret_Event ret;
-  ret.name = "Test2 Event";
+  ret.name = "Test7 Event";
   ret.t_start = "Wed Aug 29 23:15:43 2007";
   ret.t_end = "Wed Aug 29 23:15:43 2008";
   ret.description = "Test Description";
-  ret.calendar_id = 1;
+  ret.calendar_id = 2;
 
   using ::testing::Return;
   // Ожидание вызова метода add у мока Session с передачей события
@@ -58,7 +57,7 @@ TEST(EventManagerTest, AddEvent) {
   transaction.commit();
 }
 
-TEST(EventManagerTest1, RemoveAndGetEvent) {
+TEST(EventManagerTest, RemoveAndGetEvent) {
 
   // Создание мок-объекта Session
   MockSession session;
@@ -81,8 +80,7 @@ TEST(EventManagerTest1, RemoveAndGetEvent) {
   EventManager manager(session);
 
   // Создание тестовых данных
-  int id;
-  std::cin >> id;
+  int id = 100;
 
   using ::testing::Return;
   // Ожидание вызова метода add у мока Session с передачей события
@@ -95,7 +93,7 @@ TEST(EventManagerTest1, RemoveAndGetEvent) {
 }
 
 
-TEST(EventManagerTest1, UpdateAndGetEvent) {
+TEST(EventManagerTest, UpdateAndGetEvent) {
 
   // Создание мок-объекта Session
   MockSession session;

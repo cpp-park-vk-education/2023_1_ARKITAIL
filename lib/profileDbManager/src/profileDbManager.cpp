@@ -8,10 +8,10 @@ int ProfileManager::add(Ret_Prof &ret) {
   profile->node = session_.find<nodes>().where("id = ?").bind(ret.node_id);
 
   dbo::ptr<profiles> profilePtr = session_.add(std::move(profile));
-  profilePtr = session_.find<profiles>().where("name = ?").bind(ret.name);
-
-  id = profilePtr.id();
+  session_.flush();
   transaction.commit();
+  id = profilePtr.id();
+  return id;
 
   return id;
 }

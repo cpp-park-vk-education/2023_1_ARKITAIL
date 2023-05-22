@@ -21,6 +21,8 @@ struct Ret_Calen {
 
 class CalendarManager {
 public:
+  CalendarManager(dbo::Session &session) : session_(session) {}
+
   int add(Ret_Calen &);
   void remove(const int id);
   void update(Ret_Calen &);
