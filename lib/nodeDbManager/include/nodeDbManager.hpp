@@ -5,7 +5,6 @@
 struct RetTag {
   int tag_id;
   std::string name;
-  std::vector<int> node_id;
 };
 
 struct RetNode {
@@ -13,11 +12,12 @@ struct RetNode {
   int parent_id;
   Type type;
   int resource_id;
-  std::vector<int> tag_id;
 };
 
 class NodeManager {
 public:
+  NodeManager(dbo::Session &session) : session_(session) {}
+
   int Add(RetNode &);
   void Remove(int id);
   void Update(RetNode &);

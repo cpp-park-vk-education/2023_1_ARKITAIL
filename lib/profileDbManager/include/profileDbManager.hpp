@@ -11,6 +11,9 @@ struct RetProf {
 
 class ProfileManager {
 public:
+  ProfileManager(dbo::Session &session) : session_(session) {}
+
+
   int Add(RetProf&);
   void Remove(int id);
   RetProf Get(int id);

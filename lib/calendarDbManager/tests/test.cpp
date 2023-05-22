@@ -7,14 +7,13 @@
 class MockSession : public dbo::Session {
 
 public:
-  MOCK_METHOD(int, Add, (const RetEvent &));
+  MOCK_METHOD(int, Add, (const RetCalen &));
   MOCK_METHOD(void, Remove, (int));
-  MOCK_METHOD(void, Update, (const RetEvent &));
-  MOCK_METHOD(RetEvent, Get, (int));
+  MOCK_METHOD(void, Update, (const RetCalen &));
+  MOCK_METHOD(RetCalen, Get, (int));
 };
 bool operator==(const RetCalen &lhs, const RetCalen &rhs) {
-  return lhs.name == rhs.name && lhs.node_id == rhs.node_id &&
-         lhs.user_id == rhs.user_id && lhs.description == rhs.description &&
+  return lhs.name == rhs.name && lhs.user_id == rhs.user_id && lhs.description == rhs.description &&
          lhs.calendar_id == rhs.calendar_id;
 };
 TEST(CalendarManagerTest, AddCalendar) {
@@ -47,7 +46,6 @@ TEST(CalendarManagerTest, AddCalendar) {
   RetCalen ret;
   ret.name = "Test5 Calendar";
   ret.user_id = 1;
-  ret.node_id = 1;
   ret.description = "Test Description";
 
   using ::testing::Return;
@@ -129,7 +127,6 @@ TEST(CalendarManagerTest, UpdateAndGetEvent) {
   RetCalen ret;
   ret.name = "Test3 Update Calendar";
   ret.user_id = 1;
-  ret.node_id = 1;
   ret.description = "Test Description";
 
   using ::testing::Return;
@@ -156,7 +153,7 @@ TEST(CalendarManagerTest, GetEventFromCalendar) {
   session.mapClass<Nodes>("Nodes");
   session.mapClass<Tags>("Tags");
 
-  //session.createTables();
+  // session.createTables();
 
   typedef dbo::collection<dbo::ptr<Events>> Eventss;
   Eventss eventss = session.find<Events>();

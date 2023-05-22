@@ -6,14 +6,12 @@ int CalendarManager::Add(RetCalen &ret) {
   std::unique_ptr<Calendars> calendar{new Calendars()};
   calendar->name = ret.name;
   calendar->description = ret.description;
-  calendar->node = session_.find<Nodes>().where("id = ?").bind(ret.node_id);
   calendar->user = session_.find<Users>().where("id = ?").bind(ret.user_id);
 
   dbo::ptr<Calendars> calendarPtr = session_.add(std::move(calendar));
   session_.flush();
   transaction.commit();
   id_ = calendarPtr.id();
-  return id_;
 
   return id_;
 }
@@ -40,8 +38,6 @@ void CalendarManager::Update(RetCalen &ret) {
   }
   calendar.modify()->name = ret.name;
   calendar.modify()->description = ret.description;
-  calendar.modify()->node =
-      session_.find<Nodes>().where("id = ?").bind(ret.node_id);
   calendar.modify()->user =
       session_.find<Users>().where("id = ?").bind(ret.user_id);
 
@@ -59,7 +55,6 @@ RetCalen CalendarManager::Get(int id) {
   }
   ret.name = calendar->name;
   ret.description = calendar->description;
-  ret.node_id = calendar->node.id();
   ret.user_id = calendar->user.id();
 
   transaction.commit();

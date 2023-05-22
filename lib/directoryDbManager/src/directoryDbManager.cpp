@@ -6,7 +6,6 @@ int DirectoryManager::Add(RetDir &ret) {
   std::unique_ptr<Directories> direct{new Directories()};
   direct->name = ret.name;
   direct->description = ret.description;
-  direct->node = session_.find<Nodes>().where("id = ?").bind(ret.node_id);
 
   dbo::ptr<Directories> directPtr = session_.add(std::move(direct));
   session_.flush();
@@ -37,9 +36,7 @@ void DirectoryManager::Update(RetDir &ret) {
   }
   direct.modify()->name = ret.name;
   direct.modify()->description = ret.description;
-  direct.modify()->node =
-      session_.find<Nodes>().where("id = ?").bind(ret.node_id);
-
+  
   transaction.commit();
 }
 
@@ -55,7 +52,6 @@ RetDir DirectoryManager::Get(int id) {
   }
   ret.name = direct->name;
   ret.description = direct->description;
-  ret.node_id = direct->node.id();
 
   transaction.commit();
 

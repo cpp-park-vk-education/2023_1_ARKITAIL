@@ -84,17 +84,17 @@ public:
 };
 
 enum class Type {
-  Root = 0,
-  PrivateGroup = 1,
-  PrivateDirectory = 2,
-  PrivateCalendar = 3,
-  PublicGroup = 4,
-  PublicDirectory = 5,
-  PublicCalendar = 6,
-  SubscriptionGroup = 7,
-  Mount = 8,
-  ProfileGroup = 9,
-  Profile = 10
+  Root = 1,
+  PrivateGroup = 2,
+  PrivateDirectory = 4,
+  PrivateCalendar = 8,
+  PublicGroup = 16,
+  PublicDirectory = 32,
+  PublicCalendar = 64,
+  SubscriptionGroup = 128,
+  Mount = 256,
+  ProfileGroup = 512,
+  Profile = 1024
 };
 
 class Nodes {

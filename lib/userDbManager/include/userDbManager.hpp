@@ -12,6 +12,8 @@ struct RetUser{
 
 class UserManager {
 public:
+  UserManager(dbo::Session &session) : session_(session) {}
+
     RetUser Get(int id);
 
 private:

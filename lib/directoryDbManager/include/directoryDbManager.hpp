@@ -6,11 +6,13 @@ struct RetDir {
   int dir_id;
   std::string name;
   std::string description;
-  int node_id;
 };
 
 class DirectoryManager {
 public:
+  DirectoryManager(dbo::Session &session) : session_(session) {}
+
+
   int Add(RetDir &);
   void Remove(int id);
   void Update(RetDir &);
