@@ -11,6 +11,10 @@ target_link_libraries(
 	${MODULE_NAME}
 	PUBLIC
 	directory
+	mainModel
+	wt
+	wtdbo
+	wtdbopostgres
 )
 
 if (BUILD_TESTS)
