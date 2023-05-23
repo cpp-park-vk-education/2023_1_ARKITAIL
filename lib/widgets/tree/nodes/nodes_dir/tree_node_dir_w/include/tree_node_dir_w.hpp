@@ -5,7 +5,6 @@
 #include <Wt/WText.h>
 
 #include <memory>
-#include <string>
 #include <vector>
 
 #include "tree_node_w.hpp"

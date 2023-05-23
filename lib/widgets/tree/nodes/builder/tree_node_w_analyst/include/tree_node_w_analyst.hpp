@@ -6,7 +6,8 @@
 #include "ITreeNode.hpp"
 #include "Tag.hpp"
 #include "User.hpp"
-// |1| |2| |3| |4'5'6'7'8| |9'10|
+
+// |1| |2| |3| |4'5'6'7'8| |9'10'11|
 
 // 1) checkBox
 // 0 - нет
@@ -28,18 +29,16 @@
 // 01000 - personal_calendar,
 // 10000 - profile
 
-// 9,10) type node
-// 00 - leaf
-// 01 - other dir
-// 10 - sub dir
-// 11 - dir
+// 9,10,11) type node
+// 000 - leaf
+// 001 - other dir
+// 010 - sub dir
+// 100 - dir
 
 enum Components {
-    CHECKBOX = 1,
-
-    LABEL = 1 << 1,
-
-    TOOLTIP_AUTHOR = 1 << 2,
+    TYPE_OTHER_DIR = 1,
+    TYPE_SUB_DIR = 1 << 1,
+    TYPE_DIR = 1 << 2,
 
     OPTIONS_UNSUB = 1 << 3,
     OPTIONS_SUB = 1 << 4,
@@ -47,9 +46,11 @@ enum Components {
     OPTIONS_PERSONAL_CALENDAR = 1 << 6,
     OPTIONS_PROFILE = 1 << 7,
 
-    TYPE_OTHER_DIR = 1 << 8,
-    TYPE_SUB_DIR = 1 << 9,
-    TYPE_DIR = 3 << 8,
+    TOOLTIP_AUTHOR = 1 << 8,
+
+    LABEL = 1 << 9,
+
+    CHECKBOX = 1 << 10,
 };
 
 enum TreeNodeWType {
@@ -59,10 +60,11 @@ enum TreeNodeWType {
 
     SUB_GROUP = Components::TYPE_SUB_DIR,  // группа подписок
     SUB_DIR =
-        Components::CHECKBOX | Components::TOOLTIP_AUTHOR | Components::OPTIONS_UNSUB |
+        Components::CHECKBOX | Components::TOOLTIP_AUTHOR |
         Components::TYPE_SUB_DIR,  // директория из подписок без возможности отписаться(не mount)
-    SUB_DIR_OPTIONS = Components::CHECKBOX | Components::TOOLTIP_AUTHOR |
-                      Components::TYPE_SUB_DIR,  // директория из подписок с возможностью отписаться
+    SUB_DIR_OPTIONS =
+        Components::CHECKBOX | Components::TOOLTIP_AUTHOR | Components::TYPE_SUB_DIR |
+        Components::OPTIONS_UNSUB,  // директория из подписок с возможностью отписаться
 
     OTHER_GROUP_SUB =
         Components::CHECKBOX | Components::OPTIONS_SUB |
@@ -88,11 +90,11 @@ enum TreeNodeWType {
         Components::CHECKBOX |
         Components::OPTIONS_UNSUB,  // календарь в чужом профиле, от которого можно отписаться
     SUB_CALENDAR =
-        Components::CHECKBOX | Components::TOOLTIP_AUTHOR |
-        Components::OPTIONS_UNSUB,  // календарь из подписок без возможности отписаться(не mount)
-    SUB_CALENDAR_OPTIONS =
         Components::CHECKBOX |
-        Components::TOOLTIP_AUTHOR,  // календарь из подписок с возможностью отписаться
+        Components::TOOLTIP_AUTHOR,  // календарь из подписок без возможности отписаться(не mount)
+    SUB_CALENDAR_OPTIONS =
+        Components::CHECKBOX | Components::TOOLTIP_AUTHOR |
+        Components::OPTIONS_UNSUB,  // календарь из подписок с возможностью отписаться
 };
 
 struct TreeNodeWConvertedData {

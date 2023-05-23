@@ -21,6 +21,9 @@
 #include "Profile.hpp"
 #include "SessionScopeMap.hpp"
 #include "User.hpp"
+#include "Wt/WContainerWidget.h"
+#include "Wt/WIconPair.h"
+#include "Wt/WText.h"
 #include "in_place_edit_title.hpp"
 #include "options_w.hpp"
 #include "options_w_builder.hpp"
@@ -29,8 +32,9 @@
 #include "tree_node_leaf_w.hpp"
 #include "tree_node_other_dir_w.hpp"
 #include "tree_node_subscriptions_dir_w.hpp"
+#include "tree_node_w.hpp"
 #include "tree_node_w_analyst.hpp"
-#include "tree_node_w_builder_base.hpp"
+#include "tree_node_w_builder.hpp"
 #include "tree_node_w_director.hpp"
 
 TreeNodeW::TreeNodeW() {}
@@ -88,7 +92,8 @@ void TreeNodeW::performAction(Action action) {
 }
 
 void TreeNodeW::removeNode() {
-    this->clear();
+    // node_->remove();
+    parent()->removeWidget(this);
 }
 
 TreeNodeW* TreeNodeW::addParent(TreeNodeW* parent) {
@@ -112,9 +117,11 @@ void TreeNodeW::uncheckParentNodes() {
 }
 
 void TreeNodeW::addToolTipSignal() {
-    tool_tip_->setTransient(false, 5);
+    tool_tip_->setTransient(true, 2);
     tool_tip_->setAnchorWidget(header_container_);
-    header_container_->mouseWentOver().connect([=] {
+    header_container_->mouseWentOver().connect([=](Wt::WMouseEvent mouse) {
+        std::cout << "\n координаты" << mouse.widget().x << mouse.widget().y << std::endl;
+        tool_tip_->setOffsets(Wt::WLength("100px"), Wt::WFlags(Wt::Side::Bottom));
         tool_tip_->setHidden(false);
         std::cout << "открыли тултип\n" << std::endl;
     });
@@ -124,176 +131,29 @@ NodeType TreeNodeW::getType() {
     return node_->getNode().type;
 }
 
-TreeNodeW* TreeNodeW::addHead(std::unique_ptr<Wt::WWidget> head) {
-    header_container_->addWidget(std::move(head));
-    return this;
-}
-
-TreeNodeW* TreeNodeW::addCheckBox() {
-    check_box_ = check_box_container->addWidget(std::make_unique<Wt::WCheckBox>());
-    check_box_->checked().connect(this, &TreeNodeW::checkNode);
-    check_box_->unChecked().connect(this, &TreeNodeW::uncheckNode);
-    return this;
-}
-
-TreeNodeW* TreeNodeW::addOptions(std::unique_ptr<OptionsW> options) {
-    options_button_ = node_block_->addWidget(std::make_unique<Wt::WPushButton>("•••"));
-    options_button_->addStyleClass("p-1 py-0 border-0 btn-light");
-    options.get()->selectedOption().connect(this, &TreeNodeW::performAction);
-    options_button_->setMenu(std::move(options));
-    options_button_->toggleStyleClass("dropdown-toggle", false);
-    return this;
-}
-
-void TreeNodeW::addToolTip(std::unique_ptr<Wt::WContainerWidget> content) {
-    tool_tip_ = std::make_unique<Wt::WPopupWidget>(std::move(content));
-    tool_tip_->setTransient(false, 5);
-    tool_tip_->setAnchorWidget(header_container_);
-    header_container_->mouseWentOver().connect([=] {
-        tool_tip_->setHidden(false);
-        std::cout << "открыли тултип\n" << std::endl;
-    });
-}
-
-std::unique_ptr<Wt::WContainerWidget> TreeNodeW::fillToolTipContainer(
-    std::unique_ptr<Wt::WContainerWidget> content, std::string description,
-    std::vector<std::string> tags) {
-    content->setMaximumSize(Wt::WLength(300), Wt::WLength::Auto);
-    content->addStyleClass("p-2");
-
-    auto description_ptr = content->addWidget(std::make_unique<Wt::WText>(description));
-    description_ptr->addStyleClass("text-center text-break");
-
-    content->addWidget(std::make_unique<Wt::WBreak>());
-
-    for (auto&& tag : tags) {
-        auto tag_ptr = content->addWidget(
-            std::make_unique<Wt::WAnchor>(Wt::WLink(Wt::LinkType::InternalPath, "/search"), tag));
-        tag_ptr->addStyleClass("btn btn-light border-success p-0 px-1 mx-1");
-        tag_ptr->clicked().connect([=] {
-            std::cout << '\n' << tag_ptr->text().toUTF8() << '\n' << std::endl;
-        });
-    }
-    return content;
-}
-
-TreeNodeW* TreeNodeW::addToolTip(std::string description, std::vector<std::string> tags) {
-    auto content = std::make_unique<Wt::WContainerWidget>();
-    addToolTip(std::move(fillToolTipContainer(std::move(content), description, tags)));
-    return this;
-}
-
-TreeNodeW* TreeNodeW::addToolTip(std::string description, std::vector<std::string> tags,
-                                 User author) {
-    auto content = std::make_unique<Wt::WContainerWidget>();
-
-    auto author_ptr = content->addWidget(std::make_unique<Wt::WAnchor>(
-        Wt::WLink(Wt::LinkType::InternalPath, "/calendars"), author.nickname));
-    author_ptr->setStyleClass("fw-bolder");
-    author_ptr->clicked().connect([=] {
-        std::cout << author_ptr->text().toUTF8() << std::endl;
-    });
-    content->addWidget(std::make_unique<Wt::WBreak>());
-
-    addToolTip(std::move(fillToolTipContainer(std::move(content), description, tags)));
-
-    return this;
-}
-TreeNodeW* TreeNodeW::endNode() {
-    node_block_->addStretch(1);
-    return this;
-}
-
 void TreeNodeW::setOptions(std::unique_ptr<OptionsW> options) {
     options.get()->selectedOption().connect(this, &TreeNodeW::performAction);
     options_button_->setMenu(std::move(options));
 }
 
 std::unique_ptr<TreeNodeW> TreeNodeW::makeTreeNodeWidget(ITreeNode* tree_node) {
-    auto mgr = SessionScopeMap::instance().get()->managers();
-    std::unique_ptr<TreeNodeW> res;
+    auto data = TreeNodeWAnalyst().analyseTreeNodeDirWChild(tree_node);
+    std::unique_ptr<TreeNodeW> tree_node_w;
 
-    Node node = tree_node->getNode();
-    std::vector<std::string> tags;
-    tags.push_back("tag1");
-    OptionsWBuilder options_builder;
-    if ((node.type & (NodeType::PUBLIC_DIRECTORY | NodeType::PUBLIC_CALENDAR)) &&
-        (this->getType() & NodeType::SUBSCRIPTIONS_GROUP)) {
-        Directory child = mgr->directory_manager()->get(node.resource_id);
-        res = std::make_unique<TreeNodeSubscriptionsDirW>(tree_node);
-        res.get()
-            ->addCheckBox()
-            ->addHead(std::make_unique<Wt::WText>(child.name))
-            ->addOptions(OptionsWDirector().createOptionsUnsubscriptionW(options_builder))
-            ->endNode();
-        // return TreeNodeSubDirWBuilder()
-        //     .createTreeNodeW(tree_node)
-        //     ->addHead(std::make_unique<Wt::WText>(child.name))
-        //     ->addParent(this)
-        //     ->endNode()
-        //     ->getTreeNodeW();
-        // Directory child = mgr->directory_manager()->get(node.resource_id);
-        // res = std::make_unique<TreeNodeSubscriptionsDirW>(tree_node);
-
-    } else if (node.type & (NodeType::PRIVATE_CALENDAR | NodeType::PUBLIC_CALENDAR)) {
-        Calendar child = mgr->calendar_manager()->get(node.resource_id);
-        res = std::make_unique<TreeNodeLeafW>(tree_node);
-        res.get()
-            ->addHead(std::make_unique<Wt::WText>(child.name))
-            ->addCheckBox()
-            ->addOptions(OptionsWDirector().createOptionsPersonalCalendarW(options_builder))
-            ->addToolTip(child.description, tags)
-            ->endNode();
-        ;
-        // return TreeNodeLeafWBuilder()
-        //     .createTreeNodeW(tree_node)
-        //     ->addHead(std::make_unique<Wt::WText>(child.name))
-        //     ->addOptions(OptionsWDirector().createOptionsPersonalCalendarW(options_builder))
-        //     ->addToolTip(child.description, tags)
-        //     ->addParent(this)
-        //     ->endNode()
-        //     ->getTreeNodeW();
-
-    } else if (node.type & (NodeType::PRIVATE_DIRECTORY | NodeType::PUBLIC_DIRECTORY)) {
-        Directory child = mgr->directory_manager()->get(node.resource_id);
-        res =
-            TreeNodeWDirector().createNode(TreeNodeWAnalyst().analyseTreeNodeDirWChild(tree_node));
-        // res = TreeNodeDirWBuilder()
-        //           .createTreeNodeW(tree_node)
-        //           ->addHead(std::make_unique<Wt::WText>(child.name))
-        //           ->addCheckBox()
-        //           ->addOptions(OptionsWDirector().createOptionsCalendarsDirW(options_builder))
-        //           ->addToolTip(child.description, tags)
-        //           ->endNode()
-        //           ->getTreeNodeW();
-
-    } else if (node.type & (NodeType::ROOT | NodeType::PRIVATE_GROUP | NodeType::PUBLIC_GROUP |
-                            NodeType::SUBSCRIPTIONS_GROUP)) {
-        Directory child = mgr->directory_manager()->get(node.resource_id);
-
-        res = TreeNodeDirWBuilder()
-                  .createTreeNodeW(tree_node)
-                  ->addHead(std::make_unique<Wt::WText>(child.name))
-                  ->endNode()
-                  ->getTreeNodeW();
-
-    } else if (node.type & (NodeType::PROFILE_GROUP)) {
-        Directory child = mgr->directory_manager()->get(node.resource_id);
-        res = TreeNodeDirWBuilder()
-                  .createTreeNodeW(tree_node)
-                  ->addHead(std::make_unique<Wt::WText>(child.name))
-                  ->endNode()
-                  ->getTreeNodeW();
-
-    } else if (node.type & NodeType::PROFILE) {
-        // Profile child = Managers::instance().profile_manager->get(node.resource_id);
-        // return TreeNodeOtherDirWBuilder()
-        //     .createTreeNodeW(tree_node)
-        //     ->addHead(std::make_unique<InPlaceEditTitle>(child.name))
-        //     ->addParent(this)
-        //     ->endNode()
-        //     ->getTreeNodeW();
+    if (data.components_set & Components::TYPE_DIR) {
+        tree_node_w = std::make_unique<TreeNodeDirW>(data.tree_node);
+    } else if (data.components_set & Components::TYPE_OTHER_DIR) {
+        tree_node_w = std::make_unique<TreeNodeOtherDirW>(data.tree_node);
+    } else if (data.components_set & Components::TYPE_SUB_DIR) {
+        tree_node_w = std::make_unique<TreeNodeSubscriptionsDirW>(data.tree_node);
+    } else {
+        tree_node_w = std::make_unique<TreeNodeLeafW>(data.tree_node);
     }
+    std::cout << (data.components_set & Components::TYPE_DIR) << " "
+              << (data.components_set & Components::TYPE_OTHER_DIR) << " "
+              << (data.components_set & Components::TYPE_SUB_DIR) << '\n';
 
-    return res;
+    auto node_builder = TreeNodeWBuilder(std::move(tree_node_w));
+
+    return TreeNodeWDirector().fillNode(data, node_builder);
 }

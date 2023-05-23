@@ -8,7 +8,9 @@
 #include <string>
 #include <vector>
 
+#include "ITreeNode.hpp"
 #include "tree_node_dir_w.hpp"
+#include "tree_node_w.hpp"
 
 class TreeNodeOtherDirW : public TreeNodeDirW {
   public:

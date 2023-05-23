@@ -2,8 +2,6 @@
 
 #include <memory>
 
-#include "options_w_builder.hpp"
-#include "options_w_director.hpp"
 #include "tree_node_w.hpp"
 
 TreeNodeLeafW::TreeNodeLeafW() {}

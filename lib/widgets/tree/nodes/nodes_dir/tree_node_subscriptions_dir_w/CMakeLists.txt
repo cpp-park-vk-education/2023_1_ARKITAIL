@@ -7,6 +7,4 @@ target_link_libraries(tree_node_subscriptions_dir_w  PUBLIC
                       tree_node_dir_w
                       tree_node_leaf_w
                       managers
-                       tree_node_w_builder_base
-                       tree_node_dir_w_builder
                       )

@@ -8,10 +8,13 @@
 #include <string>
 #include <vector>
 
+#include "ITreeNode.hpp"
 #include "tree_node_dir_w.hpp"
+#include "tree_node_w.hpp"
 
 class TreeNodeSubscriptionsDirW : public TreeNodeDirW {
   public:
+    TreeNodeSubscriptionsDirW();
     TreeNodeSubscriptionsDirW(ITreeNode* node);
     ~TreeNodeSubscriptionsDirW() = default;
 

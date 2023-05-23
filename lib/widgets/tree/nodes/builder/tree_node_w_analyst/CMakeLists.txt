@@ -5,7 +5,6 @@ target_include_directories(tree_node_w_analyst  PUBLIC include)
 target_link_libraries(tree_node_w_analyst  PUBLIC
                       calendula_compiler_flags
                       node
-                      tree_node_w
                       calendar
                       directory
                       user

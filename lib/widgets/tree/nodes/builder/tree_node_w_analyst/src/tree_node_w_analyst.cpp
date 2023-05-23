@@ -3,6 +3,7 @@
 #include "Calendar.hpp"
 #include "Directory.hpp"
 #include "Managers.hpp"
+#include "Node.hpp"
 #include "SessionScopeMap.hpp"
 #include "User.hpp"
 
@@ -13,31 +14,35 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeDirWChild(ITreeNode* tre
     std::vector<std::string> tags;
     auto mgr = SessionScopeMap::instance().get()->managers();
     User user = mgr->user_manager()->get();
-
-    if ((tree_node->getParent()->getNode().type & NodeType::SUBSCRIPTIONS_GROUP)) {
-        // нужна проверка на sub/unsub
+    TreeNodeWConvertedData data;
+    if (!(node.type & NodeType::ROOT) &&
+        (tree_node->getParent()->getNode().type & NodeType::SUBSCRIPTIONS_GROUP)) {
+        // тут только unsub, так как это подписки
         if (node.type & NodeType::PUBLIC_DIRECTORY) {
             Directory child = mgr->directory_manager()->get(node.resource_id);
-            return TreeNodeWConvertedData{
+            data = TreeNodeWConvertedData{
                 TreeNodeWType::SUB_DIR_OPTIONS,           child.name, child.description, tags,
                 mgr->user_manager()->get(child.owner_id), tree_node};
 
         } else {
             Calendar child = mgr->calendar_manager()->get(node.resource_id);
-            return TreeNodeWConvertedData{
+            data = TreeNodeWConvertedData{
                 TreeNodeWType::SUB_CALENDAR_OPTIONS,      child.name, child.description, tags,
                 mgr->user_manager()->get(child.owner_id), tree_node};
         }
 
     } else if (node.type & (NodeType::PRIVATE_CALENDAR | NodeType::PUBLIC_CALENDAR)) {
         Calendar child = mgr->calendar_manager()->get(node.resource_id);
-        return TreeNodeWConvertedData{
+        std::cout << child.name << ' ' << node.type << std::endl;
+        data = TreeNodeWConvertedData{
             TreeNodeWType::PERSONAL_CALENDAR,         child.name, child.description, tags,
             mgr->user_manager()->get(child.owner_id), tree_node};
 
     } else if (node.type & (NodeType::PRIVATE_DIRECTORY | NodeType::PUBLIC_DIRECTORY)) {
         Directory child = mgr->directory_manager()->get(node.resource_id);
-        return TreeNodeWConvertedData{TreeNodeWType::DIR,
+
+        std::cout << child.name << ' ' << node.type << std::endl;
+        data = TreeNodeWConvertedData{TreeNodeWType::DIR,
                                       child.name,
                                       child.description,
                                       tags,
@@ -47,7 +52,9 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeDirWChild(ITreeNode* tre
     } else if (node.type & (NodeType::ROOT | NodeType::PRIVATE_GROUP | NodeType::PUBLIC_GROUP |
                             NodeType::SUBSCRIPTIONS_GROUP | NodeType::PROFILE_GROUP)) {
         Directory child = mgr->directory_manager()->get(node.resource_id);
-        return TreeNodeWConvertedData{TreeNodeWType::GROUP,
+
+        std::cout << child.name << ' ' << node.type << std::endl;
+        data = TreeNodeWConvertedData{TreeNodeWType::GROUP,
                                       child.name,
                                       child.description,
                                       tags,
@@ -59,19 +66,69 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeDirWChild(ITreeNode* tre
         // return TreeNodeWConvertedData{TreeNodeWType::PROFILE_LEAF, child.name, child.description,
         //                               tags, mgr->user_manager()->get(child.owner_id)};
     }
+    return data;
 }
 
 TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeOtherDirWChild(ITreeNode* tree_node) {
     Node node = tree_node->getNode();
-    std::vector<std::string> tags;
     auto mgr = SessionScopeMap::instance().get()->managers();
     User user = mgr->user_manager()->get();
+    TreeNodeWConvertedData data;
+
+    std::vector<std::string> tags;
+
+    // нужна проверка на sub/unsub
+    if (node.type & NodeType::PUBLIC_GROUP) {
+        Directory child = mgr->directory_manager()->get(node.resource_id);
+        data = TreeNodeWConvertedData{
+            TreeNodeWType::OTHER_GROUP_SUB,           child.name, child.description, tags,
+            mgr->user_manager()->get(child.owner_id), tree_node};
+
+    } else if (node.type & NodeType::PUBLIC_DIRECTORY) {
+        Directory child = mgr->directory_manager()->get(node.resource_id);
+        data = TreeNodeWConvertedData{TreeNodeWType::OTHER_DIR_SUB,
+                                      child.name,
+                                      child.description,
+                                      tags,
+                                      mgr->user_manager()->get(child.owner_id),
+                                      tree_node};
+
+    } else {
+        Calendar child = mgr->calendar_manager()->get(node.resource_id);
+        data = TreeNodeWConvertedData{
+            TreeNodeWType::OTHER_CALENDAR_SUB,        child.name, child.description, tags,
+            mgr->user_manager()->get(child.owner_id), tree_node};
+    }
+
+    return data;
 }
 
 TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeSubscriptionDirWChild(
     ITreeNode* tree_node) {
     Node node = tree_node->getNode();
-    std::vector<std::string> tags;
     auto mgr = SessionScopeMap::instance().get()->managers();
     User user = mgr->user_manager()->get();
+    TreeNodeWConvertedData data;
+
+    std::vector<std::string> tags;
+
+    if (node.type & NodeType::PUBLIC_CALENDAR) {
+        Calendar child = mgr->calendar_manager()->get(tree_node->getNode().resource_id);
+        data = TreeNodeWConvertedData{TreeNodeWType::SUB_CALENDAR,
+                                      child.name,
+                                      child.description,
+                                      tags,
+                                      mgr->user_manager()->get(child.owner_id),
+                                      tree_node};
+
+    } else if (node.type & NodeType::PUBLIC_DIRECTORY) {
+        Directory child = mgr->directory_manager()->get(tree_node->getNode().resource_id);
+        data = TreeNodeWConvertedData{TreeNodeWType::SUB_DIR,
+                                      child.name,
+                                      child.description,
+                                      tags,
+                                      mgr->user_manager()->get(child.owner_id),
+                                      tree_node};
+    }
+    return data;
 }
