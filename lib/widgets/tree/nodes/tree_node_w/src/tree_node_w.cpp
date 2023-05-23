@@ -20,21 +20,17 @@
 #include "Node.hpp"
 #include "Profile.hpp"
 #include "SessionScopeMap.hpp"
+#include "TreeNodeWAnalyst.hpp"
 #include "User.hpp"
 #include "Wt/WContainerWidget.h"
 #include "Wt/WIconPair.h"
 #include "Wt/WText.h"
-#include "in_place_edit_title.hpp"
 #include "options_w.hpp"
 #include "options_w_builder.hpp"
 #include "options_w_director.hpp"
 #include "tree_node_dir_w.hpp"
 #include "tree_node_leaf_w.hpp"
-#include "tree_node_other_dir_w.hpp"
-#include "tree_node_subscriptions_dir_w.hpp"
 #include "tree_node_w.hpp"
-#include "tree_node_w_analyst.hpp"
-#include "tree_node_w_builder.hpp"
 #include "tree_node_w_director.hpp"
 
 TreeNodeW::TreeNodeW() {}
@@ -42,7 +38,8 @@ TreeNodeW::TreeNodeW() {}
 TreeNodeW::TreeNodeW(ITreeNode* node) :
     Wt::WContainerWidget(),
     parent_(nullptr),
-    node_(node) {
+    node_(node),
+    analyst_(std::make_unique<TreeNodeWAnalyst>()) {
     auto node_block = addWidget(std::make_unique<Wt::WContainerWidget>());
     node_block->addStyleClass("p-0");
     node_block_ = node_block->setLayout(std::make_unique<Wt::WHBoxLayout>());
@@ -137,23 +134,5 @@ void TreeNodeW::setOptions(std::unique_ptr<OptionsW> options) {
 }
 
 std::unique_ptr<TreeNodeW> TreeNodeW::makeTreeNodeWidget(ITreeNode* tree_node) {
-    auto data = TreeNodeWAnalyst().analyseTreeNodeDirWChild(tree_node);
-    std::unique_ptr<TreeNodeW> tree_node_w;
-
-    if (data.components_set & Components::TYPE_DIR) {
-        tree_node_w = std::make_unique<TreeNodeDirW>(data.tree_node);
-    } else if (data.components_set & Components::TYPE_OTHER_DIR) {
-        tree_node_w = std::make_unique<TreeNodeOtherDirW>(data.tree_node);
-    } else if (data.components_set & Components::TYPE_SUB_DIR) {
-        tree_node_w = std::make_unique<TreeNodeSubscriptionsDirW>(data.tree_node);
-    } else {
-        tree_node_w = std::make_unique<TreeNodeLeafW>(data.tree_node);
-    }
-    std::cout << (data.components_set & Components::TYPE_DIR) << " "
-              << (data.components_set & Components::TYPE_OTHER_DIR) << " "
-              << (data.components_set & Components::TYPE_SUB_DIR) << '\n';
-
-    auto node_builder = TreeNodeWBuilder(std::move(tree_node_w));
-
-    return TreeNodeWDirector().fillNode(data, node_builder);
+    return TreeNodeWDirector().fillNode(analyst_->analyseTreeNodeWChild(tree_node));
 }

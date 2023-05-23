@@ -10,13 +10,15 @@
 #include "Calendar.hpp"
 #include "Directory.hpp"
 #include "ITreeNode.hpp"
+#include "ITreeNodeWAnalyst.hpp"
 #include "Node.hpp"
 #include "Tree.hpp"
+#include "TreeNodeWBuilderBase.hpp"
 #include "User.hpp"
 #include "options_w.hpp"
 
 class TreeNodeW : public Wt::WContainerWidget {
-    friend class TreeNodeWBuilder;
+    friend class TreeNodeWBuilderBase;
 
   public:
     TreeNodeW();
@@ -37,11 +39,12 @@ class TreeNodeW : public Wt::WContainerWidget {
     void uncheckParentNodes();
     NodeType getType();
 
-    virtual std::unique_ptr<TreeNodeW> makeTreeNodeWidget(ITreeNode* node);
+    std::unique_ptr<TreeNodeW> makeTreeNodeWidget(ITreeNode* node);
     void setOptions(std::unique_ptr<OptionsW> options);
     void addToolTipSignal();
 
-    // protected:
+  protected:
+    std::unique_ptr<ITreeNodeWAnalyst> analyst_;
     Wt::WContainerWidget* header_container_;
     Wt::WPushButton* options_button_;
     Wt::WHBoxLayout* node_block_;

@@ -16,9 +16,10 @@
 #include "SessionScopeMap.hpp"
 #include "Tree.hpp"
 #include "TreeNode.hpp"
+#include "TreeNodeWAnalyst.hpp"
 #include "tree_node_dir_w.hpp"
 #include "tree_node_leaf_w.hpp"
-#include "tree_node_other_dir_w.hpp"
+#include "tree_node_w_director.hpp"
 
 TreeW::TreeW()
 // Прописать список инициализации для полей
@@ -45,12 +46,10 @@ TreeW::TreeW()
 void TreeW::setRoot(const Node& node) {
     auto mgr = SessionScopeMap::instance().get()->managers();
     tree_manager_ = std::make_unique<Tree>(node);
-    root_ = new TreeNodeDirW(tree_manager_->getRoot());
 
     auto tree_node = tree_manager_->getRoot();
-    std::cout << tree_node << std::endl;
 
-    auto root = root_->makeTreeNodeWidget(tree_node);
+    auto root = TreeNodeWDirector().fillNode(TreeNodeWAnalyst().analyseTreeNodeWChild(tree_node));
 
     if (node.type & NodeType::PUBLIC_CALENDAR) {
         auto calendar = mgr->calendar_manager()->get(node.resource_id);

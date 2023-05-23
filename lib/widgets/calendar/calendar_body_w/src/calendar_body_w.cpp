@@ -31,8 +31,6 @@ void CalendarBodyW::activateToday(Wt::WDate& selected_date) {
     auto today_day = Wt::WDate(std::chrono::system_clock::now());
     if (selected_date.month() == today_day.month() && today_day.day() >= selected_date.day() &&
         today_day.day() < selected_date.day() + TimeInterval::DAYS_IN_WEEK) {
-        std::cout << selected_date.toString("dd MMMM yyyy") << ' '
-                  << today_day.toString("dd MMMM yyyy") << std::endl;
         table_->elementAt(0, today_day.dayOfWeek())->addStyleClass("table-success");
     }
 }
