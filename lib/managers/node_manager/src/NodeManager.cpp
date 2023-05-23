@@ -13,26 +13,25 @@
 NodeManager::NodeManager(std::shared_ptr<IDbManagers> db) :
 	db_(db) {}
 
-bool NodeManager::checkOwnership(size_t user_id, size_t node_id) {
+bool NodeManager::checkAccess(size_t user_id, size_t node_id) {
 	Node node = db_->node_dbm()->get(node_id);
 
 	if (node.type & DIRECTORY)
-		return user_id == db_->directory_dbm()->get(node.resource_id).owner_id;
+		return db_->directory_dbm()->get(node.resource_id).node_id == node_id;
 
 	if (node.type & CALENDAR)
-		return user_id == db_->calendar_dbm()->get(node.resource_id).owner_id;
+		return db_->calendar_dbm()->get(node.resource_id).node_id == node_id;
 
 	if (node.type & MOUNT)
-		return checkOwnership(user_id, node.parent_id);
+		return checkAccess(user_id, node.parent_id);
 
 	return false;
 }
 
 Node NodeManager::get(size_t node_id) {
 	User user = db_->user_dbm()->get();
-	Node node = db_->node_dbm()->get(node_id);
 
-	if (node.type & (DIRECTORY ^ PUBLIC_GD | PRIVATE_CALENDAR | MOUNT) && !checkOwnership(user.id, node_id))
+	if (!checkAccess(user.id, node_id))
 		return Node();
 
 	return db_->node_dbm()->get(node_id);
@@ -48,7 +47,7 @@ Node NodeManager::get(size_t node_id) {
 size_t NodeManager::add(const Node& node) {
 	User user = db_->user_dbm()->get();
 
-	if (!checkOwnership(user.id, node.parent_id))
+	if (!checkAccess(user.id, node.parent_id))
 		return 0;
 
 	if (node.type & (PRIVATE_DIRECTORY | PUBLIC_DIRECTORY)) {
@@ -56,7 +55,7 @@ size_t NodeManager::add(const Node& node) {
 
 		if (!(parent_node.type & PRIVATE_GD && node.type & PRIVATE_DIRECTORY ||
 			parent_node.type & PUBLIC_GD && node.type & PUBLIC_DIRECTORY ||
-			checkOwnership(user.id, node.id)))
+			checkAccess(user.id, node.id)))
 			return 0;
 
 	} else if (node.type & CALENDAR) {
@@ -64,7 +63,7 @@ size_t NodeManager::add(const Node& node) {
 
 		if (!(parent_node.type & PRIVATE_GD && node.type & PRIVATE_CALENDAR ||
 			parent_node.type & PUBLIC_GD && node.type & PUBLIC_CALENDAR ||
-			checkOwnership(user.id, node.id)))
+			checkAccess(user.id, node.id)))
 			return 0;
 
 	} else if (node.type & MOUNT) {
@@ -92,7 +91,7 @@ void NodeManager::update(const Node& node) {
 	Node prev_parent_node = db_->node_dbm()->get(prev_node.parent_id);
 	Node parent_node = db_->node_dbm()->get(node.parent_id);
 
-	if (!checkOwnership(user.id, parent_node.id) ||
+	if (!checkAccess(user.id, parent_node.id) ||
 		prev_parent_node.type != parent_node.type ||
 		prev_node.resource_id != node.resource_id ||
 		prev_node.type != node.type)
@@ -106,7 +105,7 @@ void NodeManager::remove(size_t node_id) {
 	User user = db_->user_dbm()->get();
 	Node node = db_->node_dbm()->get(node_id);
 
-	if (!checkOwnership(user.id, node.id) ||
+	if (!checkAccess(user.id, node.id) ||
 		node.type & (ROOT | GROUP))
 		return;
 
@@ -144,7 +143,7 @@ void NodeManager::move(size_t node_id, size_t destination_id) {
 	Node mv_node = db_->node_dbm()->get(node_id); 
 	Node mvd_node = mv_node;
 	mvd_node.parent_id = destination_id;
-	db_->node_dbm()->update(mvd_node);
+	update(mvd_node);
 }
 
 // TODO(uma_op): Проверка на права доступа
@@ -158,15 +157,8 @@ void NodeManager::subscribe(size_t node_id) {
 
 	for (auto subg : db_->node_dbm()->getChildren(user.root_id)) {
 		if (subg.type & SUBSCRIPTIONS_GROUP) {
-			Node mount_node = {
-				0,
-				subg.id,
-				node_id,
-				MOUNT
-			};
-				
+			Node mount_node = {0, subg.id, node_id, MOUNT};
 			add(mount_node);
-
 			break;
 		}
 	}
@@ -184,7 +176,6 @@ void NodeManager::unsubscribe(size_t node_id) {
 					db_->node_dbm()->remove(sub.id);
 					break;
 				}
-
 			break;
 		}
 }
@@ -194,7 +185,7 @@ std::vector<Node> NodeManager::getChildren(size_t node_id) {
 	User user = db_->user_dbm()->get();
 	Node node = db_->node_dbm()->get(node_id);
 
-	if (!(checkOwnership(user.id, node_id) || node.type & PUBLIC))
+	if (!(checkAccess(user.id, node_id) || node.type & PUBLIC))
 		return std::vector<Node>();
 
 	return db_->node_dbm()->getChildren(node_id);

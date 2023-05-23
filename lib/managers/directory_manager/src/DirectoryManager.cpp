@@ -7,12 +7,22 @@
 #include "DirectoryManager.hpp"
 #include "Event.hpp"
 #include "Managers.hpp"
+#include "Node.hpp"
+#include "SessionScopeMap.hpp"
 
 DirectoryManager::DirectoryManager(std::shared_ptr<IDbManagers> db) :
     db_(db) {}
 
-const Directory& DirectoryManager::get(size_t directory_id) {
-    return db_->directory_dbm()->get(directory_id);
+// Проверки доступа
+Directory DirectoryManager::get(size_t directory_id) {
+    User user = db_->user_dbm()->get();
+    Directory directory = db_->directory_dbm()->get(directory_id);
+    Node node = db_->node_dbm()->get(directory.node_id);
+
+    if (!(user.id == directory.owner_id || node.type & PUBLIC_DIRECTORY))
+        return Directory();
+
+    return directory;
 }
 
 // Для добавления директория должна содежать следуюшие поля:
@@ -20,36 +30,90 @@ const Directory& DirectoryManager::get(size_t directory_id) {
 // Directory::name
 // Directory::description
 //
-// Остальные поля не участвуют в добавлении опускаются 
+// Остальные поля не участвуют в добавлении (опускаются) 
 //
 // parent_id является полем Directory::id родительской директории
 size_t DirectoryManager::add(const Directory& directory, size_t parent_id) {
-    size_t new_dir_id = db_->directory_dbm()->add(directory);
+    User user = db_->user_dbm()->get();
+    Directory parent_directory = get(parent_id);
 
-    //  Добавляемая директория наследует тип родительской
-    const Node& parent_node = db_->node_dbm()->get(db_->directory_dbm()->get(parent_id).node_id);
+    if (!parent_directory.id || user.id != parent_directory.owner_id)
+        return 0;
+
+    auto node_mgr = SessionScopeMap::instance().get()->managers()->node_manager();
+
+    Node parent_node = node_mgr->get(get(parent_id).node_id);
+    Node new_node = {0, parent_node.id, 0, parent_node.type};
+
+    size_t new_node_id = node_mgr->add(new_node);
+
+    if (!new_node_id)
+        return 0;
+
+    Directory new_directory = directory;
+    new_directory.node_id = new_node_id;
     
-    Node new_node {
-        0,
-        parent_node.id,
-        new_dir_id,
-        parent_node.type
-    };
-    
-    return db_->node_dbm()->add(new_node);
+    return db_->directory_dbm()->add(directory);
 }
 
+// Сменить можно только название и описание
 void DirectoryManager::update(const Directory& directory) {
-    // TODO(uma_op): IMPLEMENT ME
+    User user = db_->user_dbm()->get();
+    Directory prev_directory = get(directory.id);
+
+    if (!prev_directory.id ||
+        user.id != prev_directory.owner_id ||
+        prev_directory.node_id != directory.node_id ||
+        prev_directory.owner_id != directory.owner_id)
+        return;
+
+    db_->directory_dbm()->update(directory);   
 }
 
 void DirectoryManager::remove(size_t directory_id) {
-    db_->node_dbm()->remove(db_->directory_dbm()->get(directory_id).node_id);
+    User user = db_->user_dbm()->get();
+    Directory directory = get(directory_id);
+
+    if (!directory.id ||
+        user.id != directory.owner_id)
+        return;
+
+    // Менеджер нод удаляет также и связанные ресурсы
+    auto node_mgr = SessionScopeMap::instance().get()->managers()->node_manager();
+    node_mgr->remove(directory.node_id);
 }
 
 std::vector<Event> DirectoryManager::getEvents(size_t directory_id) {
-    // TODO(uma_op): IMPLEMENT ME
+    Directory directory = db_->directory_dbm()->get(directory_id);
 
-    return std::vector<Event>();
+    if (!directory.id)
+        return std::vector<Event>();
+
+    auto node_mgr = SessionScopeMap::instance().get()->managers()->node_manager();
+    Node node = node_mgr->get(directory.node_id);
+
+    if (!node.id)
+        return std::vector<Event>();
+
+    auto calendar_mgr = SessionScopeMap::instance().get()->managers()->calendar_manager();
+
+    std::vector<Event> events;
+    std::queue<Node> q;
+
+    q.push(node);
+
+    while (!q.empty()) {
+        if (q.front().type & (PUBLIC_DIRECTORY | PRIVATE_DIRECTORY)) {
+            for (auto c : node_mgr->getChildren(q.front().id))
+                q.push(c);
+        } else if (q.front().type & CALENDAR) {
+            for (auto e : calendar_mgr->getEvents(q.front().resource_id))
+                events.push_back(e);
+        }
+
+        q.pop();
+    }
+
+    return events;
 }
 
