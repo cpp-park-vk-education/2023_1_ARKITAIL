@@ -8,6 +8,7 @@
 class TreeNodeOtherDirWBuilder : public TreeNodeWBuilderBase {
   public:
     TreeNodeOtherDirWBuilder();
+    ~TreeNodeOtherDirWBuilder() = default;
     TreeNodeOtherDirWBuilder* createTreeNodeW(ITreeNode* node);
 
     std::unique_ptr<TreeNodeW> getTreeNodeW();

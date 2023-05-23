@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include "options_w_builder.hpp"
+#include "options_w_director.hpp"
 #include "tree_node_w.hpp"
 
 TreeNodeLeafW::TreeNodeLeafW() {}
@@ -16,9 +18,3 @@ void TreeNodeLeafW::checkNode() {
 void TreeNodeLeafW::uncheckNode() {
     uncheckParentNodes();
 }
-
-void TreeNodeLeafW::showNode() {}
-
-void TreeNodeLeafW::closeNode() {}
-
-void TreeNodeLeafW::performAction(Action action) {}

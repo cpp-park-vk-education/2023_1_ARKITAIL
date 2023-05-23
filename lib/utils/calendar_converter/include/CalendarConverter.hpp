@@ -25,8 +25,7 @@ class CalendarConverter {
 
    // метод принимает вектор id'шников календарей, по которым будет получать
    // эти календари у CalendarManager
-  static std::unique_ptr<parsing::IStreamBuffer> CalendarsToIcalendar(
-      const std::vector<size_t>& calendars);
+  static std::stringstream CalendarToIcalendar(CalendarSptr calendar);
  private:
   static EventSptr FromIcalendarEvent(const parsing::ComponentUptr& icalendar_event);
   static Wt::WDateTime FromIcalendarDateTime(const std::string& icalendar_date_time);

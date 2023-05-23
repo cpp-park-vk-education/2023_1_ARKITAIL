@@ -11,6 +11,5 @@ target_link_libraries(
 	${MODULE_NAME}
 	PUBLIC
   calendar
-  parsing
   calendar_converter
 )

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include <istream>
+#include <sstream>
 
 #include <Wt/WStreamResource.h>
 #include <Wt/Http/Request.h>
@@ -11,12 +11,12 @@
 
 class StringStreamResource : public Wt::WStreamResource{
  public:
-  StringStreamResource(std::unique_ptr<parsing::IStreamBuffer>&& buffer);
+  StringStreamResource(std::stringstream&& ss);
   ~StringStreamResource();
 
   void handleRequest(
       const Wt::Http::Request& request,
       Wt::Http::Response& response) override;
  private:
-  std::istream is_;
+  std::stringstream ss_;
 };

@@ -21,6 +21,8 @@
 const std::string kDateTimeFormat = "yyyyMMdd'T'hhmmss'Z'";
 const std::string kDateFormat = "yyyyMMdd";
 
+// TODO(affeeal): адекватно переработать
+
 std::vector<size_t> CalendarConverter::IcalendarToCalendars(
     std::unique_ptr<parsing::ICharacterReader>&& char_reader) {
   // установка связей между char_reader, lexer, parser
@@ -187,49 +189,45 @@ Wt::WDate CalendarConverter::FromIcalendarDate(
   return Wt::WDate::fromString(icalendar_date, kDateFormat);
 }
 
-std::unique_ptr<parsing::IStreamBuffer> CalendarConverter::CalendarsToIcalendar(
-    const std::vector<size_t>& calendars) {
+std::stringstream CalendarConverter::CalendarToIcalendar(
+    CalendarSptr calendar) {
   std::stringstream ss;
 
-  auto calendar_manager
-    = SessionScopeMap::instance().get()->managers()->calendar_manager();
-  for (size_t calendar_id : calendars) {
-    CalendarSptr calendar = calendar_manager->get(calendar_id);
-    
-    Write(ss, "BEGIN", "VCALENDAR");
+  Write(ss, "BEGIN", "VCALENDAR");
 
-    // установка свойств календаря
-    Write(ss, "VERSION", "2.0");
-    Write(ss, "PRODID", "calendula.ru");
-    Write(ss, "CALSCALE", "GREGORIAN");
-    Write(ss, "METHOD", "PUBLISH");
-    Write(ss, "X-WR-CALNAME:", calendar->summary);
-    Write(ss, "X-CALENDULA-DESCRIPTION:", calendar->description);
-    Write(ss, "X-CALENDULA-COLOR:", calendar->color);
-    Write(ss, "X-CALENDULA-VISIBILITY:", calendar->visibility);
+  // установка свойств календаря
+  Write(ss, "VERSION", "2.0");
+  Write(ss, "PRODID", "calendula.ru");
+  Write(ss, "CALSCALE", "GREGORIAN");
+  Write(ss, "METHOD", "PUBLISH");
+  Write(ss, "X-WR-CALNAME", calendar->summary);
+  Write(ss, "X-CALENDULA-DESCRIPTION", calendar->description);
+  Write(ss, "X-CALENDULA-COLOR", calendar->color);
+  Write(ss, "X-CALENDULA-VISIBILITY", calendar->visibility);
 
-    std::vector<EventSptr> events = calendar_manager->getEvents(calendar_id);
-    for (EventSptr event : events) {
-      Write(ss, "BEGIN", "VEVENT");
+  auto managers = SessionScopeMap::instance().get()->managers();
+  std::vector<EventSptr> events
+    = managers->calendar_manager()->getEvents(calendar->id);
+  for (EventSptr event : events) {
+    Write(ss, "BEGIN", "VEVENT");
 
-      // TODO(affeeal): установить UID
-      Write(ss, "SUMMARY", event->summary);
-      // TODO(affeeal): установить DTSTAMP
-      Write(ss, "DTSTART", FromCalendarDateTime(event->start));
-      Write(ss, "DTEND", FromCalendarDateTime(event->end));
-      Write(ss, "DESCRIPTION", event->description);
-      // TODO(affeeal): установить LOCATION
-      if (event->is_recurrent) {
-        Write(ss, "RRULE", FromCalendarRrule(event));
-      }
-
-      Write(ss, "END", "VEVENT");
+    // TODO(affeeal): установить UID
+    Write(ss, "SUMMARY", event->summary);
+    // TODO(affeeal): установить DTSTAMP
+    Write(ss, "DTSTART", FromCalendarDateTime(event->start));
+    Write(ss, "DTEND", FromCalendarDateTime(event->end));
+    Write(ss, "DESCRIPTION", event->description);
+    // TODO(affeeal): установить LOCATION
+    if (event->is_recurrent) {
+      Write(ss, "RRULE", FromCalendarRrule(event));
     }
 
-    Write(ss, "END", "VCALENDAR");
+    Write(ss, "END", "VEVENT");
   }
 
-  return std::make_unique<parsing::IstreamCharacterReader>(ss.rdbuf());
+  Write(ss, "END", "VCALENDAR");
+
+  return ss;
 }
 
 void CalendarConverter::Write(

@@ -61,15 +61,37 @@ void EventW::makeWeekEventWidget(Wt::WTable* table, Wt::WDate begin_of_week) {
     }
 }
 
-void EventW::makeMonthEventWidget(Wt::WTable* table, Wt::WDate begin_of_month) {
-    // for (int day = 1; day < selected_date.daysTo(selected_date.addMonths(1)); day++) {
-    //     table_->elementAt(1 + (day) / 7, (day) % 7 + 1)->addNew<Wt::WText>(std::to_string(day));
-    // }
-    // for (int day_of_week = begin_of_month.dayOfWeek(); begin_of_month <
-    // begin_of_month.addMonths(1);
-    //      begin_of_month = begin_of_month.addDays(1), day_of_week++){
-
-    //      }
+void EventW::makeMonthEventWidget(Wt::WTable* table, Wt::WDate day_of_month) {
+    auto first_day = Wt::WDate(day_of_month.year(), day_of_month.month(), 1);
+    day_of_month = first_day;
+    for (; day_of_month.day() < first_day.daysTo(first_day.addMonths(1));
+         day_of_month = day_of_month.addDays(1)) {
+        if (begin_.date().day() <= day_of_month.day() && day_of_month.day() <= end_.date().day()) {
+            std::string style, title = "ㅤ";
+            std::cout << "ok\n";
+            if (day_of_month.day() == begin_.date().day() ||
+                day_of_month.day() == first_day.day()) {
+                style += "rounded-start ";
+                title = title_;
+            } else {
+                style += "border-start-0 ";
+            }
+            style += (day_of_month.day() == end_.date().day() ||
+                      day_of_month.day() == first_day.addMonths(1).day() - 1)
+                         ? "rounded-end "
+                         : "border-end-0 ";
+            makeEventLargePartWidget(
+                title, style + "w-100",
+                table->elementAt(1 + (day_of_month.day() + first_day.dayOfWeek()) / 7,
+                                 (day_of_month.day() + first_day.dayOfWeek()) % 7 + 1));
+        } else {
+            std::cout << "no\n";
+            table
+                ->elementAt(1 + (day_of_month.day() + first_day.dayOfWeek()) / 7,
+                            (day_of_month.day() + first_day.dayOfWeek()) % 7 + 1)
+                ->addWidget(std::make_unique<Wt::WBreak>());
+        }
+    }
 }
 
 void EventW::addDialog(Wt::WPushButton* eventWidget) {

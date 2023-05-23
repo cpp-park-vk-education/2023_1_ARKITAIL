@@ -1,13 +1,21 @@
 #pragma once
 
-#include <Wt/WObject.h>
+#include <Wt/WDialog.h>
 
-#include "Dialog.hpp"
+#include "EditEventView.hpp"
 #include "Event.hpp"
 
 namespace dialog {
-class EditEventDialog : public Dialog {
+class EditEventDialog : public Wt::WDialog {
  public:
-  EditEventDialog(Wt::WObject* parent, EventSptr event);
+  EditEventDialog(EventSptr event);
+
+  Wt::Signal<EventSptr>& event_updated();
+ private:
+  void HandleInput();
+
+  Wt::Signal<EventSptr> event_updated_;
+
+  EditEventView* view_;
 };
 } // namespace dialog

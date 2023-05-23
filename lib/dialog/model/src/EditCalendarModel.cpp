@@ -1,4 +1,5 @@
 #include "EditCalendarModel.hpp"
+
 #include "Calendar.hpp"
 
 namespace dialog {
@@ -7,6 +8,7 @@ EditCalendarModel::EditCalendarModel(CalendarSptr calendar)
 }
 
 void EditCalendarModel::UpdateCalendar() {
+  // id, node_id, owner_id остаются теми же
   calendar_->summary = Wt::asString(value(kSummary)).toUTF8();
   calendar_->description = Wt::asString(value(kDescription)).toUTF8();
   calendar_->visibility = Wt::asString(value(kVisibility)).toUTF8();
@@ -14,7 +16,6 @@ void EditCalendarModel::UpdateCalendar() {
 }
 
 void EditCalendarModel::SetValues() {
-  // id, node_id, owner_id остаются теми же
   setValue(kSummary, calendar_->summary);
   setValue(kDescription, calendar_->description);
   setValue(kVisibility, calendar_->visibility);

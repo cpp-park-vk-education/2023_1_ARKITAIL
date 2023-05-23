@@ -1,16 +1,39 @@
 #include "EditEventDialog.hpp"
 
 #include <Wt/WObject.h>
+#include <Wt/WPushButton.h>
 
 #include "EditEventView.hpp"
 #include "Event.hpp"
+#include "EventModel.hpp"
+#include "IManagers.hpp"
+#include "SessionScopeMap.hpp"
 
 namespace dialog {
-EditEventDialog::EditEventDialog(Wt::WObject* parent, EventSptr event) {
-  parent_ = parent;
-  contents_ = std::make_unique<EditEventView>(event);
-  title_ = "Событие";
-  min_width_ = 600;
-  min_height_= 600;
+EditEventDialog::EditEventDialog(EventSptr event)
+    : Wt::WDialog("Событие") {
+  rejectWhenEscapePressed();
+  setClosable(true);
+  setMinimumSize(700, 800);
+  setMovable(false);
+
+  view_ = contents()->addNew<EditEventView>(event);
+
+  Wt::WPushButton* submit = footer()->addNew<Wt::WPushButton>("OK");
+  submit->clicked().connect(this, &EditEventDialog::HandleInput);
+}
+
+void EditEventDialog::HandleInput() {
+  EventModel* model = view_->model().get();
+  view_->updateModel(model);
+
+  if (model->validate()) {
+    model->UpdateEvent();
+
+    IManagers* managers = SessionScopeMap::instance().get()->managers();
+    managers->event_manager()->update(model->event());
+    event_updated_.emit(model->event());
+  }
+  view_->updateView(model);
 }
 } // namespace dialog

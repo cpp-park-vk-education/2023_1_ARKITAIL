@@ -29,26 +29,6 @@
 TreeNodeWBuilderBase::TreeNodeWBuilderBase() :
     tree_node_w() {}
 
-// TreeNodeWBuilderBase* TreeNodeWBuilderBase::createTreeNodeDirW(ITreeNode* node) {
-//     // tree_node_w.swap(std::make_unique<TreeNodeDirW>(node));
-//     return this;
-// }
-
-// TreeNodeWBuilderBase* TreeNodeWBuilderBase::createTreeNodeLeafW(ITreeNode* node) {
-//     // tree_node_w.swap(std::make_unique<TreeNodeLeafW>(node));
-//     return this;
-// }
-
-// TreeNodeWBuilderBase* TreeNodeWBuilderBase::createTreeNodeOtherDirW(ITreeNode* node) {
-//     // tree_node_w.swap(std::make_unique<TreeNodeOtherDirW>(node));
-//     return this;
-// }
-
-// TreeNodeWBuilderBase* TreeNodeWBuilderBase::createTreeNodeSubscriptionsDirW(ITreeNode* node) {
-//     // tree_node_w.swap(std::make_unique<TreeNodeSubscriptionsDirW>(node));
-//     return this;
-// }
-
 TreeNodeWBuilderBase* TreeNodeWBuilderBase::addHead(std::unique_ptr<Wt::WWidget> head) {
     tree_node_w->header_container_->addWidget(std::move(head));
     return this;
@@ -64,21 +44,19 @@ TreeNodeWBuilderBase* TreeNodeWBuilderBase::addCheckBox() {
 }
 
 TreeNodeWBuilderBase* TreeNodeWBuilderBase::addOptions(std::unique_ptr<OptionsW> options) {
-    tree_node_w->options_button_ =
+    auto options_button_ =
         tree_node_w->node_block_->addWidget(std::make_unique<Wt::WPushButton>("•••"));
-    tree_node_w->options_button_->addStyleClass("p-1 py-0 border-0 btn-light");
-    options.get()->selectedOption().connect([=] {
-        std::cout << "\nclick option\n";
-    });
-    tree_node_w->options_button_->setMenu(std::move(options));
-    tree_node_w->options_button_->toggleStyleClass("dropdown-toggle", false);
+    options_button_->addStyleClass("p-1 py-0 border-0 btn-light");
+    options.get()->selectedOption().connect(tree_node_w.get(), &TreeNodeW::performAction);
+    options_button_->setMenu(std::move(options));
+    options_button_->toggleStyleClass("dropdown-toggle", false);
     return this;
 }
 
 TreeNodeWBuilderBase* TreeNodeWBuilderBase::addToolTip(std::string description,
                                                        std::vector<std::string> tags) {
     auto content = std::make_unique<Wt::WContainerWidget>();
-    addToolTip(std::move(fillToolTipContainer(std::move(content), description, tags)));
+    addToolTip(fillToolTipContainer(std::move(content), description, tags));
     return this;
 }
 
@@ -90,11 +68,11 @@ TreeNodeWBuilderBase* TreeNodeWBuilderBase::addToolTip(std::string description,
         Wt::WLink(Wt::LinkType::InternalPath, "/calendars"), author.nickname));
     author_ptr->setStyleClass("fw-bolder");
     author_ptr->clicked().connect([=] {
-        std::cout << author_ptr->text().toUTF8() << std::endl;
+        std::cout << "кликнули на пользователя " << author_ptr->text().toUTF8() << std::endl;
     });
     content->addWidget(std::make_unique<Wt::WBreak>());
 
-    addToolTip(std::move(fillToolTipContainer(std::move(content), description, tags)));
+    addToolTip(fillToolTipContainer(std::move(content), description, tags));
 
     return this;
 }
@@ -133,9 +111,5 @@ std::unique_ptr<Wt::WContainerWidget> TreeNodeWBuilderBase::fillToolTipContainer
 
 void TreeNodeWBuilderBase::addToolTip(std::unique_ptr<Wt::WContainerWidget> content) {
     tree_node_w->tool_tip_ = std::make_unique<Wt::WPopupWidget>(std::move(content));
-    tree_node_w->tool_tip_->setTransient(false, 5);
-    tree_node_w->tool_tip_->setAnchorWidget(tree_node_w->header_container_);
-    tree_node_w->header_container_->mouseWentOver().connect([=] {
-        tree_node_w->tool_tip_->setHidden(false);
-    });
+    tree_node_w->addToolTipSignal();
 }

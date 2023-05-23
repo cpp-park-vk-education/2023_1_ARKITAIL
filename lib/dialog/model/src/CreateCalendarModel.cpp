@@ -1,7 +1,6 @@
 #include "CreateCalendarModel.hpp"
-#include "CalendarModel.hpp"
 
-#include <Wt/WTime.h>
+#include "CalendarModel.hpp"
 
 namespace dialog {
 CreateCalendarModel::CreateCalendarModel()
@@ -18,7 +17,6 @@ void CreateCalendarModel::UpdateCalendar() {
 }
 
 void CreateCalendarModel::SetValues() {
-  // цвет по умолчанию
   setValue(kColor, "#f4d03f");
 }
 } // namespace dialog

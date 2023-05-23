@@ -1,5 +1,4 @@
 #include "EventModel.hpp"
-#include "Event.hpp"
 
 #include <memory>
 
@@ -12,6 +11,8 @@
 #include <Wt/WTime.h>
 #include <Wt/WTimeValidator.h>
 #include <Wt/WValidator.h>
+
+#include "Event.hpp"
 
 namespace dialog {
 const Wt::WFormModel::Field EventModel::kSummary = "summary";
@@ -28,20 +29,23 @@ const Wt::WFormModel::Field EventModel::kFrequency = "frequency";
 const Wt::WFormModel::Field EventModel::kInterval = "interval";
 const Wt::WFormModel::Field EventModel::kUntil = "until";
 
-EventModel::EventModel(EventSptr event)
-    : Wt::WFormModel(),
-      event_(event) {
-  AddFields();
-  SetValidators();
-  SetValues();
+void EventModel::UpdateEvent() {
+}
+
+EventSptr EventModel::event() const {
+  return event_;
 }
 
 void EventModel::set_event(EventSptr event) {
   event_ = event;
 }
 
-EventSptr EventModel::event() const {
-  return event_;
+EventModel::EventModel(EventSptr event)
+    : Wt::WFormModel(),
+      event_(event) {
+  AddFields();
+  SetValidators();
+  SetValues();
 }
 
 void EventModel::AddFields() {
@@ -82,8 +86,6 @@ void EventModel::SetValidators() {
 void EventModel::SetValues() {
 }
 
-void EventModel::UpdateEvent() {
-}
 
 std::shared_ptr<Wt::WValidator> EventModel::CreateTitleValidator() {
   auto validator = std::make_shared<Wt::WLengthValidator>();

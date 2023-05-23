@@ -24,14 +24,13 @@ class EventModel : public Wt::WFormModel {
   static const Wt::WFormModel::Field kInterval;
   static const Wt::WFormModel::Field kUntil;
   
-  void set_event(EventSptr event);
+  virtual void UpdateEvent();
 
   EventSptr event() const;
 
-  virtual void UpdateEvent();
+  void set_event(EventSptr event);
  protected:
-  EventModel() = delete;
-  EventModel(EventSptr event);
+  explicit EventModel(EventSptr event);
 
   void AddFields();
   void SetValidators();

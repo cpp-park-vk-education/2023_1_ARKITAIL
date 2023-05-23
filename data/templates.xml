@@ -6,9 +6,9 @@
         <label class="form-label" for="${id:title}">
           Название
         </label>
-        ${title}
+        ${summary}
         <div class="form-text">
-          ${title-info}
+          ${summary-info}
         </div>
       </div>
     </div>
@@ -43,14 +43,6 @@
         </div>
       </div>
     </div>
-    <div class="row m-3">
-      <div class="col">
-        ${submit-button}
-        <span class="help-inline">
-          ${submit-info}
-        </span>
-      </div>
-    </div>
   </message>
 
   <message id="calendar-import">
@@ -60,17 +52,6 @@
           В формате iCalendar
         </label>
         ${import-icalendar}
-        <div class="form-text">
-          ${import-icalendar-info}
-        </div>
-      </div>
-    </div>
-    <div class="row m-3">
-      <div class="col">
-        ${submit-button}
-        <span class="help-inline">
-          ${submit-info}
-        </span>
       </div>
     </div>
   </message>

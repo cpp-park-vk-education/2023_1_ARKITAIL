@@ -11,6 +11,7 @@ target_link_libraries(tree_node_w  PUBLIC
                       node
                       tree
                       calendar
+                      dialog
                       directory
                       user
                       profile
@@ -22,4 +23,6 @@ target_link_libraries(tree_node_w  PUBLIC
                       tree_node_other_dir_w_builder
                       tree_node_leaf_w_builder
                       options_w_director
+                      tree_node_w_analyst
+                      tree_node_w_director
                       )
