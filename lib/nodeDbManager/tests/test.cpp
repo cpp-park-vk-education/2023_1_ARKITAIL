@@ -42,7 +42,7 @@ TEST(NodeManagerTest, AddNodeAndTag) {
   // Создание объекта EventManager с использованием мока Session
   NodeManager manager(session);
   // Создание тестовых данных
-  Type type = Type::PublicCalendar;
+  NodeType type = NodeType::PUBLIC_CALENDAR;
   RetNode ret;
   ret.parent_id = 4;
   ret.type = type;

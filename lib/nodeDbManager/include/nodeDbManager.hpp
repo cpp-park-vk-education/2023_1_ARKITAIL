@@ -10,7 +10,7 @@ struct RetTag {
 struct RetNode {
   int node_id;
   int parent_id;
-  Type type;
+  NodeType type;
   int resource_id;
 };
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "baseForAll.hpp"
+#include "Node.hpp"
 
 class Users;
 class Calendars;
@@ -83,23 +84,10 @@ public:
   }
 };
 
-enum class Type {
-  Root = 1,
-  PrivateGroup = 2,
-  PrivateDirectory = 4,
-  PrivateCalendar = 8,
-  PublicGroup = 16,
-  PublicDirectory = 32,
-  PublicCalendar = 64,
-  SubscriptionGroup = 128,
-  Mount = 256,
-  ProfileGroup = 512,
-  Profile = 1024
-};
 
 class Nodes {
 public:
-  Type type;
+  NodeType type;
   dbo::ptr<Nodes> parent;
   dbo::collection<dbo::ptr<Tags>> tag;
   int resource_id;
