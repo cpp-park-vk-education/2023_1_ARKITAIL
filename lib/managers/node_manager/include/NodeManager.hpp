@@ -13,7 +13,7 @@ class NodeManager : public INodeManager {
 public:
 	NodeManager(std::shared_ptr<IDbManagers> db);
 
-	const Node& get(size_t node_id) override;
+	Node get(size_t node_id) override;
 	size_t add(const Node& node) override;
 	void update(const Node& node) override;
 
@@ -27,6 +27,8 @@ public:
 	std::vector<Node> getChildren(size_t node_id) override;
 
 private:
+	bool checkOwnership(size_t user_id, size_t node_id);
+
 	std::shared_ptr<IDbManagers> db_;
 
 };

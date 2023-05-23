@@ -16,8 +16,18 @@ enum NodeType {
     PROFILE = 1 << 11
 };
 
+enum GenericNodeType {
+    PRIVATE_GD = PRIVATE_GROUP | PRIVATE_DIRECTORY,
+    PRIVATE = PRIVATE_GD | PRIVATE_CALENDAR,
+    PUBLIC_GD = PUBLIC_GROUP | PUBLIC_DIRECTORY,
+    PUBLIC = PUBLIC_GD | PUBLIC_CALENDAR,
+    GROUP = PRIVATE_GROUP | PUBLIC_GROUP | SUBSCRIPTIONS_GROUP | PROFILE_GROUP,
+    DIRECTORY = ROOT | PRIVATE_GD | PUBLIC_GD | SUBSCRIPTIONS_GROUP | PROFILE_GROUP,
+    CALENDAR = PRIVATE_CALENDAR | PUBLIC_CALENDAR,
+};
+
 class Node {
-  public:
+public:
     Node() = default;
 
     Node(size_t id, size_t parent_id, size_t rosource_id, NodeType type);
