@@ -16,7 +16,7 @@ public:
 	virtual void update(const Event&) = 0;
 	virtual void remove(int) = 0;
 
-	virtual std::vector<Comment> getComments(int) = 0;
+	//virtual std::vector<Comment> getComments(int) = 0;
 	virtual std::chrono::time_point<clock_t> parseTime(std::string) = 0;
 
 };

@@ -26,9 +26,9 @@ void EventManager::remove(int event_id) {
     db_->event_dbm()->remove(event_id);
 }
 
-std::vector<Comment> EventManager::getComments(int event_id) {
-    return db_->event_dbm()->getComments(event_id);
-}
+// std::vector<Comment> EventManager::getComments(int event_id) {
+//     return db_->event_dbm()->getComments(event_id);
+// }
 
 std::chrono::time_point<EventManager::clock_t> EventManager::parseTime(std::string str_time) {
     // TODO(uma_op): IMPLEMENT ME

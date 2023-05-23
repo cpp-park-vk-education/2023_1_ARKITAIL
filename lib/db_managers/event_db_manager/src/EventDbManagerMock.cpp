@@ -45,13 +45,13 @@ void EventDbManagerMock::remove(int event_id) {
 			db_->events.erase(e);
 }
 
-std::vector<Comment> EventDbManagerMock::getComments(int event_id) {
-	std::vector<Comment> comments;
+// std::vector<Comment> EventDbManagerMock::getComments(int event_id) {
+// 	std::vector<Comment> comments;
 
-	for (auto e = db_->comments.begin() + 1; e != db_->comments.end(); e++)
-		if (e->event_id == event_id)
-			comments.push_back(*e);
+// 	for (auto e = db_->comments.begin() + 1; e != db_->comments.end(); e++)
+// 		if (e->event_id == event_id)
+// 			comments.push_back(*e);
 
-	return comments;
-}
+// 	return comments;
+// }
 

@@ -1,4 +1,5 @@
 /*
 убрал owner у comments 
 убрал update у comments
+убран getComment из event
 */

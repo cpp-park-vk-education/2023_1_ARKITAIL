@@ -19,7 +19,7 @@ public:
     void update(const Event& event) override;
     void remove(int event_id) override;
 
-    std::vector<Comment> getComments(int event_id) override;
+    //std::vector<Comment> getComments(int event_id) override;
     std::chrono::time_point<clock_t> parseTime(std::string str_time) override;
 
 private:
