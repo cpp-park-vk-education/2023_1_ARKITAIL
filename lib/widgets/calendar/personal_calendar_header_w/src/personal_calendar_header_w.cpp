@@ -15,7 +15,6 @@ void PersonalCalendarHeaderW::addConnections() {
 }
 
 void PersonalCalendarHeaderW::addEvent() {
-    change_selected_date_.emit(
-        Wt::WDate(selected_date_->year(), selected_date_->month(), selected_date_->day()));
+    change_selected_date_.emit(selected_date_);
     // added_event_.emit(); // если по сигналу будет передаваться событие
 }

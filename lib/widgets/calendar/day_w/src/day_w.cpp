@@ -1,6 +1,7 @@
 #include "day_w.hpp"
 
 #include "event_w.hpp"
+#include "time_utils.hpp"
 
 DayW::DayW() {
     table_->setHeaderCount(1, Wt::Orientation::Vertical);
@@ -11,7 +12,7 @@ void DayW::update(Wt::WDate selected_date_) {
     makeHeaderTime();
     table_->insertColumn(1);
     table_->insertRow(0);
-    for (int i = 0; i < 24; i++) {
+    for (int i = 0; i < TimeInterval::HOURS_PER_DAY; i++) {
         table_->elementAt(i, 1)->addStyleClass("w-100");
     }
 
@@ -31,6 +32,6 @@ void DayW::update(Wt::WDate selected_date_) {
                                          Wt::WDateTime(Wt::WDate(2023, 5, 15), Wt::WTime(0, 0)),
                                          Wt::WDateTime(Wt::WDate(2023, 5, 15), Wt::WTime(23, 59)))};
     for (auto&& event : events) {
-        event.makeDayEventWidget(table_, selected_date_);
+        event.makeDayEventWidget(table_);
     }
 }

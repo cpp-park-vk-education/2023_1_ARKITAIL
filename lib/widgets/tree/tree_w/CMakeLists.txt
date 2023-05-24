@@ -7,7 +7,8 @@ target_link_libraries(tree_w  PUBLIC
                       tree_node_w
                       tree_node_leaf_w
                       tree_node_dir_w
-                      tree_node_other_dir_w
+                      tree_node_w_analyst
+                      tree_node_w_director
                       node
                       tree
                       managers)

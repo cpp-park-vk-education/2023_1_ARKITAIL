@@ -23,7 +23,7 @@ class EventW {
 
     ~EventW() = default;
 
-    void makeDayEventWidget(Wt::WTable* table, Wt::WDate day);
+    void makeDayEventWidget(Wt::WTable* table);
     void makeWeekEventWidget(Wt::WTable* table, Wt::WDate begin_of_week);
     void makeMonthEventWidget(Wt::WTable* table, Wt::WDate begin_of_month);
 

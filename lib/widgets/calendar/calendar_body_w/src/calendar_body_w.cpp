@@ -7,18 +7,17 @@
 
 #include <memory>
 
+#include "time_utils.hpp"
+
 CalendarBodyW::CalendarBodyW() {
-    auto table = std::make_unique<Wt::WTable>();
-    table_ = table.get();
+    table_ = addWidget(std::make_unique<Wt::WTable>());
     table_->setWidth(Wt::WLength("100%"));
     table_->addStyleClass("table table-bordered table-sm d-block w-100");
-    addWidget(std::move(table));
 }
 
 void CalendarBodyW::makeHeaderTime() {
-    for (unsigned i = 0; i < 24; ++i) {
-        table_->elementAt(i, 0)->addNew<Wt::WText>(
-            Wt::WString(i < 10 ? "0{1}:00" : "{1}:00").arg(i));
+    for (size_t hour = 0; hour < TimeInterval::HOURS_PER_DAY; ++hour) {
+        table_->elementAt(hour, 0)->addNew<Wt::WText>(createTime(hour));
     }
 }
 
@@ -28,10 +27,10 @@ void CalendarBodyW::updateCalendar(Wt::WDate selected_date) {
     }
 }
 
-void CalendarBodyW::activateToday(Wt::WDate* selected_date, int begin_week_day, int shift) {
-    auto today_day = std::make_unique<Wt::WDate>(std::chrono::system_clock::now());
-    if (selected_date->month() == today_day->month() && today_day->day() >= begin_week_day &&
-        today_day->day() <= begin_week_day + 7) {
-        table_->elementAt(0, today_day->dayOfWeek() + shift)->addStyleClass("table-success");
+void CalendarBodyW::activateToday(Wt::WDate& selected_date) {
+    auto today_day = Wt::WDate(std::chrono::system_clock::now());
+    if (selected_date.month() == today_day.month() && today_day.day() >= selected_date.day() &&
+        today_day.day() < selected_date.day() + TimeInterval::DAYS_IN_WEEK) {
+        table_->elementAt(0, today_day.dayOfWeek())->addStyleClass("table-success");
     }
 }

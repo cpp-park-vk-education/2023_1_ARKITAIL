@@ -18,5 +18,5 @@ class CalendarBodyW : public ICalendarBodyW {
   protected:
     Wt::WTable* table_;
     void makeHeaderTime();
-    void activateToday(Wt::WDate* selected_date, int begin_week_day, int shift);
+    void activateToday(Wt::WDate& selected_date);
 };

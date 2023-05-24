@@ -5,6 +5,7 @@
 
 #include <memory>
 
+#include "ITreeNode.hpp"
 #include "tree_node_w.hpp"
 
 class TreeNodeLeafW : public TreeNodeW {

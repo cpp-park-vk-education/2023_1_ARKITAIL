@@ -1,7 +1,0 @@
-add_subdirectory(tree_node_w_analyst)
-add_subdirectory(tree_node_w_builder_base)
-add_subdirectory(tree_node_dir_w_builder)
-add_subdirectory(tree_node_sub_dir_w_builder)
-add_subdirectory(tree_node_other_dir_w_builder)
-add_subdirectory(tree_node_leaf_w_builder)
-add_subdirectory(tree_node_w_director)

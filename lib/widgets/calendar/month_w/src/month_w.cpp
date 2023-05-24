@@ -2,6 +2,7 @@
 
 #include "Wt/WBreak.h"
 #include "event_w.hpp"
+#include "time_utils.hpp"
 
 MonthW::MonthW() {
     table_->setHeaderCount(1);
@@ -10,26 +11,25 @@ MonthW::MonthW() {
 }
 
 void MonthW::update(Wt::WDate selected_date) {
-    auto begin_week_day = std::make_unique<Wt::WDate>(selected_date);
-    auto first_day = Wt::WDate(selected_date.year(), selected_date.month(), 1);
+    auto begin_week_day = selected_date;
     table_->clear();
 
-    for (unsigned i = 1; i < 6; ++i) {
+    for (size_t i = 1; i < 6; ++i) {
         table_->elementAt(i, 0)->addNew<Wt::WText>("ㅤ");
         table_->elementAt(i, 0)->addStyleClass("py-4");
     }
 
     for (int i{1}; auto&& weekday : {"Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"}) {
         table_->elementAt(0, i++)->addNew<Wt::WText>(weekday);
-        begin_week_day = std::make_unique<Wt::WDate>(begin_week_day->addDays(1));
+        begin_week_day = begin_week_day.addDays(1);
     }
-    std::cout << first_day.toString("dd MMMM yyyy");
 
-    for (int day = 1 + first_day.dayOfWeek();
-         day < selected_date.daysTo(selected_date.addMonths(1).addDays(first_day.dayOfWeek()));
-         day++) {
-        table_->elementAt(1 + (day) / 7, (day) % 7 + 1)
-            ->addNew<Wt::WText>(std::to_string(day - first_day.dayOfWeek()));
+    for (int day = selected_date.dayOfWeek();
+         day < selected_date.daysTo(selected_date.addMonths(1)); day++) {
+        table_
+            ->elementAt(1 + (day) / TimeInterval::DAYS_IN_WEEK,
+                        (day) % TimeInterval::DAYS_IN_WEEK + 1)
+            ->addNew<Wt::WText>(std::to_string(day - selected_date.dayOfWeek()));
     }
 
     std::vector<EventW> events = {EventW(0, "Event0 цыцы ыцы", Wt::WColor(200, 50, 50, 50),
