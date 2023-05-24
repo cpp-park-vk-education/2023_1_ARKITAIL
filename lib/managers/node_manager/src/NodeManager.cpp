@@ -106,7 +106,7 @@ void NodeManager::remove(size_t node_id) {
 	Node node = db_->node_dbm()->get(node_id);
 
 	if (!checkAccess(user.id, node.id) ||
-		node.type & (ROOT | GROUP))
+		node.type & (ROOT | PRIVATE_GROUP | PUBLIC_GROUP | SUBSCRIPTIONS_GROUP | PROFILE_GROUP))
 		return;
 
 	std::queue<Node> subtree;

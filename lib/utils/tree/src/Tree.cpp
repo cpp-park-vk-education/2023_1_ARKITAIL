@@ -26,7 +26,7 @@ std::vector<Event> Tree::getCheckedEvents() {
     q.push(getRoot());
 
     while (!q.empty()) {
-        if ((q.front()->getNode().type & (NodeType::PUBLIC_CALENDAR | NodeType::PRIVATE_CALENDAR)) &&
+        if ((q.front()->getNode().type & (PUBLIC_CALENDAR | PRIVATE_CALENDAR)) &&
             q.front()->isChecked())
             for (auto e : mgr->calendar_manager()->getEvents(q.front()->getNode().resource_id))
                 v.push_back(e);
