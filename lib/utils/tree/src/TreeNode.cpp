@@ -9,6 +9,9 @@
 #include "ITreeNode.hpp"
 #include "Managers.hpp"
 
+TreeNode::TreeNode(const Node& node) :
+    TreeNode(node, nullptr) {}
+
 TreeNode::TreeNode(const Node& node, ITreeNode* parent) : node_(node), parent_(parent), children_(), checked_(false) {
     auto mgr = SessionScopeMap::instance().get()->managers();
 
@@ -56,6 +59,7 @@ std::unique_ptr<ITreeNode> TreeNode::removeChild(ITreeNode* child) {
         if (b->get() == child) {
             rmd_child.swap(*b);
             children_.erase(b);
+            break;
         }
     }
 

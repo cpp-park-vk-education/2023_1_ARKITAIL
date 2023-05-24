@@ -1,15 +1,71 @@
-#include "SessionScopeMap.hpp"
 #include <gtest/gtest.h>
+
+#include "IManagers.hpp"
+#include "ITreeNode.hpp"
+#include "Node.hpp"
+#include "SessionScopeMap.hpp"
+#include "TreeNode.hpp"
 
 class SessionSuit : public ::testing::Test {
 protected:
 	void SetUp() override {
-		SessionScopeMap::instance().get();
+		managers = SessionScopeMap::instance().get()->managers();
 	}
 
 	void TearDown() override {
 		SessionScopeMap::instance().remove();
 	}
+
+	IManagers* managers;
 };
 
-TEST_F(SessionSuit, TestCreation) {}
+TEST_F(SessionSuit, TreeNodeCreation) {
+	User user = managers->user_manager()->get();
+	Node node = managers->node_manager()->get(user.root_id);
+
+	EXPECT_NO_THROW((TreeNode(node)));
+}
+
+TEST_F(SessionSuit, TreeNodeGettingChilds) {
+	User user = managers->user_manager()->get();
+	Node node = managers->node_manager()->get(user.root_id);
+
+	TreeNode tree_node = {node};
+
+	std::vector<Node> expected_children = {
+		Node(3, 1, 3, PRIVATE_GROUP),
+		Node(4, 1, 4, PUBLIC_GROUP),
+		Node(5, 1, 5, SUBSCRIPTIONS_GROUP),
+		Node(6, 1, 6, PROFILE_GROUP)
+	};
+
+	std::vector<ITreeNode*> got_children = tree_node.getChildren();
+
+	auto e = expected_children.begin();
+	auto g = got_children.begin();
+
+	for (; e != expected_children.end() && g != got_children.end(); e++, g++) {
+		EXPECT_EQ(e->id, (*g)->getNode().id);
+		EXPECT_EQ(e->parent_id, (*g)->getNode().parent_id);
+		EXPECT_EQ(e->resource_id, (*g)->getNode().resource_id);
+		EXPECT_EQ(e->type, (*g)->getNode().type);
+	}
+}
+
+TEST_F(SessionSuit, TreeNodeRemovingChild) {
+	User user = managers->user_manager()->get();
+	Node node = managers->node_manager()->get(user.root_id);
+
+	TreeNode tree_node = {node};
+
+	std::vector<ITreeNode*> children = tree_node.getChildren();
+	std::vector<ITreeNode*> children1 = children[0]->getChildren();
+
+	EXPECT_NO_THROW(children1[0]->remove());
+	EXPECT_NO_THROW(children1[1]->remove());
+	EXPECT_NO_THROW(children[0]->remove());
+	EXPECT_NO_THROW(children[1]->remove());
+	EXPECT_NO_THROW(children[2]->remove());
+	EXPECT_NO_THROW(children[3]->remove());
+}
+

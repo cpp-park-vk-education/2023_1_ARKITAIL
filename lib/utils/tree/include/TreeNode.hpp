@@ -8,6 +8,7 @@
 
 class TreeNode : public ITreeNode {
 public:
+    TreeNode(const Node& node);
     TreeNode(const Node& node, ITreeNode* parent);
 
     const Node& getNode() override;

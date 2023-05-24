@@ -46,7 +46,6 @@ SessionScope* SessionScopeMap::get() {
 }
 
 void SessionScopeMap::add(std::thread::id tid) {
-#ifdef BUILD_TESTS
 	std::shared_ptr<DbMock> db_mock = std::make_shared<DbMock>();
 
 	std::shared_ptr<IDbManagers> db = std::make_shared<DbManagers>(
@@ -75,7 +74,6 @@ void SessionScopeMap::add(std::thread::id tid) {
 			)
 		)
 	);
-#endif
 }
 
 void SessionScopeMap::remove() {

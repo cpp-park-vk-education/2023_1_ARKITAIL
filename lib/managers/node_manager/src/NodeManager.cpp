@@ -17,10 +17,11 @@ bool NodeManager::checkAccess(size_t user_id, size_t node_id) {
 	Node node = db_->node_dbm()->get(node_id);
 
 	if (node.type & DIRECTORY)
-		return db_->directory_dbm()->get(node.resource_id).node_id == node_id;
+		return db_->directory_dbm()->get(node.resource_id).owner_id == user_id;
 
 	if (node.type & CALENDAR)
-		return db_->calendar_dbm()->get(node.resource_id).node_id == node_id;
+		return db_->calendar_dbm()->get(node.resource_id).owner_id == user_id;
+
 
 	if (node.type & MOUNT)
 		return checkAccess(user_id, node.parent_id);

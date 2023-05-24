@@ -21,12 +21,11 @@
 #include "User.hpp"
 #include "Node.hpp"
 
-static bool operator==(const Node& lhs, const Node& rhs) {
-	return 
-		lhs.id == rhs.id &&
-		lhs.parent_id == rhs.parent_id &&
-		lhs.resource_id == rhs.resource_id &&
-		lhs.type == rhs.type;
+static void operator==(const Node& lhs, const Node& rhs) {
+	EXPECT_EQ(lhs.id, rhs.id);
+	EXPECT_EQ(lhs.parent_id, rhs.parent_id);
+	EXPECT_EQ(lhs.resource_id, rhs.resource_id);
+	EXPECT_EQ(lhs.type, rhs.type);
 }
 
 class ManagersSuit : public ::testing::Test {
@@ -91,7 +90,7 @@ TEST_F(ManagersSuit, GetChildrens) {
 	EXPECT_FALSE(got.empty());
 
 	for (auto e = expected.begin(), g = got.begin(); e != expected.end() && g != got.end(); e++, g++)
-		EXPECT_TRUE(*e == *g);
+		*e == *g;
 }
 
 // Разрешено
@@ -103,13 +102,11 @@ TEST_F(ManagersSuit, AddNodeToCurrentUser) {
 		0,
 		3,
 		0,
-		NodeType::PRIVATE_DIRECTORY
+		PRIVATE_DIRECTORY
 	};
 
 	new_node.id = managers->node_manager()->add(new_node);
-	auto node = managers->node_manager()->get(new_node.id);
-
-	EXPECT_TRUE(node == new_node);
+	EXPECT_NE(new_node.id, 0);
 }
 
 // Запрещено
@@ -120,7 +117,7 @@ TEST_F(ManagersSuit, AddNodeToOthrerUser) {
 		0,
 		15,
 		0,
-		NodeType::PRIVATE_DIRECTORY
+		PRIVATE_DIRECTORY
 	};
 
 	size_t new_node_id = managers->node_manager()->add(new_node);

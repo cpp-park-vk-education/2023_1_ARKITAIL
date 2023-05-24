@@ -6,7 +6,6 @@
 #include <Wt/WWidget.h>
 
 #include <string>
-#include <thread>
 
 #include "SessionScopeMap.hpp"
 #include "main_p.hpp"
@@ -27,6 +26,7 @@ Application::Application(const Wt::WEnvironment& env) :
     // Some initial widgets configuration
     pages_.emplace("/calendars", std::make_unique<MainP>())
         .first->second.set_destination(&cur_swap_);
+    std::cout << "hello" << std::endl;
     navbar_->addLink("Calendars", "/calendars");
     pages_.emplace("/profile", std::make_unique<OtherP>())
         .first->second.set_destination(&cur_swap_);
