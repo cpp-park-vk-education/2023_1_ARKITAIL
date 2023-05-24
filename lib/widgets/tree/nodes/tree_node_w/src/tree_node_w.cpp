@@ -20,199 +20,119 @@
 #include "Node.hpp"
 #include "Profile.hpp"
 #include "SessionScopeMap.hpp"
+#include "TreeNodeWAnalyst.hpp"
 #include "User.hpp"
-#include "in_place_edit_title.hpp"
+#include "Wt/WContainerWidget.h"
+#include "Wt/WIconPair.h"
+#include "Wt/WText.h"
 #include "options_w.hpp"
 #include "options_w_builder.hpp"
 #include "options_w_director.hpp"
 #include "tree_node_dir_w.hpp"
 #include "tree_node_leaf_w.hpp"
-#include "tree_node_other_dir_w.hpp"
-#include "tree_node_subscriptions_dir_w.hpp"
-#include "tree_node_w_builder.hpp"
+#include "tree_node_w.hpp"
+#include "tree_node_w_director.hpp"
+
+TreeNodeW::TreeNodeW() {}
 
 TreeNodeW::TreeNodeW(ITreeNode* node) :
     Wt::WContainerWidget(),
     parent_(nullptr),
-    node_(node) {
+    node_(node),
+    analyst_(std::make_unique<TreeNodeWAnalyst>()) {
     auto node_block = addWidget(std::make_unique<Wt::WContainerWidget>());
     node_block->addStyleClass("p-0");
     node_block_ = node_block->setLayout(std::make_unique<Wt::WHBoxLayout>());
+    check_box_container = node_block_->addWidget(std::make_unique<Wt::WContainerWidget>());
+    check_box_container->addStyleClass("my-auto mx-0 px-0");
+    header_container_ = node_block_->addWidget(std::make_unique<Wt::WContainerWidget>());
 }
 
 TreeNodeW* TreeNodeW::addChildNode(std::unique_ptr<TreeNodeW> child) {
     return this;
 }
 
-void TreeNodeW::removeNode() {
-    this->clear();
+void TreeNodeW::checkNode() {}
+void TreeNodeW::uncheckNode() {}
+void TreeNodeW::showNode() {}
+void TreeNodeW::closeNode() {}
+
+void TreeNodeW::performAction(Action action) {
+    OptionsWBuilder options_builder;
+    switch (action) {
+        case Action::REMOVE:
+            removeNode();
+            break;
+
+        case Action::EDIT:
+            // редактирование
+            break;
+
+        case Action::SUBSCRIBE:
+            setOptions(OptionsWDirector().createOptionsUnsubscriptionW(options_builder));
+            break;
+
+        case Action::UNSUBSCRIBE:
+            //нужна проверка в чьем это календаре
+            setOptions(OptionsWDirector().createOptionsSubscriptionW(options_builder));
+            this->removeNode();  //в своем - удаление, в чужом - смена опций
+            break;
+
+        case Action::ADD_CALENDAR:
+            // добавить календарь
+            break;
+
+        case Action::ADD_DIRECTORY:
+            // добавить директорию
+            break;
+    }
 }
 
-void TreeNodeW::addParent(TreeNodeW* parent) {
+void TreeNodeW::removeNode() {
+    // node_->remove();
+    parent()->removeWidget(this);
+}
+
+TreeNodeW* TreeNodeW::addParent(TreeNodeW* parent) {
     parent_ = parent;
+    return this;
 }
 
 bool TreeNodeW::isRoot() {
     return this == parent_;
 }
 
+bool TreeNodeW::isCanCheck() {
+    return check_box_container->count();
+}
+
 void TreeNodeW::uncheckParentNodes() {
     check_box_->setChecked(false);
-    if (!parent_->isRoot()) {
+    if (parent_->isCanCheck()) {
         parent_->uncheckParentNodes();
     }
 }
 
-//
-
-TreeNodeW* TreeNodeW::addHead(std::unique_ptr<Wt::WWidget> head) {
-    header_container_ = node_block_->addWidget(std::make_unique<Wt::WContainerWidget>());
-    header_container_->addWidget(std::move(head));
-    return this;
-}
-
-TreeNodeW* TreeNodeW::addCheckBox() {
-    check_box_container = node_block_->addWidget(std::make_unique<Wt::WContainerWidget>());
-    check_box_container->addStyleClass("my-auto");
-    check_box_ = check_box_container->addWidget(std::make_unique<Wt::WCheckBox>());
-    check_box_->checked().connect(this, &TreeNodeW::checkNode);
-    check_box_->unChecked().connect(this, &TreeNodeW::uncheckNode);
-    return this;
-}
-
-TreeNodeW* TreeNodeW::addOptions(std::unique_ptr<OptionsW> options) {
-    options_button_ = node_block_->addWidget(std::make_unique<Wt::WPushButton>("•••"));
-    options_button_->addStyleClass("p-1 py-0 border-0 btn-light");
-    options.get()->selectedOption().connect([=] {
-        std::cout << "\nclick option\n";
-    });
-    options_button_->setMenu(std::move(options));
-    options_button_->toggleStyleClass("dropdown-toggle", false);
-    return this;
-}
-
-void TreeNodeW::addToolTip(std::unique_ptr<Wt::WContainerWidget> content) {
-    tool_tip_ = std::make_unique<Wt::WPopupWidget>(std::move(content));
-    tool_tip_->setTransient(false, 5);
+void TreeNodeW::addToolTipSignal() {
+    tool_tip_->setTransient(true, 2);
     tool_tip_->setAnchorWidget(header_container_);
-    header_container_->mouseWentOver().connect([=] {
+    header_container_->mouseWentOver().connect([=](Wt::WMouseEvent mouse) {
+        std::cout << "\n координаты" << mouse.widget().x << mouse.widget().y << std::endl;
+        tool_tip_->setOffsets(Wt::WLength("100px"), Wt::WFlags(Wt::Side::Bottom));
         tool_tip_->setHidden(false);
+        std::cout << "открыли тултип\n" << std::endl;
     });
 }
 
-std::unique_ptr<Wt::WContainerWidget> TreeNodeW::fillToolTipContainer(
-    std::unique_ptr<Wt::WContainerWidget> content, std::string description,
-    std::vector<std::string> tags) {
-    content->setMaximumSize(Wt::WLength(300), Wt::WLength::Auto);
-    content->addStyleClass("p-2");
-
-    auto description_ptr = content->addWidget(std::make_unique<Wt::WText>(description));
-    description_ptr->addStyleClass("text-center text-break");
-
-    content->addWidget(std::make_unique<Wt::WBreak>());
-
-    for (auto&& tag : tags) {
-        auto tag_ptr = content->addWidget(
-            std::make_unique<Wt::WAnchor>(Wt::WLink(Wt::LinkType::InternalPath, "/search"), tag));
-        tag_ptr->addStyleClass("btn btn-light border-success p-0 px-1 mx-1");
-        tag_ptr->clicked().connect([=] {
-            std::cout << '\n' << tag_ptr->text().toUTF8() << '\n' << std::endl;
-        });
-    }
-    return content;
+NodeType TreeNodeW::getType() {
+    return node_->getNode().type;
 }
 
-TreeNodeW* TreeNodeW::addToolTip(std::string description, std::vector<std::string> tags) {
-    auto content = std::make_unique<Wt::WContainerWidget>();
-    addToolTip(std::move(fillToolTipContainer(std::move(content), description, tags)));
-    return this;
+void TreeNodeW::setOptions(std::unique_ptr<OptionsW> options) {
+    options.get()->selectedOption().connect(this, &TreeNodeW::performAction);
+    options_button_->setMenu(std::move(options));
 }
-
-TreeNodeW* TreeNodeW::addToolTip(std::string description, std::vector<std::string> tags,
-                                 User author) {
-    auto content = std::make_unique<Wt::WContainerWidget>();
-
-    auto author_ptr = content->addWidget(std::make_unique<Wt::WAnchor>(
-        Wt::WLink(Wt::LinkType::InternalPath, "/calendars"), author.nickname));
-    author_ptr->setStyleClass("fw-bolder");
-    author_ptr->clicked().connect([=] {
-        std::cout << author_ptr->text().toUTF8() << std::endl;
-    });
-    content->addWidget(std::make_unique<Wt::WBreak>());
-
-    addToolTip(std::move(fillToolTipContainer(std::move(content), description, tags)));
-
-    return this;
-}
-TreeNodeW* TreeNodeW::endNode() {
-    node_block_->addStretch(1);
-    return this;
-}
-
-//
 
 std::unique_ptr<TreeNodeW> TreeNodeW::makeTreeNodeWidget(ITreeNode* tree_node) {
-    std::unique_ptr<TreeNodeW> res;
-    auto mgr = SessionScopeMap::instance().get()->managers();
-    Node node = tree_node->getNode();
-
-    std::vector<std::string> tags;
-    OptionsWBuilder options_builder;
-
-    if (node.type & (NodeType::PRIVATE_CALENDAR | NodeType::PUBLIC_CALENDAR)) {
-        Calendar child = mgr->calendar_manager()->get(node.resource_id);
-        res = std::make_unique<TreeNodeLeafW>(tree_node);
-        auto options = std::make_unique<OptionsW>();
-        options.get()
-            ->addOptionEdit()
-            ->addOptionRemove()
-            ->addOptionAddCalendar()
-            ->addOptionAddDirectory();
-        res.get()
-            ->addHead(std::make_unique<Wt::WText>(child.name))
-            ->addOptions(std::move(options))
-            ->addToolTip(child.description, tags);
-
-    } else if (node.type & (NodeType::PRIVATE_DIRECTORY | NodeType::PUBLIC_DIRECTORY)) {
-        Directory child = mgr->directory_manager()->get(node.resource_id);
-        res = std::make_unique<TreeNodeDirW>(tree_node);
-        auto options = std::make_unique<OptionsW>();
-        options.get()
-            ->addOptionEdit()
-            ->addOptionRemove()
-            ->addOptionAddCalendar()
-            ->addOptionAddDirectory();
-        res.get()
-            ->addHead(std::make_unique<Wt::WText>(child.name))
-            ->addOptions(std::move(options))
-            ->addToolTip(child.description, tags);
-
-    } else if (node.type & (NodeType::ROOT | NodeType::PRIVATE_GROUP | NodeType::PUBLIC_GROUP)) {
-        Directory child = mgr->directory_manager()->get(node.resource_id);
-        res = std::make_unique<TreeNodeDirW>(tree_node);
-        res.get()->addHead(std::make_unique<Wt::WText>(child.name));
-
-    } else if (node.type & (NodeType::PROFILE_GROUP)) {
-        // Profile child = Managers::instance().->get(node.resource_id);
-        // res = std::make_unique<TreeNodeDirW>( tree_node);
-        // res.get()->addHead(std::make_unique<Wt::WText>(child.name));
-
-    } else if (node.type & NodeType::SUBSCRIPTIONS_GROUP) {
-        // Directory child = mgr->directory_manager()->get(node.resource_id);
-        // res = std::make_unique<TreeNodeSubscriptionsDirW>(tree_node);
-
-    } else if (node.type & NodeType::PROFILE) {
-        // res = std::make_unique<TreeNodeProfileW>(tree_node);
-        // res.get()->addHead(std::make_unique<InPlaceEditTitle>(child.name));
-    }
-    // res.get()->endNode()->addParent(this);
-    std::cout << "children" << std::endl;
-    for (auto child : tree_node->getChildren()) {
-        std::cout << "child: " << mgr->directory_manager()->get(child->getNode().resource_id).name
-                  << std::endl;
-        res.get()->addChild(res->makeTreeNodeWidget(child));
-    }
-    std::cout << "children end" << std::endl;
-
-    return res;
+    return TreeNodeWDirector().fillNode(analyst_->analyseTreeNodeWChild(tree_node));
 }

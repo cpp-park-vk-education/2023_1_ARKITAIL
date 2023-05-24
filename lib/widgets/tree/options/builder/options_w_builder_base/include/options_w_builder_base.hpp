@@ -2,10 +2,12 @@
 
 #include <memory>
 
-class OptionsW;
+#include "options_w.hpp"
 
 class OptionsWBuilderBase {
   public:
+    OptionsWBuilderBase();
+    ~OptionsWBuilderBase() = default;
     OptionsWBuilderBase* createOptionsW();
 
     virtual OptionsWBuilderBase* addOptionRemove();
@@ -18,5 +20,6 @@ class OptionsWBuilderBase {
     std::unique_ptr<OptionsW> getOptionsW();
 
   protected:
-    std::unique_ptr<OptionsW> options_w;
+    size_t options_count_;
+    std::unique_ptr<OptionsW> options_w_;
 };

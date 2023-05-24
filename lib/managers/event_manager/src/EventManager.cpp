@@ -1,10 +1,11 @@
+#include "EventManager.hpp"
+
 #include <chrono>
 #include <string>
 #include <memory>
 
 #include "DbManagers.hpp"
 #include "Event.hpp"
-#include "EventManager.hpp"
 #include "IDbManagers.hpp"
 
 EventManager::EventManager(std::shared_ptr<IDbManagers> db) :
@@ -34,4 +35,3 @@ std::chrono::time_point<EventManager::clock_t> EventManager::parseTime(std::stri
     // TODO(uma_op): IMPLEMENT ME
     return std::chrono::time_point<EventManager::clock_t>();
 }
-
