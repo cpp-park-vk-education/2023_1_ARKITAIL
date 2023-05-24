@@ -24,11 +24,11 @@ int TagDbManagerMock::add(const Tag& tag) {
 	return aid_++;
 }
 
-void TagDbManagerMock::update(const Tag& tag) {
-	for (auto e : data_)
-		if (e.id == tag.id)
-			e = tag;
-}
+// void TagDbManagerMock::update(const Tag& tag) {
+// 	for (auto e : data_)
+// 		if (e.id == tag.id)
+// 			e = tag;
+// }
 
 void TagDbManagerMock::remove(int tag_id) {
 	for (auto e = data_.begin() + 1; e != data_.end(); e++)

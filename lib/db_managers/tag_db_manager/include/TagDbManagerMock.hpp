@@ -1,7 +1,9 @@
 #pragma once
 
+#include <memory>
 #include <vector>
 
+#include "DbMock.hpp"
 #include "ITagDbManager.hpp"
 
 class TagDbManagerMock : public ITagDbManager {
@@ -10,7 +12,7 @@ public:
 
 	const Tag& get(int tag_id);
 	int add(const Tag& tag);
-	void update(const Tag& tag);
+	//void update(const Tag& tag);
 	void remove(int tag_id);
 	
 private:
