@@ -1,10 +1,8 @@
-#include "Parser.hpp"
+#include "IcalendarParser.hpp"
 
-#include <memory>
+#include "IcalendarLexer.hpp"
 
-#include "Lexer.hpp"
-
-namespace parsing {
+namespace parser {
 /*
 stream         = *component
 
@@ -35,7 +33,7 @@ StreamUptr IcalendarParser::Parse() {
   return ParseStream();
 }
 
-void IcalendarParser::set_lexer(ILexer &lexer) {
+void IcalendarParser::set_lexer(lexer::ILexer &lexer) {
   lexer_ = &lexer;
 }
 
@@ -44,7 +42,7 @@ StreamUptr IcalendarParser::ParseStream() {
   std::vector<ComponentUptr> components;
 
   // *component
-  while (lexer_->Peek().tag != Tag::kEof) {
+  while (lexer_->Peek().tag != lexer::Tag::kEof) {
     ComponentUptr component = ParseComponent();
     if (component) {
       components.push_back(std::move(component));
@@ -66,39 +64,39 @@ ComponentUptr IcalendarParser::ParseComponent() {
   std::vector<ComponentUptr> components;
 
   // "BEGIN"
-  if (lexer_->Peek() != kBegin) {
+  if (lexer_->Peek() != lexer::kBegin) {
     return nullptr;
   }
   lexer_->Get();
 
   // ":"
-  if (lexer_->Peek() != kColon) {
+  if (lexer_->Peek() != lexer::kColon) {
     return nullptr;
   }
   lexer_->Get();
 
   // name
-  if (lexer_->Peek().tag != Tag::kIdentifier
+  if (lexer_->Peek().tag != lexer::Tag::kIdentifier
       || !IsName(lexer_->Peek().image)) {
     return nullptr;
   }
   name = lexer_->Get().image;
 
   // "\r"
-  if (lexer_->Peek() != kCarriageReturn) {
+  if (lexer_->Peek() != lexer::kCarriageReturn) {
     return nullptr;
   }
   lexer_->Get();
 
   // "\n"
-  if (lexer_->Peek() != kLineFeed) {
+  if (lexer_->Peek() != lexer::kLineFeed) {
     return nullptr;
   }
   lexer_->Get();
 
   // *property
-  while (lexer_->Peek() != kBegin
-      && lexer_->Peek() != kEnd) {
+  while (lexer_->Peek() != lexer::kBegin
+      && lexer_->Peek() != lexer::kEnd) {
     PropertyUptr property = ParseProperty();
     if (property) {
       properties.push_back(std::move(property));
@@ -108,7 +106,7 @@ ComponentUptr IcalendarParser::ParseComponent() {
   }
 
   // *component
-  while (lexer_->Peek() != kEnd) {
+  while (lexer_->Peek() != lexer::kEnd) {
     ComponentUptr component = ParseComponent();
     if (component) {
       components.push_back(std::move(component));
@@ -118,33 +116,33 @@ ComponentUptr IcalendarParser::ParseComponent() {
   }
 
   // "END"
-  if (lexer_->Peek() != kEnd) {
+  if (lexer_->Peek() != lexer::kEnd) {
     return nullptr;
   }
   lexer_->Get();
 
   // ":"
-  if (lexer_->Peek() != kColon) {
+  if (lexer_->Peek() != lexer::kColon) {
     return nullptr;
   }
   lexer_->Get();
 
   // name
   // должно иметь то же значение, что и переменная name
-  if (lexer_->Peek().tag != Tag::kIdentifier
+  if (lexer_->Peek().tag != lexer::Tag::kIdentifier
       || lexer_->Peek().image != name) {
     return nullptr;
   }
   lexer_->Get();
 
   // "\r"
-  if (lexer_->Peek() != kCarriageReturn) {
+  if (lexer_->Peek() != lexer::kCarriageReturn) {
     return nullptr;
   }
   lexer_->Get();
 
   // "\n"
-  if (lexer_->Peek() != kLineFeed) {
+  if (lexer_->Peek() != lexer::kLineFeed) {
     return nullptr;
   }
   lexer_->Get();
@@ -161,14 +159,14 @@ PropertyUptr IcalendarParser::ParseProperty() {
   IValueUptr value = nullptr;
 
   // name
-  if (lexer_->Peek().tag != Tag::kIdentifier
+  if (lexer_->Peek().tag != lexer::Tag::kIdentifier
       || !IsName(lexer_->Peek().image)) {
     return nullptr;
   }
   name = lexer_->Get().image;
 
   // *parameter
-  while (lexer_->Peek() != kColon) {
+  while (lexer_->Peek() != lexer::kColon) {
     ParameterUptr parameter = ParseParameter();
     if (parameter) {
       parameters.push_back(std::move(parameter));
@@ -187,13 +185,13 @@ PropertyUptr IcalendarParser::ParseProperty() {
   }
 
   // "\r"
-  if (lexer_->Peek() != kCarriageReturn) {
+  if (lexer_->Peek() != lexer::kCarriageReturn) {
     return nullptr;
   }
   lexer_->Get();
 
   // "\n"
-  if (lexer_->Peek() != kLineFeed) {
+  if (lexer_->Peek() != lexer::kLineFeed) {
     return nullptr;
   }
   lexer_->Get();
@@ -208,7 +206,7 @@ ParameterUptr IcalendarParser::ParseParameter() {
   PairValueUptr pair_value = nullptr;
 
   // ";"
-  if (lexer_->Peek() != kSemicolon) {
+  if (lexer_->Peek() != lexer::kSemicolon) {
     return nullptr;
   }
   lexer_->Get();
@@ -224,9 +222,9 @@ ParameterUptr IcalendarParser::ParseParameter() {
 
 // value = text / ( pair-value *( ";" pair-value ) )
 IValueUptr IcalendarParser::ParseValue() {
-  if (lexer_->Peek(1) != kEqual) {
+  if (lexer_->Peek(1) != lexer::kEqual) {
     // text
-    if (lexer_->Peek().tag != Tag::kIdentifier) {
+    if (lexer_->Peek().tag != lexer::Tag::kIdentifier) {
       return nullptr;
     }
 
@@ -242,7 +240,7 @@ IValueUptr IcalendarParser::ParseValue() {
       return nullptr;
     }
     
-    while (lexer_->Peek() == kSemicolon) {
+    while (lexer_->Peek() == lexer::kSemicolon) {
       // ";"
       lexer_->Get();
 
@@ -265,20 +263,20 @@ PairValueUptr IcalendarParser::ParsePairValue() {
   std::string text = "";
 
   // name
-  if (lexer_->Peek().tag != Tag::kIdentifier
+  if (lexer_->Peek().tag != lexer::Tag::kIdentifier
       || !(IsName(lexer_->Peek().image))) {
     return nullptr;
   }
   name = lexer_->Get().image;
 
   // "="
-  if (lexer_->Peek() != kEqual) {
+  if (lexer_->Peek() != lexer::kEqual) {
     return nullptr;
   }
   lexer_->Get();
 
   // text
-  if (lexer_->Peek().tag != Tag::kIdentifier) {
+  if (lexer_->Peek().tag != lexer::Tag::kIdentifier) {
     return nullptr;
   }
   text = lexer_->Get().image;
@@ -298,4 +296,4 @@ bool IcalendarParser::IsName(const std::string& name) const {
   }
   return true;
 }
-} // namespace parsing
+} // namespace parser

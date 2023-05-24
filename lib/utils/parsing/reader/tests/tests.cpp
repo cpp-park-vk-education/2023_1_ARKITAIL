@@ -1,14 +1,14 @@
 #include <gtest/gtest.h>
 
 #include <sstream>
-#include <streambuf>
-#include <string>
 
-#include "IstreamCharacterReader.hpp"
+#include "IstreamReader.hpp"
 
-TEST(IstreamCharacterReaderTest, Empty) {
-  std::stringstream ss("");
-  parsing::IstreamCharacterReader reader(ss.rdbuf());
+namespace reader {
+TEST(IstreamReaderTest, Empty) {
+  std::stringstream source("");
+  IstreamReader reader(
+      std::make_unique<std::stringstream>(std::move(source)));
 
   EXPECT_EQ(reader.IsEof(), true);
 
@@ -19,9 +19,10 @@ TEST(IstreamCharacterReaderTest, Empty) {
   EXPECT_EQ(reader.Get(1), std::string::npos);
 }
 
-TEST(FileCharacterReaderTest, NonEmpty) {
-  std::stringstream ss("BEGIN:VCALENDAR\r\n");
-  parsing::IstreamCharacterReader reader(ss.rdbuf());
+TEST(FileReaderTest, NonEmpty) {
+  std::stringstream source("BEGIN:VCALENDAR\r\n");
+  IstreamReader reader(
+      std::make_unique<std::stringstream>(std::move(source)));
 
   EXPECT_EQ(reader.IsEof(), false);
 
@@ -41,3 +42,4 @@ TEST(FileCharacterReaderTest, NonEmpty) {
   EXPECT_EQ(reader.Get(3), 'N');
   EXPECT_EQ(reader.Peek(), ':');
 }
+} // namespace reader

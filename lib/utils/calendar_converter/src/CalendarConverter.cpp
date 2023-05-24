@@ -8,82 +8,83 @@
 #include <Wt/WDateTime.h>
 #include <Wt/WString.h>
 
-#include "ICharacterReader.hpp"
-#include "IStreamBuffer.hpp"
-
 #include "Calendar.hpp"
 #include "Event.hpp"
-#include "IstreamCharacterReader.hpp"
-#include "Lexer.hpp"
-#include "Parser.hpp"
+#include "IstreamReader.hpp"
+#include "IcalendarLexer.hpp"
+#include "IcalendarParser.hpp"
 #include "SessionScopeMap.hpp"
 
+namespace converter {
 const std::string kDateTimeFormat = "yyyyMMdd'T'hhmmss'Z'";
 const std::string kDateFormat = "yyyyMMdd";
 
-// TODO(affeeal): адекватно переработать
-
-std::vector<size_t> CalendarConverter::IcalendarToCalendars(
-    std::unique_ptr<parsing::ICharacterReader>&& char_reader) {
+std::vector<CalendarSptr> CalendarConverter::IcalendarToCalendars(
+    std::unique_ptr<std::istream>&& source) {
   // установка связей между char_reader, lexer, parser
-  parsing::IcalendarLexer lexer;
-  lexer.set_character_reader(*char_reader);
+  reader::IstreamReader reader(std::move(source));
+  
+  lexer::IcalendarLexer lexer;
+  lexer.set_reader(reader);
 
-  parsing::IcalendarParser parser;
+  parser::IcalendarParser parser;
   parser.set_lexer(lexer);
 
-  // возвращаемые id календарей
-  std::vector<size_t> calendars;
+  // возвращаемые календари
+  std::vector<CalendarSptr> calendars;
 
-  // корень AST
-  parsing::StreamUptr root = parser.Parse();
+  parser::StreamUptr root = parser.Parse();
 
   // не удалось распарсить или пустой stream
   if (!root || root->components().empty()) {
-    return std::vector<size_t>();
+    return calendars;
   }
 
-  // менджеры, через которые будут сохраняться
-  // разобранные календари и их события
   auto managers = SessionScopeMap::instance().get()->managers();
 
-  // проходимся по всем распаршенным календарям
-  for (parsing::ComponentUptr& component : root->components()) {
+  // проходимся по всем разобранным календарям
+  for (parser::ComponentUptr& component : root->components()) {
     // нас интересуют только календари
     if (component->name() != "VCALENDAR") {
       continue;
     }
 
-    CalendarSptr calendar;
+    Calendar calendar;
     std::vector<EventSptr> events;
 
-    std::vector<parsing::PropertyUptr>& calendar_properties = component->properties();
-    for (parsing::PropertyUptr& property : calendar_properties) {
+    std::vector<parser::PropertyUptr>& calendar_properties
+      = component->properties();
+    for (parser::PropertyUptr& property : calendar_properties) {
       if (property->name() == "X-WR-CALNAME") {
-        parsing::TextValue* value = dynamic_cast<parsing::TextValue*>(property->value().get());
-        if (value) {
-          calendar->summary = std::move(value->text());
+        parser::TextValue* text_value
+          = dynamic_cast<parser::TextValue*>(property->value().get());
+        if (text_value) {
+          calendar.summary = std::move(text_value->text());
         }
       } else if (property->name() == "X-CALENDULA-DESCRIPTION") {
-        parsing::TextValue* value = dynamic_cast<parsing::TextValue*>(property->value().get());
-        if (value) {
-          calendar->description = std::move(value->text());
+        parser::TextValue* text_value
+          = dynamic_cast<parser::TextValue*>(property->value().get());
+        if (text_value) {
+          calendar.description = std::move(text_value->text());
         }
       } else if (property->name() == "X-CALENDULA-COLOR") {
-        parsing::TextValue* value = dynamic_cast<parsing::TextValue*>(property->value().get());
-        if (value) {
-          calendar->color = std::move(value->text());
+        parser::TextValue* text_value
+          = dynamic_cast<parser::TextValue*>(property->value().get());
+        if (text_value) {
+          calendar.color = std::move(text_value->text());
         }
       } else if (property->name() == "X-CALENDULA-VISIBILITY") {
-        parsing::TextValue* value = dynamic_cast<parsing::TextValue*>(property->value().get());
-        if (value) {
-          calendar->visibility = std::move(value->text());
+        parser::TextValue* text_value
+          = dynamic_cast<parser::TextValue*>(property->value().get());
+        if (text_value) {
+          calendar.visibility = std::move(text_value->text());
         }
       }
     }
 
-    std::vector<parsing::ComponentUptr>& calendar_components = component->components();
-    for (parsing::ComponentUptr& component : calendar_components) {
+    std::vector<parser::ComponentUptr>& calendar_components
+      = component->components();
+    for (parser::ComponentUptr& component : calendar_components) {
       // ищем только события
       if (component->name() != "VEVENT") {
         continue;
@@ -92,73 +93,82 @@ std::vector<size_t> CalendarConverter::IcalendarToCalendars(
       events.push_back(FromIcalendarEvent(component));
     }
 
-    size_t calendar_id = managers->calendar_manager()->add(calendar);
+    size_t calendar_id = managers->calendar_manager()->add(
+        std::make_shared<Calendar>(calendar));
     for (EventSptr event : events) {
       event->calendar_id = calendar_id;
       managers->event_manager()->add(event);
     }
 
-    calendars.push_back(calendar_id);
+    // вновь запрашиваю текущий календарь,
+    // у которого теперь установлены все поля
+    calendars.push_back(managers->calendar_manager()->get(calendar_id));
   }
 
   return calendars;
 }
 
 EventSptr CalendarConverter::FromIcalendarEvent(
-    const parsing::ComponentUptr& icalendar_event) {
-  EventSptr event;
+    const parser::ComponentUptr& icalendar_event) {
+  Event event;
 
-  std::vector<parsing::PropertyUptr>& event_propeties = icalendar_event->properties();
+  std::vector<parser::PropertyUptr>& event_propeties
+    = icalendar_event->properties();
 
-  for (parsing::PropertyUptr& property : event_propeties) {
+  for (parser::PropertyUptr& property : event_propeties) {
     if (property->name() == "SUMMARY") {
-      parsing::TextValue* value = dynamic_cast<parsing::TextValue*>(property->value().get());
-      if (value) {
-        event->summary = value->text();
+      parser::TextValue* text_value
+        = dynamic_cast<parser::TextValue*>(property->value().get());
+      if (text_value) {
+        event.summary = text_value->text();
       }
     } else if (property->name() == "DESCRIPTION") {
-      parsing::TextValue* value = dynamic_cast<parsing::TextValue*>(property->value().get());
-      if (value) {
-        event->description = value->text();
+      parser::TextValue* text_value
+        = dynamic_cast<parser::TextValue*>(property->value().get());
+      if (text_value) {
+        event.description = text_value->text();
       }
     } else if (property->name() == "DTSTART") {
-      parsing::TextValue* value = dynamic_cast<parsing::TextValue*>(property->value().get());
-      if (value) {
-        event->start = FromIcalendarDateTime(value->text());
+      parser::TextValue* text_value
+        = dynamic_cast<parser::TextValue*>(property->value().get());
+      if (text_value) {
+        event.start = FromIcalendarDateTime(text_value->text());
       }
     } else if (property->name() == "DTEND") {
-      parsing::TextValue* value = dynamic_cast<parsing::TextValue*>(property->value().get());
-      if (value) {
-        event->end = FromIcalendarDateTime(value->text());
+      parser::TextValue* text_value
+        = dynamic_cast<parser::TextValue*>(property->value().get());
+      if (text_value) {
+        event.end = FromIcalendarDateTime(text_value->text());
       }
     } else if (property->name() == "RRULE") {
-      parsing::CompositeValue* composite_value
-        = dynamic_cast<parsing::CompositeValue*>(property->value().get());
+      parser::CompositeValue* composite_value
+        = dynamic_cast<parser::CompositeValue*>(property->value().get());
       if (!composite_value) {
         continue;
       }
 
-      event->is_recurrent = true;
+      event.is_recurrent = true;
 
-      for (parsing::IValueUptr& value : composite_value->values()) {
-        parsing::PairValue* pair_value = dynamic_cast<parsing::PairValue*>(value.get());
+      for (parser::IValueUptr& value : composite_value->values()) {
+        parser::PairValue* pair_value
+          = dynamic_cast<parser::PairValue*>(value.get());
         if (!pair_value) {
           continue;
         }
 
         if (pair_value->name() == "FREQ") {
-          event->frequency = pair_value->text();
+          event.frequency = pair_value->text();
         } else if (pair_value->name() == "INTERVAL") {
           // TODO(affeeal): проверка на "не число"
-          event->interval = std::stoul(pair_value->text());
+          event.interval = std::stoul(pair_value->text());
         } else if (pair_value->name() == "UNTIL") {
-          event->until = FromIcalendarDate(pair_value->text());
+          event.until = FromIcalendarDate(pair_value->text());
         }
       }
     }
   }
 
-  return event;
+  return std::make_shared<Event>(event);
 }
 
 /*
@@ -189,69 +199,77 @@ Wt::WDate CalendarConverter::FromIcalendarDate(
   return Wt::WDate::fromString(icalendar_date, kDateFormat);
 }
 
-std::stringstream CalendarConverter::CalendarToIcalendar(
-    CalendarSptr calendar) {
-  std::stringstream ss;
+std::unique_ptr<std::istream> CalendarConverter::CalendarsToIcalendar(
+    const std::vector<CalendarSptr>& calendars) {
+  std::stringstream source;
 
-  Write(ss, "BEGIN", "VCALENDAR");
+  for (CalendarSptr calendar : calendars) {
+    Write(source, "BEGIN", "VCALENDAR");
 
-  // установка свойств календаря
-  Write(ss, "VERSION", "2.0");
-  Write(ss, "PRODID", "calendula.ru");
-  Write(ss, "CALSCALE", "GREGORIAN");
-  Write(ss, "METHOD", "PUBLISH");
-  Write(ss, "X-WR-CALNAME", calendar->summary);
-  Write(ss, "X-CALENDULA-DESCRIPTION", calendar->description);
-  Write(ss, "X-CALENDULA-COLOR", calendar->color);
-  Write(ss, "X-CALENDULA-VISIBILITY", calendar->visibility);
+    // установка свойств календаря
+    Write(source, "VERSION", "2.0");
+    Write(source, "PRODID", "calendula.ru");
+    Write(source, "CALSCALE", "GREGORIAN");
+    Write(source, "METHOD", "PUBLISH");
+    Write(source, "X-WR-CALNAME", calendar->summary);
+    Write(source, "X-CALENDULA-DESCRIPTION", calendar->description);
+    Write(source, "X-CALENDULA-COLOR", calendar->color);
+    Write(source, "X-CALENDULA-VISIBILITY", calendar->visibility);
 
-  auto managers = SessionScopeMap::instance().get()->managers();
-  std::vector<EventSptr> events
-    = managers->calendar_manager()->getEvents(calendar->id);
-  for (EventSptr event : events) {
-    Write(ss, "BEGIN", "VEVENT");
+    auto managers = SessionScopeMap::instance().get()->managers();
+    std::vector<EventSptr> events
+      = managers->calendar_manager()->getEvents(calendar->id);
+    for (EventSptr event : events) {
+      Write(source, "BEGIN", "VEVENT");
 
-    // TODO(affeeal): установить UID
-    Write(ss, "SUMMARY", event->summary);
-    // TODO(affeeal): установить DTSTAMP
-    Write(ss, "DTSTART", FromCalendarDateTime(event->start));
-    Write(ss, "DTEND", FromCalendarDateTime(event->end));
-    Write(ss, "DESCRIPTION", event->description);
-    // TODO(affeeal): установить LOCATION
-    if (event->is_recurrent) {
-      Write(ss, "RRULE", FromCalendarRrule(event));
+      // TODO(affeeal): установить UID
+      Write(source, "SUMMARY", event->summary);
+      // TODO(affeeal): установить DTSTAMP
+      Write(source, "DTSTART", FromCalendarDateTime(event->start));
+      Write(source, "DTEND", FromCalendarDateTime(event->end));
+      Write(source, "DESCRIPTION", event->description);
+      // TODO(affeeal): установить LOCATION
+      if (event->is_recurrent) {
+        Write(source, "RRULE", FromCalendarRrule(event));
+      }
+
+      Write(source, "END", "VEVENT");
     }
 
-    Write(ss, "END", "VEVENT");
+    Write(source, "END", "VCALENDAR");
   }
 
-  Write(ss, "END", "VCALENDAR");
-
-  return ss;
+  return std::make_unique<std::stringstream>(std::move(source));
 }
 
 void CalendarConverter::Write(
     std::stringstream& ss,
-    const Wt::WString& name,
-    const Wt::WString& value) {
-  ss << name.toUTF8() << ":" << value.toUTF8() << "\r\n";
+    const std::string& name,
+    const std::string& value) {
+  ss << name << ":" << value << "\r\n";
 }
 
-Wt::WString CalendarConverter::FromCalendarDateTime(
+std::string CalendarConverter::FromCalendarDateTime(
     const Wt::WDateTime& date_time) {
-  return date_time.toString(kDateTimeFormat);
+  return date_time.toString(kDateTimeFormat).toUTF8();
 }
 
-Wt::WString CalendarConverter::FromCalendarRrule(const EventSptr event) {
-  std::stringstream ss;
+std::string CalendarConverter::FromCalendarRrule(EventSptr event) {
+  std::stringstream source;
 
-  ss << "FREQ=" << event->frequency;
-  ss << ";INTERVAL=" << std::to_string(event->interval);
-  ss << ";UNTIL=" << FromCalendarDate(event->until);
+  source << "FREQ=" << event->frequency;
+  source << ";INTERVAL=" << std::to_string(event->interval);
+  source << ";UNTIL=" << FromCalendarDate(event->until);
 
-  return ss.str();
+  return source.str();
 }
 
-Wt::WString CalendarConverter::FromCalendarDate(const Wt::WDate& date) {
-  return date.toString(kDateFormat);
+std::string CalendarConverter::FromCalendarDate(const Wt::WDate& date) {
+  return date.toString(kDateFormat).toUTF8();
 }
+
+std::unique_ptr<std::istream> CalendarConverter::CalendarToIcalendar(
+    CalendarSptr calendar) {
+  return CalendarsToIcalendar(std::vector<CalendarSptr> { calendar } );
+}
+} // namespace converter

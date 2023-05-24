@@ -1,12 +1,11 @@
-#include "Lexer.hpp"
+#include "IcalendarLexer.hpp"
 
 #include <algorithm>
 #include <array>
-#include <deque>
 
-#include "ICharacterReader.hpp"
+#include "IReader.hpp"
 
-namespace parsing {
+namespace lexer {
 const std::size_t kDelimitersSize = 5;
 const std::array<char, kDelimitersSize> kDelimiters { 
   ':',
@@ -15,17 +14,6 @@ const std::array<char, kDelimitersSize> kDelimiters {
   ';',
   '='
 };
-
-const Lexem kEof(Tag::kEof);
-
-const Lexem kBegin(Tag::kIdentifier, "BEGIN");
-const Lexem kEnd(Tag::kIdentifier, "END");
-
-const Lexem kColon(Tag::kDelimiter, ":");
-const Lexem kSemicolon(Tag::kDelimiter, ";");
-const Lexem kEqual(Tag::kDelimiter, "=");
-const Lexem kCarriageReturn(Tag::kDelimiter, "\r");
-const Lexem kLineFeed(Tag::kDelimiter, "\n");
 
 // выбрасывает (k+1) лексему и возвращает k-ю
 // по умолчанию k = 0
@@ -60,16 +48,16 @@ void IcalendarLexer::PushLacking(std::size_t k) {
 }
 
 Lexem IcalendarLexer::GetInternal() {
-  if (character_reader_->IsEof()) {
+  if (reader_->IsEof()) {
     return Lexem(Tag::kEof);
   }
 
-  char curr_char = character_reader_->Peek();
+  char current = reader_->Peek();
 
   // Символ - разделитель
-  if (IsDelimiter(curr_char)) {
-    character_reader_->Get();
-    return Lexem(Tag::kDelimiter, std::string(1, curr_char));
+  if (IsDelimiter(current)) {
+    reader_->Get();
+    return Lexem(Tag::kDelimiter, std::string(1, current));
   }
 
   // Символ - идентификатор
@@ -79,9 +67,8 @@ Lexem IcalendarLexer::GetInternal() {
 Lexem IcalendarLexer::GetIdentificator() {
   std::string result = "";
 
-  while (!character_reader_->IsEof()
-      && !IsDelimiter(character_reader_->Peek())) {
-    result += character_reader_->Get();
+  while (!reader_->IsEof() && !IsDelimiter(reader_->Peek())) {
+    result += reader_->Get();
   }
 
   return Lexem(Tag::kIdentifier, std::move(result));
@@ -92,7 +79,7 @@ bool IcalendarLexer::IsDelimiter(char character) const {
           != kDelimiters.end());
 }
 
-void IcalendarLexer::set_character_reader(ICharacterReader& character_reader) {
-  character_reader_ = &character_reader;
+void IcalendarLexer::set_reader(reader::IReader& reader) {
+  reader_ = &reader;
 }
 } // namespace parsing

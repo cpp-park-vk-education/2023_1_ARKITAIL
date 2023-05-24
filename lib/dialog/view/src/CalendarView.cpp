@@ -6,6 +6,8 @@
 #include <Wt/WComboBox.h>
 #include <Wt/WLineEdit.h>
 #include <Wt/WPushButton.h>
+#include <Wt/WString.h>
+#include <Wt/WTemplateFormView.h>
 #include <Wt/WTextArea.h>
 
 #include "CalendarModel.hpp"
@@ -16,15 +18,14 @@ std::shared_ptr<CalendarModel> CalendarView::model() const {
 }
 
 CalendarView::CalendarView(std::shared_ptr<CalendarModel> model)
-    : model_(model) {
-  setTemplateText(Wt::WString::tr("calendar-settings"));
-
-  addFunction("id", &WTemplate::Functions::id);
-
+    : Wt::WTemplateFormView(Wt::WString::tr("calendar-settings")),
+      model_(model) {
   InitializeSummary();
   InitializeDescription();
   InitializeVisibility();
   InitializeColor();
+
+  bindEmpty("validation-status");
 
   updateView(model_.get());
 }

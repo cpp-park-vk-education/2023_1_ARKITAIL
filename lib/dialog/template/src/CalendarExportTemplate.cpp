@@ -14,9 +14,10 @@
 namespace dialog {
 CalendarExportTemplate::CalendarExportTemplate(CalendarSptr calendar)
     : Wt::WTemplate(Wt::WString::tr("calendar-export")) {
-  std::stringstream ss = CalendarConverter::CalendarToIcalendar(calendar);
+  std::unique_ptr<std::istream> source
+    = converter::CalendarConverter::CalendarToIcalendar(calendar);
   
-  auto resource = std::make_shared<StringStreamResource>(std::move(ss));
+  auto resource = std::make_shared<StringStreamResource>(std::move(source));
   Wt::WLink link(resource);
   auto anchor = std::make_unique<Wt::WAnchor>(
       link, "Скачать в формате iCalendar");

@@ -4,9 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "Lexer.hpp"
-
-namespace parsing {
+namespace parser {
 class INode;
 class StreamNode;
 class ComponentNode;
@@ -19,7 +17,6 @@ class PairValue;
 class CompositeValue;
 
 class IParser;
-class IcalendarParser;
 
 using StreamUptr = std::unique_ptr<StreamNode>;
 using ComponentUptr = std::unique_ptr<ComponentNode>;
@@ -162,29 +159,8 @@ class CompositeValue : public IValue {
 
 class IParser {
  public:
-  // возвращает корень абстрактного синтаксического дерева
   virtual std::unique_ptr<StreamNode> Parse() = 0;
   
   virtual ~IParser() = default;
 };
-
-class IcalendarParser : public IParser {
- public:
-  std::unique_ptr<StreamNode> Parse() override;
-
-  void set_lexer(ILexer& lexer);
- private:
-  StreamUptr ParseStream();
-  ComponentUptr ParseComponent();
-  PropertyUptr ParseProperty();
-  ParameterUptr ParseParameter();
-
-  IValueUptr ParseValue();
-  PairValueUptr ParsePairValue();
-
-  bool IsName(const std::string& name) const;
-
-  ILexer* lexer_;
-};
-} // namespace parsing
-
+} // namespace parser

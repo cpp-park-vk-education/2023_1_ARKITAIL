@@ -2,13 +2,13 @@
 
 #include <cstddef>
 
-namespace parsing {
-class ICharacterReader {
+namespace reader {
+class IReader {
  public:
   virtual char Peek(std::size_t k = 0) = 0;
   virtual char Get(std::size_t k = 0) = 0;
   virtual bool IsEof() = 0;
 
-  virtual ~ICharacterReader() = default;
+  virtual ~IReader() = default;
 };
-} // namespace parsing
+} // namespace reader

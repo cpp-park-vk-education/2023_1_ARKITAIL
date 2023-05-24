@@ -3,6 +3,11 @@
   <message id="calendar-settings">
     <div class="row m-3">
       <div class="col">
+        ${validation-status}
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col">
         <label class="form-label" for="${id:title}">
           Название
         </label>
@@ -48,6 +53,11 @@
   <message id="calendar-import">
     <div class="row m-3">
       <div class="col">
+        ${validation-status}
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col">
         <label class="form-label" for="${id:import-icalendar}">
           В формате iCalendar
         </label>
@@ -61,6 +71,18 @@
       <div class="col">
         ${export-icalendar}
       </div>
+    </div>
+  </message>
+
+  <message id="validation-success">
+    <div class="text-success font-weight-bold" role="alert">
+      ${text}
+    </div>
+  </message>
+
+ <message id="validation-failed">
+    <div class="text-danger font-weight-bold" role="alert">
+      ${text}
     </div>
   </message>
 

@@ -8,7 +8,7 @@ class CalendarImportTemplate : public Wt::WTemplate {
  public:
   CalendarImportTemplate();
 
-  Wt::WFileUpload* import_icalendar();
+  Wt::WFileUpload* import_icalendar() const;
  private:
   Wt::WFileUpload* import_icalendar_;
 };

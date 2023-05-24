@@ -1,5 +1,7 @@
 #include "CreateCalendarDialog.hpp"
 
+#include <Wt/WString.h>
+#include <Wt/WTemplate.h>
 #include <fstream>
 #include <memory>
 #include <string>
@@ -16,7 +18,7 @@
 #include "CreateCalendarModel.hpp"
 #include "CreateCalendarView.hpp"
 #include "IManagers.hpp"
-#include "IstreamCharacterReader.hpp"
+#include "IstreamReader.hpp"
 #include "SessionScopeMap.hpp"
 
 namespace dialog {
@@ -27,7 +29,6 @@ enum CreateCalendarTabIndex {
 
 CreateCalendarDialog::CreateCalendarDialog()
     : Wt::WDialog("Календарь") {
-  rejectWhenEscapePressed();
   setClosable(true);
   setMinimumSize(500, 600);
   setMovable(false);
@@ -39,6 +40,7 @@ CreateCalendarDialog::CreateCalendarDialog()
   contents()->addWidget(std::move(tabs));
 
   Wt::WPushButton* submit = footer()->addNew<Wt::WPushButton>("OK");
+  submit->addStyleClass("btn btn-success");
   submit->clicked().connect(this, &CreateCalendarDialog::ChooseHandler);
 }
 
@@ -79,7 +81,13 @@ void CreateCalendarDialog::HandleSettings() {
 
     model->reset();
     model->set_calendar(nullptr);
-    Wt::log("Calendar created");
+
+    auto validation_success = std::make_unique<Wt::WTemplate>(
+        Wt::WString::tr("validation-success"));
+    validation_success->bindString("text", "Календарь успешно сохранён");
+    settings->bindWidget("validation-status", std::move(validation_success));
+  } else {
+    settings->bindEmpty("validation-status");
   }
 
   settings->updateView(model);
@@ -94,22 +102,27 @@ void CreateCalendarDialog::HandleImport() {
     return;
   }
 
-  std::ifstream file(_import->import_icalendar()->spoolFileName());
-  std::vector<size_t> calendars_id
-    = CalendarConverter::IcalendarToCalendars(
-        std::make_unique<parsing::IstreamCharacterReader>(file.rdbuf()));
-
-  if (calendars_id.empty()) {
-    Wt::log("iCalendar conversion failed");
+  std::ifstream source(_import->import_icalendar()->spoolFileName());
+  if (!source) {
+    Wt::log("exited");
     return;
   }
 
-  IManagers* managers = SessionScopeMap::instance().get()->managers();
-  for (size_t calendar_id : calendars_id) {
-    calendar_created_.emit(managers->calendar_manager()->get(calendar_id));
-  }
+  std::vector<CalendarSptr> calendars
+    = converter::CalendarConverter::IcalendarToCalendars(
+        std::make_unique<std::ifstream>(std::move(source)));
 
-  Wt::log("Calendar imported");
+  if (calendars.empty()) {
+    auto validation_failed = std::make_unique<Wt::WTemplate>(
+        Wt::WString::tr("validation-failed"));
+    validation_failed->bindString("text", "Не удалось разобрать формат");
+    _import->bindWidget("validation-status", std::move(validation_failed));
+  } else {
+    auto validation_success = std::make_unique<Wt::WTemplate>(
+        Wt::WString::tr("validation-success"));
+    validation_success->bindString("text", "Календарь успешно сохранён");
+    _import->bindWidget("validation-status", std::move(validation_success));
+  }
 }
 
 Wt::Signal<CalendarSptr>& CreateCalendarDialog::calendar_created() {

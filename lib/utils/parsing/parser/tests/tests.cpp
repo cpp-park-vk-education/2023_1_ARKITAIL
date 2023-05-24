@@ -1,52 +1,54 @@
 #include <gtest/gtest.h>
 
 #include <memory>
+#include <sstream>
 #include <utility>
 #include <vector>
 #include <queue>
 
-#include "IstreamCharacterReader.hpp"
-#include "Lexer.hpp"
-#include "Parser.hpp"
+#include "IstreamReader.hpp"
+#include "IcalendarLexer.hpp"
+#include "IcalendarParser.hpp"
 
+namespace parser {
 class IcalendarParserTest : public ::testing::Test {
  protected:
   void SetUp() override {
-    lexer_.set_character_reader(reader_);
+    lexer_.set_reader(reader_);
     parser_.set_lexer(lexer_);
   }
 
   void TearDown() override {
   }
 
-  parsing::IstreamCharacterReader reader_;
-  parsing::IcalendarLexer lexer_;
-  parsing::IcalendarParser parser_;
+  reader::IstreamReader reader_;
+  lexer::IcalendarLexer lexer_;
+  IcalendarParser parser_;
 };
 
 TEST_F(IcalendarParserTest, EmptyStream) {
-  std::stringstream ss("");
-  reader_.SetBuffer(ss.rdbuf());
+  std::stringstream source("");
+  reader_.set_source(std::make_unique<std::stringstream>(std::move(source)));
 
-  parsing::StreamUptr root = parser_.Parse();
+  StreamUptr root = parser_.Parse();
   ASSERT_TRUE(root);
 
-  std::vector<parsing::ComponentUptr>& stream_components = root->components();
+  std::vector<ComponentUptr>& stream_components = root->components();
   ASSERT_EQ(stream_components.size(), 0);
 }
 
 TEST_F(IcalendarParserTest, EmptyCalendar) {
-  std::stringstream ss("BEGIN:VCALENDAR\r\n"
-                       "END:VCALENDAR\r\n");
-  reader_.SetBuffer(ss.rdbuf());
+  std::stringstream source("BEGIN:VCALENDAR\r\n"
+                           "END:VCALENDAR\r\n");
+  reader_.set_source(std::make_unique<std::stringstream>(std::move(source)));
 
-  parsing::StreamUptr root = parser_.Parse();
+  StreamUptr root = parser_.Parse();
   ASSERT_TRUE(root);
 
-  std::vector<parsing::ComponentUptr>& stream_components = root->components();
+  std::vector<ComponentUptr>& stream_components = root->components();
   ASSERT_EQ(stream_components.size(), 1);
 
-  parsing::ComponentUptr& calendar = stream_components[0];
+  ComponentUptr& calendar = stream_components[0];
   ASSERT_TRUE(calendar);
 
   EXPECT_EQ(calendar->name(), "VCALENDAR");
@@ -55,19 +57,19 @@ TEST_F(IcalendarParserTest, EmptyCalendar) {
 }
 
 TEST_F(IcalendarParserTest, EmptyCalendars) {
-  std::stringstream ss("BEGIN:VCALENDAR\r\n"
-                       "END:VCALENDAR\r\n"
-                       "BEGIN:VCALENDAR\r\n"
-                       "END:VCALENDAR\r\n");
-  reader_.SetBuffer(ss.rdbuf());
+  std::stringstream source("BEGIN:VCALENDAR\r\n"
+                           "END:VCALENDAR\r\n"
+                           "BEGIN:VCALENDAR\r\n"
+                           "END:VCALENDAR\r\n");
+  reader_.set_source(std::make_unique<std::stringstream>(std::move(source)));
 
-  parsing::StreamUptr root = parser_.Parse();
+  StreamUptr root = parser_.Parse();
   ASSERT_TRUE(root);
 
-  std::vector<parsing::ComponentUptr>& stream_components = root->components();
+  std::vector<ComponentUptr>& stream_components = root->components();
   ASSERT_EQ(stream_components.size(), 2);
 
-  for (parsing::ComponentUptr& calendar : stream_components) {
+  for (ComponentUptr& calendar : stream_components) {
     ASSERT_TRUE(calendar);
 
     EXPECT_EQ(calendar->name(), "VCALENDAR");
@@ -77,47 +79,47 @@ TEST_F(IcalendarParserTest, EmptyCalendars) {
 }
 
 TEST_F(IcalendarParserTest, CalendarWithProperties) {
-  std::stringstream ss("BEGIN:VCALENDAR\r\n"
-                       "VERSION:2.0\r\n"
-                       "PRODID:students.bmstu.ru\r\n"
-                       "END:VCALENDAR\r\n");
-  reader_.SetBuffer(ss.rdbuf());
+  std::stringstream source("BEGIN:VCALENDAR\r\n"
+                          "VERSION:2.0\r\n"
+                          "PRODID:students.bmstu.ru\r\n"
+                          "END:VCALENDAR\r\n");
+  reader_.set_source(std::make_unique<std::stringstream>(std::move(source)));
 
-  parsing::StreamUptr root = parser_.Parse();
+  StreamUptr root = parser_.Parse();
   ASSERT_TRUE(root);
 
-  std::vector<parsing::ComponentUptr>& stream_components = root->components();
+  std::vector<ComponentUptr>& stream_components = root->components();
   ASSERT_EQ(stream_components.size(), 1);
   
-  parsing::ComponentUptr& calendar = stream_components[0];
+  ComponentUptr& calendar = stream_components[0];
   ASSERT_TRUE(calendar);
 
-  std::vector<parsing::PropertyUptr>& calendar_properties = calendar->properties();
+  std::vector<PropertyUptr>& calendar_properties = calendar->properties();
   ASSERT_EQ(calendar_properties.size(), 2) ;
 
-  std::queue<std::pair<std::string, parsing::IValueUptr>> expected;
+  std::queue<std::pair<std::string, IValueUptr>> expected;
   expected.push(std::make_pair(
-        "VERSION", std::make_unique<parsing::TextValue>("2.0")));
+        "VERSION", std::make_unique<TextValue>("2.0")));
   expected.push(std::make_pair(
-        "PRODID", std::make_unique<parsing::TextValue>("students.bmstu.ru")));
+        "PRODID", std::make_unique<TextValue>("students.bmstu.ru")));
   
-  for (parsing::PropertyUptr& property : calendar_properties) {
+  for (PropertyUptr& property : calendar_properties) {
     std::string expected_name = std::move(expected.front().first);
-    parsing::IValueUptr expected_value = std::move(expected.front().second);
+    IValueUptr expected_value = std::move(expected.front().second);
     expected.pop();
 
-    parsing::TextValue* expected_text_value
-      = dynamic_cast<parsing::TextValue*>(expected_value.get());
+    TextValue* expected_text_value
+      = dynamic_cast<TextValue*>(expected_value.get());
     ASSERT_TRUE(expected_text_value);
 
     ASSERT_TRUE(property);
     EXPECT_EQ(property->name(), expected_name);
     EXPECT_TRUE(property->parameters().empty());
 
-    parsing::IValueUptr& value = property->value();
+    IValueUptr& value = property->value();
     ASSERT_TRUE(value);
 
-    parsing::TextValue* text_value = dynamic_cast<parsing::TextValue*>(value.get());
+    TextValue* text_value = dynamic_cast<TextValue*>(value.get());
     ASSERT_TRUE(text_value);
     EXPECT_EQ(text_value->text(), expected_text_value->text());
   }
@@ -126,57 +128,57 @@ TEST_F(IcalendarParserTest, CalendarWithProperties) {
 }
 
 TEST_F(IcalendarParserTest, CalendarWithEmptyEvent) {
-  std::stringstream ss("BEGIN:VCALENDAR\r\n"
-                       "VERSION:2.0\r\n"
-                       "PRODID:students.bmstu.ru\r\n"
-                       "BEGIN:VEVENT\r\n"
-                       "END:VEVENT\r\n"
-                       "END:VCALENDAR\r\n");
-  reader_.SetBuffer(ss.rdbuf());
+  std::stringstream source("BEGIN:VCALENDAR\r\n"
+                           "VERSION:2.0\r\n"
+                           "PRODID:students.bmstu.ru\r\n"
+                           "BEGIN:VEVENT\r\n"
+                           "END:VEVENT\r\n"
+                           "END:VCALENDAR\r\n");
+  reader_.set_source(std::make_unique<std::stringstream>(std::move(source)));
 
-  parsing::StreamUptr root = parser_.Parse();
+  StreamUptr root = parser_.Parse();
   ASSERT_TRUE(root);
 
-  std::vector<parsing::ComponentUptr>& stream_components = root->components();
+  std::vector<ComponentUptr>& stream_components = root->components();
   ASSERT_EQ(stream_components.size(), 1);
   
-  parsing::ComponentUptr& calendar = stream_components[0];
+  ComponentUptr& calendar = stream_components[0];
   ASSERT_TRUE(calendar);
 
-  std::vector<parsing::PropertyUptr>& calendar_properties = calendar->properties();
+  std::vector<PropertyUptr>& calendar_properties = calendar->properties();
   ASSERT_EQ(calendar_properties.size(), 2) ;
 
-  std::queue<std::pair<std::string, parsing::IValueUptr>> expected;
+  std::queue<std::pair<std::string, IValueUptr>> expected;
   expected.push(std::make_pair(
-        "VERSION", std::make_unique<parsing::TextValue>("2.0")));
+        "VERSION", std::make_unique<TextValue>("2.0")));
   expected.push(std::make_pair(
-        "PRODID", std::make_unique<parsing::TextValue>("students.bmstu.ru")));
+        "PRODID", std::make_unique<TextValue>("students.bmstu.ru")));
   
-  for (parsing::PropertyUptr& property : calendar_properties) {
+  for (PropertyUptr& property : calendar_properties) {
     std::string expected_name = std::move(expected.front().first);
-    parsing::IValueUptr expected_value = std::move(expected.front().second);
+    IValueUptr expected_value = std::move(expected.front().second);
     expected.pop();
 
-    parsing::TextValue* expected_text_value
-      = dynamic_cast<parsing::TextValue*>(expected_value.get());
+    TextValue* expected_text_value
+      = dynamic_cast<TextValue*>(expected_value.get());
     ASSERT_TRUE(expected_text_value);
 
     ASSERT_TRUE(property);
     EXPECT_EQ(property->name(), expected_name);
     EXPECT_TRUE(property->parameters().empty());
 
-    parsing::IValueUptr& value = property->value();
+    IValueUptr& value = property->value();
     ASSERT_TRUE(value);
 
-    parsing::TextValue* text_value = dynamic_cast<parsing::TextValue*>(value.get());
+    TextValue* text_value = dynamic_cast<TextValue*>(value.get());
     ASSERT_TRUE(text_value);
     EXPECT_EQ(text_value->text(), expected_text_value->text());
   }
 
-  std::vector<parsing::ComponentUptr>& calendar_components = calendar->components();
+  std::vector<ComponentUptr>& calendar_components = calendar->components();
   ASSERT_EQ(calendar_components.size(), 1) ;
 
-  parsing::ComponentUptr& event = calendar_components[0];
+  ComponentUptr& event = calendar_components[0];
   ASSERT_TRUE(event);
 
   EXPECT_EQ(event->name(), "VEVENT");
@@ -185,59 +187,59 @@ TEST_F(IcalendarParserTest, CalendarWithEmptyEvent) {
 }
 
 TEST_F(IcalendarParserTest, CalendarWithEmptyEvents) {
-  std::stringstream ss("BEGIN:VCALENDAR\r\n"
-                       "VERSION:2.0\r\n"
-                       "PRODID:students.bmstu.ru\r\n"
-                       "BEGIN:VEVENT\r\n"
-                       "END:VEVENT\r\n"
-                       "BEGIN:VEVENT\r\n"
-                       "END:VEVENT\r\n"
-                       "END:VCALENDAR\r\n");
-  reader_.SetBuffer(ss.rdbuf());
+  std::stringstream source("BEGIN:VCALENDAR\r\n"
+                           "VERSION:2.0\r\n"
+                           "PRODID:students.bmstu.ru\r\n"
+                           "BEGIN:VEVENT\r\n"
+                           "END:VEVENT\r\n"
+                           "BEGIN:VEVENT\r\n"
+                           "END:VEVENT\r\n"
+                           "END:VCALENDAR\r\n");
+  reader_.set_source(std::make_unique<std::stringstream>(std::move(source)));
 
-  parsing::StreamUptr root = parser_.Parse();
+  StreamUptr root = parser_.Parse();
   ASSERT_TRUE(root);
 
-  std::vector<parsing::ComponentUptr>& stream_components = root->components();
+  std::vector<ComponentUptr>& stream_components = root->components();
   ASSERT_EQ(stream_components.size(), 1);
   
-  parsing::ComponentUptr& calendar = stream_components[0];
+  ComponentUptr& calendar = stream_components[0];
   ASSERT_TRUE(calendar);
 
-  std::vector<parsing::PropertyUptr>& calendar_properties = calendar->properties();
+  std::vector<PropertyUptr>& calendar_properties = calendar->properties();
   ASSERT_EQ(calendar_properties.size(), 2) ;
 
-  std::queue<std::pair<std::string, parsing::IValueUptr>> expected;
+  std::queue<std::pair<std::string, IValueUptr>> expected;
   expected.push(std::make_pair(
-        "VERSION", std::make_unique<parsing::TextValue>("2.0")));
+        "VERSION", std::make_unique<TextValue>("2.0")));
   expected.push(std::make_pair(
-        "PRODID", std::make_unique<parsing::TextValue>("students.bmstu.ru")));
+        "PRODID", std::make_unique<TextValue>("students.bmstu.ru")));
   
-  for (parsing::PropertyUptr& property : calendar_properties) {
+  for (PropertyUptr& property : calendar_properties) {
     std::string expected_name = std::move(expected.front().first);
-    parsing::IValueUptr expected_value = std::move(expected.front().second);
+    IValueUptr expected_value = std::move(expected.front().second);
     expected.pop();
 
-    parsing::TextValue* expected_text_value
-      = dynamic_cast<parsing::TextValue*>(expected_value.get());
+    TextValue* expected_text_value
+      = dynamic_cast<TextValue*>(expected_value.get());
     ASSERT_TRUE(expected_text_value);
 
     ASSERT_TRUE(property);
     EXPECT_EQ(property->name(), expected_name);
     EXPECT_TRUE(property->parameters().empty());
 
-    parsing::IValueUptr& value = property->value();
+    IValueUptr& value = property->value();
     ASSERT_TRUE(value);
 
-    parsing::TextValue* text_value = dynamic_cast<parsing::TextValue*>(value.get());
+    TextValue* text_value = dynamic_cast<TextValue*>(value.get());
     ASSERT_TRUE(text_value);
     EXPECT_EQ(text_value->text(), expected_text_value->text());
   }
 
-  std::vector<parsing::ComponentUptr>& calendar_components = calendar->components();
+  std::vector<ComponentUptr>& calendar_components = calendar->components();
   ASSERT_EQ(calendar_components.size(), 2) ;
 
-  for (parsing::ComponentUptr& event : calendar_components) {
+  for (ComponentUptr& event : calendar_components) {
     ASSERT_TRUE(event);
 
     EXPECT_EQ(event->name(), "VEVENT");
@@ -247,7 +249,7 @@ TEST_F(IcalendarParserTest, CalendarWithEmptyEvents) {
 }
 
 TEST_F(IcalendarParserTest, CalendarWithEvents) {
-  std::stringstream ss(
+  std::stringstream source(
       "BEGIN:VCALENDAR\r\n"
       "VERSION:2.0\r\n"
       "CALSCALE:GREGORIAN\r\n"
@@ -276,113 +278,113 @@ TEST_F(IcalendarParserTest, CalendarWithEvents) {
       "RRULE:FREQ=WEEKLY;INTERVAL=1;UNTIL=20230605\r\n"
       "END:VEVENT\r\n"
       "END:VCALENDAR\r\n");
-  reader_.SetBuffer(ss.rdbuf());
+  reader_.set_source(std::make_unique<std::stringstream>(std::move(source)));
 
-  parsing::StreamUptr root = parser_.Parse();
+  StreamUptr root = parser_.Parse();
   ASSERT_TRUE(root);
 
-  std::vector<parsing::ComponentUptr>& stream_components = root->components();
+  std::vector<ComponentUptr>& stream_components = root->components();
   ASSERT_EQ(stream_components.size(), 1);
   
-  parsing::ComponentUptr& calendar = stream_components[0];
+  ComponentUptr& calendar = stream_components[0];
   ASSERT_TRUE(calendar);
 
-  std::vector<parsing::PropertyUptr>& calendar_properties = calendar->properties();
+  std::vector<PropertyUptr>& calendar_properties = calendar->properties();
   ASSERT_EQ(calendar_properties.size(), 6) ;
 
-  std::queue<std::pair<std::string, parsing::IValueUptr>> expected;
+  std::queue<std::pair<std::string, IValueUptr>> expected;
   expected.push(std::make_pair(
-        "VERSION", std::make_unique<parsing::TextValue>("2.0")));
+        "VERSION", std::make_unique<TextValue>("2.0")));
   expected.push(std::make_pair(
-        "CALSCALE", std::make_unique<parsing::TextValue>("GREGORIAN")));
+        "CALSCALE", std::make_unique<TextValue>("GREGORIAN")));
   expected.push(std::make_pair(
-        "PRODID", std::make_unique<parsing::TextValue>("students.bmstu.ru")));
+        "PRODID", std::make_unique<TextValue>("students.bmstu.ru")));
   expected.push(std::make_pair(
-        "METHOD", std::make_unique<parsing::TextValue>("PUBLISH")));
+        "METHOD", std::make_unique<TextValue>("PUBLISH")));
   expected.push(std::make_pair(
-        "X-WR-CALNAME", std::make_unique<parsing::TextValue>("Расписание ИУ9-41Б")));
+        "X-WR-CALNAME", std::make_unique<TextValue>("Расписание ИУ9-41Б")));
   expected.push(std::make_pair(
-        "X-PUBLISHED-TTL", std::make_unique<parsing::TextValue>("PT1H")));
+        "X-PUBLISHED-TTL", std::make_unique<TextValue>("PT1H")));
   
   for (auto& property : calendar_properties) {
     std::string expected_name = std::move(expected.front().first);
-    parsing::IValueUptr expected_value = std::move(expected.front().second);
+    IValueUptr expected_value = std::move(expected.front().second);
     expected.pop();
 
-    parsing::TextValue* expected_text_value
-      = dynamic_cast<parsing::TextValue*>(expected_value.get());
+    TextValue* expected_text_value
+      = dynamic_cast<TextValue*>(expected_value.get());
     ASSERT_TRUE(expected_text_value);
 
     ASSERT_TRUE(property);
     EXPECT_EQ(property->name(), expected_name);
     EXPECT_TRUE(property->parameters().empty());
 
-    parsing::IValueUptr& value = property->value();
+    IValueUptr& value = property->value();
     ASSERT_TRUE(value);
 
-    parsing::TextValue* text_value = dynamic_cast<parsing::TextValue*>(value.get());
+    TextValue* text_value = dynamic_cast<TextValue*>(value.get());
     ASSERT_TRUE(text_value);
     EXPECT_EQ(text_value->text(), expected_text_value->text());
   }
 
-  std::vector<parsing::ComponentUptr>& calendar_components = calendar->components();
+  std::vector<ComponentUptr>& calendar_components = calendar->components();
   ASSERT_EQ(calendar_components.size(), 2) ;
 
   // свойства первого события
   expected.push(std::make_pair(
-        "UID", std::make_unique<parsing::TextValue>("64569647f818ecb9b6dc1612")));
+        "UID", std::make_unique<TextValue>("64569647f818ecb9b6dc1612")));
   expected.push(std::make_pair(
-        "SUMMARY", std::make_unique<parsing::TextValue>("Дифференциальные уравнения")));
+        "SUMMARY", std::make_unique<TextValue>("Дифференциальные уравнения")));
   expected.push(std::make_pair(
-        "DTSTAMP", std::make_unique<parsing::TextValue>("20230506T182000Z")));
+        "DTSTAMP", std::make_unique<TextValue>("20230506T182000Z")));
   expected.push(std::make_pair(
-        "DTSTART", std::make_unique<parsing::TextValue>("20230211T105000Z")));
+        "DTSTART", std::make_unique<TextValue>("20230211T105000Z")));
   expected.push(std::make_pair(
-        "DTEND", std::make_unique<parsing::TextValue>("20230211T122500Z")));
+        "DTEND", std::make_unique<TextValue>("20230211T122500Z")));
   expected.push(std::make_pair(
-        "DESCRIPTION", std::make_unique<parsing::TextValue>(" Бояринов Р. Н.")));
+        "DESCRIPTION", std::make_unique<TextValue>(" Бояринов Р. Н.")));
   expected.push(std::make_pair(
-        "LOCATION", std::make_unique<parsing::TextValue>("505")));
+        "LOCATION", std::make_unique<TextValue>("505")));
   {
-    std::vector<parsing::IValueUptr> values;
-    values.push_back(std::make_unique<parsing::PairValue>("FREQ", "WEEKLY"));
-    values.push_back(std::make_unique<parsing::PairValue>("INTERVAL", "1"));
-    values.push_back(std::make_unique<parsing::PairValue>("UNTIL", "20230605"));
+    std::vector<IValueUptr> values;
+    values.push_back(std::make_unique<PairValue>("FREQ", "WEEKLY"));
+    values.push_back(std::make_unique<PairValue>("INTERVAL", "1"));
+    values.push_back(std::make_unique<PairValue>("UNTIL", "20230605"));
     expected.push(std::make_pair(
-          "RRULE", std::make_unique<parsing::CompositeValue>(std::move(values))));
+          "RRULE", std::make_unique<CompositeValue>(std::move(values))));
   }
 
   //свойства второго события
   expected.push(std::make_pair(
-        "UID", std::make_unique<parsing::TextValue>("64569647f818ecb9b6dc1612")));
+        "UID", std::make_unique<TextValue>("64569647f818ecb9b6dc1612")));
   expected.push(std::make_pair(
-        "SUMMARY", std::make_unique<parsing::TextValue>("Дифференциальные уравнения")));
+        "SUMMARY", std::make_unique<TextValue>("Дифференциальные уравнения")));
   expected.push(std::make_pair(
-        "DTSTAMP", std::make_unique<parsing::TextValue>("20230506T182000Z")));
+        "DTSTAMP", std::make_unique<TextValue>("20230506T182000Z")));
   expected.push(std::make_pair(
-        "DTSTART", std::make_unique<parsing::TextValue>("20230211T105000Z")));
+        "DTSTART", std::make_unique<TextValue>("20230211T105000Z")));
   expected.push(std::make_pair(
-        "DTEND", std::make_unique<parsing::TextValue>("20230211T122500Z")));
+        "DTEND", std::make_unique<TextValue>("20230211T122500Z")));
   expected.push(std::make_pair(
-        "DESCRIPTION", std::make_unique<parsing::TextValue>(" Бояринов Р. Н.")));
+        "DESCRIPTION", std::make_unique<TextValue>(" Бояринов Р. Н.")));
   expected.push(std::make_pair(
-        "LOCATION", std::make_unique<parsing::TextValue>("505")));
+        "LOCATION", std::make_unique<TextValue>("505")));
   {
-    std::vector<parsing::IValueUptr> values;
-    values.push_back(std::make_unique<parsing::PairValue>("FREQ", "WEEKLY"));
-    values.push_back(std::make_unique<parsing::PairValue>("INTERVAL", "1"));
-    values.push_back(std::make_unique<parsing::PairValue>("UNTIL", "20230605"));
+    std::vector<IValueUptr> values;
+    values.push_back(std::make_unique<PairValue>("FREQ", "WEEKLY"));
+    values.push_back(std::make_unique<PairValue>("INTERVAL", "1"));
+    values.push_back(std::make_unique<PairValue>("UNTIL", "20230605"));
     expected.push(std::make_pair(
-          "RRULE", std::make_unique<parsing::CompositeValue>(std::move(values))));
+          "RRULE", std::make_unique<CompositeValue>(std::move(values))));
   }
 
-  for (parsing::ComponentUptr& event : calendar_components) {
+  for (ComponentUptr& event : calendar_components) {
     ASSERT_TRUE(event);
 
     EXPECT_EQ(event->name(), "VEVENT");
     EXPECT_TRUE(event->components().empty());
 
-    std::vector<parsing::PropertyUptr>& event_properties = event->properties();
+    std::vector<PropertyUptr>& event_properties = event->properties();
     ASSERT_EQ(event_properties.size(), 8);
 
     // цикл идентичен встречавшемуся ранее, но вынести его в
@@ -390,22 +392,22 @@ TEST_F(IcalendarParserTest, CalendarWithEvents) {
     // не будут работать.
     for (std::size_t i = 0; i < 7 ; i++) {
       std::string expected_name = std::move(expected.front().first);
-      parsing::IValueUptr expected_value = std::move(expected.front().second);
+      IValueUptr expected_value = std::move(expected.front().second);
       expected.pop();
 
-      parsing::TextValue* expected_text_value
-        = dynamic_cast<parsing::TextValue*>(expected_value.get());
+      TextValue* expected_text_value
+        = dynamic_cast<TextValue*>(expected_value.get());
       ASSERT_TRUE(expected_text_value);
 
-      parsing::PropertyUptr& property = event_properties[i];
+      PropertyUptr& property = event_properties[i];
       ASSERT_TRUE(property);
       EXPECT_EQ(property->name(), expected_name);
       EXPECT_TRUE(property->parameters().empty());
 
-      parsing::IValueUptr& value = property->value();
+      IValueUptr& value = property->value();
       ASSERT_TRUE(value);
 
-      parsing::TextValue* text_value = dynamic_cast<parsing::TextValue*>(value.get());
+      TextValue* text_value = dynamic_cast<TextValue*>(value.get());
       ASSERT_TRUE(text_value);
       EXPECT_EQ(text_value->text(), expected_text_value->text());
     }
@@ -414,38 +416,38 @@ TEST_F(IcalendarParserTest, CalendarWithEvents) {
     // по структуре от встречавшихся ранее
     {
       std::string expected_name = std::move(expected.front().first);
-      parsing::IValueUptr expected_value = std::move(expected.front().second);
+      IValueUptr expected_value = std::move(expected.front().second);
       expected.pop();
 
-      parsing::CompositeValue* expected_composite_value
-        = dynamic_cast<parsing::CompositeValue*>(expected_value.get());
+      CompositeValue* expected_composite_value
+        = dynamic_cast<CompositeValue*>(expected_value.get());
       ASSERT_TRUE(expected_composite_value);
 
-      std::vector<parsing::IValueUptr>& expected_values
+      std::vector<IValueUptr>& expected_values
         = expected_composite_value->values();
 
-      parsing::PropertyUptr& property = event_properties[7];
+      PropertyUptr& property = event_properties[7];
       ASSERT_TRUE(property);
       EXPECT_EQ(property->name(), expected_name);
       EXPECT_TRUE(property->parameters().empty());
 
-      parsing::IValueUptr& value = property->value();
+      IValueUptr& value = property->value();
       ASSERT_TRUE(value);
 
-      parsing::CompositeValue* composite_value
-        = dynamic_cast<parsing::CompositeValue*>(value.get());
+      CompositeValue* composite_value
+        = dynamic_cast<CompositeValue*>(value.get());
       ASSERT_TRUE(composite_value);
       
-      std::vector<parsing::IValueUptr>& values = composite_value->values();
+      std::vector<IValueUptr>& values = composite_value->values();
       ASSERT_EQ(values.size(), expected_values.size());
 
       for (std::size_t i = 0; i < values.size(); i++) {
-        parsing::PairValue* expected_pair_value
-          = dynamic_cast<parsing::PairValue*>(expected_values[i].get());
+        PairValue* expected_pair_value
+          = dynamic_cast<PairValue*>(expected_values[i].get());
         ASSERT_TRUE(expected_pair_value);
 
-        parsing::PairValue* pair_value
-          = dynamic_cast<parsing::PairValue*>(values[i].get());
+        PairValue* pair_value
+          = dynamic_cast<PairValue*>(values[i].get());
         ASSERT_TRUE(pair_value);
 
         ASSERT_EQ(pair_value->name(), expected_pair_value->name());
@@ -454,3 +456,4 @@ TEST_F(IcalendarParserTest, CalendarWithEvents) {
     }
   }
 }
+} // namespace parser

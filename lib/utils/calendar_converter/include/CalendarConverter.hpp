@@ -1,42 +1,37 @@
 #pragma once
 
 #include <memory>
-#include <sstream>
 #include <string>
 #include <vector>
 
 #include <Wt/WDateTime.h>
 #include <Wt/WDate.h>
-#include <Wt/WString.h>
 
-#include "ICharacterReader.hpp"
-#include "IStreamBuffer.hpp"
-
+#include "IParser.hpp"
 #include "Event.hpp"
 #include "Calendar.hpp"
-#include "Parser.hpp"
 
+namespace converter {
 class CalendarConverter {
  public:
-   // метод принимает ICharacterReader, из которого лексер будет получать
-   // символы, и возвращает вектор id'шников сохранённых календарей
-   static std::vector<size_t> IcalendarToCalendars(
-       std::unique_ptr<parsing::ICharacterReader>&& reader);
+  static std::vector<CalendarSptr> IcalendarToCalendars(
+      std::unique_ptr<std::istream>&& source);
 
-   // метод принимает вектор id'шников календарей, по которым будет получать
-   // эти календари у CalendarManager
-  static std::stringstream CalendarToIcalendar(CalendarSptr calendar);
+  static std::unique_ptr<std::istream> CalendarsToIcalendar(
+      const std::vector<CalendarSptr>& calendars);
+  static std::unique_ptr<std::istream> CalendarToIcalendar(
+      CalendarSptr calendar);
+
  private:
-  static EventSptr FromIcalendarEvent(const parsing::ComponentUptr& icalendar_event);
+  static EventSptr FromIcalendarEvent(const parser::ComponentUptr& icalendar_event);
   static Wt::WDateTime FromIcalendarDateTime(const std::string& icalendar_date_time);
   static Wt::WDate FromIcalendarDate(const std::string& icalendar_date);
   
-  static void Write(
-    std::stringstream& ss,
-    const Wt::WString& name,
-    const Wt::WString& value);
+  static void Write(std::stringstream& source, const std::string& name,
+    const std::string& value);
 
-  static Wt::WString FromCalendarDateTime(const Wt::WDateTime& date_time);
-  static Wt::WString FromCalendarRrule(const EventSptr event);
-  static Wt::WString FromCalendarDate(const Wt::WDate& date);
+  static std::string FromCalendarDateTime(const Wt::WDateTime& date_time);
+  static std::string FromCalendarRrule(EventSptr event);
+  static std::string FromCalendarDate(const Wt::WDate& date);
 };
+} // namespace converter

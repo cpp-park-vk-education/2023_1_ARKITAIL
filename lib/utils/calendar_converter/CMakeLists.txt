@@ -11,7 +11,7 @@ target_link_libraries(
 	${MODULE_NAME}
 	PUBLIC
   calendar
-  character_reader
+  reader
   event
   lexer
   parser

@@ -1,14 +1,13 @@
 #include "StringStreamResource.hpp"
 
-#include <sstream>
+#include <memory>
 
 #include <Wt/WStreamResource.h>
 
-#include "IStreamBuffer.hpp"
-
-StringStreamResource::StringStreamResource(std::stringstream&& ss)
+StringStreamResource::StringStreamResource(
+    std::unique_ptr<std::istream>&& source)
     : Wt::WStreamResource("text/calendar"),
-      ss_(std::move(ss)) {
+      source_(std::move(source)) {
   suggestFileName("calendar.ics");
 }
 
@@ -19,5 +18,5 @@ StringStreamResource::~StringStreamResource() {
 void StringStreamResource::handleRequest(
     const Wt::Http::Request &request,
     Wt::Http::Response &response) {
-  handleRequestPiecewise(request, response, ss_);
+  handleRequestPiecewise(request, response, *source_);
 }
