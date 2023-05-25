@@ -6,8 +6,8 @@
 #include <Wt/WText.h>
 #include <Wt/WTime.h>
 
+#include <EventW.hpp>
 #include <calendar_body_w.hpp>
-#include <event_w.hpp>
 #include <memory>
 #include <vector>
 
@@ -20,7 +20,7 @@ WeekW::WeekW() {
 }
 
 void WeekW::update(Wt::WDate selected_date) {
-    selected_date = selected_date.addDays(1 - selected_date.dayOfWeek());
+    selected_date.addDays(1 - selected_date.dayOfWeek());
 
     table_->clear();
     makeHeaderTime();
@@ -32,7 +32,6 @@ void WeekW::update(Wt::WDate selected_date) {
     // Исправить range-based for на обычный
 
     // Заголовок недели
-    std::cout << begin_week_day.toString("dd MMMM yyyy") << std::endl;
     for (int i{1}; auto weekday : {"Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"}) {
         table_->elementAt(0, i)->addNew<Wt::WText>(weekday);
         table_->elementAt(0, i++)->addNew<Wt::WText>(", " + std::to_string(begin_week_day.day()));

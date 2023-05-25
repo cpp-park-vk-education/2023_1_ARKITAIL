@@ -13,8 +13,6 @@
 TreeNodeWSubAnalyst::TreeNodeWSubAnalyst() {}
 
 TreeNodeWConvertedData TreeNodeWSubAnalyst::analyseTreeNodeWChild(ITreeNode* tree_node) {
-    std::cout << "TreeNodeWSubAnalyst\n\n";
-
     Node node = tree_node->getNode();
     auto mgr = SessionScopeMap::instance().get()->managers();
     User user = mgr->user_manager()->get();

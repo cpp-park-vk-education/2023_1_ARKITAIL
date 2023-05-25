@@ -1,4 +1,4 @@
-#include "event_w.hpp"
+#include "EventW.hpp"
 
 #include <Wt/WBreak.h>
 #include <Wt/WColor.h>
@@ -16,10 +16,12 @@
 #include "event_d.hpp"
 #include "time_utils.hpp"
 
+bool EventW::isLargeEvent() {
+    return begin_.date().daysTo(end_.date());
+}
+
 void EventW::makeDayEventWidget(Wt::WTable* table) {
-    std::cout << begin_.toString("dd MMMM yyyy") << ' ' << end_.toString("dd MMMM yyyy") << ' '
-              << begin_.date().daysTo(end_.date()) << std::endl;
-    if (begin_.date().daysTo(end_.date())) {
+    if (isLargeEvent()) {
         auto style = "w-100 rounded-start rounded-end";
         makeEventLargePartWidget(title_, style, table->elementAt(0, 1));
     } else {
@@ -30,7 +32,7 @@ void EventW::makeDayEventWidget(Wt::WTable* table) {
 }
 
 void EventW::makeWeekEventWidget(Wt::WTable* table, Wt::WDate begin_of_week) {
-    if (begin_.date().daysTo(end_.date())) {
+    if (isLargeEvent()) {
         auto begin_event = begin_.date() > begin_of_week ? begin_.date() : begin_of_week;
         auto end_event = end_.date() < begin_of_week.addDays(TimeInterval::DAYS_IN_WEEK)
                              ? end_.date()
@@ -92,18 +94,6 @@ void EventW::makeMonthEventWidget(Wt::WTable* table, Wt::WDate day_of_month) {
         } else if (begin_.date().addDays(1 - begin_.date().dayOfWeek()) <= day_of_month &&
                    day_of_month <=
                        end_.date().addDays(TimeInterval::DAYS_IN_WEEK - end_.date().dayOfWeek())) {
-            std::cout << day_of_month.toString("dd MMMM yyyy") << std::endl;
-
-            std::cout << begin_.date().toString("dd MMMM yyyy") << ' '
-                      << end_.date().toString("dd MMMM yyyy") << std::endl;
-
-            std::cout
-                << begin_.date().addDays(1 - begin_.date().dayOfWeek()).toString("dd MMMM yyyy")
-                << ' '
-                << end_.date()
-                       .addDays(TimeInterval::DAYS_IN_WEEK - end_.date().dayOfWeek())
-                       .toString("dd MMMM yyyy")
-                << std::endl;
             table->elementAt(1 + (pos) / TimeInterval::DAYS_IN_WEEK, day_of_month.dayOfWeek())
                 ->addWidget(std::make_unique<Wt::WBreak>());
         }

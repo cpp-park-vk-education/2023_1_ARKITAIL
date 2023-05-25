@@ -14,11 +14,7 @@ PersonalCalendarHeaderW* PersonalCalendarHeaderW::addButtons() {
 
 PersonalCalendarHeaderW* PersonalCalendarHeaderW::addConnections() {
     CalendarHeaderW::addConnections();
-    button_add_event_->clicked().connect(
-        this,
-        &PersonalCalendarHeaderW::addEvent);  // вообще по нажатию кнопки сохранить в модалке
-                                              // ильи...и наверное надо что-то передавать сигналом,
-                                              // хотя скорее всего буду запрашивать у бека
+    button_add_event_->clicked().connect(this, &PersonalCalendarHeaderW::addEvent);
     return this;
 }
 
