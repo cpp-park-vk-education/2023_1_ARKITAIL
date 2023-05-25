@@ -20,8 +20,6 @@ TreeNode::TreeNode(const Node& node, ITreeNode* parent) : node_(node), parent_(p
             children_.emplace_back(std::make_unique<TreeNode>(mgr->node_manager()->get(c.resource_id), this));
         else 
             children_.emplace_back(std::make_unique<TreeNode>(c, this));
-
-        std::cout << children_.back()->getNode().id;
     }
 }
 

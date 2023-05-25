@@ -69,3 +69,28 @@ TEST_F(SessionSuit, TreeNodeRemovingChild) {
 	EXPECT_NO_THROW(children[3]->remove());
 }
 
+TEST_F(SessionSuit, TreeNodeAdditionChild) {
+	User user = managers->user_manager()->get();
+	Node node = managers->node_manager()->get(user.root_id);
+	
+	TreeNode tree_node = {node};
+
+	std::vector<ITreeNode*> children = tree_node.getChildren();
+	std::vector<ITreeNode*> children1 = children[1]->getChildren();
+
+	EXPECT_NO_THROW(tree_node.addChild(children1[0]->getNode()));
+
+	std::vector<ITreeNode*> expected_children = children1[0]->getChildren();
+	std::vector<ITreeNode*> got_children = tree_node.getChildren().back()->getChildren();
+
+	for (auto e = expected_children.begin(), g = got_children.begin();
+		e != expected_children.end() && g != got_children.end();
+		e++, g++) {
+
+		EXPECT_EQ((*e)->getNode().id, (*g)->getNode().id);
+		EXPECT_EQ((*e)->getNode().parent_id, (*g)->getNode().parent_id);
+		EXPECT_EQ((*e)->getNode().resource_id, (*g)->getNode().resource_id);
+		EXPECT_EQ((*e)->getNode().type, (*g)->getNode().type);
+	}
+}
+
