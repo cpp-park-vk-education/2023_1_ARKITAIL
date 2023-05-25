@@ -55,7 +55,8 @@ std::vector<Event> Tree::checkNode(ITreeNode* node) {
                 for (auto e : mgr->calendar_manager()->getEvents(q.front()->getNode().resource_id))
                     v.push_back(*e);
 
-            for (auto c : q.front()->getChildren()) q.push(c);
+            for (auto c : q.front()->getChildren())
+                q.push(c);
         }
 
         q.pop();

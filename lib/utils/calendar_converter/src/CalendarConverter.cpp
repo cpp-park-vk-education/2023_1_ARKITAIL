@@ -217,8 +217,8 @@ std::unique_ptr<std::istream> CalendarConverter::CalendarsToIcalendar(
     Write(source, "X-CALENDULA-VISIBILITY", calendar->visibility);
 
     auto managers = SessionScopeMap::instance().get()->managers();
-    std::vector<EventSptr> events
-      = managers->calendar_manager()->getEvents(calendar->id);
+    std::vector<EventSptr> events = managers->calendar_manager()->getEvents(calendar->id);
+
     for (EventSptr event : events) {
       Write(source, "BEGIN", "VEVENT");
 

@@ -12,7 +12,7 @@ public:
 	virtual void update(const Directory& directory) = 0;
 	virtual void remove(size_t directory_id) = 0;
 
-	virtual std::vector<Event> getEvents(size_t directory_id) = 0;
+	virtual std::vector<EventSptr> getEvents(size_t directory_id) = 0;
 	
 };
 

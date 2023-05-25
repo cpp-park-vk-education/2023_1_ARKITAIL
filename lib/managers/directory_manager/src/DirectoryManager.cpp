@@ -83,33 +83,33 @@ void DirectoryManager::remove(size_t directory_id) {
     node_mgr->remove(directory.node_id);
 }
 
-std::vector<Event> DirectoryManager::getEvents(size_t directory_id) {
+std::vector<EventSptr> DirectoryManager::getEvents(size_t directory_id) {
     Directory directory = db_->directory_dbm()->get(directory_id);
 
     if (!directory.id)
-        return std::vector<Event>();
+        return std::vector<EventSptr>();
 
     auto node_mgr = SessionScopeMap::instance().get()->managers()->node_manager();
     Node node = node_mgr->get(directory.node_id);
 
     if (!node.id)
-        return std::vector<Event>();
+        return std::vector<EventSptr>();
 
     auto calendar_mgr = SessionScopeMap::instance().get()->managers()->calendar_manager();
 
-    std::vector<Event> events;
+    std::vector<EventSptr> events;
     std::queue<Node> q;
 
     q.push(node);
 
     while (!q.empty()) {
-        if (q.front().type & (PUBLIC_DIRECTORY | PRIVATE_DIRECTORY)) {
+        if (q.front().type & (PUBLIC_DIRECTORY | PRIVATE_DIRECTORY))
             for (auto c : node_mgr->getChildren(q.front().id))
                 q.push(c);
-        } else if (q.front().type & CALENDAR) {
+        else if (q.front().type & CALENDAR)
             for (auto e : calendar_mgr->getEvents(q.front().resource_id))
                 events.push_back(e);
-        }
+
 
         q.pop();
     }

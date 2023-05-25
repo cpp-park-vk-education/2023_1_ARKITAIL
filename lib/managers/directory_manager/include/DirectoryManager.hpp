@@ -17,7 +17,7 @@ public:
 	void update(const Directory& directory) override;
 	void remove(size_t directory_id) override;
 
-	std::vector<Event> getEvents(size_t directory_id) override;
+	std::vector<EventSptr> getEvents(size_t directory_id) override;
 
 private:
 	std::shared_ptr<IDbManagers> db_;

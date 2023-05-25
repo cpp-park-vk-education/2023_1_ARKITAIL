@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Wt/WDateTime.h>
 #include <chrono>
 #include <vector>
 
@@ -13,12 +14,12 @@ public:
 	virtual void remove(size_t calendar_id) = 0;
 	virtual void update(CalendarSptr calendar) = 0;
 
-	virtual std::vector<Event> getEvents(size_t calendar_id) = 0;
+	virtual std::vector<EventSptr> getEvents(size_t calendar_id) = 0;
 	
-	virtual std::vector<Event> getEventsByInterval(
+	virtual std::vector<EventSptr> getEventsByInterval(
 		size_t calendar_id,
-		std::chrono::time_point<std::chrono::steady_clock> begin,
-		std::chrono::time_point<std::chrono::steady_clock> end) = 0;
+		Wt::WDateTime begin,
+		Wt::WDateTime end) = 0;
 
 };
 

@@ -1,3 +1,5 @@
+#include <chrono>
+
 #include "DbMock.hpp"
 
 DbMock::DbMock() {
@@ -58,5 +60,5 @@ DbMock::DbMock() {
     calendars.emplace_back(7, 23, 1, "PublicCalendar", "desc");
     calendars.emplace_back(8, 24, 1, "PublicCalendar", "desc");
 
-    events.emplace_back(0, 0, "", "", std::chrono::steady_clock::now(), std::chrono::steady_clock::now());
+    events.emplace_back();
 }
