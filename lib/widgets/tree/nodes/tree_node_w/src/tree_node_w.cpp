@@ -8,13 +8,17 @@
 #include <Wt/WLink.h>
 #include <Wt/WPopupWidget.h>
 #include <Wt/WPushButton.h>
+#include <Wt/WString.h>
+#include <Wt/WText.h>
 
 #include <memory>
 #include <string>
 #include <vector>
 
 #include "Calendar.hpp"
+#include "CreateCalendarDialog.hpp"
 #include "Directory.hpp"
+#include "EditCalendarDialog.hpp"
 #include "ITreeNode.hpp"
 #include "Managers.hpp"
 #include "Node.hpp"
@@ -65,9 +69,25 @@ void TreeNodeW::performAction(Action action) {
             removeNode();
             break;
 
-        case Action::EDIT:
-            // редактирование
+        case Action::EDIT: {
+            // (affeeal): каким-то образом мне нужно получить CalendarSptr,
+            // соответствующий данному календарю, который используется
+            // EditCalendarDialog.
+            CalendarSptr dummy_calendar = std::make_shared<Calendar>();
+
+            dialog::EditCalendarDialog* dialog = addChild(
+                std::make_unique<dialog::EditCalendarDialog>(dummy_calendar));
+
+            dialog->show();
+
+            // dialog.calendar_updated().connect(...);
+
+            dialog->finished().connect([=] {
+              removeChild(dialog);
+              Wt::log("EditCalendarDialog removed");
+            });
             break;
+        }
 
         case Action::SUBSCRIBE:
             setOptions(OptionsWDirector().createOptionsUnsubscriptionW(options_builder));
@@ -79,9 +99,20 @@ void TreeNodeW::performAction(Action action) {
             this->removeNode();  //в своем - удаление, в чужом - смена опций
             break;
 
-        case Action::ADD_CALENDAR:
-            // добавить календарь
+        case Action::ADD_CALENDAR: {
+            dialog::CreateCalendarDialog* dialog
+              = addChild(std::make_unique<dialog::CreateCalendarDialog>());
+
+            dialog->show();
+
+            // dialog.calendar_created().connect(...);
+
+            dialog->finished().connect([=] {
+              removeChild(dialog);
+              Wt::log("CreateCalendarDialog removed");
+            });
             break;
+        }
 
         case Action::ADD_DIRECTORY:
             // добавить директорию

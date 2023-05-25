@@ -29,12 +29,6 @@ size_t ProfileDbManagerMock::add(const Profile& profile) {
 	return aid_++;
 }
 
-void ProfileDbManagerMock::update(const Profile& profile) {
-	for (auto e : data_)
-		if (e.id == profile.id)
-			e = profile;
-}
-
 void ProfileDbManagerMock::remove(size_t profile_id) {
 	for (auto e = data_.begin() + 1; e != data_.end(); e++)
 		if (e->id == profile_id)

@@ -9,11 +9,15 @@
 #include "Node.hpp"
 #include "SessionScopeMap.hpp"
 
-TreeNode::TreeNode(Node node, ITreeNode* parent) :
+TreeNode::TreeNode(const Node& node) :
+    TreeNode(node, nullptr) {}
+
+TreeNode::TreeNode(const Node& node, ITreeNode* parent) :
     node_(node),
     parent_(parent),
     children_(),
     checked_(false) {
+
     auto mgr = SessionScopeMap::instance().get()->managers();
 
     for (auto c : mgr->node_manager()->getChildren(node.id)) {
@@ -25,7 +29,7 @@ TreeNode::TreeNode(Node node, ITreeNode* parent) :
     }
 }
 
-Node TreeNode::getNode() {
+const Node& TreeNode::getNode() {
     return node_;
 }
 
@@ -41,7 +45,7 @@ std::vector<ITreeNode*> TreeNode::getChildren() {
     return children;
 }
 
-ITreeNode* TreeNode::addChild(Node node) {
+ITreeNode* TreeNode::addChild(const Node& node) {
     std::unique_ptr<ITreeNode> tree_node = std::make_unique<TreeNode>(node, this);
     children_.emplace_back(std::move(tree_node));
     return children_.back().get();
@@ -70,6 +74,7 @@ std::unique_ptr<ITreeNode> TreeNode::removeChild(ITreeNode* child) {
         if (b->get() == child) {
             rmd_child.swap(*b);
             children_.erase(b);
+            break;
         }
     }
 

@@ -26,10 +26,10 @@ std::vector<Event> Tree::getCheckedEvents() {
     q.push(getRoot());
 
     while (!q.empty()) {
-        if ((q.front()->getNode().type & (NodeType::PUBLIC_CALENDAR | NodeType::PRIVATE_CALENDAR)) &&
+        if ((q.front()->getNode().type & (PUBLIC_CALENDAR | PRIVATE_CALENDAR)) &&
             q.front()->isChecked())
             for (auto e : mgr->calendar_manager()->getEvents(q.front()->getNode().resource_id))
-                v.push_back(e);
+                v.push_back(*e);
 
         for (auto c : q.front()->getChildren()) q.push(c);
 
@@ -51,11 +51,12 @@ std::vector<Event> Tree::checkNode(ITreeNode* node) {
         if (q.front()->isChecked()) {
             q.front()->check();
 
-            if (q.front()->getNode().type & (NodeType::PUBLIC_DIRECTORY | NodeType::PUBLIC_DIRECTORY))
+            if (q.front()->getNode().type & (PUBLIC_DIRECTORY | PUBLIC_DIRECTORY))
                 for (auto e : mgr->calendar_manager()->getEvents(q.front()->getNode().resource_id))
-                    v.push_back(e);
+                    v.push_back(*e);
 
-            for (auto c : q.front()->getChildren()) q.push(c);
+            for (auto c : q.front()->getChildren())
+                q.push(c);
         }
 
         q.pop();

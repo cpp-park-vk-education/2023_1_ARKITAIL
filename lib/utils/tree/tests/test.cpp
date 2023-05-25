@@ -1,66 +1,96 @@
 #include <gtest/gtest.h>
 
-#include "TreeNode.hpp"
-#include "Tree.hpp"
+#include "IManagers.hpp"
+#include "ITreeNode.hpp"
 #include "Node.hpp"
-/*
+#include "SessionScopeMap.hpp"
+#include "TreeNode.hpp"
 
-TEST(TreeTests, DISABLED_Creation) {
-    Node n(0, 0, 0, NodeType::PUBLIC_CALENDAR);
-    EXPECT_NO_THROW(Tree t(n));
+class SessionSuit : public ::testing::Test {
+protected:
+	void SetUp() override {
+		managers = SessionScopeMap::instance().get()->managers();
+	}
+
+	void TearDown() override {
+		SessionScopeMap::instance().remove();
+	}
+
+	IManagers* managers;
+};
+
+TEST_F(SessionSuit, TreeNodeCreation) {
+	User user = managers->user_manager()->get();
+	Node node = managers->node_manager()->get(user.root_id);
+
+	EXPECT_NO_THROW((TreeNode(node)));
 }
 
-TEST(TreeNodeTests, DISABLED_Insertion) {
-    Node n(0, 0, 0, NodeType::);
-    Tree t(n);
+TEST_F(SessionSuit, TreeNodeGettingChilds) {
+	User user = managers->user_manager()->get();
+	Node node = managers->node_manager()->get(user.root_id);
 
-    t.getRoot()->addChild(std::unique_ptr<TreeNode> tree_node)
+	TreeNode tree_node = {node};
 
-    auto childs = t.getRoot()->getChilds();
+	std::vector<Node> expected_children = {
+		Node(3, 1, 3, PRIVATE_GROUP),
+		Node(4, 1, 4, PUBLIC_GROUP),
+		Node(5, 1, 5, SUBSCRIPTIONS_GROUP),
+		Node(6, 1, 6, PROFILE_GROUP)
+	};
 
-    EXPECT_EQ(childs.size(), 1);
+	std::vector<ITreeNode*> got_children = tree_node.getChildren();
 
-    EXPECT_EQ(childs[0]->getNode().id, n.id);
-    EXPECT_EQ(childs[0]->getNode().parent_id, n.parent_id);
-    EXPECT_EQ(childs[0]->getNode().resource_id, n.resource_id);
-    EXPECT_EQ(childs[0]->getNode().type, n.type);
+	auto e = expected_children.begin();
+	auto g = got_children.begin();
+
+	for (; e != expected_children.end() && g != got_children.end(); e++, g++) {
+		EXPECT_EQ(e->id, (*g)->getNode().id);
+		EXPECT_EQ(e->parent_id, (*g)->getNode().parent_id);
+		EXPECT_EQ(e->resource_id, (*g)->getNode().resource_id);
+		EXPECT_EQ(e->type, (*g)->getNode().type);
+	}
 }
 
-TEST(TreeNodeTests, DISABLED_Deletion) {
-    Node n(0, 0, 0, NodeType::CALENDAR);
-    TreeNode tn(n);
-    Tree t(n);
+TEST_F(SessionSuit, TreeNodeRemovingChild) {
+	User user = managers->user_manager()->get();
+	Node node = managers->node_manager()->get(user.root_id);
 
-    t.insertNode(tn, t.getRoot());
-    auto childs = t.getRoot()->getChilds();
+	TreeNode tree_node = {node};
 
-    t.removeNode(childs[0]);
-    childs = t.getRoot()->getChilds();
+	std::vector<ITreeNode*> children = tree_node.getChildren();
+	std::vector<ITreeNode*> children1 = children[0]->getChildren();
 
-    EXPECT_EQ(childs.size(), 0);
+	EXPECT_NO_THROW(children1[0]->remove());
+	EXPECT_NO_THROW(children1[1]->remove());
+	EXPECT_NO_THROW(children[0]->remove());
+	EXPECT_NO_THROW(children[1]->remove());
+	EXPECT_NO_THROW(children[2]->remove());
+	EXPECT_NO_THROW(children[3]->remove());
 }
 
-TEST(TreeNodeTests, DISABLED_Creation) {
-    Node n(0, 0, 0, NodeType::CALENDAR);
-    EXPECT_NO_THROW(TreeNode tn(n));
+TEST_F(SessionSuit, TreeNodeAdditionChild) {
+	User user = managers->user_manager()->get();
+	Node node = managers->node_manager()->get(user.root_id);
+	
+	TreeNode tree_node = {node};
+
+	std::vector<ITreeNode*> children = tree_node.getChildren();
+	std::vector<ITreeNode*> children1 = children[1]->getChildren();
+
+	EXPECT_NO_THROW(tree_node.addChild(children1[0]->getNode()));
+
+	std::vector<ITreeNode*> expected_children = children1[0]->getChildren();
+	std::vector<ITreeNode*> got_children = tree_node.getChildren().back()->getChildren();
+
+	for (auto e = expected_children.begin(), g = got_children.begin();
+		e != expected_children.end() && g != got_children.end();
+		e++, g++) {
+
+		EXPECT_EQ((*e)->getNode().id, (*g)->getNode().id);
+		EXPECT_EQ((*e)->getNode().parent_id, (*g)->getNode().parent_id);
+		EXPECT_EQ((*e)->getNode().resource_id, (*g)->getNode().resource_id);
+		EXPECT_EQ((*e)->getNode().type, (*g)->getNode().type);
+	}
 }
-
-TEST(TreeNodeTests, DISABLED_Checking) {
-    Node n(0, 0, 0, NodeType::CALENDAR);
-    TreeNode tn(n);
-
-    EXPECT_FALSE(tn.isChecked());
-    tn.check();
-    EXPECT_TRUE(tn.isChecked());
-}
-
-TEST(TreeNodeTests, DISABLED_Childs) {
-    Node n(0, 0, 0, NodeType::CALENDAR);
-    TreeNode tn(n);
-
-    auto childs = tn.getChilds();
-    EXPECT_EQ(childs.size(), 0);
-}
-
-*/
 

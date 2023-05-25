@@ -7,7 +7,7 @@
 
 class INodeManager {
 public:
-	virtual const Node& get(size_t node_id) = 0;
+	virtual Node get(size_t node_id) = 0;
 	virtual size_t add(const Node& node) = 0;
 	virtual void update(const Node& node) = 0;
 	virtual void remove(size_t node_id) = 0;

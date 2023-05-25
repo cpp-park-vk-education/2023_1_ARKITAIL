@@ -1,4 +1,5 @@
 add_subdirectory(widgets)
+add_subdirectory(dialog)
 
 add_subdirectory(application)
 
@@ -9,4 +10,3 @@ add_subdirectory(utils)
 add_subdirectory(db_managers)
 
 add_subdirectory(unmet_deps)
-

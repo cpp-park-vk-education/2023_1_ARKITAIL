@@ -2,13 +2,13 @@
 
 class TreeNodeMock : public ITreeNode {
 public:
-    TreeNodeMock(Node node, ITreeNode* parent);
+    TreeNodeMock(const Node& node, ITreeNode* parent);
 
-    Node getNode();
+    const Node& getNode();
     ITreeNode* getParent();
 
     std::vector<ITreeNode*> getChildren();
-    ITreeNode* addChild(Node node);
+    ITreeNode* addChild(const Node& node);
     std::unique_ptr<ITreeNode> remove();
 
     bool isChecked();

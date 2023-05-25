@@ -11,9 +11,9 @@ class IEventManager {
 public:
 	using clock_t = std::chrono::steady_clock;
 
-	virtual const Event& get(size_t) = 0;
-	virtual size_t add(const Event&) = 0;
-	virtual void update(const Event&) = 0;
+	virtual EventSptr get(size_t) = 0;
+	virtual size_t add(EventSptr) = 0;
+	virtual void update(EventSptr) = 0;
 	virtual void remove(size_t) = 0;
 
 	virtual std::vector<Comment> getComments(size_t) = 0;
