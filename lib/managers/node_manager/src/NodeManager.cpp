@@ -16,8 +16,10 @@ NodeManager::NodeManager(std::shared_ptr<IDbManagers> db) :
 bool NodeManager::checkAccess(size_t user_id, size_t node_id) {
 	Node node = db_->node_dbm()->get(node_id);
 
-	if (node.type & DIRECTORY)
+	if (node.type & DIRECTORY) {
+		std::cout << node.type << ' ' << std::endl;
 		return db_->directory_dbm()->get(node.resource_id).owner_id == user_id;
+	}
 
 	if (node.type & CALENDAR)
 		return db_->calendar_dbm()->get(node.resource_id)->owner_id == user_id;
@@ -189,5 +191,18 @@ std::vector<Node> NodeManager::getChildren(size_t node_id) {
 		return std::vector<Node>();
 
 	return db_->node_dbm()->getChildren(node_id);
+}
+
+bool NodeManager::subscribed(size_t node_id) {
+	User user = db_->user_dbm()->get();
+	Node root = db_->node_dbm()->get(user.root_id);
+
+	for (auto c : db_->node_dbm()->getChildren(root.id))
+		if (c.type & SUBSCRIPTIONS_GROUP)
+			for (auto s : db_->node_dbm()->getChildren(c.id))
+				if (s.resource_id == node_id)
+					return true;
+
+	return false;
 }
 

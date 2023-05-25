@@ -21,7 +21,7 @@ TreeNode::TreeNode(const Node& node, ITreeNode* parent) :
     auto mgr = SessionScopeMap::instance().get()->managers();
 
     for (auto c : mgr->node_manager()->getChildren(node.id)) {
-        if (c.type & NodeType::MOUNT)
+        if (c.type & MOUNT)
             children_.emplace_back(
                 std::make_unique<TreeNode>(mgr->node_manager()->get(c.resource_id), this));
         else
