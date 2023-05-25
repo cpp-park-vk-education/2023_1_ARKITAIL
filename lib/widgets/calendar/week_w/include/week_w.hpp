@@ -2,8 +2,8 @@
 
 #include <Wt/WDate.h>
 
+#include <EventW.hpp>
 #include <calendar_body_w.hpp>
-#include <event_w.hpp>
 
 class WeekW : public CalendarBodyW {
   public:

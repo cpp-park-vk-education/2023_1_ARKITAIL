@@ -21,11 +21,20 @@ class EventW {
         begin_(begin),
         end_(end) {}
 
+    EventW() :
+        id_(),
+        title_(),
+        color_(),
+        begin_(),
+        end_() {}
+
     ~EventW() = default;
 
     void makeDayEventWidget(Wt::WTable* table);
     void makeWeekEventWidget(Wt::WTable* table, Wt::WDate begin_of_week);
     void makeMonthEventWidget(Wt::WTable* table, Wt::WDate begin_of_month);
+
+    bool isLargeEvent();
 
   private:
     int id_;

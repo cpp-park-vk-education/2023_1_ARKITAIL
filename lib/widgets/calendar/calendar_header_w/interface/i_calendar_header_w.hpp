@@ -21,13 +21,15 @@ class ICalendarHeaderW : public Wt::WContainerWidget {
     virtual Wt::Signal<Range>& rangeChanged() = 0;
     virtual Wt::Signal<>& eventAdded() = 0;
     virtual void setRange() = 0;
-    virtual void addConnections() = 0;
+    virtual ICalendarHeaderW* addConnections() = 0;
+    virtual ICalendarHeaderW* addButtons() = 0;
+
+    virtual Wt::WString makeTitle() = 0;
 
   protected:
-    virtual Wt::WString makeTitle() = 0;
     virtual void addStyle() = 0;
+
     virtual void switchToToday() = 0;
     virtual void switchToPrev() = 0;
     virtual void switchToNext() = 0;
-    virtual void balanceSelectedDate() = 0;
 };

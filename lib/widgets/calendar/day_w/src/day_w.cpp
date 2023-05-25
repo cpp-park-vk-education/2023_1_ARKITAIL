@@ -1,6 +1,6 @@
 #include "day_w.hpp"
 
-#include "event_w.hpp"
+#include "EventW.hpp"
 #include "time_utils.hpp"
 
 DayW::DayW() {

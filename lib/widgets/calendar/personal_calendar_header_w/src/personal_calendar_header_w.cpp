@@ -3,15 +3,19 @@
 #include <Wt/WPushButton.h>
 
 PersonalCalendarHeaderW::PersonalCalendarHeaderW() :
-    CalendarHeaderW() {
+    CalendarHeaderW() {}
+
+PersonalCalendarHeaderW* PersonalCalendarHeaderW::addButtons() {
+    CalendarHeaderW::addButtons();
     button_add_event_ = container_option_range_->addNew<Wt::WPushButton>("Добавить событие");
     button_add_event_->addStyleClass("col mx-3");
+    return this;
 }
 
-void PersonalCalendarHeaderW::addConnections() {
-    button_add_event_->clicked().connect([=] {
-        // ...
-    });
+PersonalCalendarHeaderW* PersonalCalendarHeaderW::addConnections() {
+    CalendarHeaderW::addConnections();
+    button_add_event_->clicked().connect(this, &PersonalCalendarHeaderW::addEvent);
+    return this;
 }
 
 void PersonalCalendarHeaderW::addEvent() {
