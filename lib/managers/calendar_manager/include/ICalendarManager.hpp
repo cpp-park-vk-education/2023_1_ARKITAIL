@@ -1,5 +1,6 @@
 #pragma once
 
+#include <chrono>
 #include <vector>
 
 #include "Calendar.hpp"
@@ -13,6 +14,11 @@ public:
 	virtual void update(const Calendar& calendar) = 0;
 
 	virtual std::vector<Event> getEvents(size_t calendar_id) = 0;
+	
+	virtual std::vector<Event> getEventsByInterval(
+		size_t calendar_id,
+		std::chrono::time_point<std::chrono::steady_clock> begin,
+		std::chrono::time_point<std::chrono::steady_clock> end) = 0;
 
 };
 

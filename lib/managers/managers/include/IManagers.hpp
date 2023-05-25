@@ -4,6 +4,7 @@
 #include "IDirectoryManager.hpp"
 #include "IEventManager.hpp"
 #include "INodeManager.hpp"
+#include "IProfileManager.hpp"
 #include "IUserManager.hpp"
 
 class IManagers {
@@ -13,6 +14,7 @@ public:
 	virtual IDirectoryManager* directory_manager() = 0;
 	virtual ICalendarManager* calendar_manager() = 0;
 	virtual IEventManager* event_manager() = 0;
+	virtual IProfileManager* profile_manager() = 0;
 
 	virtual ~IManagers() {}
 
