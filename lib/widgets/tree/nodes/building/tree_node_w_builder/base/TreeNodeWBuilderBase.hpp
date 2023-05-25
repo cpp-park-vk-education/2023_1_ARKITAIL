@@ -19,6 +19,7 @@ class TreeNodeWBuilderBase {
 
     TreeNodeWBuilderBase* addAnalyst(std::unique_ptr<ITreeNodeWAnalyst>);
     TreeNodeWBuilderBase* addHead(std::unique_ptr<Wt::WWidget> head);
+    TreeNodeWBuilderBase* addTextHead(std::unique_ptr<Wt::WText> head);
     TreeNodeWBuilderBase* addCheckBox();
     TreeNodeWBuilderBase* addOptions(std::unique_ptr<OptionsW> options);
 

@@ -37,7 +37,9 @@ void TreeNodeLeafW::performAction(Action action) {
 
             dialog->show();
 
-            // dialog.calendar_updated().connect(...);
+            dialog->calendar_updated().connect([=](CalendarSptr calendar) {
+                text_title_->setText(calendar->summary);
+            });
 
             dialog->finished().connect([=] {
                 removeChild(dialog);

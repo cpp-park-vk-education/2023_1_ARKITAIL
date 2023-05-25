@@ -33,6 +33,11 @@ TreeNodeWBuilderBase* TreeNodeWBuilderBase::addHead(std::unique_ptr<Wt::WWidget>
     return this;
 }
 
+TreeNodeWBuilderBase* TreeNodeWBuilderBase::addTextHead(std::unique_ptr<Wt::WText> head) {
+    tree_node_w->text_title_ = tree_node_w->header_container_->addWidget(std::move(head));
+    return this;
+}
+
 TreeNodeWBuilderBase* TreeNodeWBuilderBase::addCheckBox() {
     tree_node_w->check_box_container->addStyleClass("my-auto");
     tree_node_w->check_box_ =

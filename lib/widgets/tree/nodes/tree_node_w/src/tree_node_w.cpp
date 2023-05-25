@@ -41,6 +41,7 @@
 TreeNodeW::TreeNodeW() {}
 
 TreeNodeW::TreeNodeW(ITreeNode* node) :
+    text_title_(),
     Wt::WContainerWidget(),
     parent_(nullptr),
     node_(node),

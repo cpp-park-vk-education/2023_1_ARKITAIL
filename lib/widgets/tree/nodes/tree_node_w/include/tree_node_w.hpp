@@ -44,6 +44,7 @@ class TreeNodeW : public Wt::WContainerWidget {
     void addToolTipSignal();
 
   protected:
+    Wt::WText* text_title_;
     std::unique_ptr<ITreeNodeWAnalyst> analyst_;
     Wt::WContainerWidget* header_container_;
     Wt::WPushButton* options_button_;
