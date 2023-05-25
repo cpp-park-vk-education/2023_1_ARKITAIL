@@ -97,12 +97,12 @@ void NodeManager::update(const Node& node) {
 
 // Удалять запрещено типы ROOT, {PRIVATE | PUBLIC | SUBSCRIPTIONS | PROFILE}_GROUP
 void NodeManager::remove(size_t node_id) {
-    User user = db_->user_dbm()->get();
-    Node node = db_->node_dbm()->get(node_id);
+	User user = db_->user_dbm()->get();
+	Node node = db_->node_dbm()->get(node_id);
 
-    if (!checkAccess(user.id, node.id) ||
-        node.type & (ROOT | PRIVATE_GROUP | PUBLIC_GROUP | SUBSCRIPTIONS_GROUP | PROFILE_GROUP))
-        return;
+	if (!checkAccess(user.id, node.id) ||
+		node.type & (ROOT | PRIVATE_GROUP | PUBLIC_GROUP | SUBSCRIPTIONS_GROUP | PROFILE_GROUP))
+		return;
 
     std::queue<Node> subtree;
     subtree.push(node);
@@ -112,19 +112,19 @@ void NodeManager::remove(size_t node_id) {
     while (!subtree.empty()) {
         cur_node = subtree.front();
 
-        if (cur_node.type & (PRIVATE_DIRECTORY | PUBLIC_DIRECTORY))
-            for (auto child_node : db_->node_dbm()->getChildren(cur_node.id))
-                subtree.push(child_node);
+		if (cur_node.type & (PRIVATE_DIRECTORY | PUBLIC_DIRECTORY))
+			for (auto child_node : db_->node_dbm()->getChildren(cur_node.id))
+				subtree.push(child_node);
 
-        db_->node_dbm()->remove(cur_node.id);
-
-        if (cur_node.type & (PRIVATE_DIRECTORY | PUBLIC_DIRECTORY))
-            db_->directory_dbm()->remove(cur_node.resource_id);
-        else if (cur_node.type & (PRIVATE_CALENDAR | PUBLIC_CALENDAR))
-            db_->calendar_dbm()->remove(cur_node.resource_id);
-
-        subtree.pop();
-    }
+		db_->node_dbm()->remove(cur_node.id);
+		
+		if (cur_node.type & (PRIVATE_DIRECTORY | PUBLIC_DIRECTORY))
+			db_->directory_dbm()->remove(cur_node.resource_id);
+		else if (cur_node.type & (PRIVATE_CALENDAR | PUBLIC_CALENDAR))
+			db_->calendar_dbm()->remove(cur_node.resource_id);
+        
+		subtree.pop();
+	}
 }
 
 void NodeManager::tag(const Tag& tag, size_t node_id) {
@@ -139,6 +139,7 @@ void NodeManager::move(size_t node_id, size_t destination_id) {
     Node mvd_node = mv_node;
     mvd_node.parent_id = destination_id;
     update(mvd_node);
+
 }
 
 // TODO(uma_op): Проверка на права доступа
@@ -156,6 +157,7 @@ void NodeManager::subscribe(size_t node_id) {
             break;
         }
     }
+
 }
 
 // Отписка является одной из самых безобидных операций
@@ -176,10 +178,25 @@ void NodeManager::unsubscribe(size_t node_id) {
 
 // Получение детей так же как и получение требует лишь проверки прав доступа
 std::vector<Node> NodeManager::getChildren(size_t node_id) {
-    User user = db_->user_dbm()->get();
-    Node node = db_->node_dbm()->get(node_id);
+	User user = db_->user_dbm()->get();
+	Node node = db_->node_dbm()->get(node_id);
 
-    if (!(checkAccess(user.id, node_id) || node.type & PUBLIC)) return std::vector<Node>();
+	if (!(checkAccess(user.id, node_id) || node.type & PUBLIC))
+		return std::vector<Node>();
 
-    return db_->node_dbm()->getChildren(node_id);
+	return db_->node_dbm()->getChildren(node_id);
 }
+
+bool NodeManager::subscribed(size_t node_id) {
+	User user = db_->user_dbm()->get();
+	Node root = db_->node_dbm()->get(user.root_id);
+
+	for (auto c : db_->node_dbm()->getChildren(root.id))
+		if (c.type & SUBSCRIPTIONS_GROUP)
+			for (auto s : db_->node_dbm()->getChildren(c.id))
+				if (s.resource_id == node_id)
+					return true;
+
+	return false;
+}
+

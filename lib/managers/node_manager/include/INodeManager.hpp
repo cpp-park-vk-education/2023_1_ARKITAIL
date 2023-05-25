@@ -17,6 +17,8 @@ public:
 	virtual void subscribe(size_t node_id) = 0;
 	virtual void unsubscribe(size_t node_id) = 0;
 	virtual std::vector<Node> getChildren(size_t node_id) = 0;
+	
+	virtual bool subscribed(size_t node_id) = 0;
 
 };
 

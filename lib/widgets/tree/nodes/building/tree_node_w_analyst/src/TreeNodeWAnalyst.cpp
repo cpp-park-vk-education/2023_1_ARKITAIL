@@ -29,16 +29,16 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeWChild(ITreeNode* tree_n
 
         } else {
             CalendarSptr child = mgr->calendar_manager()->get(node.resource_id);
-
             data = TreeNodeWConvertedData{
-                TreeNodeWType::SUB_CALENDAR_OPTIONS,       child->summary, child->description, tags,
+                TreeNodeWType::SUB_CALENDAR_OPTIONS,      child->summary, child->description, tags,
                 mgr->user_manager()->get(child->owner_id), tree_node};
         }
 
     } else if (node.type & (NodeType::PRIVATE_CALENDAR | NodeType::PUBLIC_CALENDAR)) {
         CalendarSptr child = mgr->calendar_manager()->get(node.resource_id);
+
         data = TreeNodeWConvertedData{
-            TreeNodeWType::PERSONAL_CALENDAR,          child->summary, child->description, tags,
+            TreeNodeWType::PERSONAL_CALENDAR,         child->summary, child->description, tags,
             mgr->user_manager()->get(child->owner_id), tree_node};
 
     } else if (node.type & (NodeType::PRIVATE_DIRECTORY | NodeType::PUBLIC_DIRECTORY)) {

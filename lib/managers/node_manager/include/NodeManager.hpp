@@ -24,6 +24,8 @@ public:
 	void unsubscribe(size_t node_id) override;
 	std::vector<Node> getChildren(size_t node_id) override;
 
+	bool subscribed(size_t node_id) override;
+
 private:
 	bool checkAccess(size_t user_id, size_t node_id);
 
