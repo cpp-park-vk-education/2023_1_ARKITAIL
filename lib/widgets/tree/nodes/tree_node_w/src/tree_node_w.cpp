@@ -77,10 +77,10 @@ void TreeNodeW::performAction(Action action) {
 
         case Action::UNSUBSCRIBE:
             mgr->node_manager()->unsubscribe(node_->getNode().id);
-            if (1) {
-                setOptions(OptionsWDirector().createOptionsSubscriptionW(options_builder));
-            } else {
+            if (!isRoot() && node_->getParent()->getNode().type & NodeType::SUBSCRIPTIONS_GROUP) {
                 this->removeNode();
+            } else {
+                setOptions(OptionsWDirector().createOptionsSubscriptionW(options_builder));
             }
             break;
 
