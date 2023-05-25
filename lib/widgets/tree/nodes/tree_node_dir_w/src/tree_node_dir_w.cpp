@@ -23,6 +23,31 @@ TreeNodeDirW::TreeNodeDirW(ITreeNode* node) :
     children_container_->addStyleClass("ps-4");
 }
 
+void TreeNodeDirW::performAction(Action action) {
+    TreeNodeW::performAction(action);
+    switch (action) {
+        case Action::EDIT: {
+            // // (affeeal): каким-то образом мне нужно получить CalendarSptr,
+            // // соответствующий данному календарю, который используется
+            // // EditCalendarDialog.
+            // CalendarSptr dummy_calendar = std::make_shared<Calendar>();
+
+            // dialog::EditCalendarDialog* dialog =
+            //     addChild(std::make_unique<dialog::EditCalendarDialog>(dummy_calendar));
+
+            // dialog->show();
+
+            // // dialog.calendar_updated().connect(...);
+
+            // dialog->finished().connect([=] {
+            //     removeChild(dialog);
+            //     Wt::log("EditCalendarDialog removed");
+            // });
+            // break;
+        }
+    }
+}
+
 TreeNodeW* TreeNodeDirW::addChildNode(std::unique_ptr<TreeNodeW> child) {
     TreeNodeW* child_node = children_container_->addWidget(std::move(child));
     child_node->addParent(this);

@@ -12,34 +12,24 @@
 
 #include "time_utils.hpp"
 
-CalendarHeaderW::CalendarHeaderW() {
-    selected_date_ = Wt::WDate(std::chrono::system_clock::now());
-    range_ = Range::WEEK;
-    auto button_box = addNew<Wt::WContainerWidget>();
-    button_box->addStyleClass("my-2 me-2 my-lg-0 d-flex justify-content-center");
-    today_button_ = button_box->addNew<Wt::WPushButton>("Сегодня");
-    prev_button_ = button_box->addNew<Wt::WPushButton>("<");
-    next_button_ = button_box->addNew<Wt::WPushButton>(">");
-    calendar_title_ = button_box->addNew<Wt::WText>(makeTitle());
+CalendarHeaderW::CalendarHeaderW() :
+    today_button_(),
+    prev_button_(),
+    next_button_(),
+    calendar_title_(),
+    container_option_range_(),
+    option_range_(),
 
-    container_option_range_ = addNew<Wt::WContainerWidget>();
+    added_event_(),
+    change_selected_date_(),
+    change_range_(),
 
-    option_range_ = container_option_range_->addNew<Wt::WComboBox>();
-    option_range_->addItem("Месяц");
-    option_range_->addItem("Неделя");
-    option_range_->addItem("День");
-    option_range_->setCurrentIndex(1);
-
-    today_button_->clicked().connect(this, &CalendarHeaderW::switchToToday);
-    prev_button_->clicked().connect(this, &CalendarHeaderW::switchToPrev);
-    next_button_->clicked().connect(this, &CalendarHeaderW::switchToNext);
-    option_range_->changed().connect(this, &CalendarHeaderW::setRange);
-    addStyle();
-}
+    selected_date_(Wt::WDate(std::chrono::system_clock::now())),
+    range_(Range::WEEK) {}
 
 Wt::WString CalendarHeaderW::makeTitle() {
     if (range_ == Range::DAY) {
-        return selected_date_.toString("dd MMMM");
+        return selected_date_.toString("d MMMM");
     }
     return selected_date_.toString("MMMM yyyy");
 }
@@ -54,61 +44,43 @@ void CalendarHeaderW::addStyle() {
     option_range_->addStyleClass("col mx-3");
 }
 
-void CalendarHeaderW::balanceSelectedDate() {
-    switch (range_) {
-        case Range::MONTH:
-            selected_date_ = Wt::WDate(selected_date_.year(), selected_date_.month(), 1);
-            break;
-        case Range::WEEK:
-            selected_date_ = selected_date_.addDays(-selected_date_.dayOfWeek());
-            break;
-    }
-}
-
 void CalendarHeaderW::setRange() {
     range_ = Range(option_range_->currentIndex());
     change_range_.emit(range_);
-    balanceSelectedDate();
     change_selected_date_.emit(selected_date_);
     calendar_title_->setText(makeTitle());
 }
 
+Wt::WDate CalendarHeaderW::switchSelectedDate(SwitchingDirection direction) {
+    if (direction == SwitchingDirection::TODAY) {
+        return selected_date_ = Wt::WDate(std::chrono::system_clock::now());
+    }
+    switch (range_) {
+        case Range::DAY:
+            return selected_date_ = Wt::WDate(selected_date_.addDays(direction));
+
+        case Range::WEEK:
+            return selected_date_ =
+                       Wt::WDate(selected_date_.addDays(direction * TimeInterval::DAYS_IN_WEEK));
+
+        case Range::MONTH:
+            return selected_date_ = Wt::WDate(selected_date_.addMonths(direction));
+    }
+    return selected_date_;
+}
+
 void CalendarHeaderW::switchToToday() {
-    selected_date_ = Wt::WDate(std::chrono::system_clock::now());
-    balanceSelectedDate();
-    change_selected_date_.emit(selected_date_);
+    change_selected_date_.emit(switchSelectedDate(SwitchingDirection::TODAY));
     calendar_title_->setText(makeTitle());
 }
 
 void CalendarHeaderW::switchToPrev() {
-    switch (range_) {
-        case Range::DAY:
-            selected_date_ = Wt::WDate(selected_date_.addDays(-1));
-            break;
-        case Range::WEEK:
-            selected_date_ = Wt::WDate(selected_date_.addDays(-TimeInterval::DAYS_IN_WEEK));
-            break;
-        case Range::MONTH:
-            selected_date_ = Wt::WDate(selected_date_.addMonths(-1));
-            break;
-    }
-    change_selected_date_.emit(selected_date_);
+    change_selected_date_.emit(switchSelectedDate(SwitchingDirection::BACK));
     calendar_title_->setText(makeTitle());
 }
 
 void CalendarHeaderW::switchToNext() {
-    switch (range_) {
-        case Range::DAY:
-            selected_date_ = Wt::WDate(selected_date_.addDays(1));
-            break;
-        case Range::WEEK:
-            selected_date_ = Wt::WDate(selected_date_.addDays(TimeInterval::DAYS_IN_WEEK));
-            break;
-        case Range::MONTH:
-            selected_date_ = Wt::WDate(selected_date_.addMonths(1));
-            break;
-    }
-    change_selected_date_.emit(selected_date_);
+    change_selected_date_.emit(switchSelectedDate(SwitchingDirection::FORWARD));
     calendar_title_->setText(makeTitle());
 }
 
@@ -128,8 +100,33 @@ void CalendarHeaderW::setSelectedDate(Wt::WDate new_date) {
     selected_date_ = new_date;
 }
 
-void CalendarHeaderW::setOptionsRange(int i) {
-    option_range_->setCurrentIndex(i);
+void CalendarHeaderW::setValueRange(Range range) {
+    range_ = range;
 }
 
-void CalendarHeaderW::addConnections() {}
+CalendarHeaderW* CalendarHeaderW::addButtons() {
+    auto button_box = addNew<Wt::WContainerWidget>();
+    button_box->addStyleClass("my-2 me-2 my-lg-0 d-flex justify-content-center");
+    today_button_ = button_box->addNew<Wt::WPushButton>("Сегодня");
+    prev_button_ = button_box->addNew<Wt::WPushButton>("<");
+    next_button_ = button_box->addNew<Wt::WPushButton>(">");
+    calendar_title_ = button_box->addNew<Wt::WText>(makeTitle());
+
+    container_option_range_ = addNew<Wt::WContainerWidget>();
+
+    option_range_ = container_option_range_->addNew<Wt::WComboBox>();
+    option_range_->addItem("Месяц");
+    option_range_->addItem("Неделя");
+    option_range_->addItem("День");
+    option_range_->setCurrentIndex(Range::WEEK);
+    addStyle();
+    return this;
+}
+
+CalendarHeaderW* CalendarHeaderW::addConnections() {
+    today_button_->clicked().connect(this, &CalendarHeaderW::switchToToday);
+    prev_button_->clicked().connect(this, &CalendarHeaderW::switchToPrev);
+    next_button_->clicked().connect(this, &CalendarHeaderW::switchToNext);
+    option_range_->changed().connect(this, &CalendarHeaderW::setRange);
+    return this;
+}

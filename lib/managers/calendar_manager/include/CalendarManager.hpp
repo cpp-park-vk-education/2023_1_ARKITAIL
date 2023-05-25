@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Wt/WDateTime.h>
 #include <vector>
 #include <memory>
 
@@ -18,6 +19,10 @@ public:
     void remove(size_t) override;
 
     std::vector<EventSptr> getEvents(size_t calendar_id) override;
+    std::vector<EventSptr> getEventsByInterval(
+	size_t calendar_id,
+	Wt::WDateTime begin,
+	Wt::WDateTime end) override;
 
 private:
     std::shared_ptr<IDbManagers> db_;

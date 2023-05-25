@@ -12,11 +12,7 @@
 
 EventDbManagerMock::EventDbManagerMock(std::shared_ptr<DbMock> db) :
 	db_(db),
-	aid_(db->events.size()) {
-
-	db_->events.emplace_back(0, 0, "", "", Wt::WDateTime::currentDateTime(), Wt::WDateTime::currentDateTime());
-	
-}
+	aid_(db->events.size()) {}
 
 EventSptr EventDbManagerMock::get(size_t event_id) {
 	for (auto e = db_->events.begin() + 1; e != db_->events.end(); e++)

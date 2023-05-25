@@ -6,7 +6,6 @@
 #include <Wt/WWidget.h>
 
 #include <string>
-#include <thread>
 
 #include "SessionScopeMap.hpp"
 #include "main_p.hpp"

@@ -16,4 +16,5 @@ class TreeNodeLeafW : public TreeNodeW {
 
     void checkNode() override;
     void uncheckNode() override;
+    void performAction(Action action) override;
 };

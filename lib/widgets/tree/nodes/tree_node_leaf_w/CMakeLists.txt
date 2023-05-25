@@ -6,4 +6,5 @@ target_link_libraries(tree_node_leaf_w  PUBLIC
                       calendula_compiler_flags
                       tree_node_w
                       options_w_builder
-                      options_w_director)
+                      options_w_director
+                      dialog)

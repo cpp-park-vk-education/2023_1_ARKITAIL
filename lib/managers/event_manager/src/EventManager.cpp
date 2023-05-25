@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <string>
+#include <memory>
 
 #include "DbManagers.hpp"
 #include "Event.hpp"
@@ -32,5 +33,5 @@ std::vector<Comment> EventManager::getComments(size_t event_id) {
 
 std::chrono::time_point<EventManager::clock_t> EventManager::parseTime(std::string str_time) {
     // TODO(uma_op): IMPLEMENT ME
-    return std::chrono::time_point<EventManager::clock_t>();
+    return std::chrono::time_point<clock_t>();
 }

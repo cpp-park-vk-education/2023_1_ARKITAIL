@@ -17,9 +17,17 @@
 #include "NodeManager.hpp"
 #include "DirectoryManager.hpp"
 #include "CalendarManager.hpp"
+#include "ProfileManager.hpp"
 
 #include "User.hpp"
 #include "Node.hpp"
+
+static void operator==(const Node& lhs, const Node& rhs) {
+	EXPECT_EQ(lhs.id, rhs.id);
+	EXPECT_EQ(lhs.parent_id, rhs.parent_id);
+	EXPECT_EQ(lhs.resource_id, rhs.resource_id);
+	EXPECT_EQ(lhs.type, rhs.type);
+}
 
 class ManagersSuit : public ::testing::Test {
 protected:
@@ -42,7 +50,8 @@ protected:
 			std::make_unique<NodeManager>(db_managers),
 			std::make_unique<DirectoryManager>(db_managers),
 			std::make_unique<CalendarManager>(db_managers),
-			std::make_unique<EventManager>(db_managers)
+			std::make_unique<EventManager>(db_managers),
+			std::make_unique<ProfileManager>(db_managers)
 		);
 
 	}
@@ -82,11 +91,56 @@ TEST_F(ManagersSuit, GetChildrens) {
 
 	EXPECT_FALSE(got.empty());
 
-	for (auto e = expected.begin(), g = got.begin(); e != expected.end() && g != got.end(); e++, g++) {
-		EXPECT_EQ(e->id, g->id);
-		EXPECT_EQ(e->parent_id, g->parent_id);
-		EXPECT_EQ(e->resource_id, g->resource_id);
-		EXPECT_EQ(e->type, g->type);
-	}
+	for (auto e = expected.begin(), g = got.begin(); e != expected.end() && g != got.end(); e++, g++)
+		*e == *g;
 }
+
+// Разрешено
+// Проверить добавление невалидных нод
+TEST_F(ManagersSuit, AddNodeToCurrentUser) {
+	auto user = managers->user_manager()->get();
+
+	Node new_node = {
+		0,
+		3,
+		0,
+		PRIVATE_DIRECTORY
+	};
+
+	new_node.id = managers->node_manager()->add(new_node);
+	EXPECT_NE(new_node.id, 0);
+}
+
+// Запрещено
+TEST_F(ManagersSuit, AddNodeToOthrerUser) {
+	auto user = managers->user_manager()->get();
+
+	Node new_node = {
+		0,
+		15,
+		0,
+		PRIVATE_DIRECTORY
+	};
+
+	size_t new_node_id = managers->node_manager()->add(new_node);
+	EXPECT_EQ(new_node_id, 0);
+}
+
+TEST_F(ManagersSuit, UpdateNodeForCurrentUser) {}
+TEST_F(ManagersSuit, UpdareNodeForOtherUser) {}
+
+TEST_F(ManagersSuit, RemoveNodeFromCurrentUser) {}
+TEST_F(ManagersSuit, RemoveNodeFromOtherUser) {}
+
+TEST_F(ManagersSuit, DISABLED_TagNode) {}
+
+TEST_F(ManagersSuit, MoveNodeInsideUserTree) {}
+TEST_F(ManagersSuit, MoveNodeBetweenUserTrees) {}
+
+TEST_F(ManagersSuit, SubscribeToPublic) {}
+TEST_F(ManagersSuit, SubscribeToPrivate) {}
+
+TEST_F(ManagersSuit, Unsubscribe) {}
+
+TEST_F(ManagersSuit, GetChildren) {}
 

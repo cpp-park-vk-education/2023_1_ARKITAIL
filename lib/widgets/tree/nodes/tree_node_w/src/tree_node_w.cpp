@@ -64,59 +64,41 @@ void TreeNodeW::closeNode() {}
 
 void TreeNodeW::performAction(Action action) {
     OptionsWBuilder options_builder;
+    auto mgr = SessionScopeMap::instance().get()->managers();
     switch (action) {
         case Action::REMOVE:
+            mgr->node_manager()->remove(node_->getNode().id);
             removeNode();
             break;
 
-        case Action::EDIT: {
-            // (affeeal): каким-то образом мне нужно получить CalendarSptr,
-            // соответствующий данному календарю, который используется
-            // EditCalendarDialog.
-            Calendar dummy_calendar { 
-              0, 0, 0, "Название", "Описание", "Приватный", "#FF0000" };
-
-            dialog::EditCalendarDialog* dialog = addChild(
-                std::make_unique<dialog::EditCalendarDialog>(
-                  std::make_shared<Calendar>(dummy_calendar)));
-
-            dialog->show();
-
-            // dialog.calendar_updated().connect(...);
-
-            dialog->finished().connect([=] {
-              removeChild(dialog);
-              Wt::log("EditCalendarDialog removed");
-            });
-            break;
-        }
-
         case Action::SUBSCRIBE:
+            mgr->node_manager()->subscribe(node_->getNode().id);
             setOptions(OptionsWDirector().createOptionsUnsubscriptionW(options_builder));
             break;
 
         case Action::UNSUBSCRIBE:
-            //нужна проверка в чьем это календаре
-            setOptions(OptionsWDirector().createOptionsSubscriptionW(options_builder));
-            this->removeNode();  //в своем - удаление, в чужом - смена опций
+            mgr->node_manager()->unsubscribe(node_->getNode().id);
+            if (!isRoot() && node_->getParent()->getNode().type & NodeType::SUBSCRIPTIONS_GROUP) {
+                this->removeNode();
+            } else {
+                setOptions(OptionsWDirector().createOptionsSubscriptionW(options_builder));
+            }
             break;
 
         case Action::ADD_CALENDAR: {
-            // dummy-параметры
-            Node node;
-            auto tree_node = std::make_unique<TreeNode>(node, nullptr);
-
-            dialog::CreateCalendarDialog* dialog
-              = addChild(std::make_unique<dialog::CreateCalendarDialog>(
-                    tree_node.get()));
+            dialog::CreateCalendarDialog* dialog =
+                addChild(std::make_unique<dialog::CreateCalendarDialog>(node_));
 
             dialog->show();
 
-            // dialog.calendar_created().connect(...);
+            dialog->node_created().connect([=](Node node) {
+                auto tree_node = node_->addChild(node);
+                addChildNode(makeTreeNodeWidget(tree_node));
+            });
 
             dialog->finished().connect([=] {
-              removeChild(dialog);
-              Wt::log("CreateCalendarDialog removed");
+                removeChild(dialog);
+                Wt::log("CreateCalendarDialog removed");
             });
             break;
         }
@@ -128,7 +110,7 @@ void TreeNodeW::performAction(Action action) {
 }
 
 void TreeNodeW::removeNode() {
-    // node_->remove();
+    node_->remove();
     parent()->removeWidget(this);
 }
 
@@ -155,11 +137,9 @@ void TreeNodeW::uncheckParentNodes() {
 void TreeNodeW::addToolTipSignal() {
     tool_tip_->setTransient(true, 2);
     tool_tip_->setAnchorWidget(header_container_);
-    header_container_->mouseWentOver().connect([=](Wt::WMouseEvent mouse) {
-        std::cout << "\n координаты" << mouse.widget().x << mouse.widget().y << std::endl;
+    header_container_->clicked().connect([=]() {  // mouseWentOver
         tool_tip_->setOffsets(Wt::WLength("100px"), Wt::WFlags(Wt::Side::Bottom));
         tool_tip_->setHidden(false);
-        std::cout << "открыли тултип\n" << std::endl;
     });
 }
 
@@ -168,7 +148,7 @@ NodeType TreeNodeW::getType() {
 }
 
 void TreeNodeW::setOptions(std::unique_ptr<OptionsW> options) {
-    options.get()->selectedOption().connect(this, &TreeNodeW::performAction);
+    options->selectedOption().connect(this, &TreeNodeW::performAction);
     options_button_->setMenu(std::move(options));
 }
 

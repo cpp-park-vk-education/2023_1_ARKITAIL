@@ -12,6 +12,7 @@
 #include "EventManager.hpp"
 #include "NodeDbManagerMock.hpp"
 #include "ProfileDbManagerMock.hpp"
+#include "ProfileManager.hpp"
 #include "TagDbManagerMock.hpp"
 #include "UserDbManagerMock.hpp"
 #include "CalendarManager.hpp"
@@ -23,6 +24,7 @@
 #include "Managers.hpp"
 #include "SessionScopeMap.hpp"
 #include "SessionScope.hpp"
+#include "EventManager.hpp"
 
 SessionScopeMap::SessionScopeMap() {}
 
@@ -68,7 +70,8 @@ void SessionScopeMap::add(std::thread::id tid) {
 					std::make_unique<NodeManager>(db),
 					std::make_unique<DirectoryManager>(db),
 					std::make_unique<CalendarManager>(db),
-					std::make_unique<EventManager>(db)
+					std::make_unique<EventManager>(db),
+					std::make_unique<ProfileManager>(db)
 				),
 				std::make_unique<ConnectionsMediator>()
 			)

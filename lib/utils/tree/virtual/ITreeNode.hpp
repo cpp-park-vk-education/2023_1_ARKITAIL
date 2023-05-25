@@ -7,11 +7,11 @@
 
 class ITreeNode {
 public:
-    virtual Node getNode() = 0;
+    virtual const Node& getNode() = 0;
     virtual ITreeNode* getParent() = 0;
 
     virtual std::vector<ITreeNode*> getChildren() = 0;
-    virtual ITreeNode* addChild(Node node) = 0;
+    virtual ITreeNode* addChild(const Node& node) = 0;
     virtual std::unique_ptr<ITreeNode> remove() = 0;
 
     virtual bool isChecked() = 0;

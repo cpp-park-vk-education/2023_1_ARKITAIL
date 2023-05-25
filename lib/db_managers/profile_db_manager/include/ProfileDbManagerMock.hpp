@@ -11,7 +11,6 @@ public:
 
 	const Profile& get(size_t profile_id);
 	size_t add(const Profile& profile);
-	void update(const Profile& profile);
 	void remove(size_t profile_id);
 
 private:

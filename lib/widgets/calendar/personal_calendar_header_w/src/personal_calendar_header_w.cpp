@@ -6,26 +6,26 @@
 #include "CreateEventDialog.hpp"
 
 PersonalCalendarHeaderW::PersonalCalendarHeaderW() :
-    CalendarHeaderW() {
+    CalendarHeaderW() {}
+
+PersonalCalendarHeaderW* PersonalCalendarHeaderW::addButtons() {
+    CalendarHeaderW::addButtons();
     button_add_event_ 
         = container_option_range_->addNew<Wt::WPushButton>("Добавить событие");
-    // (affeeal): пока непонятно, где назначать обработчик button_add_event_,
-    // поэтому прикреплю его здесь
-    button_add_event_->clicked().connect(
-        this, &PersonalCalendarHeaderW::handleAddEvent);
     button_add_event_->addStyleClass("col mx-3");
+    return this;
 }
 
-void PersonalCalendarHeaderW::addConnections() {
-  // ...
+PersonalCalendarHeaderW* PersonalCalendarHeaderW::addConnections() {
+    CalendarHeaderW::addConnections();
+    button_add_event_->clicked().connect(
+        this, &PersonalCalendarHeaderW::addEvent);
+    return this;
 }
 
 void PersonalCalendarHeaderW::addEvent() {
     change_selected_date_.emit(selected_date_);
-    // added_event_.emit(); // если по сигналу будет передаваться событие
-}
 
-void PersonalCalendarHeaderW::handleAddEvent() {
     dialog::CreateEventDialog* dialog = addChild(
         std::make_unique<dialog::CreateEventDialog>());
 
