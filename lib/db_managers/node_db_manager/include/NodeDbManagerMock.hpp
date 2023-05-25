@@ -15,8 +15,6 @@ public:
   void update(const Node &node);
   void remove(int node_id);
 
-//   void tag(int node_id, const Tag &);
-//   void move(int node_id, int destination_id);
   std::vector<Node> getChildren(int node_id);
 
 private:

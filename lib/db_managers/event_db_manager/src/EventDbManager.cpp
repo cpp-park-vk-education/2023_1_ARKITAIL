@@ -3,6 +3,8 @@
 // time_start и time_end передаются в виде "0, 0, 0, 14, 4, 2023 - 1900",
 // где это сек, мин, час, д, мес, год
 int EventDbManager::add(const Event &ret) {
+
+  
   dbo::Transaction transaction(session_);
 
   std::unique_ptr<Events> event{new Events()};

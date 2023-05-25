@@ -70,41 +70,6 @@ const Node& NodeDbManager::get(int node_id) {
   return ret;
 }
 
-void NodeDbManager::tag(int node_id, const Tag &rec) {
-  dbo::Transaction transaction(session_);
-
-  dbo::ptr<Tags> tag = session_.find<Tags>().where("id = ?").bind(rec.id);
-  std::cout << tag.get()->name << std::endl;
-  dbo::ptr<Nodes> node = session_.find<Nodes>().where("id = ?").bind(node_id);
-  std::cout << node << std::endl;
-
-  if (!node) {
-    return;
-  }
-  if (!tag) {
-    std::cout << "!" << std::endl;
-    tag = session_.add(std::unique_ptr<Tags>{new Tags()});
-    tag.modify()->name = rec.name;
-  }
-
-  node.modify()->tag.insert(tag);
-
-  transaction.commit();
-}
-
-void NodeDbManager::move(int node_id, int destination_id) {
-  dbo::Transaction transaction(session_);
-
-  dbo::ptr<Nodes> node = session_.find<Nodes>().where("id = ?").bind(node_id);
-  if (!node) {
-    return;
-  }
-  node.modify()->parent =
-      session_.find<Nodes>().where("id = ?").bind(destination_id);
-
-  transaction.commit();
-}
-
 std::vector<Node> NodeDbManager::getChildren(int node_id) {
   dbo::Transaction transaction(session_);
   Node ret;

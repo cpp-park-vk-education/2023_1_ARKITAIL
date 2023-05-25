@@ -2,10 +2,9 @@
 
 #include "mainModel.hpp"
 
-
 struct RetProf {
   int prof_id;
-  std::string name;
+  int owner_id;
   int node_id;
 };
 
@@ -13,11 +12,9 @@ class ProfileManager {
 public:
   ProfileManager(dbo::Session &session) : session_(session) {}
 
-
-  int Add(RetProf&);
+  int Add(RetProf &);
   void Remove(int id);
   RetProf Get(int id);
-
 
 private:
   int id_;

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "baseForAll.hpp"
 #include "Node.hpp"
+#include "baseForAll.hpp"
 
 class Users;
 class Calendars;
@@ -31,12 +31,16 @@ public:
 
 class Profiles {
 public:
-  std::string name;
+  dbo::ptr<Users> user;
   dbo::ptr<Nodes> node;
+  //std::vector<int> nodes_id;
+
 
   template <class Action> void persist(Action &a) {
-    dbo::field(a, name, "name");
+    dbo::belongsTo(a, user, "User");
     dbo::belongsTo(a, node, "node");
+    //dbo::field(a, nodes_id, "nodes_id");
+
   }
 };
 
@@ -83,7 +87,6 @@ public:
     dbo::belongsTo(a, calendar, "calendar");
   }
 };
-
 
 class Nodes {
 public:

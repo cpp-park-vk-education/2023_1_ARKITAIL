@@ -52,5 +52,3 @@ std::vector<Node> NodeDbManagerMock::getChildren(int node_id) {
 
   return children;
 }
-// void NodeDbManagerMock::tag(int node_id, const Tag &) {}
-// void NodeDbManagerMock::move(int node_id, int destination_id) {}
