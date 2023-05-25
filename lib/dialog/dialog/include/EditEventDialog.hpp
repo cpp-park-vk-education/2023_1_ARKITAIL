@@ -2,12 +2,13 @@
 
 #include <Wt/WDialog.h>
 
-#include "EditEventView.hpp"
+#include "EventView.hpp"
 #include "Event.hpp"
 
 namespace dialog {
 class EditEventDialog : public Wt::WDialog {
  public:
+  EditEventDialog() = delete;
   EditEventDialog(EventSptr event);
 
   Wt::Signal<EventSptr>& event_updated();
@@ -16,6 +17,6 @@ class EditEventDialog : public Wt::WDialog {
 
   Wt::Signal<EventSptr> event_updated_;
 
-  EditEventView* view_;
+  EventView* view_;
 };
 } // namespace dialog

@@ -2,7 +2,7 @@
 
 #include <Wt/WDialog.h>
 
-#include "CreateEventView.hpp"
+#include "EventView.hpp"
 #include "Event.hpp"
 
 namespace dialog {
@@ -16,6 +16,6 @@ class CreateEventDialog : public Wt::WDialog {
 
   Wt::Signal<EventSptr> event_created_;
 
-  CreateEventView* view_;
+  EventView* view_;
 };
 } // namespace dialog

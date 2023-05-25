@@ -7,6 +7,7 @@
 #include <Wt/WDateEdit.h>
 #include <Wt/WLineEdit.h>
 #include <Wt/WPushButton.h>
+#include <Wt/WString.h>
 #include <Wt/WTextArea.h>
 #include <Wt/WTime.h>
 #include <Wt/WTimeEdit.h>
@@ -16,12 +17,14 @@
 #include "EventModel.hpp"
 
 namespace dialog {
-EventView::EventView(std::shared_ptr<EventModel> model)
-    : model_(model) {
-  setTemplateText(Wt::WString::tr("event"));
+std::shared_ptr<EventModel> EventView::model() const {
+  return model_;
+}
 
-  addFunction("id", &WTemplate::Functions::id);
-
+// по умолчанию event = nullptr
+EventView::EventView(EventSptr event)
+    : Wt::WTemplateFormView(Wt::WString::tr("event")),
+      model_(std::make_shared<EventModel>(event)) {
   InitializeSummary();
   InitializeDescription();
   InitializeCalendars();
@@ -33,6 +36,8 @@ EventView::EventView(std::shared_ptr<EventModel> model)
   InitializeFrequency();
   InitializeInterval();
   InitializeUntil();
+
+  bindEmpty("validation-status");
 
   updateView(model_.get());
 }

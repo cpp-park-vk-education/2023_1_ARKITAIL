@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <messages>
-  <message id="calendar-settings">
+  <message id="calendar">
     <div class="row m-3">
       <div class="col">
         ${validation-status}
@@ -87,6 +87,11 @@
   </message>
 
   <message id="event">
+    <div class="row m-3">
+      <div class="col">
+        ${validation-status}
+      </div>
+    </div>
     <div class="row m-3">
       <div class="col">
         <label class="form-label" for="${id:summary}">
@@ -190,16 +195,7 @@
     </div>
     <div class="row m-3">
       <div class="col">
-        ${is-all-day}
-        <div class="form-text">
-          ${is-all-day-info}
-        </div>
-      </div>
-      <div class="col">
         ${is-recurrent}
-        <div class="form-text">
-          ${is-recurrent-info}
-        </div>
       </div>
     </div>
     <div class="row m-3">
@@ -229,14 +225,6 @@
         <div class="form-text">
           ${until-info}
         </div>
-      </div>
-    </div>
-    <div class="row m-3">
-      <div class="col">
-        ${submit-button}
-        <span class="help-inline">
-          ${submit-info}
-        </span>
       </div>
     </div>
   </message>

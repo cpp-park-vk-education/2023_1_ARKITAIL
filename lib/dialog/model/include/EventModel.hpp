@@ -24,17 +24,17 @@ class EventModel : public Wt::WFormModel {
   static const Wt::WFormModel::Field kInterval;
   static const Wt::WFormModel::Field kUntil;
   
-  virtual void UpdateEvent();
+  explicit EventModel(EventSptr event = nullptr);
+
+  void UpdateEvent();
 
   EventSptr event() const;
 
   void set_event(EventSptr event);
- protected:
-  explicit EventModel(EventSptr event);
-
+ private:
   void AddFields();
   void SetValidators();
-  virtual void SetValues();
+  void SetValues();
   
   std::shared_ptr<Wt::WValidator> CreateTitleValidator();
   std::shared_ptr<Wt::WValidator> CreateDateValidator();

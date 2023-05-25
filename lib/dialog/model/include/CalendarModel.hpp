@@ -13,17 +13,17 @@ class CalendarModel : public Wt::WFormModel {
   static const Wt::WFormModel::Field kVisibility;
   static const Wt::WFormModel::Field kColor;
 
-  virtual void UpdateCalendar();
+  explicit CalendarModel(CalendarSptr calendar = nullptr);
+
+  void UpdateCalendar();
 
   CalendarSptr calendar() const;
 
   void set_calendar(CalendarSptr calendar);
- protected:
-  explicit CalendarModel(CalendarSptr calendar);
-
+ private:
   void AddFields();
   void SetValidators();
-  virtual void SetValues();
+  void SetValues();
 
   std::shared_ptr<Wt::WValidator> CreateTitleValidator();
 

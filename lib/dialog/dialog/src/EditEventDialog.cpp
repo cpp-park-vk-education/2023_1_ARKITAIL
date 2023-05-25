@@ -3,7 +3,6 @@
 #include <Wt/WObject.h>
 #include <Wt/WPushButton.h>
 
-#include "EditEventView.hpp"
 #include "Event.hpp"
 #include "EventModel.hpp"
 #include "IManagers.hpp"
@@ -12,14 +11,14 @@
 namespace dialog {
 EditEventDialog::EditEventDialog(EventSptr event)
     : Wt::WDialog("Событие") {
-  rejectWhenEscapePressed();
   setClosable(true);
   setMinimumSize(700, 800);
   setMovable(false);
 
-  view_ = contents()->addNew<EditEventView>(event);
+  view_ = contents()->addNew<EventView>(event);
 
   Wt::WPushButton* submit = footer()->addNew<Wt::WPushButton>("OK");
+  submit->addStyleClass("btn btn-success");
   submit->clicked().connect(this, &EditEventDialog::HandleInput);
 }
 
@@ -33,7 +32,18 @@ void EditEventDialog::HandleInput() {
     IManagers* managers = SessionScopeMap::instance().get()->managers();
     managers->event_manager()->update(model->event());
     event_updated_.emit(model->event());
+
+    auto validation_success = std::make_unique<Wt::WTemplate>(
+        Wt::WString::tr("validation-success"));
+    validation_success->bindString("text", "Событие успешно изменено");
+    view_->bindWidget("validation-status", std::move(validation_success));
+  } else {
+    view_->bindEmpty("validation-status");
   }
   view_->updateView(model);
+}
+
+Wt::Signal<EventSptr>& EditEventDialog::event_updated() {
+  return event_updated_;
 }
 } // namespace dialog

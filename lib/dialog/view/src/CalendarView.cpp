@@ -17,9 +17,10 @@ std::shared_ptr<CalendarModel> CalendarView::model() const {
   return model_;
 }
 
-CalendarView::CalendarView(std::shared_ptr<CalendarModel> model)
-    : Wt::WTemplateFormView(Wt::WString::tr("calendar-settings")),
-      model_(model) {
+// по умолчанию calendar = nullptr
+CalendarView::CalendarView(CalendarSptr calendar)
+    : Wt::WTemplateFormView(Wt::WString::tr("calendar")),
+      model_(std::make_shared<CalendarModel>(calendar)) {
   InitializeSummary();
   InitializeDescription();
   InitializeVisibility();

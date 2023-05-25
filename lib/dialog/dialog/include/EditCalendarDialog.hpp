@@ -8,6 +8,7 @@
 namespace dialog {
 class EditCalendarDialog : public Wt::WDialog {
  public:
+  EditCalendarDialog() = delete;
   EditCalendarDialog(CalendarSptr calendar);
 
   Wt::Signal<CalendarSptr>& calendar_updated();

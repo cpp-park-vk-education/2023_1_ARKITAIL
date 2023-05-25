@@ -4,21 +4,24 @@
 #include <Wt/WTabWidget.h>
 
 #include "Calendar.hpp"
+#include "ITreeNode.hpp"
+#include "Node.hpp"
 
 namespace dialog {
 class CreateCalendarDialog : public Wt::WDialog {
  public:
-  CreateCalendarDialog();
+  CreateCalendarDialog(ITreeNode* node);
 
-  Wt::Signal<CalendarSptr>& calendar_created();
+  Wt::Signal<Node>& node_created();
  private:
   void ChooseHandler();
 
   void HandleSettings();
   void HandleImport();
 
-  Wt::Signal<CalendarSptr> calendar_created_;
+  Wt::Signal<Node> node_created_;
 
   Wt::WTabWidget* tabs_;
+  ITreeNode* node_;
 };
 } // namespace dialog

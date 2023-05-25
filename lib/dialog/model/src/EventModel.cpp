@@ -1,5 +1,7 @@
 #include "EventModel.hpp"
 
+#include <Wt/WAny.h>
+#include <Wt/WDate.h>
 #include <memory>
 
 #include <Wt/WDateTime.h>
@@ -7,6 +9,7 @@
 #include <Wt/WFormModel.h>
 #include <Wt/WIntValidator.h>
 #include <Wt/WLengthValidator.h>
+#include <Wt/WLogger.h>
 #include <Wt/WString.h>
 #include <Wt/WTime.h>
 #include <Wt/WTimeValidator.h>
@@ -29,7 +32,40 @@ const Wt::WFormModel::Field EventModel::kFrequency = "frequency";
 const Wt::WFormModel::Field EventModel::kInterval = "interval";
 const Wt::WFormModel::Field EventModel::kUntil = "until";
 
+const std::string kDateFormat = "dd.MM.yyyy";
+const std::string kTimeFormat = "hh:mm";
+  
+// по умолчанию event = nullptr
+EventModel::EventModel(EventSptr event)
+    : Wt::WFormModel(),
+      event_(event) {
+  AddFields();
+  SetValidators();
+  SetValues();
+}
+
 void EventModel::UpdateEvent() {
+  if (!event_) {
+    event_ = std::make_shared<Event>();
+  }
+
+  event_->summary = Wt::asString(value(kSummary)).toUTF8();
+  event_->description = Wt::asString(value(kDescription)).toUTF8();
+  // TODO(affeeal): разобраться с event->calendars
+
+  event_->start = Wt::WDateTime(
+      Wt::WDate::fromString(Wt::asString(value(kStartDate)), kDateFormat),
+      Wt::WTime::fromString(Wt::asString(value(kStartTime)), kStartTime));
+  event_->end = Wt::WDateTime(
+      Wt::WDate::fromString(Wt::asString(value(kEndDate)), kDateFormat),
+      Wt::WTime::fromString(Wt::asString(value(kEndTime)), kStartTime));
+
+  // исправить костыль
+  event_->is_recurrent = (Wt::asString(value(kIsRecurrent)).toUTF8() == "true");
+  event_->frequency = Wt::asString(value(kFrequency)).toUTF8();
+  event_->interval = Wt::asNumber(value(kInterval));
+  event_->until = Wt::WDate::fromString(
+      Wt::asString(value(kUntil)), kDateFormat);
 }
 
 EventSptr EventModel::event() const {
@@ -38,14 +74,6 @@ EventSptr EventModel::event() const {
 
 void EventModel::set_event(EventSptr event) {
   event_ = event;
-}
-
-EventModel::EventModel(EventSptr event)
-    : Wt::WFormModel(),
-      event_(event) {
-  AddFields();
-  SetValidators();
-  SetValues();
 }
 
 void EventModel::AddFields() {
@@ -84,8 +112,29 @@ void EventModel::SetValidators() {
 }
 
 void EventModel::SetValues() {
-}
+  // TODO(affeeal): разобраться с event->calendars
+  if (event_) {
+    setValue(kSummary, event_->summary);
+    setValue(kDescription, event_->description);
 
+    setValue(kStartDate, event_->start.date());
+    setValue(kStartTime, event_->start.time());
+    setValue(kEndDate, event_->end.date());
+    setValue(kEndTime, event_->end.time());
+
+    setValue(kIsRecurrent, event_->is_recurrent);
+    setValue(kFrequency, event_->frequency);
+    setValue(kInterval, event_->interval);
+    setValue(kUntil, event_->until);
+  } else {
+    setValue(kStartDate, Wt::WDate::currentServerDate());
+    setValue(kStartTime, Wt::WTime::currentServerTime());
+    setValue(kEndDate, Wt::WDate::currentServerDate());
+    setValue(kEndTime, Wt::WTime::currentServerTime().addSecs(3600));
+    setValue(kIsRecurrent, true);
+    setValue(kInterval, 1);
+  }
+}
 
 std::shared_ptr<Wt::WValidator> EventModel::CreateTitleValidator() {
   auto validator = std::make_shared<Wt::WLengthValidator>();
@@ -101,7 +150,7 @@ std::shared_ptr<Wt::WValidator> EventModel::CreateTitleValidator() {
 std::shared_ptr<Wt::WValidator> EventModel::CreateDateValidator() {
   auto validator = std::make_shared<Wt::WDateValidator>();
 
-  validator->setFormat("dd.MM.yyyy");
+  validator->setFormat(kDateFormat);
   validator->setInvalidNotADateText(
       "Пожалуйста, укажите дату в формате ДД.ММ.ГГГГ");
   validator->setInvalidBlankText(
@@ -113,7 +162,7 @@ std::shared_ptr<Wt::WValidator> EventModel::CreateDateValidator() {
 std::shared_ptr<Wt::WValidator> EventModel::CreateTimeValidator() {
   auto validator = std::make_shared<Wt::WTimeValidator>();
 
-  validator->setFormat("hh:mm");
+  validator->setFormat(kTimeFormat);
   validator->setInvalidNotATimeText(
       "Пожалуйста, укажите время в формате ЧЧ:ММ");
   validator->setInvalidBlankText(

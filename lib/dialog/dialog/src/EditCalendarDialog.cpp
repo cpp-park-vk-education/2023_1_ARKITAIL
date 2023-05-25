@@ -4,7 +4,7 @@
 
 #include "Calendar.hpp"
 #include "CalendarExportTemplate.hpp"
-#include "EditCalendarView.hpp"
+#include "CalendarView.hpp"
 #include "IManagers.hpp"
 #include "SessionScopeMap.hpp"
 
@@ -16,18 +16,19 @@ enum EditCalendarTabIndex {
 
 EditCalendarDialog::EditCalendarDialog(CalendarSptr calendar)
     : Wt::WDialog("Календарь") {
-  rejectWhenEscapePressed();
+  Wt::log("EditCalendarDialog: " + calendar->summary);
   setClosable(true);
   setMinimumSize(500, 600);
   setMovable(false);
 
   auto tabs = std::make_unique<Wt::WTabWidget>();
-  tabs->addTab(std::make_unique<EditCalendarView>(calendar), "Настройки");
+  tabs->addTab(std::make_unique<CalendarView>(calendar), "Настройки");
   tabs->addTab(std::make_unique<CalendarExportTemplate>(calendar), "Экспорт");
   tabs_ = tabs.get();
   contents()->addWidget(std::move(tabs));
 
   Wt::WPushButton* submit = footer()->addNew<Wt::WPushButton>("OK");
+  submit->addStyleClass("btn btn-success");
   submit->clicked().connect(this, &EditCalendarDialog::ChooseHandler);
 }
 
@@ -47,7 +48,7 @@ void EditCalendarDialog::ChooseHandler() {
 }
 
 void EditCalendarDialog::HandleSettings() {
-  EditCalendarView* settings = dynamic_cast<EditCalendarView*>(
+  CalendarView* settings = dynamic_cast<CalendarView*>(
       tabs_->currentWidget());
 
   if (!settings) {
@@ -64,8 +65,19 @@ void EditCalendarDialog::HandleSettings() {
     IManagers* managers = SessionScopeMap::instance().get()->managers();
     managers->calendar_manager()->update(model->calendar());
     calendar_updated_.emit(model->calendar());
+
+    auto validation_success = std::make_unique<Wt::WTemplate>(
+        Wt::WString::tr("validation-success"));
+    validation_success->bindString("text", "Календарь успешно изменён");
+    settings->bindWidget("validation-status", std::move(validation_success));
+  } else {
+    settings->bindEmpty("validation-status");
   }
 
   settings->updateView(model);
+}
+
+Wt::Signal<CalendarSptr>& EditCalendarDialog::calendar_updated() {
+  return calendar_updated_;
 }
 } // namespace dialog

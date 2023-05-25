@@ -17,9 +17,8 @@ class EventView : public Wt::WTemplateFormView {
  public:
   std::shared_ptr<EventModel> model() const;
 
- protected:
-  explicit EventView(std::shared_ptr<EventModel> model);
-
+  explicit EventView(EventSptr event = nullptr);
+ private:
   void InitializeSummary();
   void InitializeDescription();
   void InitializeCalendars();

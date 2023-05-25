@@ -24,6 +24,7 @@
 #include "Node.hpp"
 #include "Profile.hpp"
 #include "SessionScopeMap.hpp"
+#include "TreeNode.hpp"
 #include "TreeNodeWAnalyst.hpp"
 #include "User.hpp"
 #include "Wt/WContainerWidget.h"
@@ -72,10 +73,12 @@ void TreeNodeW::performAction(Action action) {
             // (affeeal): каким-то образом мне нужно получить CalendarSptr,
             // соответствующий данному календарю, который используется
             // EditCalendarDialog.
-            CalendarSptr dummy_calendar = std::make_shared<Calendar>();
+            Calendar dummy_calendar { 
+              0, 0, 0, "Название", "Описание", "Приватный", "#FF0000" };
 
             dialog::EditCalendarDialog* dialog = addChild(
-                std::make_unique<dialog::EditCalendarDialog>(dummy_calendar));
+                std::make_unique<dialog::EditCalendarDialog>(
+                  std::make_shared<Calendar>(dummy_calendar)));
 
             dialog->show();
 
@@ -99,8 +102,13 @@ void TreeNodeW::performAction(Action action) {
             break;
 
         case Action::ADD_CALENDAR: {
+            // dummy-параметры
+            Node node;
+            auto tree_node = std::make_unique<TreeNode>(node, nullptr);
+
             dialog::CreateCalendarDialog* dialog
-              = addChild(std::make_unique<dialog::CreateCalendarDialog>());
+              = addChild(std::make_unique<dialog::CreateCalendarDialog>(
+                    tree_node.get()));
 
             dialog->show();
 
