@@ -12,6 +12,12 @@
 
 #include "i_calendar_header_w.hpp"
 
+enum SwitchingDirection {
+    BACK = -1,
+    TODAY,
+    FORWARD
+};
+
 class CalendarHeaderW : public ICalendarHeaderW {
   public:
     CalendarHeaderW();
@@ -25,7 +31,12 @@ class CalendarHeaderW : public ICalendarHeaderW {
     Wt::WString makeTitle() override;
 
     void setSelectedDate(Wt::WDate new_date);
-    void setOptionsRange(int i);
+    void setValueRange(Range range);
+
+    CalendarHeaderW* addConnections() override;
+    CalendarHeaderW* addButtons() override;
+
+    Wt::WDate switchSelectedDate(SwitchingDirection direction);
 
   protected:
     Range range_;
@@ -33,19 +44,17 @@ class CalendarHeaderW : public ICalendarHeaderW {
     Wt::WPushButton* today_button_;
     Wt::WPushButton* prev_button_;
     Wt::WPushButton* next_button_;
-    Wt::WText* calendar_title_;
     Wt::WContainerWidget* container_option_range_;
+    Wt::WText* calendar_title_;
     Wt::Signal<> added_event_;
     Wt::Signal<Wt::WDate> change_selected_date_;
     Wt::Signal<Range> change_range_;
     Wt::WComboBox* option_range_;
 
-    virtual void addConnections() override;
-
   private:
     void addStyle() override;
+
     void switchToToday() override;
     void switchToPrev() override;
     void switchToNext() override;
-    void balanceSelectedDate() override;
 };

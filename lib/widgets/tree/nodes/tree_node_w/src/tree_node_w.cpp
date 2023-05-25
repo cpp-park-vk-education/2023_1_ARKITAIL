@@ -61,6 +61,7 @@ void TreeNodeW::performAction(Action action) {
     OptionsWBuilder options_builder;
     switch (action) {
         case Action::REMOVE:
+            // node_->remove();
             removeNode();
             break;
 
@@ -116,11 +117,9 @@ void TreeNodeW::uncheckParentNodes() {
 void TreeNodeW::addToolTipSignal() {
     tool_tip_->setTransient(true, 2);
     tool_tip_->setAnchorWidget(header_container_);
-    header_container_->mouseWentOver().connect([=](Wt::WMouseEvent mouse) {
-        std::cout << "\n координаты" << mouse.widget().x << mouse.widget().y << std::endl;
+    header_container_->clicked().connect([=](Wt::WMouseEvent mouse) {  // mouseWentOver
         tool_tip_->setOffsets(Wt::WLength("100px"), Wt::WFlags(Wt::Side::Bottom));
         tool_tip_->setHidden(false);
-        std::cout << "открыли тултип\n" << std::endl;
     });
 }
 
@@ -129,7 +128,7 @@ NodeType TreeNodeW::getType() {
 }
 
 void TreeNodeW::setOptions(std::unique_ptr<OptionsW> options) {
-    options.get()->selectedOption().connect(this, &TreeNodeW::performAction);
+    options->selectedOption().connect(this, &TreeNodeW::performAction);
     options_button_->setMenu(std::move(options));
 }
 

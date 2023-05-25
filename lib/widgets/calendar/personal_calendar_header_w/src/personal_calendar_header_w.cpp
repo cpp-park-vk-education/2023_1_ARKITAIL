@@ -3,17 +3,23 @@
 #include <Wt/WPushButton.h>
 
 PersonalCalendarHeaderW::PersonalCalendarHeaderW() :
-    CalendarHeaderW() {
+    CalendarHeaderW() {}
+
+PersonalCalendarHeaderW* PersonalCalendarHeaderW::addButtons() {
+    CalendarHeaderW::addButtons();
     button_add_event_ = container_option_range_->addNew<Wt::WPushButton>("Добавить событие");
     button_add_event_->addStyleClass("col mx-3");
+    return this;
 }
 
-void PersonalCalendarHeaderW::addConnections() {
+PersonalCalendarHeaderW* PersonalCalendarHeaderW::addConnections() {
+    CalendarHeaderW::addConnections();
     button_add_event_->clicked().connect(
         this,
         &PersonalCalendarHeaderW::addEvent);  // вообще по нажатию кнопки сохранить в модалке
                                               // ильи...и наверное надо что-то передавать сигналом,
                                               // хотя скорее всего буду запрашивать у бека
+    return this;
 }
 
 void PersonalCalendarHeaderW::addEvent() {

@@ -43,12 +43,12 @@ TreeNodeWBuilderBase* TreeNodeWBuilderBase::addCheckBox() {
 }
 
 TreeNodeWBuilderBase* TreeNodeWBuilderBase::addOptions(std::unique_ptr<OptionsW> options) {
-    auto options_button_ =
+    tree_node_w->options_button_ =
         tree_node_w->node_block_->addWidget(std::make_unique<Wt::WPushButton>("•••"));
-    options_button_->addStyleClass("p-1 py-0 border-0 btn-light");
+    tree_node_w->options_button_->addStyleClass("p-1 py-0 border-0 btn-light");
     options.get()->selectedOption().connect(tree_node_w.get(), &TreeNodeW::performAction);
-    options_button_->setMenu(std::move(options));
-    options_button_->toggleStyleClass("dropdown-toggle", false);
+    tree_node_w->options_button_->setMenu(std::move(options));
+    tree_node_w->options_button_->toggleStyleClass("dropdown-toggle", false);
     return this;
 }
 

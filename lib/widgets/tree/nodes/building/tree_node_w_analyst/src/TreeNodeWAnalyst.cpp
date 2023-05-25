@@ -36,7 +36,6 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeWChild(ITreeNode* tree_n
 
     } else if (node.type & (NodeType::PRIVATE_CALENDAR | NodeType::PUBLIC_CALENDAR)) {
         Calendar child = mgr->calendar_manager()->get(node.resource_id);
-        std::cout << child.name << ' ' << node.type << std::endl;
         data = TreeNodeWConvertedData{
             TreeNodeWType::PERSONAL_CALENDAR,         child.name, child.description, tags,
             mgr->user_manager()->get(child.owner_id), tree_node};
@@ -44,7 +43,6 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeWChild(ITreeNode* tree_n
     } else if (node.type & (NodeType::PRIVATE_DIRECTORY | NodeType::PUBLIC_DIRECTORY)) {
         Directory child = mgr->directory_manager()->get(node.resource_id);
 
-        std::cout << child.name << ' ' << node.type << std::endl;
         data = TreeNodeWConvertedData{TreeNodeWType::DIR,
                                       child.name,
                                       child.description,
@@ -56,7 +54,6 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeWChild(ITreeNode* tree_n
                             NodeType::SUBSCRIPTIONS_GROUP | NodeType::PROFILE_GROUP)) {
         Directory child = mgr->directory_manager()->get(node.resource_id);
 
-        std::cout << child.name << ' ' << node.type << std::endl;
         data = TreeNodeWConvertedData{TreeNodeWType::GROUP,
                                       child.name,
                                       child.description,
