@@ -20,7 +20,7 @@ WeekW::WeekW() {
 }
 
 void WeekW::update(Wt::WDate selected_date) {
-    selected_date.addDays(1 - selected_date.dayOfWeek());
+    selected_date = selected_date.addDays(1 - selected_date.dayOfWeek());
 
     table_->clear();
     makeHeaderTime();

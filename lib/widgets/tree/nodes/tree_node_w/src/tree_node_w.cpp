@@ -63,53 +63,41 @@ void TreeNodeW::closeNode() {}
 
 void TreeNodeW::performAction(Action action) {
     OptionsWBuilder options_builder;
+    auto mgr = SessionScopeMap::instance().get()->managers();
     switch (action) {
         case Action::REMOVE:
-            // node_->remove();
+            mgr->node_manager()->remove(node_->getNode().id);
             removeNode();
             break;
 
-        case Action::EDIT: {
-            // (affeeal): каким-то образом мне нужно получить CalendarSptr,
-            // соответствующий данному календарю, который используется
-            // EditCalendarDialog.
-            CalendarSptr dummy_calendar = std::make_shared<Calendar>();
-
-            dialog::EditCalendarDialog* dialog = addChild(
-                std::make_unique<dialog::EditCalendarDialog>(dummy_calendar));
-
-            dialog->show();
-
-            // dialog.calendar_updated().connect(...);
-
-            dialog->finished().connect([=] {
-              removeChild(dialog);
-              Wt::log("EditCalendarDialog removed");
-            });
-            break;
-        }
-
         case Action::SUBSCRIBE:
+            mgr->node_manager()->subscribe(node_->getNode().id);
             setOptions(OptionsWDirector().createOptionsUnsubscriptionW(options_builder));
             break;
 
         case Action::UNSUBSCRIBE:
-            //нужна проверка в чьем это календаре
-            setOptions(OptionsWDirector().createOptionsSubscriptionW(options_builder));
-            this->removeNode();  //в своем - удаление, в чужом - смена опций
+            mgr->node_manager()->unsubscribe(node_->getNode().id);
+            if (1) {
+                setOptions(OptionsWDirector().createOptionsSubscriptionW(options_builder));
+            } else {
+                this->removeNode();
+            }
             break;
 
         case Action::ADD_CALENDAR: {
-            dialog::CreateCalendarDialog* dialog
-              = addChild(std::make_unique<dialog::CreateCalendarDialog>());
+            dialog::CreateCalendarDialog* dialog =
+                addChild(std::make_unique<dialog::CreateCalendarDialog>(node_));
 
             dialog->show();
 
-            // dialog.calendar_created().connect(...);
+            dialog.node_created().connect([=](Node node) {
+                auto tree_node = node_->addChild(node);
+                addChildNode(makeTreeNodeWidget(tree_node));
+            });
 
             dialog->finished().connect([=] {
-              removeChild(dialog);
-              Wt::log("CreateCalendarDialog removed");
+                removeChild(dialog);
+                Wt::log("CreateCalendarDialog removed");
             });
             break;
         }
@@ -121,7 +109,7 @@ void TreeNodeW::performAction(Action action) {
 }
 
 void TreeNodeW::removeNode() {
-    // node_->remove();
+    node_->remove();
     parent()->removeWidget(this);
 }
 
@@ -148,7 +136,7 @@ void TreeNodeW::uncheckParentNodes() {
 void TreeNodeW::addToolTipSignal() {
     tool_tip_->setTransient(true, 2);
     tool_tip_->setAnchorWidget(header_container_);
-    header_container_->clicked().connect([=] {  // mouseWentOver
+    header_container_->clicked().connect([=]() {  // mouseWentOver
         tool_tip_->setOffsets(Wt::WLength("100px"), Wt::WFlags(Wt::Side::Bottom));
         tool_tip_->setHidden(false);
     });

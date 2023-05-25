@@ -20,6 +20,7 @@ class TreeNodeDirW : public TreeNodeW {
     void closeNode() override;
     void checkNode() override;
     void uncheckNode() override;
+    void performAction(Action action) override;
 
   protected:
     std::vector<TreeNodeW*> children_;
