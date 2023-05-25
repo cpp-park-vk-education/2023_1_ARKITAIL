@@ -1,9 +1,11 @@
 #pragma once
 
-#include "SessionScope.hpp"
 #include <mutex>
 #include <thread>
 #include <memory>
+#include <unordered_map>
+
+#include "SessionScope.hpp"
 
 class SessionScopeMap {
 public:

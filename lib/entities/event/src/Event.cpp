@@ -1,25 +1,25 @@
 #include "Event.hpp"
-
-Event::Event() :
-	id(),
-	calendar_id(),
-	name(),
-	description(),
-	begin_point(),
-	end_point() {}
+#include <string>
 
 Event::Event(
     size_t id,
     size_t calendar_id,
-    std::string name,
+    std::string summary,
     std::string description,
-    std::chrono::time_point<std::chrono::steady_clock> begin_point,
-    std::chrono::time_point<std::chrono::steady_clock> end_point
-) : 
-	id(id),
-	calendar_id(calendar_id),
-	name(name),
-	description(description),
-	begin_point(begin_point),
-	end_point(end_point) {}
-
+    Wt::WDateTime start,
+    Wt::WDateTime end,
+    bool is_recurrent,
+    std::string frequency,
+    size_t interval,
+    Wt::WDate until)
+  : id(id),
+    calendar_id(calendar_id),
+    summary(std::move(summary)),
+    description(std::move(description)),
+    start(std::move(start)),
+    end(std::move(end)),
+    is_recurrent(is_recurrent),
+    frequency(std::move(frequency)),
+    interval(interval),
+    until(std::move(until)) {
+}

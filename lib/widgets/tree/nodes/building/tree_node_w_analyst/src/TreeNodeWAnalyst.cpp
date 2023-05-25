@@ -28,18 +28,18 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeWChild(ITreeNode* tree_n
                 mgr->user_manager()->get(child.owner_id), tree_node};
 
         } else {
-            Calendar child = mgr->calendar_manager()->get(node.resource_id);
+            CalendarSptr child = mgr->calendar_manager()->get(node.resource_id);
             data = TreeNodeWConvertedData{
-                TreeNodeWType::SUB_CALENDAR_OPTIONS,      child.name, child.description, tags,
-                mgr->user_manager()->get(child.owner_id), tree_node};
+                TreeNodeWType::SUB_CALENDAR_OPTIONS,      child->summary, child->description, tags,
+                mgr->user_manager()->get(child->owner_id), tree_node};
         }
 
     } else if (node.type & (NodeType::PRIVATE_CALENDAR | NodeType::PUBLIC_CALENDAR)) {
-        Calendar child = mgr->calendar_manager()->get(node.resource_id);
-        std::cout << child.name << ' ' << node.type << std::endl;
+        CalendarSptr child = mgr->calendar_manager()->get(node.resource_id);
+        std::cout << child->summary << ' ' << node.type << std::endl;
         data = TreeNodeWConvertedData{
-            TreeNodeWType::PERSONAL_CALENDAR,         child.name, child.description, tags,
-            mgr->user_manager()->get(child.owner_id), tree_node};
+            TreeNodeWType::PERSONAL_CALENDAR,         child->summary, child->description, tags,
+            mgr->user_manager()->get(child->owner_id), tree_node};
 
     } else if (node.type & (NodeType::PRIVATE_DIRECTORY | NodeType::PUBLIC_DIRECTORY)) {
         Directory child = mgr->directory_manager()->get(node.resource_id);

@@ -15,7 +15,7 @@ public:
 	virtual ICalendarManager* calendar_manager() = 0;
 	virtual IEventManager* event_manager() = 0;
 	virtual IProfileManager* profile_manager() = 0;
-
+	
 	virtual ~IManagers() {}
 
 };

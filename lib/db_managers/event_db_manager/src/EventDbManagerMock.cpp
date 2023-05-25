@@ -2,6 +2,8 @@
 #include <memory>
 #include <vector>
 
+#include <Wt/WDateTime.h>
+
 #include "DbManagers.hpp"
 #include "Comment.hpp"
 #include "DbMock.hpp"
@@ -12,31 +14,31 @@ EventDbManagerMock::EventDbManagerMock(std::shared_ptr<DbMock> db) :
 	db_(db),
 	aid_(db->events.size()) {}
 
-const Event& EventDbManagerMock::get(size_t event_id) {
+EventSptr EventDbManagerMock::get(size_t event_id) {
 	for (auto e = db_->events.begin() + 1; e != db_->events.end(); e++)
 		if (e->id == event_id)
-			return *e;
+			return std::make_shared<Event>(*e);
 	
-	return db_->events[0];
+	return std::make_shared<Event>(db_->events[0]);
 }
 
-size_t EventDbManagerMock::add(const Event& event) {
+size_t EventDbManagerMock::add(EventSptr event) {
 	db_->events.emplace_back(
 		aid_,
-		event.calendar_id,
-		event.name,
-		event.description,
-		event.begin_point,
-		event.end_point
+		event->calendar_id,
+		event->summary,
+		event->description,
+		event->start,
+		event->end
 	);
 
 	return aid_++;
 }
 
-void EventDbManagerMock::update(const Event& event) {
+void EventDbManagerMock::update(EventSptr event) {
 	for (auto e : db_->events)
-		if (e.id == event.id)
-			e = event;
+		if (e.id == event->id)
+			e = *event;
 }
 
 void EventDbManagerMock::remove(size_t event_id) {

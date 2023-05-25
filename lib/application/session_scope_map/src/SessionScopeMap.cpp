@@ -9,6 +9,7 @@
 #include "DbMock.hpp"
 #include "DirectoryDbManagerMock.hpp"
 #include "EventDbManagerMock.hpp"
+#include "EventManager.hpp"
 #include "NodeDbManagerMock.hpp"
 #include "ProfileDbManagerMock.hpp"
 #include "ProfileManager.hpp"

@@ -7,6 +7,7 @@ target_link_libraries(tree_node_w  PUBLIC
                       options_w
                       node
                       tree
+                      dialog
                       tree_node_w_analyst
                       tree_node_w_director
                       tree_node_w_builder

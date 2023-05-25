@@ -14,16 +14,16 @@ public:
 
     EventManager(std::shared_ptr<IDbManagers> db);
 
-    const Event& get(size_t event_id) override;
-    size_t add(const Event& event) override;
-    void update(const Event& event) override;
+    EventSptr get(size_t event_id) override;
+    size_t add(EventSptr event) override;
+    void update(EventSptr event) override;
     void remove(size_t event_id) override;
 
     std::vector<Comment> getComments(size_t event_id) override;
     std::chrono::time_point<clock_t> parseTime(std::string str_time) override;
 
 private:
-	std::shared_ptr<IDbManagers> db_;
+    std::shared_ptr<IDbManagers> db_;
 
 };
 

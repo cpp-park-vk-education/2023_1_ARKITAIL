@@ -2,19 +2,22 @@
 
 #include <memory>
 
-#include "DbMock.hpp"
 #include "ICalendarDbManager.hpp"
+
+#include "Calendar.hpp"
+#include "DbMock.hpp"
+#include "Event.hpp"
 
 class CalendarDbManagerMock : public ICalendarDbManager {
 public:
     CalendarDbManagerMock(std::shared_ptr<DbMock> db);
 
-    const Calendar& get(size_t);
-    size_t add(const Calendar&);
-    void update(const Calendar&);
+    CalendarSptr get(size_t);
+    size_t add(CalendarSptr);
+    void update(CalendarSptr);
     void remove(size_t);
 
-    std::vector<Event> getEvents(size_t);
+    std::vector<EventSptr> getEvents(size_t);
 
 private:
     std::shared_ptr<DbMock> db_;

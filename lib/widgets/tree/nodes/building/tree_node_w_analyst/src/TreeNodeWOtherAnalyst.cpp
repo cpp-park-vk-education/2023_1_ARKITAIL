@@ -37,10 +37,10 @@ TreeNodeWConvertedData TreeNodeWOtherAnalyst::analyseTreeNodeWChild(ITreeNode* t
                                       tree_node};
 
     } else {
-        Calendar child = mgr->calendar_manager()->get(node.resource_id);
+        CalendarSptr child = mgr->calendar_manager()->get(node.resource_id);
         data = TreeNodeWConvertedData{
-            TreeNodeWType::OTHER_CALENDAR_SUB,        child.name, child.description, tags,
-            mgr->user_manager()->get(child.owner_id), tree_node};
+            TreeNodeWType::OTHER_CALENDAR_SUB,        child->summary, child->description, tags,
+            mgr->user_manager()->get(child->owner_id), tree_node};
     }
 
     return data;

@@ -52,7 +52,7 @@ debug: # Run application
 		--docroot . \
 		--http-address 0.0.0.0 \
 		--http-port 8080 \
-		--resources-dir='../resources, ../static'
+		--resources-dir=/usr/local/share/Wt/resources
 
 # TODO: prod
 

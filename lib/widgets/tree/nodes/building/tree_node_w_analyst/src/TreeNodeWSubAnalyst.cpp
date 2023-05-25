@@ -23,12 +23,12 @@ TreeNodeWConvertedData TreeNodeWSubAnalyst::analyseTreeNodeWChild(ITreeNode* tre
     std::vector<std::string> tags;
 
     if (node.type & NodeType::PUBLIC_CALENDAR) {
-        Calendar child = mgr->calendar_manager()->get(tree_node->getNode().resource_id);
+        CalendarSptr child = mgr->calendar_manager()->get(tree_node->getNode().resource_id);
         data = TreeNodeWConvertedData{TreeNodeWType::SUB_CALENDAR,
-                                      child.name,
-                                      child.description,
+                                      child->summary,
+                                      child->description,
                                       tags,
-                                      mgr->user_manager()->get(child.owner_id),
+                                      mgr->user_manager()->get(child->owner_id),
                                       tree_node};
 
     } else if (node.type & NodeType::PUBLIC_DIRECTORY) {

@@ -2,18 +2,16 @@ cmake_minimum_required(VERSION 3.15)
 
 project(Calendula)
 
-find_package(Boost REQUIRED)
 find_package(Wt REQUIRED)
-find_package(PostgreSQL REQUIRED)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-SET (WT_CONNECTOR "wthttp" CACHE STRING "Connector used (wthttp or wtfcgi)")
+set(WT_CONNECTOR "wthttp" CACHE STRING "Connector used (wthttp or wtfcgi)")
 
 option(BUILD_TESTS "build tests" ON)
 if(BUILD_TESTS)
-    enable_testing()
     find_package(GTest REQUIRED)
+    enable_testing()
 endif(BUILD_TESTS)
 
 add_library(calendula_compiler_flags INTERFACE)
@@ -25,7 +23,7 @@ target_compile_features(
 )
 
 target_compile_options(calendula_compiler_flags INTERFACE
-    "$<BUILD_INTERFACE:-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused>"
+    "$<BUILD_INTERFACE:-g;-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused>"
 )
 
 add_executable(Calendula src/main.cpp)
@@ -40,6 +38,3 @@ target_link_libraries(
 
     application  # Все зависимости содержит библиотека application
 )
-
-target_include_directories(${PROJECT_NAME} PUBLIC /usr/local/inlcude/Wt)
-

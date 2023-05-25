@@ -29,7 +29,7 @@ std::vector<Event> Tree::getCheckedEvents() {
         if ((q.front()->getNode().type & (PUBLIC_CALENDAR | PRIVATE_CALENDAR)) &&
             q.front()->isChecked())
             for (auto e : mgr->calendar_manager()->getEvents(q.front()->getNode().resource_id))
-                v.push_back(e);
+                v.push_back(*e);
 
         for (auto c : q.front()->getChildren()) q.push(c);
 
@@ -53,7 +53,7 @@ std::vector<Event> Tree::checkNode(ITreeNode* node) {
 
             if (q.front()->getNode().type & (PUBLIC_DIRECTORY | PUBLIC_DIRECTORY))
                 for (auto e : mgr->calendar_manager()->getEvents(q.front()->getNode().resource_id))
-                    v.push_back(e);
+                    v.push_back(*e);
 
             for (auto c : q.front()->getChildren()) q.push(c);
         }
