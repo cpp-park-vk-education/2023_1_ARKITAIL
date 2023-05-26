@@ -11,13 +11,14 @@ int CalendarDbManager::add(CalendarSptr calendar) {
   std::unique_ptr<db::Calendar> db_calendar_unique = std::make_unique<db::Calendar>();
   db_calendar_unique->summary = calendar->summary;
   db_calendar_unique->description = calendar->description;
+  db_calendar_unique->visibility = calendar->visibility;
+  db_calendar_unique->color = calendar->color;
   db_calendar_unique->user
       = session_.find<db::User>().where("id = ?").bind(calendar->owner_id);
 
   db::CalendarPtr db_calendar = session_.add(std::move(db_calendar_unique));
   session_.flush();
   
-  // нужна ли здесь транзация?..
   transaction.commit();
 
   return db_calendar.id();
@@ -41,13 +42,18 @@ void CalendarDbManager::remove(int calendar_id) {
 void CalendarDbManager::update(CalendarSptr calendar) {
   Wt::Dbo::Transaction transaction(session_);
 
-  db::CalendarPtr db_calendar =
-      session_.find<db::Calendar>().where("name = ?").bind(calendar->summary);
+  db::CalendarPtr db_calendar
+      = session_.find<db::Calendar>().where("id = ?").bind(calendar->id);
 
   if (!db_calendar) {
     return;
   }
+  
+  db_calendar.modify()->summary = calendar->summary;
   db_calendar.modify()->description = calendar->description;
+  db_calendar.modify()->visibility = calendar->visibility;
+  db_calendar.modify()->color = calendar->color;
+  // по идее, user останется неизменным
   db_calendar.modify()->user =
       session_.find<db::User>().where("id = ?").bind(calendar->owner_id);
 
@@ -68,7 +74,9 @@ CalendarSptr CalendarDbManager::get(int calendar_id) {
   calendar.node_id = db_calendar->node.id();
   calendar.summary = db_calendar->summary;
   calendar.description = db_calendar->description;
-  calendar.summary = db_calendar->summary;
+  calendar.visibility = db_calendar->visibility;
+  calendar.color = db_calendar->color;
+  // user ?
   
   return std::make_shared<Calendar>(std::move(calendar));
 }
@@ -91,9 +99,13 @@ std::vector<Event> CalendarDbManager::getEvents(int calendar_id) {
     event.calendar_id = db_calendar.id();
     event.summary = db_event->summary;
     event.description = db_event->description;
+    event.location = db_event->location;
     event.start = db_event->start;
     event.end = db_event->end;
-    // ...
+    event.stamp = db_event->stamp;
+    event.frequency = db_event->frequency;
+    event.interval = db_event->interval;
+    event.until = db_event->until;
 
     events.push_back(std::move(event));
   }

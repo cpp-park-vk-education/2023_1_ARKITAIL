@@ -14,7 +14,7 @@ EventDbManagerMock::EventDbManagerMock(std::shared_ptr<DbMock> db) :
 	db_(db),
 	aid_(db->events.size()) {}
 
-const Event& EventDbManagerMock::get(int event_id) {
+EventSptr EventDbManagerMock::get(int event_id) {
 	for (auto e = db_->events.begin() + 1; e != db_->events.end(); e++)
 		if (e->id == event_id)
 			return std::make_shared<Event>(*e);
@@ -22,7 +22,7 @@ const Event& EventDbManagerMock::get(int event_id) {
 	return std::make_shared<Event>(db_->events[0]);
 }
 
-int EventDbManagerMock::add(const Event& event) {
+int EventDbManagerMock::add(EventSptr event) {
 	db_->events.emplace_back(
 		aid_,
 		event->calendar_id,
@@ -46,14 +46,3 @@ void EventDbManagerMock::remove(int event_id) {
 		if (e->id == event_id)
 			db_->events.erase(e);
 }
-
-// std::vector<Comment> EventDbManagerMock::getComments(int event_id) {
-// 	std::vector<Comment> comments;
-
-// 	for (auto e = db_->comments.begin() + 1; e != db_->comments.end(); e++)
-// 		if (e->event_id == event_id)
-// 			comments.push_back(*e);
-
-// 	return comments;
-// }
-

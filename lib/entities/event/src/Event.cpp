@@ -1,4 +1,5 @@
 #include "Event.hpp"
+
 #include <string>
 
 Event::Event(
@@ -6,9 +7,10 @@ Event::Event(
     int calendar_id,
     std::string summary,
     std::string description,
+    std::string location,
     Wt::WDateTime start,
     Wt::WDateTime end,
-    bool is_recurrent,
+    Wt::WDateTime stamp,
     std::string frequency,
     int interval,
     Wt::WDate until)
@@ -16,9 +18,10 @@ Event::Event(
     calendar_id(calendar_id),
     summary(std::move(summary)),
     description(std::move(description)),
+    location(std::move(location)),
     start(std::move(start)),
     end(std::move(end)),
-    is_recurrent(is_recurrent),
+    stamp(std::move(stamp)),
     frequency(std::move(frequency)),
     interval(interval),
     until(std::move(until)) {

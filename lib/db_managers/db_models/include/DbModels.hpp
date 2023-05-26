@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Wt/Dbo/Field.h>
 #include <string>
 #include <vector>
 
@@ -82,8 +83,10 @@ public:
   CalendarPtr calendar;
   std::string summary;
   std::string description;
+  std::string location;
   Wt::WDateTime start;
   Wt::WDateTime end;
+  Wt::WDateTime stamp; // дата и временя создания события
   std::string frequency;
   int interval;
   Wt::WDate until;
@@ -92,8 +95,10 @@ public:
     Wt::Dbo::belongsTo(a, calendar, "calendar");
     Wt::Dbo::field(a, summary, "summary");
     Wt::Dbo::field(a, description, "description");
+    Wt::Dbo::field(a, location, "location");
     Wt::Dbo::field(a, start, "start");
     Wt::Dbo::field(a, end, "end");
+    Wt::Dbo::field(a, stamp, "stamp");
     Wt::Dbo::field(a, frequency, "frequency");
     Wt::Dbo::field(a, interval, "interval");
     Wt::Dbo::field(a, until, "until");
