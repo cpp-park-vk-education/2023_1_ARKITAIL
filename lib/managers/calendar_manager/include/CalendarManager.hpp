@@ -18,10 +18,10 @@ public:
     void update(CalendarSptr) override;
     void remove(int) override;
 
-    std::vector<EventSptr> getEvents(int calendar_id) override;
-    std::vector<EventSptr> getEventsByInterval(
+    std::vector<Event> getEvents(int calendar_id) override;
+    std::vector<Event> getEventsByInterval(
         int calendar_id,
-	      Wt::WDateTime begin,
+	      Wt::WDateTime start,
 	      Wt::WDateTime end) override;
 
 private:

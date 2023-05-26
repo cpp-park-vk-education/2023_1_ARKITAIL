@@ -27,23 +27,19 @@ void CalendarManager::remove(int calendar_id) {
     db_->calendar_dbm()->remove(calendar_id);
 }
 
-<<<<<<< HEAD
-std::vector<EventSptr> CalendarManager::getEvents(size_t calendar_id) {
-=======
 std::vector<Event> CalendarManager::getEvents(int calendar_id) {
->>>>>>> origin/impl-lukyanov
     return db_->calendar_dbm()->getEvents(calendar_id);
 }
 
-std::vector<EventSptr> CalendarManager::getEventsByInterval(
-    size_t calendar_id,
-    Wt::WDateTime begin,
+std::vector<Event> CalendarManager::getEventsByInterval(
+    int calendar_id,
+    Wt::WDateTime start,
     Wt::WDateTime end) {
 
-    std::vector<EventSptr> events;
+    std::vector<Event> events;
 
     for (auto e : getEvents(calendar_id))
-        if (e->end >= begin && e->start <= end)
+        if (e.end >= start && e.start <= end)
             events.push_back(e);
 
     return events;
