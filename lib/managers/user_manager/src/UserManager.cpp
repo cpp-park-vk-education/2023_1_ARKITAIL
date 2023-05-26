@@ -12,7 +12,7 @@ const User& UserManager::get() {
 	return db_->user_dbm()->get();
 }
 
-const User& UserManager::get(size_t user_id) {
+const User& UserManager::get(int user_id) {
 	return db_->user_dbm()->get(user_id);
 }
 

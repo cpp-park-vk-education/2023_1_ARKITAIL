@@ -6,10 +6,9 @@
 
 class ICommentDbManager {
 public:
-	virtual const Comment& get(size_t comment_id) = 0;
-	virtual size_t add(const Comment& comment) = 0;
-	virtual void update(const Comment& comment) = 0;
-	virtual void remove(size_t comment_id) = 0;
+	virtual const Comment& get(int comment_id) = 0;
+	virtual int add(const Comment& comment) = 0;
+	virtual void remove(int comment_id) = 0;
 
 };
 

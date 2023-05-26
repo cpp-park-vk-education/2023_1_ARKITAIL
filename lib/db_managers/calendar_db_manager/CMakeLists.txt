@@ -13,14 +13,6 @@ target_link_libraries(
 	calendar
 	event
 	db_managers
+  db_models
+	main_model
 )
-
-if (BUILD_TESTS)
-	target_link_libraries(
-		${MODULE_NAME}
-		PUBLIC
-		db_mock
-	)
-# 	add_subdirectory(tests)
-endif()
-

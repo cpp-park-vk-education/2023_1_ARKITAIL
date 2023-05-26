@@ -17,9 +17,9 @@ class Tree {
     std::vector<Event> checkNode(ITreeNode* node);
     void uncheckNode(ITreeNode* node);
 
-    size_t checked();
+    int checked();
 
   private:
     std::unique_ptr<ITreeNode> root_;
-    size_t checked_;
+    int checked_;
 };

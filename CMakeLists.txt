@@ -6,9 +6,7 @@ find_package(Wt REQUIRED)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(WT_CONNECTOR "wthttp" CACHE STRING "Connector used (wthttp or wtfcgi)")
-
-option(BUILD_TESTS "build tests" ON)
+option(BUILD_TESTS "build tests" OFF)
 if(BUILD_TESTS)
     find_package(GTest REQUIRED)
     enable_testing()
@@ -27,14 +25,13 @@ target_compile_options(calendula_compiler_flags INTERFACE
 )
 
 add_executable(Calendula src/main.cpp)
+
 add_subdirectory(lib)
 
 target_link_libraries(
     Calendula PUBLIC
     calendula_compiler_flags
-
-    wthttp
     wt
-
-    application  # Все зависимости содержит библиотека application
+    wthttp
+    application # Все зависимости содержит библиотека application
 )

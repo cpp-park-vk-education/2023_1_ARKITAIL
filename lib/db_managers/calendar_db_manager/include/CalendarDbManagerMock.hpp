@@ -12,16 +12,16 @@ class CalendarDbManagerMock : public ICalendarDbManager {
 public:
     CalendarDbManagerMock(std::shared_ptr<DbMock> db);
 
-    CalendarSptr get(size_t);
-    size_t add(CalendarSptr);
-    void update(CalendarSptr);
-    void remove(size_t);
+    CalendarSptr get(int calendar_id) override;
+    int add(CalendarSptr) override;
+    void update(CalendarSptr) override;
+    void remove(int calendar_id) override;
 
-    std::vector<EventSptr> getEvents(size_t);
+    std::vector<Event> getEvents(int calendar_id) override;
 
 private:
     std::shared_ptr<DbMock> db_;
-    size_t aid_;
+    int aid_;
 
 };
 

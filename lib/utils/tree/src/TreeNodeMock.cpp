@@ -17,7 +17,7 @@ ITreeNode* TreeNodeMock::getParent() {
 std::vector<ITreeNode*> TreeNodeMock::getChildren() {
     std::vector<ITreeNode*> children;
 
-    for (size_t i = 0; i < children_.size(); i++)
+    for (int i = 0; i < children_.size(); i++)
         children.push_back(children_[i].get());
 
     return children;

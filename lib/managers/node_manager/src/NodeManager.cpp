@@ -14,6 +14,7 @@
 NodeManager::NodeManager(std::shared_ptr<IDbManagers> db) :
     db_(db) {}
 
+<<<<<<< HEAD
 bool NodeManager::checkAccess(size_t user_id, size_t node_id) {
     Node node = db_->node_dbm()->get(node_id);
 
@@ -35,6 +36,12 @@ Node NodeManager::get(size_t node_id) {
     // 	return Node();
 
     return db_->node_dbm()->get(node_id);
+=======
+// TODO(uma_op): Проверку доступа можно осуществить, получением связанного ресурса
+// и сравнения айди текущего пользователя и владельца ресурса
+const Node& NodeManager::get(int node_id) {
+	return db_->node_dbm()->get(node_id);
+>>>>>>> origin/impl-lukyanov
 }
 
 // В ноду типа PRIVATE_{GROUP | DIRECTORY}
@@ -43,6 +50,7 @@ Node NodeManager::get(size_t node_id) {
 // В ноду типа SUBSCRIPTIONS_GROUP
 // можно добавить только MOUNT и наоборот
 // В ноды ROOT, MOUNT, PUBLIC_CALENDAR, PRIVATE_CALENDAR добавить ничего нельзя
+<<<<<<< HEAD
 // Ресурсом MOUNT может быть только нодой с ресурсом PUBLIC_{DIRECTORY | CALENDAR}
 size_t NodeManager::add(const Node& node) {
     User user = db_->user_dbm()->get();
@@ -79,6 +87,10 @@ size_t NodeManager::add(const Node& node) {
     }
 
     return db_->node_dbm()->add(node);
+=======
+int NodeManager::add(const Node& node) {
+	return db_->node_dbm()->add(node);
+>>>>>>> origin/impl-lukyanov
 }
 
 // Можно менять только поле parent_id функция аналогична NodeManager::move
@@ -95,10 +107,16 @@ void NodeManager::update(const Node& node) {
     db_->node_dbm()->update(node);
 }
 
+<<<<<<< HEAD
 // Удалять запрещено типы ROOT, {PRIVATE | PUBLIC | SUBSCRIPTIONS | PROFILE}_GROUP
 void NodeManager::remove(size_t node_id) {
 	User user = db_->user_dbm()->get();
 	Node node = db_->node_dbm()->get(node_id);
+=======
+// TODO(uma_op): Удалять запрещено типы ROOT, {PRIVATE | PUBLIC | SUBSCRIPTIONS | PROFILE}_GROUP
+void NodeManager::remove(int node_id) {
+	const Node& node = db_->node_dbm()->get(node_id);
+>>>>>>> origin/impl-lukyanov
 
 	if (!checkAccess(user.id, node.id) ||
 		node.type & (ROOT | PRIVATE_GROUP | PUBLIC_GROUP | SUBSCRIPTIONS_GROUP | PROFILE_GROUP))
@@ -127,12 +145,18 @@ void NodeManager::remove(size_t node_id) {
 	}
 }
 
+<<<<<<< HEAD
 void NodeManager::tag(const Tag& tag, size_t node_id) {
     // TODO(uma_op): IMPLEMENT ME
+=======
+void NodeManager::tag(const Tag& tag, int node_id) {
+	// TODO(uma_op): IMPLEMENT ME
+>>>>>>> origin/impl-lukyanov
 }
 
 // Проверка на то, что перемещение осуществляется только внутри дерева одного пользователя
 // и в ноды с валидными типами
+<<<<<<< HEAD
 //
 void NodeManager::move(size_t node_id, size_t destination_id) {
     Node mv_node = db_->node_dbm()->get(node_id);
@@ -140,13 +164,24 @@ void NodeManager::move(size_t node_id, size_t destination_id) {
     mvd_node.parent_id = destination_id;
     update(mvd_node);
 
+=======
+void NodeManager::move(int node_id, int destination_id) {
+	const Node& mv_node = db_->node_dbm()->get(node_id); 
+	Node mvd_node = mv_node;
+	mvd_node.parent_id = destination_id;
+>>>>>>> origin/impl-lukyanov
 }
 
 // TODO(uma_op): Проверка на права доступа
 // Подписка может осуществиться только на PUBLIC_{DIRECTORY | CALENDAR}
+<<<<<<< HEAD
 void NodeManager::subscribe(size_t node_id) {
     User user = db_->user_dbm()->get();
     Node node = db_->node_dbm()->get(node_id);
+=======
+void NodeManager::subscribe(int node_id) {
+	const User& user = db_->user_dbm()->get();
+>>>>>>> origin/impl-lukyanov
 
     if (!(node.type & (PUBLIC_DIRECTORY | PUBLIC_CALENDAR))) return;
 
@@ -162,8 +197,13 @@ void NodeManager::subscribe(size_t node_id) {
 
 // Отписка является одной из самых безобидных операций
 // и не требует никаких проверок
+<<<<<<< HEAD
 void NodeManager::unsubscribe(size_t node_id) {
     User user = db_->user_dbm()->get();
+=======
+void NodeManager::unsubscribe(int node_id) {
+	const User& user = db_->user_dbm()->get();
+>>>>>>> origin/impl-lukyanov
 
     for (auto subg : db_->node_dbm()->getChildren(user.root_id))
         if (subg.type & SUBSCRIPTIONS_GROUP) {
@@ -176,6 +216,7 @@ void NodeManager::unsubscribe(size_t node_id) {
         }
 }
 
+<<<<<<< HEAD
 // Получение детей так же как и получение требует лишь проверки прав доступа
 std::vector<Node> NodeManager::getChildren(size_t node_id) {
 	User user = db_->user_dbm()->get();
@@ -184,6 +225,10 @@ std::vector<Node> NodeManager::getChildren(size_t node_id) {
 	if (!(checkAccess(user.id, node_id) || node.type & PUBLIC))
 		return std::vector<Node>();
 
+=======
+// TODO(uma_op) Получение детей так же как и получение требует лишь проверки прав доступа
+std::vector<Node> NodeManager::getChildren(int node_id) {
+>>>>>>> origin/impl-lukyanov
 	return db_->node_dbm()->getChildren(node_id);
 }
 

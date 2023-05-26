@@ -2,7 +2,7 @@
 
 #include <cstddef>
 
-Node::Node(size_t id, size_t parent_id, size_t resource_id, NodeType type) :
+Node::Node(int id, int parent_id, int resource_id, NodeType type) :
     id(id),
     parent_id(parent_id),
     resource_id(resource_id),

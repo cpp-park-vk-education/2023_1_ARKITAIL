@@ -74,6 +74,6 @@ void Tree::uncheckNode(ITreeNode* node) {
     }
 }
 
-size_t Tree::checked() {
+int Tree::checked() {
     return checked_;
 }

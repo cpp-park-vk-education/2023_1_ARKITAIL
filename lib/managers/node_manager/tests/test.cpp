@@ -104,11 +104,16 @@ TEST_F(ManagersSuit, AddNodeToCurrentUser) {
 		0,
 		3,
 		0,
+<<<<<<< HEAD
 		PRIVATE_DIRECTORY
 	};
 
 	new_node.id = managers->node_manager()->add(new_node);
 	EXPECT_NE(new_node.id, 0);
+=======
+		NodeType::PRIVATE_DIRECTORY
+	};
+>>>>>>> origin/impl-lukyanov
 }
 
 // Запрещено

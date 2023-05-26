@@ -13,19 +13,19 @@ class Event {
  public:
   Event() = default;
   Event(
-      size_t id,
-      size_t calendar_id,
+      int id,
+      int calendar_id,
       std::string summary,
       std::string description,
       Wt::WDateTime start,
       Wt::WDateTime end,
       bool is_recurrent = false,
       std::string frequency = std::string(),
-      size_t interval = 0,
+      int interval = 0,
       Wt::WDate until = Wt::WDate());
 
-  size_t id;
-  size_t calendar_id;
+  int id;
+  int calendar_id;
 
   std::string summary;
   std::string description;
@@ -35,6 +35,6 @@ class Event {
 
   bool is_recurrent;
   std::string frequency;
-  size_t interval;
+  int interval;
   Wt::WDate until;
 };

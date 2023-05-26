@@ -40,7 +40,12 @@ ITreeNode* TreeNode::getParent() {
 std::vector<ITreeNode*> TreeNode::getChildren() {
     std::vector<ITreeNode*> children;
 
+<<<<<<< HEAD
     for (size_t i = 0; i < children_.size(); i++) children.push_back(children_[i].get());
+=======
+    for (int i = 0; i < children_.size(); i++)
+        children.push_back(children_[i].get());
+>>>>>>> origin/impl-lukyanov
 
     return children;
 }

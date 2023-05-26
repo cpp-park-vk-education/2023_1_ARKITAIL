@@ -1,21 +1,23 @@
 #pragma once
 
+#include <memory>
 #include <vector>
 
+#include "DbMock.hpp"
 #include "ITagDbManager.hpp"
 
 class TagDbManagerMock : public ITagDbManager {
 public:
 	TagDbManagerMock();
 
-	const Tag& get(size_t tag_id);
-	size_t add(const Tag& tag);
-	void update(const Tag& tag);
-	void remove(size_t tag_id);
+	const Tag& get(int tag_id);
+	int add(const Tag& tag);
+	//void update(const Tag& tag);
+	void remove(int tag_id);
 	
 private:
 	std::vector<Tag> data_;
-	size_t aid_;
+	int aid_;
 
 };
 

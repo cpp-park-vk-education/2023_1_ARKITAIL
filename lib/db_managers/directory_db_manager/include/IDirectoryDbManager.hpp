@@ -6,10 +6,9 @@
 
 class IDirectoryDbManager {
 public:
-    virtual const Directory& get(size_t) = 0;
-    virtual size_t add(const Directory&) = 0;
+    virtual const Directory& get(int directory_id) = 0;
+    virtual int add(const Directory&) = 0;
     virtual void update(const Directory&) = 0;
-    virtual void remove(size_t) = 0;
-
+    virtual void remove(int directory_id) = 0;
 };
 
