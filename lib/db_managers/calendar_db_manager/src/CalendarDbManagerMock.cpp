@@ -27,7 +27,9 @@ int CalendarDbManagerMock::add(CalendarSptr calendar) {
 		calendar->node_id,
 		calendar->owner_id,
 		calendar->summary,
-		calendar->description
+		calendar->description,
+		calendar->visibility,
+		calendar->color
 	);
 
 	return aid_++;

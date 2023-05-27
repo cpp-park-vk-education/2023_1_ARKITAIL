@@ -28,8 +28,13 @@ int EventDbManagerMock::add(EventSptr event) {
 		event->calendar_id,
 		event->summary,
 		event->description,
+    event->location,
 		event->start,
-		event->end
+		event->end,
+    event->stamp,
+    event->frequency,
+    event->interval,
+    event->until
 	);
 
 	return aid_++;

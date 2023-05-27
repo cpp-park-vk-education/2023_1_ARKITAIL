@@ -4,8 +4,8 @@
 
 class IUserManager {
 public:
-	virtual const User& get() = 0;
-	virtual const User& get(int) = 0;
+	virtual UserSptr get() = 0;
+	virtual UserSptr get(int) = 0;
 
 };
 

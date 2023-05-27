@@ -8,11 +8,11 @@
 UserManager::UserManager(std::shared_ptr<IDbManagers> db) :
 	db_(db) {}
 
-const User& UserManager::get() {
+UserSptr UserManager::get() {
 	return db_->user_dbm()->get();
 }
 
-const User& UserManager::get(int user_id) {
+UserSptr UserManager::get(int user_id) {
 	return db_->user_dbm()->get(user_id);
 }
 

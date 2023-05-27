@@ -2,7 +2,6 @@
 
 #include <Wt/Dbo/Transaction.h>
 
-#include "DbModels.hpp"
 #include "Directory.hpp"
 
 int DirectoryDbManager::add(DirectorySptr directory) {

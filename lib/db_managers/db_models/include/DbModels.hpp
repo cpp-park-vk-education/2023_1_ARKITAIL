@@ -5,6 +5,7 @@
 
 #include <Wt/WDateTime.h>
 #include <Wt/WDate.h>
+#include <Wt/Dbo/Dbo.h>
 #include <Wt/Dbo/Field.h>
 #include <Wt/Dbo/collection.h>
 #include <Wt/Dbo/ptr.h>

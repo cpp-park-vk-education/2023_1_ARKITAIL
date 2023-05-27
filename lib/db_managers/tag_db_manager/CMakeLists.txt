@@ -12,7 +12,7 @@ target_link_libraries(
 	PUBLIC
 	tag
 	db_managers
-	mainModel
+  db_models
 )
 
 # if (BUILD_TESTS)

@@ -10,4 +10,5 @@ target_link_libraries(
   ${MODULE_NAME} PUBLIC
   node
   event
+  wtdbo
   )

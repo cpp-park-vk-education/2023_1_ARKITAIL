@@ -23,7 +23,7 @@ TreeNode::TreeNode(const Node& node, ITreeNode* parent) :
     for (auto c : mgr->node_manager()->getChildren(node.id)) {
         if (c.type & MOUNT)
             children_.emplace_back(
-                std::make_unique<TreeNode>(mgr->node_manager()->get(c.resource_id), this));
+                std::make_unique<TreeNode>(*mgr->node_manager()->get(c.resource_id), this));
         else
             children_.emplace_back(std::make_unique<TreeNode>(c, this));
     }
@@ -40,12 +40,8 @@ ITreeNode* TreeNode::getParent() {
 std::vector<ITreeNode*> TreeNode::getChildren() {
     std::vector<ITreeNode*> children;
 
-<<<<<<< HEAD
-    for (size_t i = 0; i < children_.size(); i++) children.push_back(children_[i].get());
-=======
-    for (int i = 0; i < children_.size(); i++)
+    for (size_t i = 0; i < children_.size(); i++)
         children.push_back(children_[i].get());
->>>>>>> origin/impl-lukyanov
 
     return children;
 }

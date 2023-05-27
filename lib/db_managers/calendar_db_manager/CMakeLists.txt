@@ -14,5 +14,4 @@ target_link_libraries(
 	event
 	db_managers
   db_models
-	main_model
 )

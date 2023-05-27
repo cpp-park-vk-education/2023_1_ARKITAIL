@@ -8,9 +8,11 @@
 #include <string>
 
 #include "SessionScopeMap.hpp"
+#include "Session.hpp"
 #include "main_p.hpp"
 #include "navbar_w.hpp"
 #include "other_p.hpp"
+#include "Utils.hpp"
 
 Application::Application(const Wt::WEnvironment& env) :
     Wt::WApplication(env),

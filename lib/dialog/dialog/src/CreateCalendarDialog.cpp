@@ -149,7 +149,7 @@ void CreateCalendarDialog::HandleImport() {
   _import->bindWidget("validation-status", std::move(validation_success));
 }
 
-Wt::Signal<Node>& CreateCalendarDialog::node_created() {
+Wt::Signal<NodeSptr>& CreateCalendarDialog::node_created() {
   return node_created_;
 }
 } // namespace dialog
