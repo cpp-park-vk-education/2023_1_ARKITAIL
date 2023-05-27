@@ -94,7 +94,7 @@ std::vector<CalendarSptr> CalendarConverter::IcalendarToCalendars(
     }
 
     size_t calendar_id = managers->calendar_manager()->add(
-        std::make_shared<Calendar>(calendar));
+        std::make_shared<Calendar>(calendar), 0);  // Add directory id
     for (EventSptr event : events) {
       event->calendar_id = calendar_id;
       managers->event_manager()->add(event);

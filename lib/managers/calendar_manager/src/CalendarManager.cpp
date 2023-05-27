@@ -15,7 +15,7 @@ CalendarSptr CalendarManager::get(size_t calendar_id) {
     return db_->calendar_dbm()->get(calendar_id);
 }
 
-size_t CalendarManager::add(CalendarSptr calendar) {
+size_t CalendarManager::add(CalendarSptr calendar, size_t directory_id) {
     return db_->calendar_dbm()->add(calendar);
 }
 

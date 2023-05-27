@@ -76,7 +76,7 @@ void CreateCalendarDialog::HandleSettings() {
     model->UpdateCalendar();
 
     IManagers* managers = SessionScopeMap::instance().get()->managers();
-    size_t calendar_id = managers->calendar_manager()->add(model->calendar());
+    size_t calendar_id = managers->calendar_manager()->add(model->calendar(), 0);  // Add directory id
     calendar_created_.emit(managers->calendar_manager()->get(calendar_id));
 
     model->reset();

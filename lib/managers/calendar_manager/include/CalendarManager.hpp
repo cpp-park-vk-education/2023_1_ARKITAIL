@@ -14,7 +14,7 @@ public:
     CalendarManager(std::shared_ptr<IDbManagers> db);
 
     CalendarSptr get(size_t) override;
-    size_t add(CalendarSptr) override;
+    size_t add(CalendarSptr, size_t) override;
     void update(CalendarSptr) override;
     void remove(size_t) override;
 

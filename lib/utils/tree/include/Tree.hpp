@@ -14,7 +14,7 @@ class Tree {
 
     std::vector<Event> getCheckedEvents();
 
-    std::vector<Event> checkNode(ITreeNode* node);
+    void checkNode(ITreeNode* node);
     void uncheckNode(ITreeNode* node);
 
     size_t checked();
