@@ -116,6 +116,17 @@
     </div>
     <div class="row m-3">
       <div class="col">
+        <label class="form-label" for="${id:location}">
+          Место
+        </label>
+        ${location}
+        <div class="form-text">
+          ${location-info}
+        </div>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col">
         <label class="form-label" for="${id:calendars}">
           Календарь
         </label>

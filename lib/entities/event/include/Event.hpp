@@ -22,6 +22,8 @@ class Event {
       int interval,
       Wt::WDate until);
 
+  bool IsRecurrent() const;
+
   int id;
   int calendar_id;
 

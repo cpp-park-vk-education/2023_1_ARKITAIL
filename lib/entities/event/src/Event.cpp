@@ -26,3 +26,9 @@ Event::Event(
     interval(interval),
     until(std::move(until)) {
 }
+
+// если событие не повторяется, то frequency == "",
+// interval == 0 и until == Wt::WDate()
+bool Event::IsRecurrent() const {
+  return frequency == "";
+}
