@@ -17,12 +17,16 @@ TreeNodeLeafW::TreeNodeLeafW(ITreeNode* node) :
     TreeNodeW(node) {}
 
 void TreeNodeLeafW::checkNode() {
-    checked_.emit(node_);
+    if (!node_->isChecked()) {
+        checked_.emit(node_);
+    }
+
     check_box_->setChecked(true);
 }
 
 void TreeNodeLeafW::uncheckNode() {
-    checked_.emit(node_);
+    if (node_->isChecked())
+        checked_.emit(node_);
     uncheckParentNodes();
 }
 

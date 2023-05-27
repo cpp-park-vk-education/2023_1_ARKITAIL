@@ -12,12 +12,12 @@ TreeNodeDirW::TreeNodeDirW() :
 
 TreeNodeDirW::TreeNodeDirW(ITreeNode* node) :
     TreeNodeW(node),
-    children_container_(addWidget(std::make_unique<Wt::WContainerWidget>())),
     children_(),
     icon_(node_block_->insertWidget(0,
                                     std::make_unique<Wt::WIconPair>("/static/icons/nav-plus.svg",
                                                                     "/static/icons/nav-minus.svg"),
-                                    0))
+                                    0)),
+    children_container_(addWidget(std::make_unique<Wt::WContainerWidget>()))
 
 {
     icon_->addStyleClass("me-1");
@@ -63,41 +63,48 @@ std::vector<TreeNodeW*> TreeNodeDirW::childrenNodes() {
 }
 
 void TreeNodeDirW::showNode() {
+    std::cout << "HERE1" << std::endl;
     if (childrenNodes().empty()) {
-        for (auto&& node_child : node_->getChildren()) {
+        for (auto node_child : node_->getChildren()) {
             auto child_block = addChildNode(this->makeTreeNodeWidget(node_child));
             if (isCanCheck() && check_box_->isChecked()) {
                 child_block->checkNode();
             }
-            child_block->showNode();   // СЕНЯ
-            child_block->closeNode();  // СЕНЯ
         }
 
     } else {
-        for (auto&& child : childrenNodes()) {
+        for (auto child : childrenNodes()) {
             child->setHidden(false);
         }
     }
+    std::cout << "HERE2" << std::endl;
 }
 
 void TreeNodeDirW::closeNode() {
-    for (auto&& child : childrenNodes()) {
+    for (auto child : childrenNodes()) {
         child->setHidden(true);
     }
 }
 
 void TreeNodeDirW::checkNode() {
-    checked_.emit(node_);
+    if (!node_->isChecked()){
+        checked_.emit(node_);
+        
+    }
+
     check_box_->setChecked(true);
-    for (auto&& child : childrenNodes()) {
+
+    for (auto child : childrenNodes()) {
         child->checkNode();
     }
 }
 
 void TreeNodeDirW::uncheckNode() {
-    checked_.emit(node_);
+    if (node_->isChecked())
+        checked_.emit(node_);
+
     uncheckParentNodes();
-    for (auto&& child : childrenNodes()) {
+    for (auto child : childrenNodes()) {
         child->uncheckNode();
     }
 }

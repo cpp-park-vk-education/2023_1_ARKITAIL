@@ -60,6 +60,7 @@ void TreeNode::check() {
 }
 
 void TreeNode::uncheck() {
+    std::cout << "Unchecked" << std::endl;
     checked_ = false;
 }
 

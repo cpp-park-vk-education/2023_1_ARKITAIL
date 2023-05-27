@@ -52,9 +52,15 @@ std::vector<Event> Tree::getCheckedEvents() {
 std::vector<Event> Tree::getCheckedEventsByInterval(Wt::WDateTime begin, Wt::WDateTime end) {
     std::vector<Event> v;
 
-    for (auto e : getCheckedEvents())
-        if (e.start <= end && e.end >= begin)
+    for (auto e : getCheckedEvents()) {
+        std::cout << "HERE" << std::endl;
+        std::cout << e.start.toString("d MMMM yyyy") << " to " << e.end.toString("d MMMM yyyy") << std::endl;
+        std::cout << begin.toString("d MMMM yyyy") << " to " << end.toString("d MMMM yyyy") << std::endl;
+        if (e.start <= end && e.end >= begin) {
             v.push_back(e);
+            std::cout << "HERE1" << std::endl;
+        }
+    }
 
     return v;
 }
@@ -89,7 +95,7 @@ void Tree::uncheckNode(ITreeNode* node) {
     std::queue<ITreeNode*> q;
     q.push(node);
 
-    while (q.empty()) {
+    while (!q.empty()) {
         q.front()->uncheck();
         
         for (auto c : q.front()->getChildren())

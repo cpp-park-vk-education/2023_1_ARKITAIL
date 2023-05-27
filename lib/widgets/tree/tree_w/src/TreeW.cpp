@@ -2,10 +2,13 @@
 
 #include <Wt/WAnimation.h>
 #include <Wt/WContainerWidget.h>
+#include <Wt/WDate.h>
+#include <Wt/WDateTime.h>
 #include <Wt/WHBoxLayout.h>
 #include <Wt/WLineEdit.h>
 #include <Wt/WPushButton.h>
 
+#include <Wt/WTime.h>
 #include <algorithm>
 #include <memory>
 #include <string>
@@ -26,6 +29,7 @@ TreeW::TreeW() :
     search_line_(),
     remember_combination_button_(),
     root_() {
+
     animateHide(Wt::WAnimation(Wt::AnimationEffect::SlideInFromLeft));
     setStyleClass("start-0 w-100");
     auto tree_header_container = addWidget(std::make_unique<Wt::WContainerWidget>());
@@ -66,8 +70,6 @@ void TreeW::setRoot(const Node& node) {
             root_ = addWidget(std::move(root));
         }
     }
-    root_->showNode();   // СЕНЯ
-    root_->closeNode();  // СЕНЯ
 }
 
 void TreeW::rememberCombination() {}
@@ -85,7 +87,7 @@ void TreeW::checkNode(ITreeNode* tree_node) {
 }
 
 void TreeW::getRangeEvents(Wt::WDate date1, Wt::WDate date2) {
-    auto events = tree_manager_->getCheckedEvents();
+    auto events = tree_manager_->getCheckedEventsByInterval(Wt::WDateTime(date1, Wt::WTime(0, 0, 0)), Wt::WDateTime(date2, Wt::WTime(0, 0, 0)));
     std::cout << events.size() << "\n";
     for (auto e : events) {
         std::cout << e.summary << std::endl;

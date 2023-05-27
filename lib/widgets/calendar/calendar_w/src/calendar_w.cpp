@@ -35,6 +35,7 @@ TreeW* CalendarW::addTree(std::unique_ptr<TreeW> tree) {
     // В дальнейшем метод setRoot будет вызываться по сигналу перехода на страницу
     auto mgr = SessionScopeMap::instance().get()->managers();
     auto node = mgr->node_manager()->get(mgr->user_manager()->get().root_id);
+
     tree_->setRoot(node);
 
     show_tree_button_ =
