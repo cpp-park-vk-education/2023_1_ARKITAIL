@@ -10,14 +10,14 @@ class NodeDbManagerMock: public INodeDbManager{
 public:
   NodeDbManagerMock(std::shared_ptr<DbMock> db);
 
-  const Node &get(int node_id);
-  int add(const Node &node);
-  void update(const Node &node);
-  void remove(int node_id);
+  NodeSptr get(int node_id) override;
+  int add(NodeSptr node) override;
+  void update(NodeSptr node) override;
+  void remove(int node_id) override;
 
-//   void tag(int node_id, const Tag &);
-//   void move(int node_id, int destination_id);
-  std::vector<Node> getChildren(int node_id);
+  std::vector<Node> getChildren(int node_id) override;
+  void tag(int node_id, TagSptr tag) override;
+  void move(int node_id, int destination_id) override;
 
 private:
   std::shared_ptr<DbMock> db_;

@@ -1,15 +1,18 @@
 #pragma once
 
-#include <cstddef>
+#include <memory>
 #include <string>
+
+class Tag;
+using TagSptr = std::shared_ptr<Tag>;
 
 class Tag {
 public:
-    Tag();
-    Tag(int id, std::string name);
-    
-    int id;
-    std::string name;
+  Tag() = default;
+  Tag(int id, std::string name);
+  
+  int id;
+  std::string name;
 
 };
 

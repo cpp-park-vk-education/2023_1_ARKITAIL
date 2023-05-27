@@ -1,123 +1,136 @@
 #include "NodeDbManager.hpp"
 
-int NodeDbManager::add(const Node &ret) {
-  Tag t_ret;
-  dbo::Transaction transaction(session_);
+#include "DbModels.hpp"
+#include "Node.hpp"
 
-  std::unique_ptr<Nodes> node{new Nodes()};
-  node->parent = session_.find<Nodes>().where("id = ?").bind(ret.parent_id);
-  node->resource_id = ret.resource_id;
-  node->type = ret.type;
+int NodeDbManager::add(NodeSptr node) {
+  Wt::Dbo::Transaction transaction(session_);
 
-  dbo::ptr<Nodes> nodePtr = session_.add(std::move(node));
+  std::unique_ptr<db::Node> db_node_unique = std::make_unique<db::Node>();
+  db_node_unique->resource_id = node->resource_id;
+  db_node_unique->type = node->type;
+
+  db::NodePtr db_node = session_.add(std::move(db_node_unique));
+  id_ = db_node.id();
 
   session_.flush();
+
+  // родителя устанавливаем только здесь, так как изначально могли его не найти
+  db_node_unique->parent
+      = session_.find<db::Node>().where("id = ?").bind(node->parent_id);
+
   transaction.commit();
-  id_ = nodePtr.id();
-
-  dbo::Transaction transac(session_);
-
-  dbo::ptr<Nodes> nodee = session_.find<Nodes>().where("id = ?").bind(id_);
-
-  nodee.modify()->parent =
-      session_.find<Nodes>().where("id = ?").bind(ret.parent_id);
-  transac.commit();
-
+  
   return id_;
 }
 
 void NodeDbManager::remove(int node_id) {
-  dbo::Transaction transaction(session_);
+  Wt::Dbo::Transaction transaction(session_);
 
-  dbo::ptr<Nodes> node = session_.find<Nodes>().where("id = ?").bind(node_id);
-  if (!node) {
+  db::NodePtr db_node
+      = session_.find<db::Node>().where("id = ?").bind(node_id);
+
+  if (!db_node) {
     return;
   }
-  node.remove();
+
+  db_node.remove();
   transaction.commit();
 }
 
-void NodeDbManager::update(const Node &ret) {
-  dbo::Transaction transaction(session_);
+void NodeDbManager::update(NodeSptr node) {
+  Wt::Dbo::Transaction transaction(session_);
 
-  dbo::ptr<Nodes> node =
-      session_.find<Nodes>().where("id = ?").bind(ret.id);
-  if (!node) {
+  db::NodePtr db_node
+      = session_.find<db::Node>().where("id = ?").bind(node->id);
+
+  if (!db_node) {
     return;
   }
-  node.modify()->parent =
-      session_.find<Nodes>().where("id = ?").bind(ret.parent_id);
-  node.modify()->resource_id = ret.resource_id;
-  node.modify()->type = ret.type;
+
+  db_node.modify()->parent =
+      session_.find<db::Node>().where("id = ?").bind(node->parent_id);
+  db_node.modify()->resource_id = node->resource_id;
+  db_node.modify()->type = node->type;
 
   transaction.commit();
 }
 
-const Node& NodeDbManager::get(int node_id) {
-  dbo::Transaction transaction(session_);
+NodeSptr NodeDbManager::get(int node_id) {
+  Wt::Dbo::Transaction transaction(session_);
 
-  Node ret;
-  dbo::ptr<Nodes> node = session_.find<Nodes>().where("id = ?").bind(node_id);
-  if (!node) {
-    return ret;
+  db::NodePtr db_node
+      = session_.find<db::Node>().where("id = ?").bind(node_id);
+
+  if (!db_node) {
+    return nullptr;
   }
-  ret.parent_id = node->parent.id();
-  ret.type = node->type;
-  ret.resource_id = node->resource_id;
+
+  Node node;
+  node.parent_id = db_node->parent.id();
+  node.type = db_node->type;
+  node.resource_id = db_node->resource_id;
+  node.id = node_id;
 
   transaction.commit();
 
-  return ret;
+  return std::make_shared<Node>(std::move(node));
 }
 
-void NodeDbManager::tag(int node_id, const Tag &rec) {
-  dbo::Transaction transaction(session_);
+void NodeDbManager::tag(int node_id, TagSptr tag) {
+  Wt::Dbo::Transaction transaction(session_);
 
-  dbo::ptr<Tags> tag = session_.find<Tags>().where("id = ?").bind(rec.id);
-  std::cout << tag.get()->name << std::endl;
-  dbo::ptr<Nodes> node = session_.find<Nodes>().where("id = ?").bind(node_id);
-  std::cout << node << std::endl;
+  db::TagPtr db_tag
+      = session_.find<db::Tag>().where("id = ?").bind(tag->id);
 
-  if (!node) {
+  db::NodePtr db_node
+      = session_.find<db::Node>().where("id = ?").bind(node_id);
+
+  if (!db_node) {
     return;
   }
-  if (!tag) {
-    std::cout << "!" << std::endl;
-    tag = session_.add(std::unique_ptr<Tags>{new Tags()});
-    tag.modify()->name = rec.name;
+
+  if (!db_tag) {
+    // affeeal->Antihoman: здесь, типо, добавление работает без session.flush?
+    db_tag = session_.add(std::make_unique<db::Tag>());
+    db_tag.modify()->name = tag->name;
   }
 
-  node.modify()->tag.insert(tag);
+  db_node.modify()->tags.insert(db_tag);
 
   transaction.commit();
 }
 
 void NodeDbManager::move(int node_id, int destination_id) {
-  dbo::Transaction transaction(session_);
+  Wt::Dbo::Transaction transaction(session_);
 
-  dbo::ptr<Nodes> node = session_.find<Nodes>().where("id = ?").bind(node_id);
-  if (!node) {
+  db::NodePtr db_node
+      = session_.find<db::Node>().where("id = ?").bind(node_id);
+
+  if (!db_node) {
     return;
   }
-  node.modify()->parent =
-      session_.find<Nodes>().where("id = ?").bind(destination_id);
+
+  db_node.modify()->parent
+      = session_.find<db::Node>().where("id = ?").bind(destination_id);
 
   transaction.commit();
 }
 
 std::vector<Node> NodeDbManager::getChildren(int node_id) {
-  dbo::Transaction transaction(session_);
-  Node ret;
   std::vector<Node> children;
-  dbo::collection<dbo::ptr<Nodes>> node =
-      session_.find<Nodes>().where("parent = ?").bind(node_id);
-  for (const dbo::ptr<Nodes> &nod : node) {
-    ret.parent_id = node_id;
-    ret.resource_id = nod->resource_id;
-    ret.type = nod->type;
-    children.push_back(ret);
+
+  // affeeal->Antihoman: переименовать parent в parent_id
+  Wt::Dbo::collection<db::NodePtr> db_nodes =
+      session_.find<db::Node>().where("parent = ?").bind(node_id);
+
+  for (const db::NodePtr& db_node : db_nodes) {
+    Node node;
+    node.parent_id = node_id;
+    node.resource_id = db_node->resource_id;
+    node.type = db_node->type;
+    children.push_back(node);
   }
 
-  transaction.commit();
   return children;
 }

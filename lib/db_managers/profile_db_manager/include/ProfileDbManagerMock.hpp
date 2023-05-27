@@ -9,9 +9,9 @@ class ProfileDbManagerMock : public IProfileDbManager {
 public:
 	ProfileDbManagerMock();
 
-	const Profile& get(int profile_id);
-	int add(const Profile& profile);
-	void update(const Profile& profile);
+	ProfileSptr get(int profile_id);
+	int add(ProfileSptr profile);
+	void update(ProfileSptr profile);
 	void remove(int profile_id);
 
 private:

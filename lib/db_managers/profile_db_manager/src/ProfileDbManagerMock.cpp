@@ -10,29 +10,29 @@ ProfileDbManagerMock::ProfileDbManagerMock() :
 	data_.emplace_back(0, 0, 0, std::vector<int>());
 }
 
-const Profile& ProfileDbManagerMock::get(int profile_id) {
+ProfileSptr ProfileDbManagerMock::get(int profile_id) {
 	for (auto e = data_.begin() + 1; e != data_.end(); e++)
 		if (e->id == profile_id)
-			return *e;
+			return std::make_shared<Profile>(*e);
 	
-	return data_[0];
+	return std::make_shared<Profile>(data_[0]);
 }
 
-int ProfileDbManagerMock::add(const Profile& profile) {
+int ProfileDbManagerMock::add(ProfileSptr profile) {
 	data_.emplace_back(
 		aid_,
-		profile.node_id,
-		profile.owner_id,
-		profile.nodes
+		profile->node_id,
+		profile->owner_id,
+		profile->nodes
 	);
 
 	return aid_++;
 }
 
-void ProfileDbManagerMock::update(const Profile& profile) {
+void ProfileDbManagerMock::update(ProfileSptr profile) {
 	for (auto e : data_)
-		if (e.id == profile.id)
-			e = profile;
+		if (e.id == profile->id)
+			e = *profile;
 }
 
 void ProfileDbManagerMock::remove(int profile_id) {

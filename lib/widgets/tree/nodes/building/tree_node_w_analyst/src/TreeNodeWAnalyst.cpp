@@ -22,10 +22,10 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeWChild(ITreeNode* tree_n
         (tree_node->getParent()->getNode().type & NodeType::SUBSCRIPTIONS_GROUP)) {
         // тут только unsub, так как это подписки
         if (node.type & NodeType::PUBLIC_DIRECTORY) {
-            Directory child = mgr->directory_manager()->get(node.resource_id);
+            DirectorySptr child = mgr->directory_manager()->get(node.resource_id);
             data = TreeNodeWConvertedData{
-                TreeNodeWType::SUB_DIR_OPTIONS,           child.name, child.description, tags,
-                mgr->user_manager()->get(child.owner_id), tree_node};
+                TreeNodeWType::SUB_DIR_OPTIONS,           child->name, child->description, tags,
+                mgr->user_manager()->get(child->owner_id), tree_node};
 
         } else {
             CalendarSptr child = mgr->calendar_manager()->get(node.resource_id);
@@ -42,24 +42,24 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeWChild(ITreeNode* tree_n
             mgr->user_manager()->get(child->owner_id), tree_node};
 
     } else if (node.type & (NodeType::PRIVATE_DIRECTORY | NodeType::PUBLIC_DIRECTORY)) {
-        Directory child = mgr->directory_manager()->get(node.resource_id);
+        DirectorySptr child = mgr->directory_manager()->get(node.resource_id);
 
         data = TreeNodeWConvertedData{TreeNodeWType::DIR,
-                                      child.name,
-                                      child.description,
+                                      child->name,
+                                      child->description,
                                       tags,
-                                      mgr->user_manager()->get(child.owner_id),
+                                      mgr->user_manager()->get(child->owner_id),
                                       tree_node};
 
     } else if (node.type & (NodeType::ROOT | NodeType::PRIVATE_GROUP | NodeType::PUBLIC_GROUP |
                             NodeType::SUBSCRIPTIONS_GROUP | NodeType::PROFILE_GROUP)) {
-        Directory child = mgr->directory_manager()->get(node.resource_id);
+        DirectorySptr child = mgr->directory_manager()->get(node.resource_id);
 
         data = TreeNodeWConvertedData{TreeNodeWType::GROUP,
-                                      child.name,
-                                      child.description,
+                                      child->name,
+                                      child->description,
                                       tags,
-                                      mgr->user_manager()->get(child.owner_id),
+                                      mgr->user_manager()->get(child->owner_id),
                                       tree_node};
 
     } else if (node.type & NodeType::PROFILE) {

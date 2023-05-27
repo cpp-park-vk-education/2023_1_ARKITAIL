@@ -1,16 +1,21 @@
 #include "UserDbManager.hpp"
 
-const User& UserDbManager::get(int user_id) {
-  dbo::Transaction transaction(session_);
+UserSptr UserDbManager::get() {
+  // TODO(affeeal)
+  return nullptr;
+}
 
-  User ret;
-  dbo::ptr<Users> user =
-      session_.find<Users>().where("id = ?").bind(user_id);
-  ret.email = user->email;
-  ret.login = user->login;
-  ret.nickname = user->nickname;
-  ret.description = user->description;
+UserSptr UserDbManager::get(int user_id) {
+  Wt::Dbo::ptr<db::User> db_user
+      = session_.find<db::User>().where("id = ?").bind(user_id);
 
-  transaction.commit();
-  return ret;
+  User user;
+  user.id = user_id;
+  // user.root_id = ???
+  user.email = db_user->email;
+  user.login = db_user->login;
+  user.nickname = db_user->nickname;
+  user.description = db_user->description;
+
+  return std::make_shared<User>(std::move(user));
 }

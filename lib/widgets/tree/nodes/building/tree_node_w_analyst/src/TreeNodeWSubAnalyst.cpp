@@ -30,12 +30,12 @@ TreeNodeWConvertedData TreeNodeWSubAnalyst::analyseTreeNodeWChild(ITreeNode* tre
                                       tree_node};
 
     } else if (node.type & NodeType::PUBLIC_DIRECTORY) {
-        Directory child = mgr->directory_manager()->get(tree_node->getNode().resource_id);
+        DirectorySptr child = mgr->directory_manager()->get(tree_node->getNode().resource_id);
         data = TreeNodeWConvertedData{TreeNodeWType::SUB_DIR,
-                                      child.name,
-                                      child.description,
+                                      child->name,
+                                      child->description,
                                       tags,
-                                      mgr->user_manager()->get(child.owner_id),
+                                      mgr->user_manager()->get(child->owner_id),
                                       tree_node};
     }
     return data;

@@ -1,17 +1,18 @@
 #pragma once
 
-#include "mainModel.hpp"
+#include "DbModels.hpp"
 #include "ITagDbManager.hpp"
 
 class TagDbManager: public ITagDbManager {
 public:
-  TagDbManager(dbo::Session &session) : session_(session) {}
+  TagDbManager(Wt::Dbo::Session &session) : session_(session) {}
 
-  int add(const Tag &);
-  void remove(int tag_id);
-  const Tag& get(int tag_id);
+  int add(TagSptr tag) override;
+  void remove(int tag_id) override;
+	void update(TagSptr tag) override;
+  TagSptr get(int tag_id) override;
 
 private:
   int id_;
-  dbo::Session &session_;
+  Wt::Dbo::Session &session_;
 };

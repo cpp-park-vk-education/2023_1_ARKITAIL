@@ -1,39 +1,55 @@
 #include "TagDbManager.hpp"
 
-int TagDbManager::add(const Tag &ret) {
-  dbo::Transaction transaction(session_);
+#include <memory>
 
-  std::unique_ptr<Tags> tag{new Tags()};
-  tag->name = ret.name;
+#include "DbModels.hpp"
+#include "Tag.hpp"
 
-  dbo::ptr<Tags> tagPtr = session_.add(std::move(tag));
+int TagDbManager::add(TagSptr tag) {
+  Wt::Dbo::Transaction transaction(session_);
+
+  std::unique_ptr<db::Tag> db_tag_unique = std::make_unique<db::Tag>();
+  db_tag_unique->name = tag->name;
+
+  db::TagPtr db_tag = session_.add(std::move(db_tag_unique));
   session_.flush();
+
   transaction.commit();
-  id_ = tagPtr.id();
+
+  id_ = db_tag.id();
   return id_;
 }
 
 void TagDbManager::remove(int tag_id) {
-  dbo::Transaction transaction(session_);
+  Wt::Dbo::Transaction transaction(session_);
 
-  dbo::ptr<Tags> tag = session_.find<Tags>().where("id = ?").bind(tag_id);
-  if (!tag) {
+  db::TagPtr db_tag
+      = session_.find<db::Tag>().where("id = ?").bind(tag_id);
+
+  if (!db_tag) {
     return;
   }
-  tag.remove();
+
+  db_tag.remove();
+
   transaction.commit();
 }
-const Tag& TagDbManager::get(int tag_id) {
-  dbo::Transaction transaction(session_);
 
-  Tag ret;
-  dbo::ptr<Tags> tag = session_.find<Tags>().where("id = ?").bind(tag_id);
-  if (!tag) {
-    ret.name = "error";
-    return ret;
+void TagDbManager::update(TagSptr tag) {
+  // TODO(Antiho)
+}
+
+TagSptr TagDbManager::get(int tag_id) {
+  db::TagPtr db_tag
+      = session_.find<db::Tag>().where("id = ?").bind(tag_id);
+
+  if (!db_tag) {
+    return nullptr;
   }
-  ret.name = tag->name;
 
-  transaction.commit();
-  return ret;
+  TagSptr tag = std::make_shared<Tag>();
+  tag->name = tag->name;
+  tag->id = tag_id;
+  
+  return tag;
 }

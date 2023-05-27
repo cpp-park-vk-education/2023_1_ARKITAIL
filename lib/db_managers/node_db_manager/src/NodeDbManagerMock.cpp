@@ -12,29 +12,29 @@ NodeDbManagerMock::NodeDbManagerMock(std::shared_ptr<DbMock> db)
   aid_ = (db_->nodes.size());
 }
 
-const Node &NodeDbManagerMock::get(int node_id) {
+NodeSptr NodeDbManagerMock::get(int node_id) {
   for (auto e = db_->nodes.begin() + 1; e != db_->nodes.end(); e++)
     if (e->id == node_id)
-      return *e;
+      return std::make_shared<Node>(*e);
 
-  return db_->nodes[0];
+  return std::make_shared<Node>(db_->nodes[0]);
 }
 
-int NodeDbManagerMock::add(const Node &node) {
+int NodeDbManagerMock::add(NodeSptr node) {
   db_->nodes.emplace_back(
 	aid_, 
-	node.parent_id, 
-	node.resource_id, 
-	node.type
+	node->parent_id, 
+	node->resource_id, 
+	node->type
 	);
 
   return aid_++;
 }
 
-void NodeDbManagerMock::update(const Node &node) {
+void NodeDbManagerMock::update(NodeSptr node) {
   for (auto e : db_->nodes)
-    if (e.id == node.id)
-      e = node;
+    if (e.id == node->id)
+      e = *node;
 }
 
 void NodeDbManagerMock::remove(int node_id) {
@@ -52,5 +52,9 @@ std::vector<Node> NodeDbManagerMock::getChildren(int node_id) {
 
   return children;
 }
-// void NodeDbManagerMock::tag(int node_id, const Tag &) {}
-// void NodeDbManagerMock::move(int node_id, int destination_id) {}
+
+void NodeDbManagerMock::tag(int node_id, TagSptr tag) {
+}
+
+void NodeDbManagerMock::move(int node_id, int destination_id) {
+}

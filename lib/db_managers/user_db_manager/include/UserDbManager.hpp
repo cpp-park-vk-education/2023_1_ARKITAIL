@@ -1,15 +1,16 @@
 #pragma once
 
-#include "mainModel.hpp"
+#include "DbModels.hpp"
 #include "IUserDbManager.hpp"
 
 class UserDbManager: public IUserDbManager {
 public:
-  UserDbManager(dbo::Session &session) : session_(session) {}
+  UserDbManager(Wt::Dbo::Session &session) : session_(session) {}
 
-    const User& get(int user_id);
+  UserSptr get() override;
+  UserSptr get(int user_id) override;
 
 private:
   int id_;
-  dbo::Session &session_;
+  Wt::Dbo::Session &session_;
 };

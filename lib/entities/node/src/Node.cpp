@@ -7,6 +7,3 @@ Node::Node(int id, int parent_id, int resource_id, NodeType type) :
     parent_id(parent_id),
     resource_id(resource_id),
     type(type) {}
-
-Node::Node(const Node& node) :
-    Node(node.id, node.parent_id, node.resource_id, node.type) {}

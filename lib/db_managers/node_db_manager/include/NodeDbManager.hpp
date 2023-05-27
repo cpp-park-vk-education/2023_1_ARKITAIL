@@ -1,24 +1,28 @@
 #pragma once
 
-#include "mainModel.hpp"
-#include "INodeDbManager.hpp"
+#include <Wt/Dbo/Session.h>
 
+#include "DbModels.hpp"
+#include "INodeDbManager.hpp"
+#include "Node.hpp"
+#include "Tag.hpp"
 
 class NodeDbManager: public INodeDbManager {
 public:
-  NodeDbManager(dbo::Session &session) : session_(session) {}
+  NodeDbManager(Wt::Dbo::Session &session) : session_(session) {}
 
-  int add(const Node &);
-  void remove(int node_id);
-  void update(const Node &);
-  const Node& get(int node_id);
+  int add(NodeSptr node) override;
+  void remove(int node_id) override;
+  void update(NodeSptr node) override;
+  NodeSptr get(int node_id) override;
 
-  void tag(int node_id, const Tag &);
-  void move(int node_id, int destination_id);
-  std::vector<Node> getChildren(int node_id);
+  std::vector<Node> getChildren(int node_id) override;
+  
+  void tag(int node_id, TagSptr tag) override;
+  void move(int node_id, int destination_id) override;
 
 private:
   int id_;
   int destination_id_;
-  dbo::Session &session_;
+  Wt::Dbo::Session &session_;
 };

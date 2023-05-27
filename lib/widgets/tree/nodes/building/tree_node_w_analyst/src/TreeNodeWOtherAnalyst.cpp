@@ -22,18 +22,18 @@ TreeNodeWConvertedData TreeNodeWOtherAnalyst::analyseTreeNodeWChild(ITreeNode* t
 
     // нужна проверка на sub/unsub
     if (node.type & NodeType::PUBLIC_GROUP) {
-        Directory child = mgr->directory_manager()->get(node.resource_id);
+        DirectorySptr child = mgr->directory_manager()->get(node.resource_id);
         data = TreeNodeWConvertedData{
-            TreeNodeWType::OTHER_GROUP_SUB,           child.name, child.description, tags,
-            mgr->user_manager()->get(child.owner_id), tree_node};
+            TreeNodeWType::OTHER_GROUP_SUB,           child->name, child->description, tags,
+            mgr->user_manager()->get(child->owner_id), tree_node};
 
     } else if (node.type & NodeType::PUBLIC_DIRECTORY) {
-        Directory child = mgr->directory_manager()->get(node.resource_id);
+        DirectorySptr child = mgr->directory_manager()->get(node.resource_id);
         data = TreeNodeWConvertedData{TreeNodeWType::OTHER_DIR_SUB,
-                                      child.name,
-                                      child.description,
+                                      child->name,
+                                      child->description,
                                       tags,
-                                      mgr->user_manager()->get(child.owner_id),
+                                      mgr->user_manager()->get(child->owner_id),
                                       tree_node};
 
     } else {

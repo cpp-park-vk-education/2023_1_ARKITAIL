@@ -11,8 +11,8 @@ class UserDbManagerMock : public IUserDbManager {
 public:
     UserDbManagerMock(std::shared_ptr<DbMock> db);
 
-    const User& get() override;
-    const User& get(int user_id) override;
+    UserSptr get() override;
+    UserSptr get(int user_id) override;
 
 private:
     std::shared_ptr<DbMock> db_;

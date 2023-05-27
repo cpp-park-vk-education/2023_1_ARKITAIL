@@ -4,8 +4,8 @@
 
 class IUserDbManager {
 public:
-    virtual const User& get() = 0;
-    virtual const User& get(int user_id) = 0;
+    virtual UserSptr get() = 0; // вернуть текущего пользователя
+    virtual UserSptr get(int user_id) = 0;
 
 };
 

@@ -1,7 +1,10 @@
 #pragma once
 
-#include <cstddef>
+#include <memory>
 #include <string>
+
+class User;
+using UserSptr = std::shared_ptr<User>;
 
 class User {
  public:
