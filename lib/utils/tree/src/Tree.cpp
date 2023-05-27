@@ -1,6 +1,8 @@
 #include "Tree.hpp"
 #include "TreeNode.hpp"
 
+#include <Wt/WDate.h>
+#include <Wt/WDateTime.h>
 #include <queue>
 #include <vector>
 
@@ -35,6 +37,16 @@ std::vector<Event> Tree::getCheckedEvents() {
 
         q.pop();
     }
+
+    return v;
+}
+
+std::vector<Event> Tree::getCheckedEventsByInterval(Wt::WDateTime begin, Wt::WDateTime end) {
+    std::vector<Event> v;
+
+    for (auto e : getCheckedEvents())
+        if (e.start <= end && e.end >= begin)
+            v.push_back(e);
 
     return v;
 }
