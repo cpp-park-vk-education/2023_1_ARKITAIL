@@ -3,8 +3,10 @@
 #include <iterator>
 #include <memory>
 #include <mutex>
+#include <string>
 #include <thread>
 #include <utility>
+#include <Wt/WApplication.h>
 
 #include "CalendarDbManagerMock.hpp"
 #include "CalendarManager.hpp"
@@ -36,19 +38,19 @@ SessionScopeMap& SessionScopeMap::instance() {
 SessionScope* SessionScopeMap::get() {
     std::lock_guard<std::mutex> lg(container_mutex_);
 
-    auto tid = std::this_thread::get_id();
-    auto ss = container_.find(tid);
+	auto sid = Wt::WApplication::instance()->sessionId();
+	auto ss = container_.find(sid);
 
-    if (ss == container_.end()) {
-        add(tid);
-        ss = container_.find(tid);  // Можно было бы возвращать итератор из add
-    }
+	if (ss == container_.end()) {
+		add(sid);
+		ss = container_.find(sid);  // Можно было бы возвращать итератор из add
+	}
 
     return ss->second.get();
 }
 
-void SessionScopeMap::add(std::thread::id tid) {
-    std::shared_ptr<DbMock> db_mock = std::make_shared<DbMock>();
+void SessionScopeMap::add(std::string sid) {
+	std::shared_ptr<DbMock> db_mock = std::make_shared<DbMock>();
 
     std::shared_ptr<IDbManagers> db = std::make_shared<DbManagers>(
         std::make_unique<UserDbManagerMock>(db_mock), std::make_unique<NodeDbManagerMock>(db_mock),
@@ -57,19 +59,28 @@ void SessionScopeMap::add(std::thread::id tid) {
         std::make_unique<EventDbManagerMock>(db_mock), std::make_unique<CommentDbManagerMock>(),
         std::make_unique<TagDbManagerMock>(), std::make_unique<ProfileDbManagerMock>());
 
-    container_.insert(std::make_pair(
-        tid, std::make_unique<SessionScope>(
-                 std::make_unique<Managers>(
-                     std::make_unique<UserManager>(db), std::make_unique<NodeManager>(db),
-                     std::make_unique<DirectoryManager>(db), std::make_unique<CalendarManager>(db),
-                     std::make_unique<EventManager>(db), std::make_unique<ProfileManager>(db)),
-                 std::make_unique<ConnectionsMediator>())));
+	container_.insert(
+		std::make_pair(
+			sid,
+			std::make_unique<SessionScope>(
+				std::make_unique<Managers>(
+					std::make_unique<UserManager>(db),
+					std::make_unique<NodeManager>(db),
+					std::make_unique<DirectoryManager>(db),
+					std::make_unique<CalendarManager>(db),
+					std::make_unique<EventManager>(db),
+					std::make_unique<ProfileManager>(db)
+				),
+				std::make_unique<ConnectionsMediator>()
+			)
+		)
+	);
 }
 
 void SessionScopeMap::remove() {
     std::lock_guard<std::mutex> lg(container_mutex_);
 
-    auto tid = std::this_thread::get_id();
+	auto sid = Wt::WApplication::instance()->sessionId();
 
-    container_.erase(tid);
+	container_.erase(sid);
 }

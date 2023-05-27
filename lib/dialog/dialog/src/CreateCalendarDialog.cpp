@@ -79,7 +79,7 @@ void CreateCalendarDialog::HandleSettings() {
 
     IManagers* managers = SessionScopeMap::instance().get()->managers();
     // будет заменено на то, что ниже
-    size_t calendar_id = managers->calendar_manager()->add(model->calendar());
+    size_t calendar_id = managers->calendar_manager()->add(model->calendar(), 0);
     // size_t calendar_id = managers->calendar_manager()->add(
     //     model->calendar(),
     //     node_->getNode().resource_id);
@@ -133,7 +133,7 @@ void CreateCalendarDialog::HandleImport() {
   for (CalendarSptr calendar : calendars) {
     IManagers* managers = SessionScopeMap::instance().get()->managers();
     // будет заменено на то, что ниже
-    size_t calendar_id = managers->calendar_manager()->add(calendar);
+    size_t calendar_id = managers->calendar_manager()->add(calendar, 0);
     // size_t calendar_id = managers->calendar_manager()->add(
     //     calendar,
     //     node_->getNode().resource_id);
