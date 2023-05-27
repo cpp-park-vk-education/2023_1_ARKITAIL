@@ -1,4 +1,4 @@
-set(MODULE_NAME application)
+set(MODULE_NAME deferred)
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
@@ -9,17 +9,5 @@ target_include_directories(${MODULE_NAME} PUBLIC ${INCLUDE_DIR})
 target_link_libraries(
 	${MODULE_NAME}
 	PUBLIC 
-	wt 
-	wthttp
-
-	swapable
-	deferred
-
-	session_scope_map
-	swapable
-	main_p
-	navbar_w
-	other_p
-  utils
 )
 

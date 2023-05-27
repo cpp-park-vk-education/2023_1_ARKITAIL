@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Wt/WDateTime.h>
+#include <cstddef>
 #include <vector>
 #include <memory>
 
@@ -13,14 +14,14 @@ class CalendarManager : public ICalendarManager {
 public:
     CalendarManager(std::shared_ptr<IDbManagers> db);
 
-    CalendarSptr get(int) override;
-    int add(CalendarSptr) override;
+    CalendarSptr get(size_t) override;
+    size_t add(CalendarSptr, size_t) override;
     void update(CalendarSptr) override;
-    void remove(int) override;
+    void remove(size_t) override;
 
-    std::vector<Event> getEvents(int calendar_id) override;
+    std::vector<Event> getEvents(size_t calendar_id) override;
     std::vector<Event> getEventsByInterval(
-        int calendar_id,
+        size_t calendar_id,
 	      Wt::WDateTime start,
 	      Wt::WDateTime end) override;
 

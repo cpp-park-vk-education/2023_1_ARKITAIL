@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Wt/WDate.h>
+#include <Wt/WDateTime.h>
 #include <cstddef>
 
 #include "Event.hpp"
@@ -13,8 +15,9 @@ class Tree {
     ITreeNode* getRoot();
 
     std::vector<Event> getCheckedEvents();
+    std::vector<Event> getCheckedEventsByInterval(Wt::WDateTime begin, Wt::WDateTime end);
 
-    std::vector<Event> checkNode(ITreeNode* node);
+    void checkNode(ITreeNode* node);
     void uncheckNode(ITreeNode* node);
 
     int checked();
