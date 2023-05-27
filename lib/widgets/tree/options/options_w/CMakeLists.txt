@@ -1,8 +1,15 @@
-add_library(options_w  src/options_w.cpp)
-
-target_include_directories(options_w  PUBLIC include)
-
-target_link_libraries(options_w  PUBLIC
-                      calendula_compiler_flags
-                      tree_node_w
-                      options_w_builder)
+set(MODULE_NAME options_w)
+set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+                      
+file(GLOB SOURCES ${SOURCE_DIR}/*.cpp)
+                      
+add_library(${MODULE_NAME} STATIC ${SOURCES})
+target_include_directories(${MODULE_NAME} PUBLIC ${INCLUDE_DIR})
+                      
+target_link_libraries(${MODULE_NAME} PUBLIC
+                        calendula_compiler_flags
+                        tree_node_w
+                        options_w_builder
+                      )
+                    

@@ -67,50 +67,42 @@ DbMock::DbMock() {
     events.emplace_back(
         1, 1, "PrivateEventUmaOp", "description",
         Wt::WDateTime::currentDateTime().addDays(-10),
-        Wt::WDateTime::currentDateTime().addDays(-1),
-        false, "", 0, Wt::WDate());
+        Wt::WDateTime::currentDateTime().addDays(-1));
 
     events.emplace_back(
         2, 2, "PrivateEventUmaOp", "description",
-        Wt::WDateTime::currentDateTime().addDays(10),
         Wt::WDateTime::currentDateTime().addDays(1),
-        false, "", 0, Wt::WDate());
+        Wt::WDateTime::currentDateTime().addDays(10));
 
     events.emplace_back(
         3, 3, "PublicEventUmaOp", "description",
         Wt::WDateTime::currentDateTime().addDays(-5),
-        Wt::WDateTime::currentDateTime().addDays(5),
-        false, "", 0, Wt::WDate());
+        Wt::WDateTime::currentDateTime().addDays(5));
     
     events.emplace_back(
         4, 4, "PublicEventUmaOp", "description",
-        Wt::WDateTime::currentDateTime().addDays(30),
-        Wt::WDateTime::currentDateTime().addDays(2),
-        false, "", 0, Wt::WDate());
+        Wt::WDateTime::currentDateTime().addDays(3),
+        Wt::WDateTime::currentDateTime().addDays(20));
 
     events.emplace_back(
         5, 5, "PrivateEventTest", "description",
         Wt::WDateTime::currentDateTime().addDays(-10),
-        Wt::WDateTime::currentDateTime().addDays(-9),
-        false, "", 0, Wt::WDate());
+        Wt::WDateTime::currentDateTime().addDays(-9));
 
     events.emplace_back(
         6, 6, "PrivateEventTest", "description",
         Wt::WDateTime::currentDateTime().addDays(3),
-        Wt::WDateTime::currentDateTime().addDays(4),
-        false, "", 0, Wt::WDate());
+        Wt::WDateTime::currentDateTime().addDays(4));
 
     events.emplace_back(
         7, 7, "PublicEventTest", "description",
         Wt::WDateTime::currentDateTime().addDays(-2),
-        Wt::WDateTime::currentDateTime().addDays(-1),
-        false, "", 0, Wt::WDate());
+        Wt::WDateTime::currentDateTime().addDays(-1));
 
     events.emplace_back(
         8, 8, "PublicEventTest", "description", 
         Wt::WDateTime::currentDateTime().addDays(-4),
-        Wt::WDateTime::currentDateTime().addDays(-2),
-        false, "", 0, Wt::WDate());
+        Wt::WDateTime::currentDateTime().addDays(-2));
 
 }
 

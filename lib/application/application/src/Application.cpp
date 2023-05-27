@@ -7,10 +7,10 @@
 
 #include <string>
 
+#include "MainP.hpp"
+#include "OtherP.hpp"
 #include "SessionScopeMap.hpp"
-#include "main_p.hpp"
 #include "navbar_w.hpp"
-#include "other_p.hpp"
 
 Application::Application(const Wt::WEnvironment& env) :
     Wt::WApplication(env),

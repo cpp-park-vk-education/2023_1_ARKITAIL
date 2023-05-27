@@ -12,16 +12,19 @@
 #include <memory>
 #include <string>
 
+#include "ConnectionPoint.hpp"
 #include "ITreeNode.hpp"
 #include "ITreeNodeWAnalyst.hpp"
+#include "InPlaceEditTitle.hpp"
 #include "Managers.hpp"
 #include "Node.hpp"
+#include "OptionsW.hpp"
 #include "Profile.hpp"
+#include "SessionScopeMap.hpp"
+#include "TreeNodeW.hpp"
 #include "TreeNodeWAnalyst.hpp"
+#include "TreeW.hpp"
 #include "User.hpp"
-#include "in_place_edit_title.hpp"
-#include "options_w.hpp"
-#include "tree_node_w.hpp"
 
 TreeNodeWBuilderBase* TreeNodeWBuilderBase::addAnalyst(std::unique_ptr<ITreeNodeWAnalyst> analyst) {
     tree_node_w->analyst_ = (std::move(analyst));
@@ -44,6 +47,12 @@ TreeNodeWBuilderBase* TreeNodeWBuilderBase::addCheckBox() {
         tree_node_w->check_box_container->addWidget(std::make_unique<Wt::WCheckBox>());
     tree_node_w->check_box_->checked().connect(tree_node_w.get(), &TreeNodeW::checkNode);
     tree_node_w->check_box_->unChecked().connect(tree_node_w.get(), &TreeNodeW::uncheckNode);
+    return this;
+}
+
+TreeNodeWBuilderBase* TreeNodeWBuilderBase::addCheckBoxConnectionPoint(
+    ConnectionPoint<Wt::Signal<ITreeNode*>, TreeW, ITreeNode*>* cp) {
+    cp->add_sender(&(tree_node_w->checked_));
     return this;
 }
 

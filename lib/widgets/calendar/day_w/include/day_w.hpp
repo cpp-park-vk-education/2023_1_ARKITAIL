@@ -1,6 +1,6 @@
 #pragma once
 
-#include <calendar_body_w.hpp>
+#include <CalendarBodyW.hpp>
 
 class DayW : public CalendarBodyW {
   public:
@@ -8,5 +8,5 @@ class DayW : public CalendarBodyW {
     ~DayW() = default;
 
   private:
-    void update(Wt::WDate selected_date) override;
+    void update(Wt::WDate begin_date, std::vector<Event> events) override;
 };

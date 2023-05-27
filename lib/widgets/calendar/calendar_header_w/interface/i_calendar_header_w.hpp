@@ -7,6 +7,8 @@
 
 #include <memory>
 
+#include "Event.hpp"
+
 enum Range {
     MONTH,
     WEEK,
@@ -17,14 +19,15 @@ class ICalendarHeaderW : public Wt::WContainerWidget {
   public:
     virtual ~ICalendarHeaderW() = default;
 
-    virtual Wt::Signal<Wt::WDate>& selectedDateChanged() = 0;
+    virtual Wt::Signal<Wt::WDate, Wt::WDate>& selectedDateChanged() = 0;
     virtual Wt::Signal<Range>& rangeChanged() = 0;
-    virtual Wt::Signal<>& eventAdded() = 0;
     virtual void setRange() = 0;
     virtual ICalendarHeaderW* addConnections() = 0;
     virtual ICalendarHeaderW* addButtons() = 0;
 
     virtual Wt::WString makeTitle() = 0;
+
+    virtual void emitDates() = 0;
 
   protected:
     virtual void addStyle() = 0;

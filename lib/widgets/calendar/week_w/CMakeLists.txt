@@ -1,8 +1,15 @@
-add_library(week_w src/week_w.cpp)
-
-target_include_directories(week_w PUBLIC include)
-
-target_link_libraries(week_w PUBLIC
-                      calendar_body_w
-                      event_w
-                      calendula_compiler_flags)
+set(MODULE_NAME week_w)
+set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+                      
+file(GLOB SOURCES ${SOURCE_DIR}/*.cpp)
+                      
+add_library(${MODULE_NAME} STATIC ${SOURCES})
+target_include_directories(${MODULE_NAME} PUBLIC ${INCLUDE_DIR})
+                      
+target_link_libraries(${MODULE_NAME} PUBLIC
+                        calendula_compiler_flags
+                        calendar_body_w
+                        event_w
+                        event
+                        )
