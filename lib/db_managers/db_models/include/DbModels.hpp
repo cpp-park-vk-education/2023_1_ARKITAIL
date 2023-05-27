@@ -1,12 +1,11 @@
 #pragma once
 
-#include <Wt/Dbo/Field.h>
 #include <string>
 #include <vector>
 
 #include <Wt/WDateTime.h>
 #include <Wt/WDate.h>
-#include <Wt/Dbo/Dbo.h>
+#include <Wt/Dbo/Field.h>
 #include <Wt/Dbo/collection.h>
 #include <Wt/Dbo/ptr.h>
 
@@ -14,6 +13,7 @@
 
 namespace db {
 class Calendar;
+class Comment;
 class Directory;
 class Event;
 class Node;
@@ -24,6 +24,7 @@ class User;
 std::vector<unsigned char> ReadFile(const std::string &filename);
 
 using CalendarPtr = Wt::Dbo::ptr<Calendar>;
+using CommentPtr = Wt::Dbo::ptr<Comment>;
 using DirectoryPtr = Wt::Dbo::ptr<Directory>;
 using EventPtr = Wt::Dbo::ptr<Event>;
 using NodePtr = Wt::Dbo::ptr<Node>;
@@ -49,6 +50,17 @@ public:
     Wt::Dbo::field(a, description, "description");
     Wt::Dbo::field(a, color, "color");
     Wt::Dbo::field(a, visibility, "visibility");
+  }
+};
+
+class Comment {
+public:
+  std::string text;
+  Wt::Dbo::ptr<Event> event;
+
+  template <class Action> void persist(Action &a) {
+    Wt::Dbo::field(a, text, "text");
+    Wt::Dbo::belongsTo(a, event, "event");
   }
 };
 

@@ -1,9 +1,5 @@
 #include "Calendar.hpp"
 
-#include <cstddef>
-#include <vector>
-#include <string>
-
 Calendar::Calendar(
     int id,
     int node_id,
@@ -15,8 +11,8 @@ Calendar::Calendar(
   : id(id),
     node_id(node_id),
     owner_id(owner_id),
-    summary(summary),
-    description(description),
-    visibility(visibility),
-    color(color) {
+    summary(std::move(summary)),
+    description(std::move(description)),
+    visibility(std::move(visibility)),
+    color(std::move(color)) {
 }

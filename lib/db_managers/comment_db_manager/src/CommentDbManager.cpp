@@ -1,44 +1,56 @@
 #include "CommentDbManager.hpp"
 
-int CommentDbManager::add(const Comment &ret) {
-  dbo::Transaction transaction(session_);
+#include <memory>
 
-  std::unique_ptr<Comments> comment{new Comments()};
-  comment->text = ret.text;
-  comment->event = session_.find<Events>().where("id = ?").bind(ret.event_id);
+#include <Wt/Dbo/Transaction.h>
 
-  dbo::ptr<Comments> commentPtr = session_.add(std::move(comment));
+#include "DbModels.hpp"
+
+int CommentDbManager::add(CommentSptr comment) {
+  Wt::Dbo::Transaction transaction(session_);
+
+  std::unique_ptr<db::Comment> db_comment_unique
+      = std::make_unique<db::Comment>();
+  db_comment_unique->text = comment->text;
+  db_comment_unique->event
+     = session_.find<db::Event>().where("id = ?").bind(comment->event_id);
+
+  db::CommentPtr db_comment = session_.add(std::move(db_comment_unique));
   session_.flush();
+
   transaction.commit();
-  id_ = commentPtr.id();
+
+  id_ = db_comment.id();
   return id_;
 }
 
 void CommentDbManager::remove(int comment_id) {
-  dbo::Transaction transaction(session_);
+  Wt::Dbo::Transaction transaction(session_);
 
-  dbo::ptr<Comments> comment =
-      session_.find<Comments>().where("id = ?").bind(comment_id);
-  if (!comment) {
+  db::CommentPtr db_comment =
+      session_.find<db::Comment>().where("id = ?").bind(comment_id);
+
+  if (!db_comment) {
     return;
   }
-  comment.remove();
+
+  db_comment.remove();
+
   transaction.commit();
 }
 
-const Comment& CommentDbManager::get(int comment_id) {
-  dbo::Transaction transaction(session_);
+CommentSptr CommentDbManager::get(int comment_id) {
+  Wt::Dbo::ptr<db::Comment> db_comment =
+      session_.find<db::Comment>().where("id = ?").bind(comment_id);
 
-  Comment ret;
-  dbo::ptr<Comments> comment =
-      session_.find<Comments>().where("id = ?").bind(comment_id);
-  if (!comment) {
-    return ret;
+  if (!db_comment) {
+    return nullptr;
   }
-  ret.text = comment->text;
-  ret.event_id = comment->event.id();
 
-  transaction.commit();
+  Comment comment;
+  comment.text = db_comment->text;
+  comment.event_id = db_comment->event.id();
+  comment.id = comment_id;
 
-  return ret;
+  return std::make_shared<Comment>(std::move(comment));
 }

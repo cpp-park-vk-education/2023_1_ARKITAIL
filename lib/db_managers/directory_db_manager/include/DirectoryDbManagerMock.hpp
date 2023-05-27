@@ -10,10 +10,10 @@ class DirectoryDbManagerMock : public IDirectoryDbManager {
 public:
     DirectoryDbManagerMock(std::shared_ptr<DbMock> db) ;
     
-    const Directory& get(int directory_id);
-    int add(const Directory& directory);
-    void update(const Directory& directory);
-    void remove(int directory_id);
+    DirectorySptr get(int directory_id) override;
+    int add(DirectorySptr directory) override;
+    void update(DirectorySptr directory) override;
+    void remove(int directory_id) override;
 
 private:
     std::shared_ptr<DbMock> db_;

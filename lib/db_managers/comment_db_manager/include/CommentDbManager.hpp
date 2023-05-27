@@ -1,19 +1,19 @@
 #pragma once
 
-#include "mainModel.hpp"
-#include "ICommentDbManager.hpp"
+#include <Wt/Dbo/Session.h>
 
+#include "DbModels.hpp"
+#include "ICommentDbManager.hpp"
 
 class CommentDbManager: ICommentDbManager {
 public:
-  CommentDbManager(dbo::Session &session) : session_(session) {}
+  CommentDbManager(Wt::Dbo::Session &session) : session_(session) {}
 
-  int add(const Comment&);
-  void remove(int comment_id);
-  const Comment& get(int comment_id);
-
+  int add(CommentSptr comment) override;
+  void remove(int comment_id) override;
+  CommentSptr get(int comment_id) override;
 
 private:
   int id_;
-  dbo::Session &session_;
+  Wt::Dbo::Session &session_;
 };

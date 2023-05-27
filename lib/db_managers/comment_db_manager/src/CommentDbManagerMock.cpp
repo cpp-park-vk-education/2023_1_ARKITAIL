@@ -9,26 +9,26 @@ CommentDbManagerMock::CommentDbManagerMock() :
 	data_.emplace_back(0, 0, "");
 }
 
-const Comment& CommentDbManagerMock::get(int comment_id) {
+CommentSptr CommentDbManagerMock::get(int comment_id) {
 	for (auto e = data_.begin() + 1; e != data_.end(); e++)
 		if (e->id == comment_id)
-			return *e;
+			return std::make_shared<Comment>(*e);
 	
-	return data_[0];
+	return std::make_shared<Comment>(data_[0]);
 }
 
-int CommentDbManagerMock::add(const Comment& comment) {
+int CommentDbManagerMock::add(CommentSptr comment) {
 	data_.emplace_back(
 		aid_,
-		comment.event_id,
+		comment->event_id,
 		//comment.owner_id,
-		comment.text
+		comment->text
 	);
 
 	return aid_++;
 }
 
-// void CommentDbManagerMock::update(const Comment& comment) {
+// void CommentDbManagerMock::update(CommentSptr comment) {
 // 	for (auto e : data_)
 // 		if (e.id == comment.id)
 // 			e = comment;

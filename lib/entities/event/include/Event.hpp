@@ -1,10 +1,7 @@
 #pragma once
 
-#include <memory.h>
-
 #include <Wt/WDateTime.h>
 #include <Wt/WDate.h>
-#include <Wt/WString.h>
 
 class Event;
 using EventSptr = std::shared_ptr<Event>;

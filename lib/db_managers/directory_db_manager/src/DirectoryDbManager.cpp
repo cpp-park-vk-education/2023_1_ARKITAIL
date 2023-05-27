@@ -1,63 +1,83 @@
 #include "DirectoryDbManager.hpp"
 
+#include <Wt/Dbo/Transaction.h>
 
-int DirectoryDbManager::add(const Directory &ret) {
-  dbo::Transaction transaction(session_);
+#include "DbModels.hpp"
+#include "Directory.hpp"
 
-  std::unique_ptr<Directories> direct{new Directories()};
-  direct->description = ret.description;
-  direct->name = ret.name;
-  direct->node = session_.find<Nodes>("id = ?").bind(ret.node_id);
-  direct->user = session_.find<Users>("id = ?").bind(ret.owner_id);
-  dbo::ptr<Directories> directPtr = session_.add(std::move(direct));
+int DirectoryDbManager::add(DirectorySptr directory) {
+  Wt::Dbo::Transaction transaction(session_);
+
+  std::unique_ptr<db::Directory> db_directory_unique
+     = std::make_unique<db::Directory>();
+
+  db_directory_unique->description = directory->description;
+  db_directory_unique->name = directory->name;
+  db_directory_unique->node
+      = session_.find<db::Node>("id = ?").bind(directory->node_id);
+
+  db_directory_unique->user
+      = session_.find<db::User>("id = ?").bind(directory->owner_id);
+
+  db::DirectoryPtr db_directory = session_.add(std::move(db_directory_unique));
   session_.flush();
+
   transaction.commit();
-  id_ = directPtr.id();
+
+  id_ = db_directory.id();
   return id_;
 }
 
 void DirectoryDbManager::remove(int directory_id) {
-  dbo::Transaction transaction(session_);
+  Wt::Dbo::Transaction transaction(session_);
 
-  dbo::ptr<Directories> direct =
-      session_.find<Directories>().where("id = ?").bind(directory_id);
-  if (!direct) {
+  db::DirectoryPtr db_directory =
+      session_.find<db::Directory>().where("id = ?").bind(directory_id);
+
+  if (!db_directory) {
     return;
   }
-  direct.remove();
+
+  db_directory.remove();
+
   transaction.commit();
 }
 
-void DirectoryDbManager::update(const Directory &ret) {
-  dbo::Transaction transaction(session_);
+void DirectoryDbManager::update(DirectorySptr directory) {
+  Wt::Dbo::Transaction transaction(session_);
 
-  dbo::ptr<Directories> direct =
-      session_.find<Directories>().where("id = ?").bind(ret.id);
-  if (!direct) {
+  db::DirectoryPtr db_directory =
+      session_.find<db::Directory>().where("id = ?").bind(directory->id);
+
+  if (!db_directory) {
     return;
   }
-  direct.modify()->user = session_.find<Users>().where("id = ?").bind(ret.owner_id);
-  direct.modify()->name = ret.name;
-  direct.modify()->description = ret.description;
-  direct.modify()->node = session_.find<Nodes>().where("id = ?").bind(ret.node_id);
+
+  db_directory.modify()->user
+      = session_.find<db::User>().where("id = ?").bind(directory->owner_id);
+
+  db_directory.modify()->name = directory->name;
+  db_directory.modify()->description = directory->description;
+  db_directory.modify()->node
+      = session_.find<db::Node>().where("id = ?").bind(directory->node_id);
+
   transaction.commit();
 }
 
-const Directory& DirectoryDbManager::get(int directory_id) {
-  dbo::Transaction transaction(session_);
+DirectorySptr DirectoryDbManager::get(int directory_id) {
+  db::DirectoryPtr db_directory =
+      session_.find<db::Directory>().where("id = ?").bind(directory_id);
 
-  Directory ret;
-  dbo::ptr<Directories> direct =
-      session_.find<Directories>().where("id = ?").bind(directory_id);
-  if (!direct) {
-    return ret;
+  if (!db_directory) {
+    return nullptr;
   }
-  ret.name = direct->name;
-  ret.owner_id = direct->user.id();
-  ret.description = direct->description;
-  ret.node_id = direct->node.id();
 
-  transaction.commit();
+  Directory directory;
+  directory.name = db_directory->name;
+  directory.owner_id = db_directory->user.id();
+  directory.description = db_directory->description;
+  directory.node_id = db_directory->node.id();
+  directory.id = directory_id;
 
-  return ret;
+  return std::make_shared<Directory>(std::move(directory));
 }

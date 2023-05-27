@@ -1,6 +1,5 @@
 #pragma once
 
-#include <cstddef>
 #include <memory>
 #include <string>
 #include <vector>
@@ -17,8 +16,8 @@ class Calendar {
       int owner_id,
       std::string summary,
       std::string description,
-      std::string visibility = std::string(),
-      std::string color = std::string());
+      std::string visibility,
+      std::string color);
 
   int id;
   int node_id;
