@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Wt/Dbo/Session.h>
 #include <Wt/WApplication.h>
 #include <Wt/WContainerWidget.h>
 #include <Wt/WEnvironment.h>
@@ -20,7 +19,7 @@ class Application : public Wt::WApplication {
     void route(const std::string& internalPath);
 
   private:
-    std::unique_ptr<Wt::Dbo::Session> session_;
+    // TODO(affeeal): session
 
     std::unordered_map<std::string, Swapable<Wt::WContainerWidget>> pages_;
     Swapable<Wt::WContainerWidget> cur_swap_;

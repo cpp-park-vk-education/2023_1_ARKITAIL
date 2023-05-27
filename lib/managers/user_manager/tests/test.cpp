@@ -73,11 +73,11 @@ TEST_F(ManagersSuit, GetCurrentUser) {
 	
 	std::cout << "Here" << std::endl;
 	
-	EXPECT_EQ(expected.id, got.id);
-	EXPECT_EQ(expected.root_id, got.root_id);
-	EXPECT_EQ(expected.login, got.login);
-	EXPECT_EQ(expected.email, got.email);
-	EXPECT_EQ(expected.nickname, got.nickname);
-	EXPECT_EQ(expected.description, got.description);
+	EXPECT_EQ(expected.id, got->id);
+	EXPECT_EQ(expected.root_id, got->root_id);
+	EXPECT_EQ(expected.login, got->login);
+	EXPECT_EQ(expected.email, got->email);
+	EXPECT_EQ(expected.nickname, got->nickname);
+	EXPECT_EQ(expected.description, got->description);
 }
 

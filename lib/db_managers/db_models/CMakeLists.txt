@@ -7,8 +7,10 @@ file(GLOB SOURCES ${SOURCE_DIR}/*.cpp)
 add_library(${MODULE_NAME} SHARED ${SOURCES})
 target_include_directories(${MODULE_NAME} PUBLIC ${INCLUDE_DIR})
 target_link_libraries(
-  ${MODULE_NAME} PUBLIC
-  node
-  event
+  ${MODULE_NAME}
+  PUBLIC
+  wt
   wtdbo
+  
+  node
   )

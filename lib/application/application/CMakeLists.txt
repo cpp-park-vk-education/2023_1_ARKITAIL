@@ -12,13 +12,11 @@ target_link_libraries(
 	wt 
 	wthttp
 
-	swapable
-
 	session_scope_map
-  session
-  utils
+	swapable
 	main_p
-	other_p
 	navbar_w
+	other_p
+  utils
 )
 

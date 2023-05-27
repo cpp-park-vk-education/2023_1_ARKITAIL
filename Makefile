@@ -8,7 +8,7 @@ help: # Show help for each of the Makefile recipes.
 
 .PHONY: clean
 clean: # Delete build/ and .cache/ directories.
-	rm -rf build/ .cache/
+	rm -rf .build/ .cache/
 	
 .PHONY: generate
 generate: # Generate a build recipe in a build/ directory.

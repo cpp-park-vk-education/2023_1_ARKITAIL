@@ -2,13 +2,13 @@
 
 #include <Wt/WBootstrap5Theme.h>
 #include <Wt/WContainerWidget.h>
+#include <Wt/WLogger.h>
 #include <Wt/WText.h>
 #include <Wt/WWidget.h>
 
 #include <string>
 
 #include "SessionScopeMap.hpp"
-#include "Session.hpp"
 #include "main_p.hpp"
 #include "navbar_w.hpp"
 #include "other_p.hpp"
@@ -16,19 +16,24 @@
 
 Application::Application(const Wt::WEnvironment& env) :
     Wt::WApplication(env),
-    session_(),
     pages_(),
     cur_swap_(),
     cur_page_(nullptr) {
+
+    Wt::log("Session creation started...");
+
     setTitle("Calendula");
     setTheme(std::make_unique<Wt::WBootstrap5Theme>());
     useStyleSheet("/static/style.css");
     messageResourceBundle().use(appRoot() + "data/templates");
 
     navbar_ = root()->addWidget(std::make_unique<NavbarW>());
+
     // Some initial widgets configuration
     pages_.emplace("/calendars", std::make_unique<MainP>())
         .first->second.set_destination(&cur_swap_);
+    
+    Wt::log("до сюда мы дожили");
     navbar_->addLink("Calendars", "/calendars");
     pages_.emplace("/profile", std::make_unique<OtherP>())
         .first->second.set_destination(&cur_swap_);
@@ -45,6 +50,7 @@ Application::Application(const Wt::WEnvironment& env) :
     internalPathChanged().connect(this, &Application::route);
 
     // Connections mediator connections establishing
+    Wt::log("Session created");
 }
 
 void Application::route(const std::string& internalPath) {
