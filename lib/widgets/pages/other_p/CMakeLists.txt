@@ -1,9 +1,14 @@
-add_library(other_p src/other_p.cpp)
-
-target_include_directories(other_p PUBLIC include)
-
-target_link_libraries(other_p PUBLIC
-                      calendar_w
-                      tree_w
-                      calendula_compiler_flags)
-
+set(MODULE_NAME other_p)
+set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+                      
+file(GLOB SOURCES ${SOURCE_DIR}/*.cpp)
+                      
+add_library(${MODULE_NAME} STATIC ${SOURCES})
+target_include_directories(${MODULE_NAME} PUBLIC ${INCLUDE_DIR})
+                      
+target_link_libraries(${MODULE_NAME} PUBLIC
+                        calendula_compiler_flags
+                        calendar_w
+                        tree_w
+                      )

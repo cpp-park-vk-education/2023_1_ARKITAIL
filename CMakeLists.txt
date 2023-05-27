@@ -29,11 +29,11 @@ add_executable(Calendula src/main.cpp)
 add_subdirectory(lib)
 
 target_link_libraries(
-    Calendula
-    PUBLIC
+    Calendula PUBLIC
+    calendula_compiler_flags
+
     wt
     wthttp
 
     application
-    calendula_compiler_flags
 )

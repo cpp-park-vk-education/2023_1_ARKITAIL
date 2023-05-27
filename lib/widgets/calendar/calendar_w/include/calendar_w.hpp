@@ -6,9 +6,9 @@
 #include <map>
 #include <memory>
 
-#include "calendar_body_w.hpp"
+#include "CalendarBodyW.hpp"
+#include "TreeW.hpp"
 #include "calendar_header_w.hpp"
-#include "tree_w.hpp"
 
 class CalendarW : public Wt::WContainerWidget {
   public:

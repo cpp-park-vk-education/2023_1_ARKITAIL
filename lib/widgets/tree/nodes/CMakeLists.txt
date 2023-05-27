@@ -1,4 +1,2 @@
-add_subdirectory(tree_node_dir_w)
-add_subdirectory(tree_node_leaf_w)
 add_subdirectory(tree_node_w)
 add_subdirectory(building)

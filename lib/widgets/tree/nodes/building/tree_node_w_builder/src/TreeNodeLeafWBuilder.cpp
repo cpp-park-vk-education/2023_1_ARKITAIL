@@ -3,9 +3,9 @@
 #include <memory>
 
 #include "ITreeNode.hpp"
+#include "TreeNodeLeafW.hpp"
+#include "TreeNodeW.hpp"
 #include "TreeNodeWBuilderBase.hpp"
-#include "tree_node_leaf_w.hpp"
-#include "tree_node_w.hpp"
 
 TreeNodeLeafWBuilder::TreeNodeLeafWBuilder() {}
 

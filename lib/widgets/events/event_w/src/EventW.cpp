@@ -32,6 +32,7 @@ void EventW::makeDayEventWidget(Wt::WTable* table) {
 }
 
 void EventW::makeWeekEventWidget(Wt::WTable* table, Wt::WDate begin_of_week) {
+
     if (isLargeEvent()) {
         auto begin_event = begin_.date() > begin_of_week ? begin_.date() : begin_of_week;
         auto end_event = end_.date() < begin_of_week.addDays(TimeInterval::DAYS_IN_WEEK)
@@ -42,7 +43,8 @@ void EventW::makeWeekEventWidget(Wt::WTable* table, Wt::WDate begin_of_week) {
         std::string base_style = "w-100 ";
         for (auto day = begin_of_week; day < begin_of_week.addDays(TimeInterval::DAYS_IN_WEEK);
              day = day.addDays(1)) {
-            if (day == end_event) {
+            std::cout << day.day() << '\n';
+            if (day == end_event && day != begin_event) {
                 auto style = base_style +
                              (day == begin_.date() ? "rounded-start" : "border-start-0") +
                              (std::string) " rounded-end";
@@ -72,11 +74,9 @@ void EventW::makeWeekEventWidget(Wt::WTable* table, Wt::WDate begin_of_week) {
     }
 }
 
-void EventW::makeMonthEventWidget(Wt::WTable* table, Wt::WDate day_of_month) {
-    auto first_day_of_month = Wt::WDate(day_of_month.year(), day_of_month.month(), 1);
-    auto first_day_of_table = first_day_of_month.addDays(1 - first_day_of_month.dayOfWeek());
+void EventW::makeMonthEventWidget(Wt::WTable* table, Wt::WDate first_day_of_table) {
 
-    day_of_month = first_day_of_table;
+    auto day_of_month = first_day_of_table;
     for (size_t pos = 0; day_of_month < first_day_of_table.addDays(TimeInterval::DAYS_IN_WEEK * 5);
          day_of_month = day_of_month.addDays(1), pos++) {
         if (begin_.date() <= day_of_month && day_of_month <= end_.date()) {

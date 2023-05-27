@@ -2,6 +2,8 @@
 
 #include <Wt/WDateTime.h>
 #include <Wt/WDate.h>
+#include <Wt/WString.h>
+#include <Wt/WColor.h>
 
 class Event;
 using EventSptr = std::shared_ptr<Event>;
@@ -20,7 +22,8 @@ class Event {
       Wt::WDateTime stamp,
       std::string frequency,
       int interval,
-      Wt::WDate until);
+      Wt::WDate until,
+      Wt::WColor color = Wt::WColor(100, 100, 40));
 
   bool IsRecurrent() const;
 
@@ -30,6 +33,8 @@ class Event {
   std::string summary;
   std::string description;
   std::string location;
+
+  Wt::WColor color;
 
   Wt::WDateTime start;
   Wt::WDateTime end;

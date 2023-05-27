@@ -1,5 +1,6 @@
 #include "Event.hpp"
 
+#include <Wt/WColor.h>
 #include <string>
 
 Event::Event(
@@ -13,7 +14,8 @@ Event::Event(
     Wt::WDateTime stamp,
     std::string frequency,
     int interval,
-    Wt::WDate until)
+    Wt::WDate until,
+    Wt::WColor color)
   : id(id),
     calendar_id(calendar_id),
     summary(std::move(summary)),
@@ -24,7 +26,8 @@ Event::Event(
     stamp(std::move(stamp)),
     frequency(std::move(frequency)),
     interval(interval),
-    until(std::move(until)) {
+    until(std::move(until)),
+    color(std::move(color)) {
 }
 
 // если событие не повторяется, то frequency == "",

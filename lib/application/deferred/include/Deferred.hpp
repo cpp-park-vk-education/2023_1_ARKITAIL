@@ -21,7 +21,9 @@ private:
 template <typename T, typename TBase>
 std::unique_ptr<TBase> Deferred<T, TBase>::get() {
 	if (!obj_) {
+		std::cout << "Trying to build" << std::endl;
 		obj_ = std::make_unique<T>();
+		std::cout << "Builded" << std::endl;
 		std::cout << "This thread has id: " << std::this_thread::get_id() << std::endl;
 	}
 

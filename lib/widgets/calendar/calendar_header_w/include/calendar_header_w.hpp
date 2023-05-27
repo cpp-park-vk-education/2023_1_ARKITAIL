@@ -10,6 +10,7 @@
 
 #include <memory>
 
+#include "Event.hpp"
 #include "i_calendar_header_w.hpp"
 
 enum SwitchingDirection {
@@ -23,9 +24,8 @@ class CalendarHeaderW : public ICalendarHeaderW {
     CalendarHeaderW();
     ~CalendarHeaderW() = default;
 
-    Wt::Signal<Wt::WDate>& selectedDateChanged() override;
+    Wt::Signal<Wt::WDate, Wt::WDate>& selectedDateChanged() override;
     Wt::Signal<Range>& rangeChanged() override;
-    Wt::Signal<>& eventAdded() override;
 
     void setRange() override;
     Wt::WString makeTitle() override;
@@ -38,6 +38,11 @@ class CalendarHeaderW : public ICalendarHeaderW {
 
     Wt::WDate switchSelectedDate(SwitchingDirection direction);
 
+    void emitDates() override;
+
+    Wt::Signal<std::vector<Event>> events_range_changed;
+    Wt::Signal<Wt::WDate> change_selected_date_;
+
   protected:
     Range range_;
     Wt::WDate selected_date_;
@@ -46,10 +51,10 @@ class CalendarHeaderW : public ICalendarHeaderW {
     Wt::WPushButton* next_button_;
     Wt::WContainerWidget* container_option_range_;
     Wt::WText* calendar_title_;
-    Wt::Signal<> added_event_;
-    Wt::Signal<Wt::WDate> change_selected_date_;
-    Wt::Signal<Range> change_range_;
     Wt::WComboBox* option_range_;
+
+    Wt::Signal<Wt::WDate, Wt::WDate> selected_date_changed_;
+    Wt::Signal<Range> change_range_;
 
   private:
     void addStyle() override;

@@ -3,8 +3,8 @@
 #include <memory>
 
 #include "ITreeNode.hpp"
-#include "tree_node_dir_w.hpp"
-#include "tree_node_w.hpp"
+#include "TreeNodeDirW.hpp"
+#include "TreeNodeW.hpp"
 
 TreeNodeDirWBuilder::TreeNodeDirWBuilder() {}
 

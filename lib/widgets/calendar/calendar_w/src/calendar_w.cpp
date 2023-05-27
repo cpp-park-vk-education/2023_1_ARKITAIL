@@ -9,14 +9,14 @@
 #include <map>
 #include <memory>
 
+#include "CalendarBodyW.hpp"
 #include "Managers.hpp"
 #include "SessionScopeMap.hpp"
-#include "calendar_body_w.hpp"
+#include "TreeW.hpp"
+#include "WeekW.hpp"
 #include "calendar_header_w.hpp"
 #include "day_w.hpp"
 #include "month_w.hpp"
-#include "tree_w.hpp"
-#include "week_w.hpp"
 
 CalendarW::CalendarW() {
     auto layout = setLayout(std::make_unique<Wt::WHBoxLayout>());
@@ -68,9 +68,9 @@ void CalendarW::addConnections() {
     show_tree_button_->clicked().connect(this, &CalendarW::showTree);
     header_->rangeChanged().connect(this, &CalendarW::setCalendarRange);
 
-    for (auto calendar : calendars_) {
-        header_->selectedDateChanged().connect(calendar.second, &ICalendarBodyW::updateCalendar);
-    }
+    // for (auto calendar : calendars_) {
+    //     header_->selectedDateChanged().connect(calendar.second, &ICalendarBodyW::updateCalendar);
+    // }
 }
 
 void CalendarW::showTree() {

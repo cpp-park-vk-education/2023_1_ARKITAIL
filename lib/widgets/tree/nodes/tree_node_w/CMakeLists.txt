@@ -1,14 +1,22 @@
-add_library(tree_node_w  src/tree_node_w.cpp)
+set(MODULE_NAME tree_node_w)
+set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-target_include_directories(tree_node_w  PUBLIC include)
+file(GLOB SOURCES ${SOURCE_DIR}/*.cpp)
 
-target_link_libraries(tree_node_w  PUBLIC
-                      calendula_compiler_flags
-                      options_w
-                      node
-                      tree
-                      dialog
-                      tree_node_w_analyst
-                      tree_node_w_director
-                      tree_node_w_builder
-                      )
+add_library(${MODULE_NAME} STATIC ${SOURCES})
+target_include_directories(${MODULE_NAME} PUBLIC ${INCLUDE_DIR})
+
+target_link_libraries(
+	${MODULE_NAME}
+	PUBLIC 
+	calendula_compiler_flags
+    options_w
+    node
+    tree
+    dialog
+    tree_node_w_analyst
+    tree_node_w_director
+    tree_node_w_builder
+)
+ 
