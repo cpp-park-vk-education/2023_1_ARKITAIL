@@ -20,7 +20,7 @@ class Calendar {
       std::string summary,
       std::string description,
       std::string visibility = std::string(),
-      std::string color = std::string());
+      std::string color = "#FFDAB9");
 
   size_t id;
   size_t node_id;

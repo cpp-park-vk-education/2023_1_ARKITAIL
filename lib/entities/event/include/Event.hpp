@@ -20,7 +20,6 @@ class Event {
       std::string description,
       Wt::WDateTime start,
       Wt::WDateTime end,
-      Wt::WColor color = Wt::WColor(100, 100, 40),
       bool is_recurrent = false,
       std::string frequency = std::string(),
       size_t interval = 0,

@@ -3,7 +3,7 @@
 #include <Wt/WBreak.h>
 
 #include "EventW.hpp"
-#include "Wt/WBreak.h"
+#include "SessionScopeMap.hpp"
 #include "time_utils.hpp"
 
 MonthW::MonthW() {
@@ -32,10 +32,13 @@ void MonthW::update(Wt::WDate begin_date, std::vector<Event> events) {
             ->addStyleClass("mx-auto d-block px-auto py-1 text-center");
     }
 
-   std::vector<EventW> events_w;
+    std::vector<EventW> events_w;
+
+    auto calendar_mgr = SessionScopeMap::instance().get()->managers()->calendar_manager();
 
     for (auto event : events) {
-        events_w.push_back(EventW(event.id, event.summary, event.color, event.start, event.end));
+        auto color = Wt::WColor(calendar_mgr->get(event.calendar_id)->color);
+        events_w.push_back(EventW(event.id, event.summary, color, event.start, event.end));
     }
 
     for (auto&& event : events_w) {

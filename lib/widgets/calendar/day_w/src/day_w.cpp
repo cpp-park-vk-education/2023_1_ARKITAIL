@@ -2,6 +2,7 @@
 
 #include "EventW.hpp"
 #include "time_utils.hpp"
+#include "SessionScopeMap.hpp"
 
 DayW::DayW() {
     table_->setHeaderCount(1, Wt::Orientation::Vertical);
@@ -18,8 +19,11 @@ void DayW::update(Wt::WDate begin_date, std::vector<Event> events) {
 
     std::vector<EventW> events_w;
 
+    auto calendar_mgr = SessionScopeMap::instance().get()->managers()->calendar_manager();
+
     for (auto event : events) {
-        events_w.push_back(EventW(event.id, event.summary, event.color, event.start, event.end));
+        auto color = Wt::WColor(calendar_mgr->get(event.calendar_id)->color);
+        events_w.push_back(EventW(event.id, event.summary, color, event.start, event.end));
     }
 
     for (auto&& event : events_w) {

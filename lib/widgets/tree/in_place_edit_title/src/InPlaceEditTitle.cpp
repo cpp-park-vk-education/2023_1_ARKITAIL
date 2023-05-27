@@ -13,7 +13,7 @@ InPlaceEditTitle::InPlaceEditTitle(std::string label) :
 }
 
 void InPlaceEditTitle::setTitle() {
-    if (text() != Wt::WString("") && text() != title_) {
+    if (!text().empty() && text() != title_ && text().toUTF8().length() <= 15) {
         title_ = text();
         // отправить что-то Сене
     } else {
