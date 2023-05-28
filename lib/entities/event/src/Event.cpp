@@ -14,8 +14,7 @@ Event::Event(
     Wt::WDateTime stamp,
     std::string frequency,
     int interval,
-    Wt::WDate until,
-    Wt::WColor color)
+    Wt::WDate until)
   : id(id),
     calendar_id(calendar_id),
     summary(std::move(summary)),
@@ -26,8 +25,7 @@ Event::Event(
     stamp(std::move(stamp)),
     frequency(std::move(frequency)),
     interval(interval),
-    until(std::move(until)),
-    color(std::move(color)) {
+    until(std::move(until)) {
 }
 
 // если событие не повторяется, то frequency == "",

@@ -17,7 +17,7 @@ class Calendar {
       std::string summary,
       std::string description,
       std::string visibility,
-      std::string color);
+      std::string color = "#FFDAB9");
 
   int id;
   int node_id;

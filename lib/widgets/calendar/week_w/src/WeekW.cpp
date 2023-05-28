@@ -12,6 +12,7 @@
 #include "CalendarBodyW.hpp"
 #include "Event.hpp"
 #include "EventW.hpp"
+#include "SessionScopeMap.hpp"
 
 WeekW::WeekW() {
     table_->setHeaderCount(1);
@@ -22,8 +23,6 @@ WeekW::WeekW() {
 }
 
 void WeekW::update(Wt::WDate begin_date, std::vector<Event> events) {
-    // selected_date = selected_date.addDays(1 - selected_date.dayOfWeek());
-
     table_->clear();
     makeHeaderTime();
     table_->insertRow(0);
@@ -44,8 +43,11 @@ void WeekW::update(Wt::WDate begin_date, std::vector<Event> events) {
 
     std::vector<EventW> events_w;
 
+    auto calendar_mgr = SessionScopeMap::instance().get()->managers()->calendar_manager();
+
     for (auto event : events) {
-        events_w.push_back(EventW(event.id, event.summary, event.color, event.start, event.end));
+        auto color = Wt::WColor(calendar_mgr->get(event.calendar_id)->color);
+        events_w.push_back(EventW(event.id, event.summary, color, event.start, event.end));
     }
 
     for (auto event : events_w) {
