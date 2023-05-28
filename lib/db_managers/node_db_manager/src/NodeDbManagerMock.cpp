@@ -1,4 +1,7 @@
 #include <memory>
+#include <string>
+
+#include <Wt/WLogger.h>
 
 #include "DbManagers.hpp"
 #include "DbMock.hpp"
@@ -13,10 +16,15 @@ NodeDbManagerMock::NodeDbManagerMock(std::shared_ptr<DbMock> db)
 }
 
 NodeSptr NodeDbManagerMock::get(int node_id) {
+  Wt::log("NodeDbManagerMock::get: requested " + std::to_string(node_id));
   for (auto e = db_->nodes.begin() + 1; e != db_->nodes.end(); e++)
-    if (e->id == node_id)
-      return std::make_shared<Node>(*e);
+    if (e->id == node_id) {
+      NodeSptr node = std::make_shared<Node>(*e);
+      Wt::log("NodeDbManagerMock::get: found; is nullptr: " + std::to_string(node == nullptr));
+      return node;
+    }
 
+  Wt::log("NodeDbManagerMock::get: not found");
   return std::make_shared<Node>(db_->nodes[0]);
 }
 
