@@ -5,9 +5,11 @@
 
 #include <Wt/WDateTime.h>
 #include <Wt/WDate.h>
+#include <Wt/WGlobal.h>
 #include <Wt/Dbo/Dbo.h>
 #include <Wt/Dbo/WtSqlTraits.h>
 #include <Wt/Dbo/Field.h>
+#include <Wt/Dbo/Types.h>
 #include <Wt/Dbo/collection.h>
 #include <Wt/Dbo/ptr.h>
 
@@ -33,6 +35,8 @@ using NodePtr = Wt::Dbo::ptr<Node>;
 using ProfilePtr = Wt::Dbo::ptr<Profile>;
 using TagPtr = Wt::Dbo::ptr<Tag>;
 using UserPtr = Wt::Dbo::ptr<User>;
+
+using AuthInfo = Wt::Auth::Dbo::AuthInfo<User>;
 
 class Calendar {
 public:
@@ -167,3 +171,5 @@ public:
   }
 };
 } // namespace db
+
+DBO_EXTERN_TEMPLATES(db::User);

@@ -10,13 +10,11 @@ target_link_libraries(
 	${MODULE_NAME} PUBLIC 
   calendula_compiler_flags
   deferred
-  session
 	session_scope_map
 	swapable
 	main_p
 	navbar_w
 	other_p
-  utils
 	wt 
 	wthttp
 )

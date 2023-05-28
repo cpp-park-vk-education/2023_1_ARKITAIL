@@ -23,6 +23,7 @@
 #include "NodeManager.hpp"
 #include "ProfileDbManagerMock.hpp"
 #include "ProfileManager.hpp"
+#include "Session.hpp"
 #include "SessionScope.hpp"
 #include "TagDbManagerMock.hpp"
 #include "UserDbManagerMock.hpp"
@@ -46,18 +47,21 @@ SessionScope* SessionScopeMap::get() {
 		ss = container_.find(sid);  // Можно было бы возвращать итератор из add
 	}
 
-    return ss->second.get();
+  return ss->second.get();
 }
 
 void SessionScopeMap::add(std::string sid) {
 	std::shared_ptr<DbMock> db_mock = std::make_shared<DbMock>();
 
     std::shared_ptr<IDbManagers> db = std::make_shared<DbManagers>(
-        std::make_unique<UserDbManagerMock>(db_mock), std::make_unique<NodeDbManagerMock>(db_mock),
+        std::make_unique<UserDbManagerMock>(db_mock),
+        std::make_unique<NodeDbManagerMock>(db_mock),
         std::make_unique<DirectoryDbManagerMock>(db_mock),
         std::make_unique<CalendarDbManagerMock>(db_mock),
-        std::make_unique<EventDbManagerMock>(db_mock), std::make_unique<CommentDbManagerMock>(),
-        std::make_unique<TagDbManagerMock>(), std::make_unique<ProfileDbManagerMock>());
+        std::make_unique<EventDbManagerMock>(db_mock),
+        std::make_unique<CommentDbManagerMock>(),
+        std::make_unique<TagDbManagerMock>(),
+        std::make_unique<ProfileDbManagerMock>());
 
 	container_.insert(
 		std::make_pair(
@@ -71,7 +75,8 @@ void SessionScopeMap::add(std::string sid) {
 					std::make_unique<EventManager>(db),
 					std::make_unique<ProfileManager>(db)
 				),
-				std::make_unique<ConnectionsMediator>()
+				std::make_unique<ConnectionsMediator>(),
+        std::make_unique<Session>()
 			)
 		)
 	);

@@ -2,8 +2,6 @@
 
 #include <Wt/WBootstrap5Theme.h>
 #include <Wt/WContainerWidget.h>
-#include <Wt/WLogger.h>
-#include <Wt/WText.h>
 #include <Wt/WWidget.h>
 
 #include <string>

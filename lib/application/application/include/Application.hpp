@@ -15,13 +15,11 @@
 
 class Application : public Wt::WApplication {
   public:
-    Application(const Wt::WEnvironment& env);
+    explicit Application(const Wt::WEnvironment& env);
 
     void route(const std::string& internalPath);
 
   private:
-    // TODO(affeeal): session
-
     std::unordered_map<std::string, Swapable<IDeferred<Wt::WContainerWidget>>> pages_;
     Swapable<IDeferred<Wt::WContainerWidget>> cur_swap_;
     Wt::WContainerWidget* cur_page_;
