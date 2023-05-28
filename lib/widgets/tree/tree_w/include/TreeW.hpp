@@ -15,8 +15,7 @@
 class TreeW : public Wt::WContainerWidget {
   public:
     TreeW();
-    ~TreeW() = default;
-    void setRoot(NodeSptr node);
+    void setRoot(const Node& node);
     void checkNode(ITreeNode* tree_node);
     void getRangeEvents(Wt::WDate date1, Wt::WDate date2);
 

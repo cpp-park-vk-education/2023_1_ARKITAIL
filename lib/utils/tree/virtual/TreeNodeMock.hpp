@@ -2,24 +2,24 @@
 
 class TreeNodeMock : public ITreeNode {
 public:
-    TreeNodeMock(NodeSptr node, ITreeNode* parent);
+    TreeNodeMock(const Node& node, ITreeNode* parent);
 
-    const Node& getNode();
-    ITreeNode* getParent();
+    const Node& getNode() override;
+    ITreeNode* getParent() override;
 
-    std::vector<ITreeNode*> getChildren();
-    ITreeNode* addChild(NodeSptr node);
-    std::unique_ptr<ITreeNode> remove();
+    std::vector<ITreeNode*> getChildren() override;
+    ITreeNode* addChild(const Node& node) override;
+    std::unique_ptr<ITreeNode> remove() override;
 
-    bool isChecked();
+    bool isChecked() override;
 
-    void check();
-    void uncheck();
+    void check() override;
+    void uncheck() override;
     
 private:
-    std::unique_ptr<ITreeNode> removeChild(ITreeNode* child);
+    std::unique_ptr<ITreeNode> removeChild(ITreeNode* child) override;
 
-    NodeSptr node_;
+    Node node_;
     ITreeNode* parent_;
     std::vector<std::unique_ptr<ITreeNode>> children_;
     bool checked_;

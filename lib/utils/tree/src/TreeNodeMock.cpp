@@ -1,13 +1,13 @@
 #include "TreeNodeMock.hpp"
 
-TreeNodeMock::TreeNodeMock(NodeSptr node, ITreeNode* parent) :
+TreeNodeMock::TreeNodeMock(const Node& node, ITreeNode* parent) :
     node_(node),
     children_(),
     checked_(false),
     parent_(parent) {}
 
 const Node& TreeNodeMock::getNode() {
-    return *node_;
+    return node_;
 }
 
 ITreeNode* TreeNodeMock::getParent() {
@@ -23,7 +23,7 @@ std::vector<ITreeNode*> TreeNodeMock::getChildren() {
     return children;
 }
 
-ITreeNode* TreeNodeMock::addChild(NodeSptr node) {
+ITreeNode* TreeNodeMock::addChild(const Node& node) {
     std::unique_ptr<ITreeNode> tree_node = std::make_unique<TreeNodeMock>(node, this);
     children_.emplace_back(std::move(tree_node));
     return children_.back().get();

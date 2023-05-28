@@ -8,17 +8,17 @@ help: # Show help for each of the Makefile recipes.
 
 .PHONY: clean
 clean: # Delete build/ and .cache/ directories.
-	rm -rf .build/ .cache/
+	rm -rf build/ .cache/
 	
 .PHONY: generate
 generate: # Generate a build recipe in a build/ directory.
 	cmake \
 		-DCMAKE_BUILD_TYPE=Debug \
 		-DBUILD_TESTS=ON \
-		-B .build/
+		-B build/
 
 silent-build:
-	cmake --build .build/
+	cmake --build build/
 
 .PHONY: build
 build: # Use a generated recipe to build artifacts.
@@ -26,7 +26,7 @@ build: # Use a generated recipe to build artifacts.
 
 .PHONY: test
 test: # Run all Google tests.
-	ctest --test-dir .build/
+	ctest --test-dir build/
 
 # TODO: coverage, lint
 
@@ -46,7 +46,7 @@ remove: # Remove development container and down all dependences.
 
 .PHONY: debug
 debug: # Run application
-	./.build/Calendula \
+	./build/Calendula \
 		--docroot . \
 		--http-address 0.0.0.0 \
 		--http-port 8080 \

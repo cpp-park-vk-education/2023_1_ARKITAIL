@@ -49,7 +49,7 @@ TreeW::TreeW() :
     remember_combination_button_->clicked().connect(this, &TreeW::rememberCombination);
 }
 
-void TreeW::setRoot(NodeSptr node) {
+void TreeW::setRoot(const Node& node) {
     auto ss = SessionScopeMap::instance().get();
     auto mgr = ss->managers();
 
@@ -59,13 +59,13 @@ void TreeW::setRoot(NodeSptr node) {
 
     auto root = TreeNodeWDirector().fillNode(TreeNodeWAnalyst().analyseTreeNodeWChild(tree_node));
 
-    if (node->type & NodeType::PUBLIC_CALENDAR) {
-        auto calendar = mgr->calendar_manager()->get(node->resource_id);
+    if (node.type & NodeType::PUBLIC_CALENDAR) {
+        auto calendar = mgr->calendar_manager()->get(node.resource_id);
         root_ = addWidget(std::move(root));
 
     } else {
-        auto directory = mgr->directory_manager()->get(node->resource_id);
-        if (node->type & NodeType::ROOT) {
+        auto directory = mgr->directory_manager()->get(node.resource_id);
+        if (node.type & NodeType::ROOT) {
             root_ = addWidget(std::move(root));
         } else {
             root_ = addWidget(std::move(root));
