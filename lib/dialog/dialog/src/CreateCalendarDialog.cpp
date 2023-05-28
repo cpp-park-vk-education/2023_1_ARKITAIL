@@ -33,7 +33,8 @@ CreateCalendarDialog::CreateCalendarDialog(ITreeNode* node)
     : Wt::WDialog("Календарь"),
       node_(node) {
   setClosable(true);
-  setMinimumSize(500, 600);
+  setWidth(600);
+  setHeight(600);
   setMovable(false);
 
   auto tabs = std::make_unique<Wt::WTabWidget>();
@@ -78,11 +79,9 @@ void CreateCalendarDialog::HandleSettings() {
     model->UpdateCalendar();
 
     IManagers* managers = SessionScopeMap::instance().get()->managers();
-    // будет заменено на то, что ниже
-    size_t calendar_id = managers->calendar_manager()->add(model->calendar());
-    // size_t calendar_id = managers->calendar_manager()->add(
-    //     model->calendar(),
-    //     node_->getNode().resource_id);
+    size_t calendar_id = managers->calendar_manager()->add(
+        model->calendar(),
+        node_->getNode().resource_id);
     CalendarSptr created_calendar
         = managers->calendar_manager()->get(calendar_id);
     node_created_.emit(
@@ -132,11 +131,9 @@ void CreateCalendarDialog::HandleImport() {
   
   for (CalendarSptr calendar : calendars) {
     IManagers* managers = SessionScopeMap::instance().get()->managers();
-    // будет заменено на то, что ниже
-    size_t calendar_id = managers->calendar_manager()->add(calendar);
-    // size_t calendar_id = managers->calendar_manager()->add(
-    //     calendar,
-    //     node_->getNode().resource_id);
+    size_t calendar_id = managers->calendar_manager()->add(
+        calendar,
+        node_->getNode().resource_id);
     CalendarSptr created_calendar
         = managers->calendar_manager()->get(calendar_id);
     node_created_.emit(
@@ -149,7 +146,7 @@ void CreateCalendarDialog::HandleImport() {
   _import->bindWidget("validation-status", std::move(validation_success));
 }
 
-Wt::Signal<Node>& CreateCalendarDialog::node_created() {
+Wt::Signal<NodeSptr>& CreateCalendarDialog::node_created() {
   return node_created_;
 }
 } // namespace dialog

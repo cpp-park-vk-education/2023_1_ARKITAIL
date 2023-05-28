@@ -5,6 +5,7 @@
 #include "Node.hpp"
 #include "SessionScopeMap.hpp"
 #include "TreeNode.hpp"
+#include "User.hpp"
 
 class SessionSuit : public ::testing::Test {
 protected:
@@ -20,17 +21,17 @@ protected:
 };
 
 TEST_F(SessionSuit, TreeNodeCreation) {
-	User user = managers->user_manager()->get();
-	Node node = managers->node_manager()->get(user.root_id);
+	UserSptr user = managers->user_manager()->get();
+	NodeSptr node = managers->node_manager()->get(user->root_id);
 
-	EXPECT_NO_THROW((TreeNode(node)));
+	EXPECT_NO_THROW((TreeNode(*node)));
 }
 
 TEST_F(SessionSuit, TreeNodeGettingChilds) {
-	User user = managers->user_manager()->get();
-	Node node = managers->node_manager()->get(user.root_id);
+	UserSptr user = managers->user_manager()->get();
+	NodeSptr node = managers->node_manager()->get(user->root_id);
 
-	TreeNode tree_node = {node};
+	TreeNode tree_node(*node);
 
 	std::vector<Node> expected_children = {
 		Node(3, 1, 3, PRIVATE_GROUP),
@@ -53,10 +54,10 @@ TEST_F(SessionSuit, TreeNodeGettingChilds) {
 }
 
 TEST_F(SessionSuit, TreeNodeRemovingChild) {
-	User user = managers->user_manager()->get();
-	Node node = managers->node_manager()->get(user.root_id);
+	UserSptr user = managers->user_manager()->get();
+	NodeSptr node = managers->node_manager()->get(user->root_id);
 
-	TreeNode tree_node = {node};
+	TreeNode tree_node(*node);
 
 	std::vector<ITreeNode*> children = tree_node.getChildren();
 	std::vector<ITreeNode*> children1 = children[0]->getChildren();
@@ -70,10 +71,10 @@ TEST_F(SessionSuit, TreeNodeRemovingChild) {
 }
 
 TEST_F(SessionSuit, TreeNodeAdditionChild) {
-	User user = managers->user_manager()->get();
-	Node node = managers->node_manager()->get(user.root_id);
+	UserSptr user = managers->user_manager()->get();
+	NodeSptr node = managers->node_manager()->get(user->root_id);
 	
-	TreeNode tree_node = {node};
+	TreeNode tree_node(*node);
 
 	std::vector<ITreeNode*> children = tree_node.getChildren();
 	std::vector<ITreeNode*> children1 = children[1]->getChildren();

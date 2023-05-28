@@ -5,8 +5,6 @@
 #include <Wt/WColorPicker.h>
 #include <Wt/WComboBox.h>
 #include <Wt/WLineEdit.h>
-#include <Wt/WPushButton.h>
-#include <Wt/WString.h>
 #include <Wt/WTemplateFormView.h>
 #include <Wt/WTextArea.h>
 

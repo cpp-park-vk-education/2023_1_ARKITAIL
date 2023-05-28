@@ -15,7 +15,6 @@ TreeNodeWSubAnalyst::TreeNodeWSubAnalyst() {}
 TreeNodeWConvertedData TreeNodeWSubAnalyst::analyseTreeNodeWChild(ITreeNode* tree_node) {
     Node node = tree_node->getNode();
     auto mgr = SessionScopeMap::instance().get()->managers();
-    User user = mgr->user_manager()->get();
     TreeNodeWConvertedData data;
 
     std::vector<std::string> tags;
@@ -26,16 +25,16 @@ TreeNodeWConvertedData TreeNodeWSubAnalyst::analyseTreeNodeWChild(ITreeNode* tre
                                       child->summary,
                                       child->description,
                                       tags,
-                                      mgr->user_manager()->get(child->owner_id),
+                                      *mgr->user_manager()->get(child->owner_id),
                                       tree_node};
 
     } else if (node.type & NodeType::PUBLIC_DIRECTORY) {
-        Directory child = mgr->directory_manager()->get(tree_node->getNode().resource_id);
+        DirectorySptr child = mgr->directory_manager()->get(tree_node->getNode().resource_id);
         data = TreeNodeWConvertedData{TreeNodeWType::SUB_DIR,
-                                      child.name,
-                                      child.description,
+                                      child->name,
+                                      child->description,
                                       tags,
-                                      mgr->user_manager()->get(child.owner_id),
+                                      *mgr->user_manager()->get(child->owner_id),
                                       tree_node};
     }
     return data;

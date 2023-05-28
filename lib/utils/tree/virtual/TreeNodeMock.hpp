@@ -4,20 +4,20 @@ class TreeNodeMock : public ITreeNode {
 public:
     TreeNodeMock(const Node& node, ITreeNode* parent);
 
-    const Node& getNode();
-    ITreeNode* getParent();
+    const Node& getNode() override;
+    ITreeNode* getParent() override;
 
-    std::vector<ITreeNode*> getChildren();
-    ITreeNode* addChild(const Node& node);
-    std::unique_ptr<ITreeNode> remove();
+    std::vector<ITreeNode*> getChildren() override;
+    ITreeNode* addChild(const Node& node) override;
+    std::unique_ptr<ITreeNode> remove() override;
 
-    bool isChecked();
+    bool isChecked() override;
 
-    void check();
-    void uncheck();
+    void check() override;
+    void uncheck() override;
     
 private:
-    std::unique_ptr<ITreeNode> removeChild(ITreeNode* child);
+    std::unique_ptr<ITreeNode> removeChild(ITreeNode* child) override;
 
     Node node_;
     ITreeNode* parent_;

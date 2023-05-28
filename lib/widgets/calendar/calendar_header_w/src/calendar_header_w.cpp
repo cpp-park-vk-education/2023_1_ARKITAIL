@@ -10,6 +10,7 @@
 
 #include <memory>
 
+#include "Event.hpp"
 #include "time_utils.hpp"
 
 CalendarHeaderW::CalendarHeaderW() :
@@ -20,7 +21,7 @@ CalendarHeaderW::CalendarHeaderW() :
     container_option_range_(),
     option_range_(),
 
-    added_event_(),
+    events_range_changed(),
     change_selected_date_(),
     change_range_(),
 
@@ -46,9 +47,9 @@ void CalendarHeaderW::addStyle() {
 
 void CalendarHeaderW::setRange() {
     range_ = Range(option_range_->currentIndex());
-    change_range_.emit(range_);
-    change_selected_date_.emit(selected_date_);
     calendar_title_->setText(makeTitle());
+    change_range_.emit(range_);
+    emitDates();
 }
 
 Wt::WDate CalendarHeaderW::switchSelectedDate(SwitchingDirection direction) {
@@ -70,30 +71,29 @@ Wt::WDate CalendarHeaderW::switchSelectedDate(SwitchingDirection direction) {
 }
 
 void CalendarHeaderW::switchToToday() {
-    change_selected_date_.emit(switchSelectedDate(SwitchingDirection::TODAY));
     calendar_title_->setText(makeTitle());
+    switchSelectedDate(SwitchingDirection::TODAY);
+    emitDates();
 }
 
 void CalendarHeaderW::switchToPrev() {
-    change_selected_date_.emit(switchSelectedDate(SwitchingDirection::BACK));
+    switchSelectedDate(SwitchingDirection::BACK);
     calendar_title_->setText(makeTitle());
+    emitDates();
 }
 
 void CalendarHeaderW::switchToNext() {
-    change_selected_date_.emit(switchSelectedDate(SwitchingDirection::FORWARD));
-    calendar_title_->setText(makeTitle());
+    switchSelectedDate(SwitchingDirection::FORWARD);
+    calendar_title_->setText(makeTitle());  
+    emitDates();
 }
 
-Wt::Signal<Wt::WDate>& CalendarHeaderW::selectedDateChanged() {
-    return change_selected_date_;
+Wt::Signal<Wt::WDate, Wt::WDate>& CalendarHeaderW::selectedDateChanged() {
+    return selected_date_changed_;
 }
 
 Wt::Signal<Range>& CalendarHeaderW::rangeChanged() {
     return change_range_;
-}
-
-Wt::Signal<>& CalendarHeaderW::eventAdded() {
-    return added_event_;
 }
 
 void CalendarHeaderW::setSelectedDate(Wt::WDate new_date) {
@@ -129,4 +129,27 @@ CalendarHeaderW* CalendarHeaderW::addConnections() {
     next_button_->clicked().connect(this, &CalendarHeaderW::switchToNext);
     option_range_->changed().connect(this, &CalendarHeaderW::setRange);
     return this;
+}
+
+void CalendarHeaderW::emitDates() {
+    Wt::WDate date1, date2;
+    switch (range_) {
+        case Range::DAY:
+            date1 = selected_date_;
+            date2 = selected_date_;
+            break;
+        case Range::WEEK:
+            date1 = selected_date_.addDays(1 - selected_date_.dayOfWeek());
+            date2 = selected_date_.addDays(TimeInterval::DAYS_IN_WEEK - selected_date_.dayOfWeek());
+            break;
+        case Range::MONTH:
+            auto first_day_of_month = Wt::WDate(selected_date_.year(), selected_date_.month(), 1);
+            date1 = first_day_of_month.addDays(1 - first_day_of_month.dayOfWeek());
+            date2 = date1.addDays(5 * TimeInterval::DAYS_IN_WEEK);
+            break;
+    }
+    std::cout << "\nотправляется сигнал из хедера с двумя датами в дерево, то есть "
+                 "selected_date_changed_ emit\n"
+              << std::endl;
+    selected_date_changed_.emit(date1, date2);
 }

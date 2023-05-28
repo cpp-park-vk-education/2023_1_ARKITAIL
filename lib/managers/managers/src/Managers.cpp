@@ -1,9 +1,11 @@
-#include "IEventManager.hpp"
-#include "SessionScopeMap.hpp"
 #include "Managers.hpp"
+
 #include <algorithm>
 #include <memory>
 #include <thread>
+
+#include "IEventManager.hpp"
+#include "SessionScopeMap.hpp"
 
 Managers::Managers(
 	std::unique_ptr<IUserManager> user_manager,

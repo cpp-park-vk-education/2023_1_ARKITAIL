@@ -30,8 +30,6 @@ test: # Run all Google tests.
 
 # TODO: coverage, lint
 
-# TODO: подумать над неймингами :)
-
 .PHONY: run
 run: # Run development container and up all dependences.
 	docker compose run --build --publish 8080:8080 dev

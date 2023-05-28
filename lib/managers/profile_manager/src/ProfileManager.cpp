@@ -7,11 +7,11 @@
 ProfileManager::ProfileManager(std::shared_ptr<IDbManagers> db) :
 	db_(db) {}
 
-Profile ProfileManager::get(size_t profile_id) {
+ProfileSptr ProfileManager::get(size_t profile_id) {
 	return db_->profile_dbm()->get(profile_id);
 }
 
-size_t ProfileManager::add(const Profile& profile) {
+size_t ProfileManager::add(ProfileSptr profile) {
 	return db_->profile_dbm()->add(profile);
 }
 

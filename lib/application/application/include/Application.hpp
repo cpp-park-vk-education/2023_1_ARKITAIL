@@ -10,8 +10,8 @@
 #include "ConnectionsMediator.hpp"
 #include "Managers.hpp"
 #include "Swapable.hpp"
-#include "UnmetDeps.hpp"
 #include "navbar_w.hpp"
+#include "IDeferred.hpp"
 
 class Application : public Wt::WApplication {
   public:
@@ -20,10 +20,10 @@ class Application : public Wt::WApplication {
     void route(const std::string& internalPath);
 
   private:
-    Session session_;
+    // TODO(affeeal): session
 
-    std::unordered_map<std::string, Swapable<Wt::WContainerWidget>> pages_;
-    Swapable<Wt::WContainerWidget> cur_swap_;
+    std::unordered_map<std::string, Swapable<IDeferred<Wt::WContainerWidget>>> pages_;
+    Swapable<IDeferred<Wt::WContainerWidget>> cur_swap_;
     Wt::WContainerWidget* cur_page_;
 
     NavbarW* navbar_;

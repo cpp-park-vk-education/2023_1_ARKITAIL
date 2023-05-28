@@ -3,20 +3,21 @@
 #include <Wt/WApplication.h>
 #include <Wt/WContainerWidget.h>
 #include <Wt/WHBoxLayout.h>
+#include <Wt/WLogger.h>
 #include <Wt/WPushButton.h>
 #include <Wt/WString.h>
 
 #include <map>
 #include <memory>
 
+#include "CalendarBodyW.hpp"
 #include "Managers.hpp"
 #include "SessionScopeMap.hpp"
-#include "calendar_body_w.hpp"
+#include "TreeW.hpp"
+#include "WeekW.hpp"
 #include "calendar_header_w.hpp"
 #include "day_w.hpp"
 #include "month_w.hpp"
-#include "tree_w.hpp"
-#include "week_w.hpp"
 
 CalendarW::CalendarW() {
     auto layout = setLayout(std::make_unique<Wt::WHBoxLayout>());
@@ -34,8 +35,8 @@ TreeW* CalendarW::addTree(std::unique_ptr<TreeW> tree) {
 
     // В дальнейшем метод setRoot будет вызываться по сигналу перехода на страницу
     auto mgr = SessionScopeMap::instance().get()->managers();
-    auto node = mgr->node_manager()->get(mgr->user_manager()->get().root_id);
-    tree_->setRoot(node);
+    auto node = mgr->node_manager()->get(mgr->user_manager()->get()->root_id);
+    tree_->setRoot(*node);
 
     show_tree_button_ =
         tree_panel_layout->addWidget(std::make_unique<Wt::WPushButton>(Wt::WString(">")));
@@ -68,9 +69,9 @@ void CalendarW::addConnections() {
     show_tree_button_->clicked().connect(this, &CalendarW::showTree);
     header_->rangeChanged().connect(this, &CalendarW::setCalendarRange);
 
-    for (auto calendar : calendars_) {
-        header_->selectedDateChanged().connect(calendar.second, &ICalendarBodyW::updateCalendar);
-    }
+    // for (auto calendar : calendars_) {
+    //     header_->selectedDateChanged().connect(calendar.second, &ICalendarBodyW::updateCalendar);
+    // }
 }
 
 void CalendarW::showTree() {

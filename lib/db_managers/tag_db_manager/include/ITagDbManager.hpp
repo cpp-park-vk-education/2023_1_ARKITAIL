@@ -4,10 +4,10 @@
 
 class ITagDbManager {
 public:
-	virtual const Tag& get(size_t tag_id) = 0;
-	virtual size_t add(const Tag& tag) = 0;
-	virtual void update(const Tag& tag) = 0;
-	virtual void remove(size_t tag_id) = 0;
+	virtual TagSptr get(int tag_id) = 0;
+	virtual int add(TagSptr tag) = 0;
+	virtual void update(TagSptr tag) = 0;
+	virtual void remove(int tag_id) = 0;
 
 };
 

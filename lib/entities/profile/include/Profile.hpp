@@ -1,18 +1,25 @@
 #pragma once
 
-#include <cstddef>
+#include <memory>
 #include <vector>
+
+class Profile;
+using ProfileSptr = std::shared_ptr<Profile>;
 
 class Profile {
 public:
-    Profile();
-    Profile(size_t id, size_t node_id, size_t owner_id, std::vector<size_t> nodes);
+    Profile() = default;
+    explicit Profile(
+        int id,
+        int node_id,
+        int owner_id,
+        std::vector<int> nodes);
 
-    size_t id;
-    size_t node_id;
-    size_t owner_id;
+    int id;
+    int node_id;
+    int owner_id;
 
-    std::vector<size_t> nodes;
+    std::vector<int> nodes;
 
 };
 

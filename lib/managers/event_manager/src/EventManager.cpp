@@ -11,11 +11,11 @@
 EventManager::EventManager(std::shared_ptr<IDbManagers> db) :
     db_(db) {}
 
-EventSptr EventManager::get(size_t event_id) {
+EventSptr EventManager::get(int event_id) {
     return db_->event_dbm()->get(event_id);
 }
 
-size_t EventManager::add(EventSptr event) {
+int EventManager::add(EventSptr event) {
     return db_->event_dbm()->add(event);
 }
 
@@ -23,15 +23,7 @@ void EventManager::update(EventSptr event) {
     db_->event_dbm()->update(event);
 }
 
-void EventManager::remove(size_t event_id) {
+void EventManager::remove(int event_id) {
     db_->event_dbm()->remove(event_id);
 }
 
-std::vector<Comment> EventManager::getComments(size_t event_id) {
-    return db_->event_dbm()->getComments(event_id);
-}
-
-std::chrono::time_point<EventManager::clock_t> EventManager::parseTime(std::string str_time) {
-    // TODO(uma_op): IMPLEMENT ME
-    return std::chrono::time_point<clock_t>();
-}

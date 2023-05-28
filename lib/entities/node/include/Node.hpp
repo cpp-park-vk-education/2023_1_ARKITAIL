@@ -1,6 +1,9 @@
 #pragma once
 
-#include <cstddef>
+#include <memory>
+
+class Node;
+using NodeSptr = std::shared_ptr<Node>;
 
 enum NodeType {
     ROOT = 1 << 1,
@@ -28,14 +31,11 @@ enum GenericNodeType {
 class Node {
 public:
     Node() = default;
+    Node(int id, int parent_id, int rosource_id, NodeType type);
 
-    Node(size_t id, size_t parent_id, size_t rosource_id, NodeType type);
-
-    Node(const Node& node);
-
-    size_t id;
-    size_t parent_id;
-    size_t resource_id;
+    int id;
+    int parent_id;
+    int resource_id;
 
     NodeType type;
 };

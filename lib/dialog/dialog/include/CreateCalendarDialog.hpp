@@ -5,21 +5,20 @@
 
 #include "Calendar.hpp"
 #include "ITreeNode.hpp"
-#include "Node.hpp"
 
 namespace dialog {
 class CreateCalendarDialog : public Wt::WDialog {
  public:
   CreateCalendarDialog(ITreeNode* node);
 
-  Wt::Signal<Node>& node_created();
+  Wt::Signal<NodeSptr>& node_created();
  private:
   void ChooseHandler();
 
   void HandleSettings();
   void HandleImport();
 
-  Wt::Signal<Node> node_created_;
+  Wt::Signal<NodeSptr> node_created_;
 
   Wt::WTabWidget* tabs_;
   ITreeNode* node_;

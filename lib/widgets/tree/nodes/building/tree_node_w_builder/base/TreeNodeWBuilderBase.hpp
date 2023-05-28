@@ -2,12 +2,14 @@
 
 #include <memory>
 
+#include "ConnectionPoint.hpp"
 #include "ITreeNode.hpp"
 #include "ITreeNodeWAnalyst.hpp"
+#include "OptionsW.hpp"
 #include "User.hpp"
-#include "options_w.hpp"
 
 class TreeNodeW;
+class TreeW;
 
 class TreeNodeWBuilderBase {
   protected:
@@ -19,7 +21,12 @@ class TreeNodeWBuilderBase {
 
     TreeNodeWBuilderBase* addAnalyst(std::unique_ptr<ITreeNodeWAnalyst>);
     TreeNodeWBuilderBase* addHead(std::unique_ptr<Wt::WWidget> head);
+    TreeNodeWBuilderBase* addTextHead(std::unique_ptr<Wt::WText> head);
+
+    TreeNodeWBuilderBase* addCheckBoxConnectionPoint(
+        ConnectionPoint<Wt::Signal<ITreeNode*>, TreeW, ITreeNode*>* cp);
     TreeNodeWBuilderBase* addCheckBox();
+
     TreeNodeWBuilderBase* addOptions(std::unique_ptr<OptionsW> options);
 
     TreeNodeWBuilderBase* addToolTip(std::string description, std::vector<std::string> tags);

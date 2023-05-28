@@ -13,7 +13,7 @@ CalendarDbManagerMock::CalendarDbManagerMock(std::shared_ptr<DbMock> db) :
 	aid_ = db_->calendars.size();
 }
 
-CalendarSptr CalendarDbManagerMock::get(size_t calendar_id) {
+CalendarSptr CalendarDbManagerMock::get(int calendar_id) {
 	for (auto e = db_->calendars.begin() + 1; e != db_->calendars.end(); e++)
 		if (e->id == calendar_id)
 			return std::make_shared<Calendar>(*e);
@@ -21,13 +21,15 @@ CalendarSptr CalendarDbManagerMock::get(size_t calendar_id) {
 	return std::make_shared<Calendar>(db_->calendars[0]);
 }
 
-size_t CalendarDbManagerMock::add(CalendarSptr calendar) {
+int CalendarDbManagerMock::add(CalendarSptr calendar) {
 	db_->calendars.emplace_back(
 		aid_,
 		calendar->node_id,
 		calendar->owner_id,
 		calendar->summary,
-		calendar->description
+		calendar->description,
+		calendar->visibility,
+		calendar->color
 	);
 
 	return aid_++;
@@ -39,18 +41,18 @@ void CalendarDbManagerMock::update(CalendarSptr calendar) {
 			e = *calendar;
 }
 
-void CalendarDbManagerMock::remove(size_t calendar_id) {
+void CalendarDbManagerMock::remove(int calendar_id) {
 	for (auto e = db_->calendars.begin() + 1; e != db_->calendars.end(); e++)
 		if (e->id == calendar_id)
 			db_->calendars.erase(e);
 }
 
-std::vector<EventSptr> CalendarDbManagerMock::getEvents(size_t calendar_id) {
-	std::vector<EventSptr> events;
+std::vector<Event> CalendarDbManagerMock::getEvents(int calendar_id) {
+	std::vector<Event> events;
 
 	for (auto e = db_->events.begin() + 1; e != db_->events.end(); e++)
 		if (e->calendar_id == calendar_id)
-			events.push_back(std::make_shared<Event>(*e));
+			events.push_back(*e);
 
 	return events;
 }

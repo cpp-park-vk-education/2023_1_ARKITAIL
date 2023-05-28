@@ -1,6 +1,8 @@
 #include "Tree.hpp"
 #include "TreeNode.hpp"
 
+#include <Wt/WDate.h>
+#include <Wt/WDateTime.h>
 #include <queue>
 #include <vector>
 
@@ -27,11 +29,19 @@ std::vector<Event> Tree::getCheckedEvents() {
 
     while (!q.empty()) {
         if ((q.front()->getNode().type & (PUBLIC_CALENDAR | PRIVATE_CALENDAR)) &&
-            q.front()->isChecked())
-            for (auto e : mgr->calendar_manager()->getEvents(q.front()->getNode().resource_id))
-                v.push_back(*e);
+            q.front()->isChecked()) {
 
-        for (auto c : q.front()->getChildren()) q.push(c);
+            std::cout << "Calendar id: " << q.front()->getNode().resource_id << std::endl;
+            for (auto e : mgr->calendar_manager()->getEvents(q.front()->getNode().resource_id)) {
+                std::cout << "Event id: " << e.id << std::endl;
+                v.push_back(e);
+            }
+        }
+
+        for (auto c : q.front()->getChildren()) {
+            std::cout << "Children node id: " << c->getNode().id << std::endl;
+            q.push(c);
+        }
 
         q.pop();
     }
@@ -39,21 +49,32 @@ std::vector<Event> Tree::getCheckedEvents() {
     return v;
 }
 
-std::vector<Event> Tree::checkNode(ITreeNode* node) {
+std::vector<Event> Tree::getCheckedEventsByInterval(Wt::WDateTime begin, Wt::WDateTime end) {
+    std::vector<Event> v;
+
+    for (auto e : getCheckedEvents()) {
+        std::cout << "HERE" << std::endl;
+        std::cout << e.start.toString("d MMMM yyyy") << " to " << e.end.toString("d MMMM yyyy") << std::endl;
+        std::cout << begin.toString("d MMMM yyyy") << " to " << end.toString("d MMMM yyyy") << std::endl;
+        if (e.start <= end && e.end >= begin) {
+            v.push_back(e);
+            std::cout << "HERE1" << std::endl;
+        }
+    }
+
+    return v;
+}
+
+void Tree::checkNode(ITreeNode* node) {
     auto mgr = SessionScopeMap::instance().get()->managers();
 
     std::queue<ITreeNode*> q;
-    std::vector<Event> v;
 
     q.push(node);
 
     while (!q.empty()) {
-        if (q.front()->isChecked()) {
+        if (!q.front()->isChecked()) {
             q.front()->check();
-
-            if (q.front()->getNode().type & (PUBLIC_DIRECTORY | PUBLIC_DIRECTORY))
-                for (auto e : mgr->calendar_manager()->getEvents(q.front()->getNode().resource_id))
-                    v.push_back(*e);
 
             for (auto c : q.front()->getChildren())
                 q.push(c);
@@ -61,8 +82,6 @@ std::vector<Event> Tree::checkNode(ITreeNode* node) {
 
         q.pop();
     }
-
-    return v;
 }
 
 void Tree::uncheckNode(ITreeNode* node) {
@@ -72,8 +91,20 @@ void Tree::uncheckNode(ITreeNode* node) {
         cur_node->uncheck();
         cur_node = cur_node->getParent();
     }
+
+    std::queue<ITreeNode*> q;
+    q.push(node);
+
+    while (!q.empty()) {
+        q.front()->uncheck();
+        
+        for (auto c : q.front()->getChildren())
+            q.push(c);
+
+        q.pop();
+    }
 }
 
-size_t Tree::checked() {
+int Tree::checked() {
     return checked_;
 }

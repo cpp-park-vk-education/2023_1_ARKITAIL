@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "ITreeNode.hpp"
@@ -17,15 +18,14 @@ TreeNode::TreeNode(const Node& node, ITreeNode* parent) :
     parent_(parent),
     children_(),
     checked_(false) {
-
     auto mgr = SessionScopeMap::instance().get()->managers();
-
-    for (auto c : mgr->node_manager()->getChildren(node.id)) {
-        if (c.type & MOUNT)
-            children_.emplace_back(
-                std::make_unique<TreeNode>(mgr->node_manager()->get(c.resource_id), this));
-        else
-            children_.emplace_back(std::make_unique<TreeNode>(c, this));
+    for (auto child : mgr->node_manager()->getChildren(node.id)) {
+        if (child.type & MOUNT) {
+          auto mount_node = mgr->node_manager()->get(child.resource_id);
+          children_.emplace_back(std::make_unique<TreeNode>(*mount_node, this));
+        } else {
+          children_.emplace_back(std::make_unique<TreeNode>(child, this));
+        }
     }
 }
 
@@ -40,7 +40,8 @@ ITreeNode* TreeNode::getParent() {
 std::vector<ITreeNode*> TreeNode::getChildren() {
     std::vector<ITreeNode*> children;
 
-    for (size_t i = 0; i < children_.size(); i++) children.push_back(children_[i].get());
+    for (size_t i = 0; i < children_.size(); i++)
+        children.push_back(children_[i].get());
 
     return children;
 }
@@ -60,6 +61,7 @@ void TreeNode::check() {
 }
 
 void TreeNode::uncheck() {
+    std::cout << "Unchecked" << std::endl;
     checked_ = false;
 }
 

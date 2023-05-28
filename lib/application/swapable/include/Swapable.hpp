@@ -15,7 +15,7 @@ public:
 	void build_destination();
 
 	void set_content(std::unique_ptr<T> content);
-	std::unique_ptr<T> get_content();
+	T* get_content();
 
 private:
 	Swapable* destination_;
@@ -57,7 +57,7 @@ void Swapable<T>::set_content(std::unique_ptr<T> content) {
 }
 
 template<typename T>
-std::unique_ptr<T> Swapable<T>::get_content() {
-	return std::move(content_);
+T* Swapable<T>::get_content() {
+	return content_.get();
 }
 

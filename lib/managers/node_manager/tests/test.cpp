@@ -68,12 +68,12 @@ TEST_F(ManagersSuit, GetRootNodeOfCurrentUser) {
 	auto user = managers->user_manager()->get();
 
 	Node expected = {1, 1, 1, NodeType::ROOT};
-	auto got = managers->node_manager()->get(user.root_id);
+	auto got = managers->node_manager()->get(user->root_id);
 	
-	EXPECT_EQ(expected.id, got.id);
-	EXPECT_EQ(expected.parent_id, got.parent_id);
-	EXPECT_EQ(expected.resource_id, got.resource_id);
-	EXPECT_EQ(expected.type, got.type);
+	EXPECT_EQ(expected.id, got->id);
+	EXPECT_EQ(expected.parent_id, got->parent_id);
+	EXPECT_EQ(expected.resource_id, got->resource_id);
+	EXPECT_EQ(expected.type, got->type);
 }
 
 TEST_F(ManagersSuit, GetChildrens) {
@@ -86,8 +86,8 @@ TEST_F(ManagersSuit, GetChildrens) {
 		Node(6, 1, 6, NodeType::PROFILE_GROUP)
 	};
 
-	auto root_node = managers->node_manager()->get(user.root_id);
-	auto got = managers->node_manager()->getChildren(root_node.id);
+	auto root_node = managers->node_manager()->get(user->root_id);
+	auto got = managers->node_manager()->getChildren(root_node->id);
 
 	EXPECT_FALSE(got.empty());
 
@@ -107,7 +107,8 @@ TEST_F(ManagersSuit, AddNodeToCurrentUser) {
 		PRIVATE_DIRECTORY
 	};
 
-	new_node.id = managers->node_manager()->add(new_node);
+	new_node.id = managers->node_manager()->add(
+      std::make_shared<Node>(std::move(new_node)));
 	EXPECT_NE(new_node.id, 0);
 }
 
@@ -122,7 +123,8 @@ TEST_F(ManagersSuit, AddNodeToOthrerUser) {
 		PRIVATE_DIRECTORY
 	};
 
-	size_t new_node_id = managers->node_manager()->add(new_node);
+	size_t new_node_id = managers->node_manager()->add(
+      std::make_shared<Node>(std::move(new_node)));
 	EXPECT_EQ(new_node_id, 0);
 }
 

@@ -52,65 +52,73 @@ DbMock::DbMock() {
     directories.emplace_back(13, 19, 1, "PrivateDirectory", "desc");
     directories.emplace_back(14, 22, 1, "PublicDirectory", "desc");
 
-    calendars.emplace_back(0, 0, 0, "", "");
-    calendars.emplace_back(1, 8, 0, "PrivateCalendar", "desc");
-    calendars.emplace_back(2, 9, 0, "PrivateCalendar", "desc");
-    calendars.emplace_back(3, 11, 0, "PublicCalendar", "desc");
-    calendars.emplace_back(4, 12, 0, "PublicCalendar", "desc");
-    calendars.emplace_back(5, 20, 1, "PrivateCalendar", "desc");
-    calendars.emplace_back(6, 21, 1, "PrivateCalendar", "desc");
-    calendars.emplace_back(7, 23, 1, "PublicCalendar", "desc");
-    calendars.emplace_back(8, 24, 1, "PublicCalendar", "desc");
+    calendars.emplace_back(0, 0, 0, "", "", "", "");
+    calendars.emplace_back(1, 8, 0, "PrivateCalendar", "desc", "", "");
+    calendars.emplace_back(2, 9, 0, "PrivateCalendar", "desc", "", "");
+    calendars.emplace_back(3, 11, 0, "PublicCalendar", "desc", "", "");
+    calendars.emplace_back(4, 12, 0, "PublicCalendar", "desc", "", "");
+    calendars.emplace_back(5, 20, 1, "PrivateCalendar", "desc", "", "");
+    calendars.emplace_back(6, 21, 1, "PrivateCalendar", "desc", "", "");
+    calendars.emplace_back(7, 23, 1, "PublicCalendar", "desc", "", "");
+    calendars.emplace_back(8, 24, 1, "PublicCalendar", "desc", "", "");
 
     events.emplace_back();
 
     events.emplace_back(
-        1, 1, "PrivateEventUmaOp", "description",
+        1, 1, "PrivateEventUmaOp", "description", "location",
         Wt::WDateTime::currentDateTime().addDays(-10),
         Wt::WDateTime::currentDateTime().addDays(-1),
-        false, "", 0, Wt::WDate());
+        Wt::WDateTime::currentDateTime(),
+        "", 0, Wt::WDate());
 
     events.emplace_back(
-        2, 2, "PrivateEventUmaOp", "description",
+        2, 2, "PrivateEventUmaOp", "description", "location",
         Wt::WDateTime::currentDateTime().addDays(10),
         Wt::WDateTime::currentDateTime().addDays(1),
-        false, "", 0, Wt::WDate());
+        Wt::WDateTime::currentDateTime(),
+        "", 0, Wt::WDate());
 
     events.emplace_back(
-        3, 3, "PublicEventUmaOp", "description",
+        3, 3, "PublicEventUmaOp", "description", "location",
         Wt::WDateTime::currentDateTime().addDays(-5),
         Wt::WDateTime::currentDateTime().addDays(5),
-        false, "", 0, Wt::WDate());
+        Wt::WDateTime::currentDateTime(),
+        "", 0, Wt::WDate());
     
     events.emplace_back(
-        4, 4, "PublicEventUmaOp", "description",
+        4, 4, "PublicEventUmaOp", "description", "location",
         Wt::WDateTime::currentDateTime().addDays(30),
         Wt::WDateTime::currentDateTime().addDays(2),
-        false, "", 0, Wt::WDate());
+        Wt::WDateTime::currentDateTime(),
+        "", 0, Wt::WDate());
 
     events.emplace_back(
-        5, 5, "PrivateEventTest", "description",
+        5, 5, "PrivateEventTest", "description", "location",
         Wt::WDateTime::currentDateTime().addDays(-10),
         Wt::WDateTime::currentDateTime().addDays(-9),
-        false, "", 0, Wt::WDate());
+        Wt::WDateTime::currentDateTime(),
+        "", 0, Wt::WDate());
 
     events.emplace_back(
-        6, 6, "PrivateEventTest", "description",
+        6, 6, "PrivateEventTest", "description", "location",
         Wt::WDateTime::currentDateTime().addDays(3),
         Wt::WDateTime::currentDateTime().addDays(4),
-        false, "", 0, Wt::WDate());
+        Wt::WDateTime::currentDateTime(),
+        "", 0, Wt::WDate());
 
     events.emplace_back(
-        7, 7, "PublicEventTest", "description",
+        7, 7, "PublicEventTest", "description", "location",
         Wt::WDateTime::currentDateTime().addDays(-2),
         Wt::WDateTime::currentDateTime().addDays(-1),
-        false, "", 0, Wt::WDate());
+        Wt::WDateTime::currentDateTime(),
+        "", 0, Wt::WDate());
 
     events.emplace_back(
-        8, 8, "PublicEventTest", "description", 
+        8, 8, "PublicEventTest", "description", "location",
         Wt::WDateTime::currentDateTime().addDays(-4),
         Wt::WDateTime::currentDateTime().addDays(-2),
-        false, "", 0, Wt::WDate());
+        Wt::WDateTime::currentDateTime(),
+        "", 0, Wt::WDate());
 
 }
 
