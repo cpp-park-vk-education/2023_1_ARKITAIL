@@ -11,7 +11,7 @@
 #include "Node.hpp"
 #include "SessionScopeMap.hpp"
 
-Tree::Tree(const Node& node) :
+Tree::Tree(NodeSptr node) :
     root_(std::make_unique<TreeNode>(node, nullptr)),
     checked_(0) {}
 

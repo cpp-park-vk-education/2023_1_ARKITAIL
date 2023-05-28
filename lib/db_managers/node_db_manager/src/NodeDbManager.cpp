@@ -126,6 +126,7 @@ std::vector<Node> NodeDbManager::getChildren(int node_id) {
 
   for (const db::NodePtr& db_node : db_nodes) {
     Node node;
+    node.id = node_id;
     node.parent_id = node_id;
     node.resource_id = db_node->resource_id;
     node.type = db_node->type;

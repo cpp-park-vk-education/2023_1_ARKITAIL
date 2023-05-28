@@ -9,8 +9,7 @@
 
 class Tree {
   public:
-    Tree();
-    Tree(const Node& node);
+    Tree(NodeSptr node);
 
     ITreeNode* getRoot();
 

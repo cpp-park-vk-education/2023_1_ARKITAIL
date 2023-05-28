@@ -49,7 +49,6 @@ Application::Application(const Wt::WEnvironment& env) :
     internalPathChanged().connect(this, &Application::route);
 
     // Connections mediator connections establishing
-    Wt::log("Session created");
 }
 
 void Application::route(const std::string& internalPath) {

@@ -6,6 +6,7 @@
 #include <Wt/WDateTime.h>
 #include <Wt/WHBoxLayout.h>
 #include <Wt/WLineEdit.h>
+#include <Wt/WLogger.h>
 #include <Wt/WPushButton.h>
 
 #include <Wt/WTime.h>
@@ -48,23 +49,25 @@ TreeW::TreeW() :
     remember_combination_button_->clicked().connect(this, &TreeW::rememberCombination);
 }
 
-void TreeW::setRoot(const Node& node) {
+void TreeW::setRoot(NodeSptr node) {
     auto ss = SessionScopeMap::instance().get();
     auto mgr = ss->managers();
 
+    Wt::log("TreeW::setRoot: settings tree_manager_...");
     tree_manager_ = std::make_unique<Tree>(node);
+    Wt::log("TreeW::setRoot: tree_manager_ is set");
 
     auto tree_node = tree_manager_->getRoot();
 
     auto root = TreeNodeWDirector().fillNode(TreeNodeWAnalyst().analyseTreeNodeWChild(tree_node));
 
-    if (node.type & NodeType::PUBLIC_CALENDAR) {
-        auto calendar = mgr->calendar_manager()->get(node.resource_id);
+    if (node->type & NodeType::PUBLIC_CALENDAR) {
+        auto calendar = mgr->calendar_manager()->get(node->resource_id);
         root_ = addWidget(std::move(root));
 
     } else {
-        auto directory = mgr->directory_manager()->get(node.resource_id);
-        if (node.type & NodeType::ROOT) {
+        auto directory = mgr->directory_manager()->get(node->resource_id);
+        if (node->type & NodeType::ROOT) {
             root_ = addWidget(std::move(root));
         } else {
             root_ = addWidget(std::move(root));

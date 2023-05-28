@@ -24,14 +24,14 @@ TEST_F(SessionSuit, TreeNodeCreation) {
 	UserSptr user = managers->user_manager()->get();
 	NodeSptr node = managers->node_manager()->get(user->root_id);
 
-	EXPECT_NO_THROW((TreeNode(*node)));
+	EXPECT_NO_THROW((TreeNode(node)));
 }
 
 TEST_F(SessionSuit, TreeNodeGettingChilds) {
 	UserSptr user = managers->user_manager()->get();
 	NodeSptr node = managers->node_manager()->get(user->root_id);
 
-	TreeNode tree_node(*node);
+	TreeNode tree_node(node);
 
 	std::vector<Node> expected_children = {
 		Node(3, 1, 3, PRIVATE_GROUP),
@@ -57,7 +57,7 @@ TEST_F(SessionSuit, TreeNodeRemovingChild) {
 	UserSptr user = managers->user_manager()->get();
 	NodeSptr node = managers->node_manager()->get(user->root_id);
 
-	TreeNode tree_node(*node);
+	TreeNode tree_node(node);
 
 	std::vector<ITreeNode*> children = tree_node.getChildren();
 	std::vector<ITreeNode*> children1 = children[0]->getChildren();
@@ -74,12 +74,12 @@ TEST_F(SessionSuit, TreeNodeAdditionChild) {
 	UserSptr user = managers->user_manager()->get();
 	NodeSptr node = managers->node_manager()->get(user->root_id);
 	
-	TreeNode tree_node(*node);
+	TreeNode tree_node(node);
 
 	std::vector<ITreeNode*> children = tree_node.getChildren();
 	std::vector<ITreeNode*> children1 = children[1]->getChildren();
 
-	EXPECT_NO_THROW(tree_node.addChild(children1[0]->getNode()));
+	EXPECT_NO_THROW(tree_node.addChild(std::make_shared<Node>(children1[0]->getNode())));
 
 	std::vector<ITreeNode*> expected_children = children1[0]->getChildren();
 	std::vector<ITreeNode*> got_children = tree_node.getChildren().back()->getChildren();
