@@ -53,9 +53,7 @@ void TreeW::setRoot(NodeSptr node) {
     auto ss = SessionScopeMap::instance().get();
     auto mgr = ss->managers();
 
-    Wt::log("TreeW::setRoot: settings tree_manager_...");
     tree_manager_ = std::make_unique<Tree>(node);
-    Wt::log("TreeW::setRoot: tree_manager_ is set");
 
     auto tree_node = tree_manager_->getRoot();
 

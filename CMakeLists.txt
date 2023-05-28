@@ -15,8 +15,7 @@ endif(BUILD_TESTS)
 add_library(calendula_compiler_flags INTERFACE)
 
 target_compile_features(
-    calendula_compiler_flags
-    INTERFACE
+    calendula_compiler_flags INTERFACE
     cxx_std_17
 )
 
@@ -25,15 +24,8 @@ target_compile_options(calendula_compiler_flags INTERFACE
 )
 
 add_executable(Calendula src/main.cpp)
-
 add_subdirectory(lib)
-
 target_link_libraries(
     Calendula PUBLIC
-    calendula_compiler_flags
-
-    wt
-    wthttp
-
-    application
+    application # Все зависимости содержит библиотека application
 )
