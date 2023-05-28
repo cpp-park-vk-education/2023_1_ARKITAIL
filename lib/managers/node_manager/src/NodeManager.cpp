@@ -33,8 +33,8 @@ bool NodeManager::checkAccess(int user_id, int node_id) {
 NodeSptr NodeManager::get(int node_id) {
     UserSptr user = db_->user_dbm()->get();
 
-    if (!checkAccess(user->id, node_id))
-    	return nullptr;
+    // if (!checkAccess(user->id, node_id))
+    // 	return nullptr;
 
     return db_->node_dbm()->get(node_id);
 }
