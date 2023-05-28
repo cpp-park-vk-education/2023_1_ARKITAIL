@@ -16,7 +16,8 @@ namespace dialog {
 CreateEventDialog::CreateEventDialog()
     : Wt::WDialog("Событие") {
   setClosable(true);
-  setMinimumSize(700, 800);
+  setWidth(600);
+  setHeight(900);
   setMovable(false);
 
   view_ = contents()->addNew<EventView>();
@@ -31,7 +32,6 @@ void CreateEventDialog::HandleInput() {
   view_->updateModel(model);
 
   if (model->validate()) {
-    Wt::log("MODEL VALIDATED");
     model->UpdateEvent();
 
     IManagers* managers = SessionScopeMap::instance().get()->managers();

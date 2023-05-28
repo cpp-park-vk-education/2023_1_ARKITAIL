@@ -17,6 +17,7 @@
 
 #include "Calendar.hpp"
 #include "CreateCalendarDialog.hpp"
+#include "CreateDirectoryDialog.hpp"
 #include "Directory.hpp"
 #include "EditCalendarDialog.hpp"
 #include "ITreeNode.hpp"
@@ -123,9 +124,23 @@ void TreeNodeW::performAction(Action action) {
             break;
         }
 
-        case Action::ADD_DIRECTORY:
-            // добавить директорию
+        case Action::ADD_DIRECTORY: {
+            dialog::CreateDirectoryDialog* dialog =
+                addChild(std::make_unique<dialog::CreateDirectoryDialog>(node_));
+
+            dialog->show();
+
+            dialog->node_created().connect([=](NodeSptr node) {
+                auto tree_node = node_->addChild(*node);
+                addChildNode(makeTreeNodeWidget(tree_node));
+            });
+
+            dialog->finished().connect([=] {
+                removeChild(dialog);
+                Wt::log("CreateDirectoryDialog removed");
+            });
             break;
+        }
     }
 }
 

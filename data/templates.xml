@@ -124,8 +124,6 @@
           ${location-info}
         </div>
       </div>
-    </div>
-    <div class="row m-3">
       <div class="col">
         <label class="form-label" for="${id:calendars}">
           Календарь
@@ -235,6 +233,36 @@
         ${until}
         <div class="form-text">
           ${until-info}
+        </div>
+      </div>
+    </div>
+  </message>
+
+  <message id="directory">
+    <div class="row m-3">
+      <div class="col">
+        ${validation-status}
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col">
+        <label class="form-label" for="${id:name}">
+          Название
+        </label>
+        ${name}
+        <div class="form-text">
+          ${name-info}
+        </div>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col">
+        <label class="form-label" for="${id:description}">
+          Описание
+        </label>
+        ${description}
+        <div class="form-text">
+          ${description-info}
         </div>
       </div>
     </div>

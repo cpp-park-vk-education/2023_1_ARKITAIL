@@ -16,9 +16,9 @@ enum EditCalendarTabIndex {
 
 EditCalendarDialog::EditCalendarDialog(CalendarSptr calendar)
     : Wt::WDialog("Календарь") {
-  Wt::log("EditCalendarDialog: " + calendar->summary);
   setClosable(true);
-  setMinimumSize(500, 600);
+  setWidth(600);
+  setHeight(600);
   setMovable(false);
 
   auto tabs = std::make_unique<Wt::WTabWidget>();

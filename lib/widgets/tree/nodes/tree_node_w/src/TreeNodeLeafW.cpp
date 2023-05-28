@@ -35,11 +35,11 @@ void TreeNodeLeafW::performAction(Action action) {
     switch (action) {
         case Action::EDIT: {
             auto mgr = SessionScopeMap::instance().get()->managers();
-            CalendarSptr dummy_calendar =
+            CalendarSptr calendar =
                 mgr->calendar_manager()->get(node_->getNode().resource_id);
 
             dialog::EditCalendarDialog* dialog =
-                addChild(std::make_unique<dialog::EditCalendarDialog>(dummy_calendar));
+                addChild(std::make_unique<dialog::EditCalendarDialog>(calendar));
 
             dialog->show();
 

@@ -11,5 +11,6 @@ target_link_libraries(
 	${MODULE_NAME}
 	PUBLIC
   calendar
+  directory
   event
 )

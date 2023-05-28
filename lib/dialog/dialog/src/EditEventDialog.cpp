@@ -12,7 +12,8 @@ namespace dialog {
 EditEventDialog::EditEventDialog(EventSptr event)
     : Wt::WDialog("Событие") {
   setClosable(true);
-  setMinimumSize(700, 800);
+  setWidth(600);
+  setHeight(900);
   setMovable(false);
 
   view_ = contents()->addNew<EventView>(event);

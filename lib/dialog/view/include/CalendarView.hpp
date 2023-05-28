@@ -2,7 +2,6 @@
 
 #include <memory>
 
-#include <Wt/WPushButton.h>
 #include <Wt/WTemplateFormView.h>
 
 #include "Calendar.hpp"

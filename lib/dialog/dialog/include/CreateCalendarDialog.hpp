@@ -5,7 +5,6 @@
 
 #include "Calendar.hpp"
 #include "ITreeNode.hpp"
-#include "Node.hpp"
 
 namespace dialog {
 class CreateCalendarDialog : public Wt::WDialog {

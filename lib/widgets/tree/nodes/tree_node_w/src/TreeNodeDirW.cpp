@@ -2,10 +2,14 @@
 
 #include <memory>
 
+#include <Wt/WContainerWidget.h>
+#include <Wt/WIconPair.h>
+#include <Wt/WText.h>
+
+#include "Directory.hpp"
+#include "EditDirectoryDialog.hpp"
+#include "SessionScopeMap.hpp"
 #include "TreeNodeW.hpp"
-#include "Wt/WContainerWidget.h"
-#include "Wt/WIconPair.h"
-#include "Wt/WText.h"
 
 TreeNodeDirW::TreeNodeDirW() :
     TreeNodeW() {}
@@ -30,23 +34,24 @@ void TreeNodeDirW::performAction(Action action) {
     TreeNodeW::performAction(action);
     switch (action) {
         case Action::EDIT: {
-            // // (affeeal): каким-то образом мне нужно получить CalendarSptr,
-            // // соответствующий данному календарю, который используется
-            // // EditCalendarDialog.
-            // CalendarSptr dummy_calendar = std::make_shared<Calendar>();
+            auto mgr = SessionScopeMap::instance().get()->managers();
+            DirectorySptr directory =
+                mgr->directory_manager()->get(node_->getNode().resource_id);
 
-            // dialog::EditCalendarDialog* dialog =
-            //     addChild(std::make_unique<dialog::EditCalendarDialog>(dummy_calendar));
+            dialog::EditDirectoryDialog* dialog =
+                addChild(std::make_unique<dialog::EditDirectoryDialog>(directory));
 
-            // dialog->show();
+            dialog->show();
 
-            // // dialog.calendar_updated().connect(...);
+            dialog->directory_updated().connect([=](DirectorySptr directory) {
+                text_title_->setText(directory->name);
+            });
 
-            // dialog->finished().connect([=] {
-            //     removeChild(dialog);
-            //     Wt::log("EditCalendarDialog removed");
-            // });
-            // break;
+            dialog->finished().connect([=] {
+                removeChild(dialog);
+                Wt::log("CreateDirectoryDialog removed");
+            });
+            break;
         }
     }
 }

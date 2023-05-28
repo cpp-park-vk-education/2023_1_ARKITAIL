@@ -33,7 +33,8 @@ CreateCalendarDialog::CreateCalendarDialog(ITreeNode* node)
     : Wt::WDialog("Календарь"),
       node_(node) {
   setClosable(true);
-  setMinimumSize(500, 600);
+  setWidth(600);
+  setHeight(600);
   setMovable(false);
 
   auto tabs = std::make_unique<Wt::WTabWidget>();
