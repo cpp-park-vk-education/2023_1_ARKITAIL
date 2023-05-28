@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<messages>
+  <message id="calendar">
+    <div class="row m-3">
+      <div class="col">
+        ${validation-status}
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col">
+        <label class="form-label" for="${id:title}">
+          Название
+        </label>
+        ${summary}
+        <div class="form-text">
+          ${summary-info}
+        </div>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col">
+        <label class="form-label" for="${id:description}">
+          Описание
+        </label>
+        ${description}
+        <div class="form-text">
+          ${description-info}
+        </div>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col-6">
+        <label class="form-label" for="${id:visibility}">
+          Видимость
+        </label>
+        ${visibility}
+        <div class="form-text">
+          ${visibility-info}
+        </div>
+      </div>
+      <div class="offset-2 col-4">
+        <label class="form-label" for="${id:color}">
+          Цвет
+        </label>
+        ${color}
+        <div class="form-text">
+          ${color-info}
+        </div>
+      </div>
+    </div>
+  </message>
+
+  <message id="calendar-import">
+    <div class="row m-3">
+      <div class="col">
+        ${validation-status}
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col">
+        <label class="form-label" for="${id:import-icalendar}">
+          В формате iCalendar
+        </label>
+        ${import-icalendar}
+      </div>
+    </div>
+  </message>
+
+  <message id="calendar-export">
+    <div class="row m-3">
+      <div class="col">
+        ${export-icalendar}
+      </div>
+    </div>
+  </message>
+
+  <message id="validation-success">
+    <div class="text-success font-weight-bold" role="alert">
+      ${text}
+    </div>
+  </message>
+
+ <message id="validation-failed">
+    <div class="text-danger font-weight-bold" role="alert">
+      ${text}
+    </div>
+  </message>
+
+  <message id="event">
+    <div class="row m-3">
+      <div class="col">
+        ${validation-status}
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col">
+        <label class="form-label" for="${id:summary}">
+          Название
+        </label>
+        ${summary}
+        <div class="form-text">
+          ${summary-info}
+        </div>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col">
+        <label class="form-label" for="${id:description}">
+          Описание
+        </label>
+        ${description}
+        <div class="form-text">
+          ${description-info}
+        </div>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col">
+        <label class="form-label" for="${id:location}">
+          Место
+        </label>
+        ${location}
+        <div class="form-text">
+          ${location-info}
+        </div>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col">
+        <label class="form-label" for="${id:calendars}">
+          Календарь
+        </label>
+        ${calendars}
+        <div class="form-text">
+          ${calendars-info}
+        </div>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <label class="form-label" for="${id:start-date}">
+              Дата
+            </label>
+            <span>
+              и
+            </span>
+            <label class="form-label" for="${id:start-time}">
+              время
+            </label>
+            <span>
+              начала
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            ${start-date}
+            <div class="form-text">
+              ${start-date-info}
+            </div>
+          </div>
+          <div class="col">
+            ${start-time}
+            <div class="form-text">
+              ${start-time-info}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <label class="form-label" for="${id:end-date}">
+              Дата
+            </label>
+            <span>
+              и
+            </span>
+            <label class="form-label" for="${id:end-time}">
+              время
+            </label>
+            <span>
+              окончания
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            ${end-date}
+            <div class="form-text">
+              ${end-date-info}
+            </div>
+          </div>
+          <div class="col">
+            ${end-time}
+            <div class="form-text">
+              ${end-time-info}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col">
+        ${is-recurrent}
+      </div>
+    </div>
+    <div class="row m-3">
+      <div class="col">
+        <label class="form-label" for="${id:frequency}">
+          Период
+        </label>
+        ${frequency}
+        <div class="form-text">
+          ${frequency-info}
+        </div>
+      </div>
+      <div class="col">
+        <label class="form-label" for="${id:interval}">
+          Интервал
+        </label>
+        ${interval}
+        <div class="form-text">
+          ${interval-info}
+        </div>
+      </div>
+      <div class="col">
+        <label class="form-label" for="${id:until}">
+          До
+        </label>
+        ${until}
+        <div class="form-text">
+          ${until-info}
+        </div>
+      </div>
+    </div>
+  </message>
+</messages>

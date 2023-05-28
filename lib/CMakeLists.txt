@@ -1,0 +1,7 @@
+add_subdirectory(application)
+add_subdirectory(db_managers)
+add_subdirectory(dialog)
+add_subdirectory(entities)
+add_subdirectory(managers)
+add_subdirectory(utils)
+add_subdirectory(widgets)

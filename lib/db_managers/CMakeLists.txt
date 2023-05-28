@@ -1,0 +1,12 @@
+add_subdirectory(db_managers)
+add_subdirectory(db_models)
+add_subdirectory(db_mock)
+
+add_subdirectory(calendar_db_manager)
+add_subdirectory(comment_db_manager)
+add_subdirectory(directory_db_manager)
+add_subdirectory(event_db_manager)
+add_subdirectory(node_db_manager)
+add_subdirectory(profile_db_manager)
+add_subdirectory(tag_db_manager)
+add_subdirectory(user_db_manager)
