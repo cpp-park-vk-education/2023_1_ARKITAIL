@@ -12,4 +12,5 @@ target_link_libraries(
 	PUBLIC
 	event
 	db_managers
+  db_models
 )
