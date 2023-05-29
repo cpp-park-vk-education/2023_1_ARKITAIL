@@ -2,7 +2,9 @@
 
 #include <Wt/WBootstrap5Theme.h>
 #include <Wt/WContainerWidget.h>
+#include <Wt/WGlobal.h>
 #include <Wt/WWidget.h>
+#include <Wt/Auth/AuthWidget.h>
 
 #include <string>
 #include <thread>
@@ -47,6 +49,8 @@ Application::Application(const Wt::WEnvironment& env) :
     internalPathChanged().connect(this, &Application::route);
 
     // Connections mediator connections establishing
+    
+    root()->addWidget(CreateAuthWiget());
 }
 
 void Application::route(const std::string& internalPath) {
@@ -55,4 +59,17 @@ void Application::route(const std::string& internalPath) {
     pages_[internalPath].build_destination();
     cur_swap_.swap();
     cur_page_ = root()->addWidget(cur_swap_.get_content()->get());
+}
+
+std::unique_ptr<Wt::Auth::AuthWidget> Application::CreateAuthWiget() {
+  Session* session = SessionScopeMap::instance().get()->session();
+  std::unique_ptr<Wt::Auth::AuthWidget> auth_widget
+      = std::make_unique<Wt::Auth::AuthWidget>(
+          session->auth_service(),
+          session->users(),
+          session->login());
+  auth_widget->model()->addPasswordAuth(&session->password_service());
+  auth_widget->setRegistrationEnabled(true);
+  auth_widget->processEnvironment();
+  return auth_widget;
 }

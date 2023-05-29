@@ -23,15 +23,15 @@ class Session : public Wt::Dbo::Session {
   static const Wt::Auth::PasswordService& password_service();
 
   Session();
-  Session(const std::string& connection_information);
+  explicit Session(const std::string& connection_information);
 
   db::UserPtr user() const;
   Wt::Auth::AbstractUserDatabase& users();
   Wt::Auth::Login& login();
 
+ private:
   static Wt::Auth::AuthService auth_service_;
   static Wt::Auth::PasswordService password_service_;
- private:
 
   std::unique_ptr<UserDatabase> users_;
   Wt::Auth::Login login_;

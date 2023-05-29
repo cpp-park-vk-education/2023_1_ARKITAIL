@@ -2,15 +2,14 @@
 
 #include <memory>
 
-#include <Wt/Dbo/Session.h>
-
 #include "IManagers.hpp"
 #include "ConnectionsMediator.hpp"
+#include "Session.hpp"
 
 SessionScope::SessionScope(
 	std::unique_ptr<IManagers> managers,
 	std::unique_ptr<ConnectionsMediator> connections_mediator,
-  std::unique_ptr<Wt::Dbo::Session> session
+  std::unique_ptr<Session> session
 ) :
 	managers_(std::move(managers)),
 	connections_mediator_(std::move(connections_mediator)),
@@ -24,7 +23,7 @@ ConnectionsMediator* SessionScope::connections_mediator() {
 	return connections_mediator_.get();
 }
 
-Wt::Dbo::Session* SessionScope::session() {
+Session* SessionScope::session() {
 	return session_.get();
 }
 
