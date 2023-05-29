@@ -25,6 +25,7 @@
 #include "ProfileManager.hpp"
 #include "SessionScope.hpp"
 #include "TagDbManagerMock.hpp"
+#include "TagManager.hpp"
 #include "UserDbManagerMock.hpp"
 #include "UserManager.hpp"
 
@@ -69,6 +70,7 @@ void SessionScopeMap::add(std::string sid) {
 					std::make_unique<DirectoryManager>(db),
 					std::make_unique<CalendarManager>(db),
 					std::make_unique<EventManager>(db),
+					std::make_unique<TagManager>(db),
 					std::make_unique<ProfileManager>(db)
 				),
 				std::make_unique<ConnectionsMediator>()

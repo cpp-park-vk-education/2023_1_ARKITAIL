@@ -18,6 +18,7 @@
 #include "ProfileDbManagerMock.hpp"
 #include "ProfileManager.hpp"
 #include "TagDbManagerMock.hpp"
+#include "TagManager.hpp"
 #include "User.hpp"
 #include "UserDbManagerMock.hpp"
 #include "UserManager.hpp"
@@ -39,6 +40,7 @@ class ManagersSuit : public ::testing::Test {
                                               std::make_unique<DirectoryManager>(db_managers),
                                               std::make_unique<CalendarManager>(db_managers),
                                               std::make_unique<EventManager>(db_managers),
+                                              std::make_unique<TagManager>(db_managers),
                                               std::make_unique<ProfileManager>(db_managers));
     }
 

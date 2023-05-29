@@ -32,17 +32,17 @@ Directory DirectoryManager::get(size_t directory_id) {
 //
 // Остальные поля не участвуют в добавлении (опускаются) 
 //
-// parent_id является полем Directory::id родительской директории
-size_t DirectoryManager::add(const Directory& directory, size_t parent_id) {
+// directory_id является полем Directory::id родительской директории
+size_t DirectoryManager::add(const Directory& directory, size_t directory_id) {
     User user = db_->user_dbm()->get();
-    Directory parent_directory = get(parent_id);
+    Directory parent_directory = get(directory_id);
 
     if (!parent_directory.id || user.id != parent_directory.owner_id)
         return 0;
 
     auto node_mgr = SessionScopeMap::instance().get()->managers()->node_manager();
 
-    Node parent_node = node_mgr->get(get(parent_id).node_id);
+    Node parent_node = node_mgr->get(get(directory_id).node_id);
     Node new_node = {0, parent_node.id, 0, parent_node.type};
 
     size_t new_node_id = node_mgr->add(new_node);

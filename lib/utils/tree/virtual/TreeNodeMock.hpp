@@ -2,6 +2,7 @@
 
 class TreeNodeMock : public ITreeNode {
 public:
+    TreeNodeMock(const Node& node);
     TreeNodeMock(const Node& node, ITreeNode* parent);
 
     const Node& getNode();

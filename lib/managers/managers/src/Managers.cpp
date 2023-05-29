@@ -1,4 +1,5 @@
 #include "IEventManager.hpp"
+#include "ITagManager.hpp"
 #include "SessionScopeMap.hpp"
 #include "Managers.hpp"
 #include <algorithm>
@@ -11,6 +12,7 @@ Managers::Managers(
 	std::unique_ptr<IDirectoryManager> directory_manager,
 	std::unique_ptr<ICalendarManager> calendar_manager,
 	std::unique_ptr<IEventManager> event_manager,
+	std::unique_ptr<ITagManager> tag_manager,
 	std::unique_ptr<IProfileManager> profile_manager
 ) :
 	user_manager_(std::move(user_manager)),
@@ -18,6 +20,7 @@ Managers::Managers(
 	directory_manager_(std::move(directory_manager)),
 	calendar_manager_(std::move(calendar_manager)),
 	event_manager_(std::move(event_manager)),
+	tag_manager_(std::move(tag_manager)),
 	profile_manager_(std::move(profile_manager)) {}
 
 IUserManager* Managers::user_manager() {
@@ -38,6 +41,10 @@ ICalendarManager* Managers::calendar_manager() {
 
 IEventManager* Managers::event_manager() {
 	return event_manager_.get();
+}
+
+ITagManager* Managers::tag_manager() {
+	return tag_manager_.get();
 }
 
 IProfileManager* Managers::profile_manager() {
