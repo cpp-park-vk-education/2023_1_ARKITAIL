@@ -4,6 +4,7 @@
 
 #include "Node.hpp"
 #include "Tag.hpp"
+#include "Profile.hpp"
 
 class INodeDbManager {
 public:
@@ -14,5 +15,6 @@ public:
 
   virtual std::vector<Node> getChildren(int node_id) = 0;
   virtual void tag(int node_id, TagSptr tag) = 0;
+  virtual void profile(int node_id, ProfileSptr profile) = 0;
   virtual void move(int node_id, int destination_id) = 0;
 };

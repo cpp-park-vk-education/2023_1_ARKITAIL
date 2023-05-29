@@ -11,7 +11,7 @@ target_link_libraries(
 	${MODULE_NAME}
 	PUBLIC
 	node
-  db_models
+    db_models
 	tag
 	db_managers
 )

@@ -36,7 +36,18 @@ void TagDbManager::remove(int tag_id) {
 }
 
 void TagDbManager::update(TagSptr tag) {
-  // TODO(Antiho)
+    Wt::Dbo::Transaction transaction(session_);
+
+  db::TagPtr db_tag
+      = session_.find<db::Tag>().where("id = ?").bind(tag->id);
+
+  if (!db_tag) {
+    return;
+  }
+
+  db_tag.modify()->name = tag->name;
+
+  transaction.commit();
 }
 
 TagSptr TagDbManager::get(int tag_id) {

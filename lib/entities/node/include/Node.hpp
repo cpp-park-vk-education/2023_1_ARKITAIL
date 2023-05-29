@@ -36,6 +36,7 @@ public:
     int id;
     int parent_id;
     int resource_id;
+    
 
     NodeType type;
 };

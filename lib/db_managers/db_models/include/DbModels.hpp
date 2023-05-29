@@ -3,13 +3,13 @@
 #include <string>
 #include <vector>
 
-#include <Wt/WDateTime.h>
-#include <Wt/WDate.h>
 #include <Wt/Dbo/Dbo.h>
-#include <Wt/Dbo/WtSqlTraits.h>
 #include <Wt/Dbo/Field.h>
+#include <Wt/Dbo/WtSqlTraits.h>
 #include <Wt/Dbo/collection.h>
 #include <Wt/Dbo/ptr.h>
+#include <Wt/WDate.h>
+#include <Wt/WDateTime.h>
 
 #include "Node.hpp"
 
@@ -68,12 +68,14 @@ public:
 
 class Profile {
 public:
-  std::string name;
-  NodePtr node;
+  NodePtr node_id;
+  UserPtr owner_id;
+  Wt::Dbo::collection<NodePtr> nodes;
 
   template <class Action> void persist(Action &a) {
-    Wt::Dbo::field(a, name, "name");
-    Wt::Dbo::belongsTo(a, node, "node");
+    Wt::Dbo::belongsTo(a, node_id, "node_id");
+    Wt::Dbo::belongsTo(a, owner_id, "owber_id");
+    Wt::Dbo::hasMany(a, nodes, Wt::Dbo::ManyToMany, "node_profiles");
   }
 };
 
@@ -122,14 +124,16 @@ public:
 class Node {
 public:
   NodeType type;
-  NodePtr parent;
+  NodePtr parent_id;
   Wt::Dbo::collection<TagPtr> tags;
+  Wt::Dbo::collection<ProfilePtr> profiles;
   int resource_id;
 
   template <class Action> void persist(Action &a) {
     Wt::Dbo::field(a, type, "type");
-    Wt::Dbo::belongsTo(a, parent, "parent");
+    Wt::Dbo::belongsTo(a, parent_id, "parent_id");
     Wt::Dbo::hasMany(a, tags, Wt::Dbo::ManyToMany, "node_tags");
+    Wt::Dbo::hasMany(a, profiles, Wt::Dbo::ManyToMany, "node_profiles");
     Wt::Dbo::field(a, resource_id, "resource_id");
   }
 };

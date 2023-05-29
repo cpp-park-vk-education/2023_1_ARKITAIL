@@ -12,14 +12,11 @@ public:
     explicit Profile(
         int id,
         int node_id,
-        int owner_id,
-        std::vector<int> nodes);
+        int owner_id);
 
     int id;
     int node_id;
     int owner_id;
-
-    std::vector<int> nodes;
 
 };
 

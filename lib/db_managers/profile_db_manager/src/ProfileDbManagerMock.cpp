@@ -7,7 +7,7 @@ ProfileDbManagerMock::ProfileDbManagerMock() :
 	data_(),
 	aid_(1) {
 
-	data_.emplace_back(0, 0, 0, std::vector<int>());
+	data_.emplace_back(0, 0, 0);
 }
 
 ProfileSptr ProfileDbManagerMock::get(int profile_id) {
@@ -22,8 +22,7 @@ int ProfileDbManagerMock::add(ProfileSptr profile) {
 	data_.emplace_back(
 		aid_,
 		profile->node_id,
-		profile->owner_id,
-		profile->nodes
+		profile->owner_id
 	);
 
 	return aid_++;

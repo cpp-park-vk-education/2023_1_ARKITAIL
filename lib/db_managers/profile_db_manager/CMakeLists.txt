@@ -11,6 +11,8 @@ target_link_libraries(
 	${MODULE_NAME}
 	PUBLIC
 	profile
+	db_models
+	db_managers
 )
 
 # if (BUILD_TESTS)

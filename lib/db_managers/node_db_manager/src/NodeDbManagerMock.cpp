@@ -59,5 +59,8 @@ std::vector<Node> NodeDbManagerMock::getChildren(int node_id) {
 void NodeDbManagerMock::tag(int node_id, TagSptr tag) {
 }
 
+void NodeDbManagerMock::profile(int node_id, ProfileSptr profile){
+}
+
 void NodeDbManagerMock::move(int node_id, int destination_id) {
 }
