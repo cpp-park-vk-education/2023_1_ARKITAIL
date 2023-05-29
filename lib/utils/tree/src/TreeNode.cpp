@@ -56,12 +56,11 @@ std::unique_ptr<ITreeNode> TreeNode::remove() {
 }
 
 void TreeNode::check() {
-    checked_ = true;
+    checked_++;
 }
 
 void TreeNode::uncheck() {
-    std::cout << "Unchecked" << std::endl;
-    checked_ = false;
+    checked_--;
 }
 
 bool TreeNode::isChecked() {
