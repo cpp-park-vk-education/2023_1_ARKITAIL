@@ -51,6 +51,8 @@ debug: # Run application
 		--http-address 0.0.0.0 \
 		--http-port 8080 \
 		--resources-dir=/usr/local/share/Wt/resources
+# Для affeeal: в Docker заменить строку выше на
+	# --resources-dir=/usr/share/Wt/resources
 
 # TODO: prod
 
