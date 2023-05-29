@@ -26,9 +26,8 @@ void CalendarBodyW::updateCalendar(Wt::WDate begin_date, std::vector<Event> even
     for (auto e : events) {
         std::cout << e.summary << ' ';
     }
-    std::cout << begin_date.toString("dd MMMM yyyy");
 
-        if (isVisible()) {
+    if (isVisible()) {
         update(begin_date, events);
     }
 }

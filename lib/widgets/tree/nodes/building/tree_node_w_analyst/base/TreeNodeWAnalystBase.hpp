@@ -1,7 +1,9 @@
 #pragma once
 
+#include "IManagers.hpp"
 #include "ITreeNode.hpp"
 #include "User.hpp"
+#include "Tag.hpp"
 
 // |1| |2| |3| |4'5'6'7'8| |9'10'11|
 
@@ -50,7 +52,7 @@ enum Components {
 };
 
 enum TreeNodeWType {
-    GROUP,  // большая часть групп
+    GROUP,                                                           // группы
     DIR = Components::CHECKBOX | Components::OPTIONS_CALENDARS_DIR,  // свои директории
 
     SUB_GROUP = Components::TYPE_SUB_DIR,  // группа подписок
@@ -92,13 +94,20 @@ struct TreeNodeWConvertedData {
     TreeNodeWType components_set;
     std::string name;
     std::string description;
-    // std::vector<Tag> tags;
-    std::vector<std::string> tags;
+    std::vector<Tag> tags;
     User author;
     ITreeNode* tree_node;
 };
 
-class ITreeNodeWAnalyst {
+class TreeNodeWAnalystBase {
+  protected:
+    IManagers* managers_;
+
   public:
+    TreeNodeWAnalystBase() {}
+    TreeNodeWAnalystBase(IManagers* managers) :
+        managers_(managers) {}
+    virtual ~TreeNodeWAnalystBase() {}
+
     virtual TreeNodeWConvertedData analyseTreeNodeWChild(ITreeNode* tree_node) = 0;
 };

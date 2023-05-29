@@ -57,5 +57,3 @@ std::unique_ptr<ITreeNode> TreeNodeMock::removeChild(ITreeNode* child) {
 
     return rmd_child;
 }
-
-

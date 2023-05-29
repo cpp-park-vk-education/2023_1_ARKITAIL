@@ -26,6 +26,15 @@ TreeNodeDirW::TreeNodeDirW(ITreeNode* node) :
     children_container_->addStyleClass("ps-4");
 }
 
+void TreeNodeDirW::removeChildNode(TreeNodeW* child) {
+    for (auto child_ = children_.begin(); child_ != children_.end(); child_++) {
+        if (*child_ == child) {
+            children_.erase(child_);
+            break;
+        }
+    }
+}
+
 void TreeNodeDirW::performAction(Action action) {
     TreeNodeW::performAction(action);
     switch (action) {
@@ -63,7 +72,6 @@ std::vector<TreeNodeW*> TreeNodeDirW::childrenNodes() {
 }
 
 void TreeNodeDirW::showNode() {
-    std::cout << "HERE1" << std::endl;
     if (childrenNodes().empty()) {
         for (auto node_child : node_->getChildren()) {
             auto child_block = addChildNode(this->makeTreeNodeWidget(node_child));
@@ -77,7 +85,6 @@ void TreeNodeDirW::showNode() {
             child->setHidden(false);
         }
     }
-    std::cout << "HERE2" << std::endl;
 }
 
 void TreeNodeDirW::closeNode() {
@@ -87,9 +94,8 @@ void TreeNodeDirW::closeNode() {
 }
 
 void TreeNodeDirW::checkNode() {
-    if (!node_->isChecked()){
+    if (!node_->isChecked()) {
         checked_.emit(node_);
-        
     }
 
     check_box_->setChecked(true);

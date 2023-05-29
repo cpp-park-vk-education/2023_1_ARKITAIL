@@ -4,9 +4,10 @@
 
 #include "ConnectionPoint.hpp"
 #include "ITreeNode.hpp"
-#include "ITreeNodeWAnalyst.hpp"
 #include "OptionsW.hpp"
+#include "TreeNodeWAnalystBase.hpp"
 #include "User.hpp"
+#include "Tag.hpp"
 
 class TreeNodeW;
 class TreeW;
@@ -19,7 +20,7 @@ class TreeNodeWBuilderBase {
   public:
     virtual TreeNodeWBuilderBase* createTreeNodeW(ITreeNode* node) = 0;
 
-    TreeNodeWBuilderBase* addAnalyst(std::unique_ptr<ITreeNodeWAnalyst>);
+    TreeNodeWBuilderBase* addAnalyst(std::unique_ptr<TreeNodeWAnalystBase> analyst);
     TreeNodeWBuilderBase* addHead(std::unique_ptr<Wt::WWidget> head);
     TreeNodeWBuilderBase* addTextHead(std::unique_ptr<Wt::WText> head);
 
@@ -29,8 +30,8 @@ class TreeNodeWBuilderBase {
 
     TreeNodeWBuilderBase* addOptions(std::unique_ptr<OptionsW> options);
 
-    TreeNodeWBuilderBase* addToolTip(std::string description, std::vector<std::string> tags);
-    TreeNodeWBuilderBase* addToolTip(std::string description, std::vector<std::string> tags,
+    TreeNodeWBuilderBase* addToolTip(std::string description, std::vector<Tag> tags);
+    TreeNodeWBuilderBase* addToolTip(std::string description, std::vector<Tag> tags,
                                      User author);
     TreeNodeWBuilderBase* addParent(TreeNodeW* parent_node);
     TreeNodeWBuilderBase* endNode();
@@ -40,6 +41,6 @@ class TreeNodeWBuilderBase {
   private:
     std::unique_ptr<Wt::WContainerWidget> fillToolTipContainer(
         std::unique_ptr<Wt::WContainerWidget> content, std::string description,
-        std::vector<std::string> tags);
+        std::vector<Tag> tags);
     void addToolTip(std::unique_ptr<Wt::WContainerWidget> content);
 };

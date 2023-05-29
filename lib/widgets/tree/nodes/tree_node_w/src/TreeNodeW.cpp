@@ -61,7 +61,7 @@ TreeNodeW::TreeNodeW(ITreeNode* node) :
     header_container_(),
     options_button_(),
 
-    analyst_(std::make_unique<TreeNodeWAnalyst>()),
+    analyst_(std::make_unique<TreeNodeWAnalyst>(SessionScopeMap::instance().get()->managers())),
     parent_(nullptr),
     node_(node)
 
@@ -93,15 +93,20 @@ void TreeNodeW::performAction(Action action) {
 
         case Action::SUBSCRIBE:
             mgr->node_manager()->subscribe(node_->getNode().id);
-            setOptions(OptionsWDirector().createOptionsUnsubscriptionW(options_builder));
+            if (mgr->node_manager()->subscribed(node_->getNode().id)) {
+                setOptions(OptionsWDirector().createOptionsUnsubscriptionW(options_builder));
+            }
             break;
 
         case Action::UNSUBSCRIBE:
             mgr->node_manager()->unsubscribe(node_->getNode().id);
-            if (!isRoot() && node_->getParent()->getNode().type & NodeType::SUBSCRIPTIONS_GROUP) {
-                this->removeNode();
-            } else {
-                setOptions(OptionsWDirector().createOptionsSubscriptionW(options_builder));
+            if (!mgr->node_manager()->subscribed(node_->getNode().id)) {
+                if (!isRoot() &&
+                    node_->getParent()->getNode().type & NodeType::SUBSCRIPTIONS_GROUP) {
+                    this->removeNode();
+                } else {
+                    setOptions(OptionsWDirector().createOptionsSubscriptionW(options_builder));
+                }
             }
             break;
 
@@ -116,7 +121,7 @@ void TreeNodeW::performAction(Action action) {
                 addChildNode(makeTreeNodeWidget(tree_node));
             });
 
-            dialog->finished().connect([=] {
+            dialog->finished().connect([=]() {
                 removeChild(dialog);
                 Wt::log("CreateCalendarDialog removed");
             });
@@ -132,7 +137,10 @@ void TreeNodeW::performAction(Action action) {
 void TreeNodeW::removeNode() {
     node_->remove();
     parent()->removeWidget(this);
+    parent_->removeChildNode(this);
 }
+
+void TreeNodeW::removeChildNode(TreeNodeW* child) {}
 
 TreeNodeW* TreeNodeW::addParent(TreeNodeW* parent) {
     parent_ = parent;
@@ -140,7 +148,7 @@ TreeNodeW* TreeNodeW::addParent(TreeNodeW* parent) {
 }
 
 bool TreeNodeW::isRoot() {
-    return this == parent_;
+    return !parent_;
 }
 
 bool TreeNodeW::isCanCheck() {
@@ -149,7 +157,7 @@ bool TreeNodeW::isCanCheck() {
 
 void TreeNodeW::uncheckParentNodes() {
     check_box_->setChecked(false);
-    if (parent_->isCanCheck()) {
+    if (!isRoot() && parent_->isCanCheck()) {
         parent_->uncheckParentNodes();
     }
 }
@@ -168,8 +176,12 @@ NodeType TreeNodeW::getType() {
 }
 
 void TreeNodeW::setOptions(std::unique_ptr<OptionsW> options) {
+    std::cout << options.get() << std::endl;
     options->selectedOption().connect(this, &TreeNodeW::performAction);
+    options_button_->setMenu(std::make_unique<OptionsW>());
+
     options_button_->setMenu(std::move(options));
+    options_button_->toggleStyleClass("dropdown-toggle", false);
 }
 
 std::unique_ptr<TreeNodeW> TreeNodeW::makeTreeNodeWidget(ITreeNode* tree_node) {

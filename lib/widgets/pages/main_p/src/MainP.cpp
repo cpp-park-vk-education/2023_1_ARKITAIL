@@ -12,10 +12,17 @@
 #include "personal_calendar_header_w.hpp"
 
 MainP::MainP() {
+    auto ss = SessionScopeMap::instance().get();
+
     calendar_ = addWidget(std::make_unique<CalendarW>());
 
     auto tree = calendar_->addTree(std::make_unique<TreeW>());
-    auto ss = SessionScopeMap::instance().get();
+
+    auto mgr = ss->managers();
+    auto node = mgr->node_manager()->get(mgr->user_manager()->get().root_id);
+    auto sub = mgr->node_manager()->get(4);
+    tree->setRoot(node);
+
     auto cm = ss->connections_mediator();
     cm->node_to_tree_main.add_receiver(tree, &TreeW::checkNode);
     cm->tree_to_header_main.add_sender(&tree->node_checked);

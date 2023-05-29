@@ -4,7 +4,6 @@
 #include <Wt/WBreak.h>
 
 #include "ITreeNode.hpp"
-#include "ITreeNodeWAnalyst.hpp"
 #include "InPlaceEditTitle.hpp"
 #include "Managers.hpp"
 #include "Node.hpp"
@@ -16,6 +15,7 @@
 #include "TreeNodeLeafW.hpp"
 #include "TreeNodeLeafWBuilder.hpp"
 #include "TreeNodeWAnalyst.hpp"
+#include "TreeNodeWAnalystBase.hpp"
 #include "TreeNodeWBuilderBase.hpp"
 #include "TreeNodeWOtherAnalyst.hpp"
 #include "TreeNodeWSubAnalyst.hpp"
@@ -33,9 +33,11 @@ std::unique_ptr<TreeNodeW> TreeNodeWDirector::fillNode(TreeNodeWConvertedData da
     auto node_builder = node_builder_ptr->createTreeNodeW(data.tree_node);
 
     if (data.components_set & Components::TYPE_OTHER_DIR) {
-        node_builder->addAnalyst(std::make_unique<TreeNodeWOtherAnalyst>());
+        node_builder->addAnalyst(
+            std::make_unique<TreeNodeWOtherAnalyst>(SessionScopeMap::instance().get()->managers()));
     } else if (data.components_set & Components::TYPE_SUB_DIR) {
-        node_builder->addAnalyst(std::make_unique<TreeNodeWSubAnalyst>());
+        node_builder->addAnalyst(
+            std::make_unique<TreeNodeWSubAnalyst>(SessionScopeMap::instance().get()->managers()));
     }
 
     if (data.components_set & Components::CHECKBOX) {

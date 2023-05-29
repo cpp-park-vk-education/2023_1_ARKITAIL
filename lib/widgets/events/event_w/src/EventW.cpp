@@ -20,6 +20,15 @@ bool EventW::isLargeEvent() {
     return begin_.date().daysTo(end_.date());
 }
 
+bool EventW::isBelongsToEvent(Wt::WDate date) {
+    return begin_.date() <= date && date <= end_.date();
+}
+
+bool EventW::isBelongsToEventWeek(Wt::WDate date) {
+    return begin_.date().addDays(1 - begin_.date().dayOfWeek()) <= date &&
+           date <= end_.date().addDays(TimeInterval::DAYS_IN_WEEK - end_.date().dayOfWeek());
+}
+
 void EventW::makeDayEventWidget(Wt::WTable* table) {
     if (isLargeEvent()) {
         auto style = "w-100 rounded-start rounded-end";
@@ -32,7 +41,6 @@ void EventW::makeDayEventWidget(Wt::WTable* table) {
 }
 
 void EventW::makeWeekEventWidget(Wt::WTable* table, Wt::WDate begin_of_week) {
-
     if (isLargeEvent()) {
         auto begin_event = begin_.date() > begin_of_week ? begin_.date() : begin_of_week;
         auto end_event = end_.date() < begin_of_week.addDays(TimeInterval::DAYS_IN_WEEK)
@@ -43,7 +51,6 @@ void EventW::makeWeekEventWidget(Wt::WTable* table, Wt::WDate begin_of_week) {
         std::string base_style = "w-100 ";
         for (auto day = begin_of_week; day < begin_of_week.addDays(TimeInterval::DAYS_IN_WEEK);
              day = day.addDays(1)) {
-            std::cout << day.day() << '\n';
             if (day == end_event && day != begin_event) {
                 auto style = base_style +
                              (day == begin_.date() ? "rounded-start" : "border-start-0") +
@@ -75,11 +82,10 @@ void EventW::makeWeekEventWidget(Wt::WTable* table, Wt::WDate begin_of_week) {
 }
 
 void EventW::makeMonthEventWidget(Wt::WTable* table, Wt::WDate first_day_of_table) {
-
     auto day_of_month = first_day_of_table;
     for (size_t pos = 0; day_of_month < first_day_of_table.addDays(TimeInterval::DAYS_IN_WEEK * 5);
          day_of_month = day_of_month.addDays(1), pos++) {
-        if (begin_.date() <= day_of_month && day_of_month <= end_.date()) {
+        if (isBelongsToEvent(day_of_month)) {
             std::string style, title = "ㅤ";  // ???
             if (day_of_month == begin_.date()) {
                 style += "rounded-start ";
@@ -91,9 +97,7 @@ void EventW::makeMonthEventWidget(Wt::WTable* table, Wt::WDate first_day_of_tabl
             makeEventLargePartWidget(
                 title, style + "w-100",
                 table->elementAt(1 + (pos) / TimeInterval::DAYS_IN_WEEK, day_of_month.dayOfWeek()));
-        } else if (begin_.date().addDays(1 - begin_.date().dayOfWeek()) <= day_of_month &&
-                   day_of_month <=
-                       end_.date().addDays(TimeInterval::DAYS_IN_WEEK - end_.date().dayOfWeek())) {
+        } else if (isBelongsToEventWeek(day_of_month)) {
             table->elementAt(1 + (pos) / TimeInterval::DAYS_IN_WEEK, day_of_month.dayOfWeek())
                 ->addWidget(std::make_unique<Wt::WBreak>());
         }
@@ -103,7 +107,7 @@ void EventW::makeMonthEventWidget(Wt::WTable* table, Wt::WDate first_day_of_tabl
 void EventW::addDialog(Wt::WPushButton* eventWidget) {
     eventWidget->setAttributeValue("id", Wt::WString(std::to_string(id_)));
     eventWidget->setAttributeValue("title", Wt::WString(title_, Wt::CharEncoding::UTF8));
-    eventWidget->clicked().connect([=] {
+    eventWidget->clicked().connect([=]() {
         eventWidget->addChild(
             std::make_unique<EventD>(std::stoi(eventWidget->attributeValue("id").toUTF8()),
                                      eventWidget->attributeValue("title").toUTF8()));

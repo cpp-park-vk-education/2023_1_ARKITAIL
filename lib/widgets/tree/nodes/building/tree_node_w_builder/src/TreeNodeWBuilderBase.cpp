@@ -14,19 +14,22 @@
 
 #include "ConnectionPoint.hpp"
 #include "ITreeNode.hpp"
-#include "ITreeNodeWAnalyst.hpp"
 #include "InPlaceEditTitle.hpp"
 #include "Managers.hpp"
 #include "Node.hpp"
 #include "OptionsW.hpp"
 #include "Profile.hpp"
 #include "SessionScopeMap.hpp"
+#include "Tag.hpp"
+#include "TagW.hpp"
 #include "TreeNodeW.hpp"
 #include "TreeNodeWAnalyst.hpp"
+#include "TreeNodeWAnalystBase.hpp"
 #include "TreeW.hpp"
 #include "User.hpp"
 
-TreeNodeWBuilderBase* TreeNodeWBuilderBase::addAnalyst(std::unique_ptr<ITreeNodeWAnalyst> analyst) {
+TreeNodeWBuilderBase* TreeNodeWBuilderBase::addAnalyst(
+    std::unique_ptr<TreeNodeWAnalystBase> analyst) {
     tree_node_w->analyst_ = (std::move(analyst));
     return this;
 }
@@ -67,14 +70,14 @@ TreeNodeWBuilderBase* TreeNodeWBuilderBase::addOptions(std::unique_ptr<OptionsW>
 }
 
 TreeNodeWBuilderBase* TreeNodeWBuilderBase::addToolTip(std::string description,
-                                                       std::vector<std::string> tags) {
+                                                       std::vector<Tag> tags) {
     auto content = std::make_unique<Wt::WContainerWidget>();
     addToolTip(fillToolTipContainer(std::move(content), description, tags));
     return this;
 }
 
 TreeNodeWBuilderBase* TreeNodeWBuilderBase::addToolTip(std::string description,
-                                                       std::vector<std::string> tags, User author) {
+                                                       std::vector<Tag> tags, User author) {
     auto content = std::make_unique<Wt::WContainerWidget>();
 
     auto author_ptr = content->addWidget(std::make_unique<Wt::WAnchor>(
@@ -101,8 +104,7 @@ TreeNodeWBuilderBase* TreeNodeWBuilderBase::endNode() {
 }
 
 std::unique_ptr<Wt::WContainerWidget> TreeNodeWBuilderBase::fillToolTipContainer(
-    std::unique_ptr<Wt::WContainerWidget> content, std::string description,
-    std::vector<std::string> tags) {
+    std::unique_ptr<Wt::WContainerWidget> content, std::string description, std::vector<Tag> tags) {
     content->setMaximumSize(Wt::WLength(300), Wt::WLength::Auto);
     content->addStyleClass("p-2");
 
@@ -112,12 +114,8 @@ std::unique_ptr<Wt::WContainerWidget> TreeNodeWBuilderBase::fillToolTipContainer
     content->addWidget(std::make_unique<Wt::WBreak>());
 
     for (auto&& tag : tags) {
-        auto tag_ptr = content->addWidget(
-            std::make_unique<Wt::WAnchor>(Wt::WLink(Wt::LinkType::InternalPath, "/search"), tag));
-        tag_ptr->addStyleClass("btn btn-light border-success p-0 px-1 mx-1");
-        tag_ptr->clicked().connect([=] {
-            std::cout << '\n' << tag_ptr->text().toUTF8() << '\n' << std::endl;
-        });
+        auto tag_ptr = content->addWidget(std::make_unique<TagW>(tag));
+        tag_ptr->tagClicked().connect([=](size_t tag_id) {});
     }
     return content;
 }
