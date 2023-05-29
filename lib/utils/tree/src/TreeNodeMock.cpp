@@ -1,5 +1,8 @@
 #include "TreeNodeMock.hpp"
 
+TreeNodeMock::TreeNodeMock(const Node& node) :
+    TreeNodeMock(node, nullptr) {}
+
 TreeNodeMock::TreeNodeMock(const Node& node, ITreeNode* parent) :
     node_(node),
     children_(),

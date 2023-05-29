@@ -17,6 +17,7 @@
 #include "NodeManager.hpp"
 #include "DirectoryManager.hpp"
 #include "CalendarManager.hpp"
+#include "TagManager.hpp"
 #include "ProfileManager.hpp"
 
 #include "User.hpp"
@@ -51,6 +52,7 @@ protected:
 			std::make_unique<DirectoryManager>(db_managers),
 			std::make_unique<CalendarManager>(db_managers),
 			std::make_unique<EventManager>(db_managers),
+			std::make_unique<TagManager>(db_managers),
 			std::make_unique<ProfileManager>(db_managers)
 		);
 

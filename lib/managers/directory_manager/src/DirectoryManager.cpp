@@ -33,7 +33,7 @@ DirectorySptr DirectoryManager::get(int directory_id) {
 //
 // Остальные поля не участвуют в добавлении (опускаются) 
 //
-// parent_id является полем Directory::id родительской директории
+// directory_id является полем Directory::id родительской директории
 int DirectoryManager::add(DirectorySptr directory, int parent_id) {
     UserSptr user = db_->user_dbm()->get();
     DirectorySptr parent_directory = get(parent_id);
@@ -44,8 +44,8 @@ int DirectoryManager::add(DirectorySptr directory, int parent_id) {
     auto node_mgr = SessionScopeMap::instance().get()->managers()->node_manager();
 
     NodeSptr parent_node = node_mgr->get(get(parent_id)->node_id);
-    NodeSptr new_node = std::make_shared<Node>(
-        0, parent_node->id, 0, parent_node->type);
+    NodeSptr new_node
+        = std::make_shared<Node>(0, parent_node->id, 0, parent_node->type);
 
     size_t new_node_id = node_mgr->add(new_node);
 

@@ -190,15 +190,15 @@ std::vector<Node> NodeManager::getChildren(int node_id) {
 }
 
 bool NodeManager::subscribed(int node_id) {
-	UserSptr user = db_->user_dbm()->get();
-	NodeSptr root = db_->node_dbm()->get(user->root_id);
+    UserSptr user = db_->user_dbm()->get();
+    NodeSptr root = db_->node_dbm()->get(user->root_id);
 
-	for (auto c : db_->node_dbm()->getChildren(root->id))
-		if (c.type & SUBSCRIPTIONS_GROUP)
-			for (auto s : db_->node_dbm()->getChildren(c.id))
-				if (s.resource_id == node_id)
-					return true;
+    for (auto c : db_->node_dbm()->getChildren(root->id))
+	    if (c.type & SUBSCRIPTIONS_GROUP)
+	        for (auto s : db_->node_dbm()->getChildren(c.id))
+	    	    if (s.resource_id == node_id)
+	    	        return true;
 
-	return false;
+    return false;
 }
 

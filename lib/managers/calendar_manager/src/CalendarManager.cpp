@@ -1,10 +1,18 @@
+#include "CalendarManager.hpp"
+
 #include <memory>
 
+#include <Wt/WDate.h>
+#include <Wt/WDateTime.h>
+
 #include "Calendar.hpp"
-#include "CalendarManager.hpp"
+#include "Directory.hpp"
 #include "Event.hpp"
 #include "DbManagers.hpp"
 #include "IDbManagers.hpp"
+#include "Node.hpp"
+#include "SessionScopeMap.hpp"
+#include "User.hpp"
 
 CalendarManager::CalendarManager(std::shared_ptr<IDbManagers> db) :
     db_(db) {}
@@ -14,6 +22,26 @@ CalendarSptr CalendarManager::get(size_t calendar_id) {
 }
 
 size_t CalendarManager::add(CalendarSptr calendar, size_t directory_id) {
+    auto mgr = SessionScopeMap::instance().get()->managers();
+
+    UserSptr user = db_->user_dbm()->get();
+    DirectorySptr parent_directory = mgr->directory_manager()->get(directory_id);
+
+    if (!parent_directory->id || user->id != parent_directory->owner_id)
+        return 0;
+
+    NodeSptr parent_node = mgr->node_manager()->get(get(directory_id)->node_id);
+    NodeSptr new_node
+        = std::make_shared<Node>(0, parent_node->id, 0, parent_node->type);
+
+    size_t new_node_id = mgr->node_manager()->add(new_node);
+
+    if (!new_node_id)
+        return 0;
+
+    CalendarSptr new_calendar = calendar;
+    calendar->node_id = new_node_id;
+
     return db_->calendar_dbm()->add(calendar);
 }
 
