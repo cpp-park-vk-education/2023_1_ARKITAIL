@@ -35,6 +35,8 @@ class EventW {
     void makeMonthEventWidget(Wt::WTable* table, Wt::WDate begin_of_month);
 
     bool isLargeEvent();
+    bool isBelongsToEvent(Wt::WDate date);
+    bool isBelongsToEventWeek(Wt::WDate date);
 
   private:
     int id_;

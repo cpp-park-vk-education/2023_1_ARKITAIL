@@ -1,3 +1,5 @@
+#include <Wt/WTable.h>
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 #include <memory>
@@ -25,8 +27,8 @@ class EventWTest : public ::testing::Test {
                                 Wt::WDateTime(Wt::WDate(2023, 5, 25), Wt::WTime(14, 0))),
 
                          EventW(4, "Title4", Wt::WColor(25, 200, 220, 50),
-                                Wt::WDateTime(Wt::WDate(2023, 5, 27), Wt::WTime(0, 0)),
-                                Wt::WDateTime(Wt::WDate(2024, 5, 27), Wt::WTime(23, 59)))};
+                                Wt::WDateTime(Wt::WDate(2023, 5, 21), Wt::WTime(0, 0)),
+                                Wt::WDateTime(Wt::WDate(2024, 5, 21), Wt::WTime(23, 59)))};
 
         small_events_ = {EventW(0, "Title0", Wt::WColor(200, 50, 50, 50),
                                 Wt::WDateTime(Wt::WDate(2023, 5, 27), Wt::WTime(12, 45)),
@@ -46,7 +48,7 @@ class EventWTest : public ::testing::Test {
 
                          EventW(4, "Title4", Wt::WColor(25, 200, 220, 50),
                                 Wt::WDateTime(Wt::WDate(2023, 7, 27), Wt::WTime(0, 8)),
-                                Wt::WDateTime(Wt::WDate(2024, 7, 27), Wt::WTime(20, 59)))};
+                                Wt::WDateTime(Wt::WDate(2023, 7, 27), Wt::WTime(20, 59)))};
     }
 
     void TearDown() override {}
@@ -55,12 +57,38 @@ class EventWTest : public ::testing::Test {
     std::vector<EventW> large_events_;
 };
 
-// TEST_F(EventWTest, IsLargeEvent) {
-//     for (auto small_event : small_events_) {
-//         EXPECT_FALSE(small_event.isLargeEvent());
-//     }
+TEST_F(EventWTest, IsLargeEvent) {
+    for (auto large_event : large_events_) {
+        EXPECT_TRUE(large_event.isLargeEvent());
+    }
+}
 
-//     for (auto large_event : large_events_) {
-//         EXPECT_TRUE(large_event.isLargeEvent());
-//     }
-// }
+TEST_F(EventWTest, IsNotLargeEvent) {
+    for (auto small_event : small_events_) {
+        EXPECT_FALSE(small_event.isLargeEvent());
+    }
+}
+
+TEST_F(EventWTest, IsBelongsToEvent) {
+    for (auto large_event : large_events_) {
+        EXPECT_TRUE(large_event.isBelongsToEvent(Wt::WDate(2023, 5, 23)));
+    }
+}
+
+TEST_F(EventWTest, IsNotBelongsToEvent) {
+    for (auto large_event : large_events_) {
+        EXPECT_FALSE(large_event.isBelongsToEvent(Wt::WDate(2022, 3, 23)));
+    }
+}
+
+TEST_F(EventWTest, IsBelongsToBeginOfEventWeek) {
+    EXPECT_TRUE(large_events_[0].isBelongsToEventWeek(Wt::WDate(2023, 5, 15)));
+    EXPECT_TRUE(large_events_[1].isBelongsToEventWeek(Wt::WDate(2023, 2, 24)));
+    EXPECT_FALSE(large_events_[3].isBelongsToEventWeek(Wt::WDate(2023, 1, 14)));
+}
+
+TEST_F(EventWTest, IsBelongsToEndOfEventWeek) {
+    EXPECT_TRUE(large_events_[0].isBelongsToEventWeek(Wt::WDate(2023, 5, 28)));
+    EXPECT_TRUE(large_events_[1].isBelongsToEventWeek(Wt::WDate(2023, 6, 4)));
+    EXPECT_FALSE(large_events_[3].isBelongsToEventWeek(Wt::WDate(2023, 1, 21)));
+}

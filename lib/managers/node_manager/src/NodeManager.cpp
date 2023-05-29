@@ -23,7 +23,8 @@ bool NodeManager::checkAccess(size_t user_id, size_t node_id) {
     if (node.type & CALENDAR)
         return db_->calendar_dbm()->get(node.resource_id)->owner_id == user_id;
 
-    if (node.type & MOUNT) return checkAccess(user_id, node.parent_id);
+    if (node.type & MOUNT)
+        return checkAccess(user_id, node.parent_id);
 
     return false;
 }
@@ -47,32 +48,40 @@ Node NodeManager::get(size_t node_id) {
 size_t NodeManager::add(const Node& node) {
     User user = db_->user_dbm()->get();
 
-    if (!checkAccess(user.id, node.parent_id)) return 0;
+    if (!checkAccess(user.id, node.parent_id)) {
+        return 0;
+    }
 
     if (node.type & (PRIVATE_DIRECTORY | PUBLIC_DIRECTORY)) {
         Node parent_node = db_->node_dbm()->get(node.parent_id);
 
         if (!(parent_node.type & PRIVATE_GD && node.type & PRIVATE_DIRECTORY ||
               parent_node.type & PUBLIC_GD && node.type & PUBLIC_DIRECTORY ||
-              checkAccess(user.id, node.id)))
+              checkAccess(user.id, node.id))) {
             return 0;
+        }
 
     } else if (node.type & CALENDAR) {
         Node parent_node = db_->node_dbm()->get(node.parent_id);
 
         if (!(parent_node.type & PRIVATE_GD && node.type & PRIVATE_CALENDAR ||
               parent_node.type & PUBLIC_GD && node.type & PUBLIC_CALENDAR ||
-              checkAccess(user.id, node.id)))
+              checkAccess(user.id, node.id))) {
             return 0;
+        }
 
     } else if (node.type & MOUNT) {
         Node parent_node = db_->node_dbm()->get(node.parent_id);
 
-        if (!(parent_node.type & SUBSCRIPTIONS_GROUP)) return 0;
+        if (!(parent_node.type & SUBSCRIPTIONS_GROUP)) {
+            return 0;
+        }
 
         Node resource_node = db_->node_dbm()->get(node.resource_id);
 
-        if (!(resource_node.type & (PUBLIC_DIRECTORY | PUBLIC_CALENDAR))) return 0;
+        if (!(resource_node.type & (PUBLIC_DIRECTORY | PUBLIC_CALENDAR))) {
+            return 0;
+        }
 
     } else {
         return 0;
@@ -97,12 +106,12 @@ void NodeManager::update(const Node& node) {
 
 // Удалять запрещено типы ROOT, {PRIVATE | PUBLIC | SUBSCRIPTIONS | PROFILE}_GROUP
 void NodeManager::remove(size_t node_id) {
-	User user = db_->user_dbm()->get();
-	Node node = db_->node_dbm()->get(node_id);
+    User user = db_->user_dbm()->get();
+    Node node = db_->node_dbm()->get(node_id);
 
-	if (!checkAccess(user.id, node.id) ||
-		node.type & (ROOT | PRIVATE_GROUP | PUBLIC_GROUP | SUBSCRIPTIONS_GROUP | PROFILE_GROUP))
-		return;
+    if (!checkAccess(user.id, node.id) ||
+        node.type & (ROOT | PRIVATE_GROUP | PUBLIC_GROUP | SUBSCRIPTIONS_GROUP | PROFILE_GROUP))
+        return;
 
     std::queue<Node> subtree;
     subtree.push(node);
@@ -112,19 +121,19 @@ void NodeManager::remove(size_t node_id) {
     while (!subtree.empty()) {
         cur_node = subtree.front();
 
-		if (cur_node.type & (PRIVATE_DIRECTORY | PUBLIC_DIRECTORY))
-			for (auto child_node : db_->node_dbm()->getChildren(cur_node.id))
-				subtree.push(child_node);
+        if (cur_node.type & (PRIVATE_DIRECTORY | PUBLIC_DIRECTORY))
+            for (auto child_node : db_->node_dbm()->getChildren(cur_node.id))
+                subtree.push(child_node);
 
-		db_->node_dbm()->remove(cur_node.id);
-		
-		if (cur_node.type & (PRIVATE_DIRECTORY | PUBLIC_DIRECTORY))
-			db_->directory_dbm()->remove(cur_node.resource_id);
-		else if (cur_node.type & (PRIVATE_CALENDAR | PUBLIC_CALENDAR))
-			db_->calendar_dbm()->remove(cur_node.resource_id);
-        
-		subtree.pop();
-	}
+        db_->node_dbm()->remove(cur_node.id);
+
+        if (cur_node.type & (PRIVATE_DIRECTORY | PUBLIC_DIRECTORY))
+            db_->directory_dbm()->remove(cur_node.resource_id);
+        else if (cur_node.type & (PRIVATE_CALENDAR | PUBLIC_CALENDAR))
+            db_->calendar_dbm()->remove(cur_node.resource_id);
+
+        subtree.pop();
+    }
 }
 
 void NodeManager::tag(const Tag& tag, size_t node_id) {
@@ -139,7 +148,6 @@ void NodeManager::move(size_t node_id, size_t destination_id) {
     Node mvd_node = mv_node;
     mvd_node.parent_id = destination_id;
     update(mvd_node);
-
 }
 
 // TODO(uma_op): Проверка на права доступа
@@ -148,7 +156,8 @@ void NodeManager::subscribe(size_t node_id) {
     User user = db_->user_dbm()->get();
     Node node = db_->node_dbm()->get(node_id);
 
-    if (!(node.type & (PUBLIC_DIRECTORY | PUBLIC_CALENDAR))) return;
+    if (!(node.type & (PUBLIC_DIRECTORY | PUBLIC_CALENDAR)))
+        return;
 
     for (auto subg : db_->node_dbm()->getChildren(user.root_id)) {
         if (subg.type & SUBSCRIPTIONS_GROUP) {
@@ -157,7 +166,6 @@ void NodeManager::subscribe(size_t node_id) {
             break;
         }
     }
-
 }
 
 // Отписка является одной из самых безобидных операций
@@ -167,24 +175,25 @@ void NodeManager::unsubscribe(size_t node_id) {
 
     for (auto subg : db_->node_dbm()->getChildren(user.root_id))
         if (subg.type & SUBSCRIPTIONS_GROUP) {
-            for (auto sub : db_->node_dbm()->getChildren(subg.id))
+            for (auto sub : db_->node_dbm()->getChildren(subg.id)) {
                 if (sub.resource_id == node_id) {
                     db_->node_dbm()->remove(sub.id);
                     break;
                 }
+            }
             break;
         }
 }
 
 // Получение детей так же как и получение требует лишь проверки прав доступа
 std::vector<Node> NodeManager::getChildren(size_t node_id) {
-	User user = db_->user_dbm()->get();
-	Node node = db_->node_dbm()->get(node_id);
+    User user = db_->user_dbm()->get();
+    Node node = db_->node_dbm()->get(node_id);
 
-	if (!(checkAccess(user.id, node_id) || node.type & PUBLIC))
-		return std::vector<Node>();
+    if (!(checkAccess(user.id, node_id) || node.type & PUBLIC))
+        return std::vector<Node>();
 
-	return db_->node_dbm()->getChildren(node_id);
+    return db_->node_dbm()->getChildren(node_id);
 }
 
 bool NodeManager::subscribed(size_t node_id) {
@@ -197,6 +206,6 @@ bool NodeManager::subscribed(size_t node_id) {
 		if (s.resource_id == node_id)
 		    return true;
 
+
     return false;
 }
-

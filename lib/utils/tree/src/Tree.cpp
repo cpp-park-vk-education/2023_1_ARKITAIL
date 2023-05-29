@@ -4,6 +4,7 @@
 
 #include <Wt/WDate.h>
 #include <Wt/WDateTime.h>
+
 #include <queue>
 #include <vector>
 
@@ -11,6 +12,7 @@
 #include "Managers.hpp"
 #include "Node.hpp"
 #include "SessionScopeMap.hpp"
+#include "TreeNode.hpp"
 
 Tree::Tree(const Node& node) :
     root_(std::make_unique<TreeNode>(node, nullptr)),
@@ -22,7 +24,7 @@ ITreeNode* Tree::getRoot() {
 
 std::vector<Event> Tree::getCheckedEvents() {
     auto mgr = SessionScopeMap::instance().get()->managers();
-    
+
     std::queue<ITreeNode*> q;
     std::vector<Event> v;
 
@@ -31,7 +33,6 @@ std::vector<Event> Tree::getCheckedEvents() {
     while (!q.empty()) {
         if ((q.front()->getNode().type & (PUBLIC_CALENDAR | PRIVATE_CALENDAR)) &&
             q.front()->isChecked()) {
-
             std::cout << "Calendar id: " << q.front()->getNode().resource_id << std::endl;
             for (auto e : mgr->calendar_manager()->getEvents(q.front()->getNode().resource_id)) {
                 std::cout << "Event id: " << e->id << std::endl;
@@ -112,7 +113,7 @@ void Tree::uncheckNode(ITreeNode* node) {
 
     while (!q.empty()) {
         q.front()->uncheck();
-        
+
         for (auto c : q.front()->getChildren())
             q.push(c);
 

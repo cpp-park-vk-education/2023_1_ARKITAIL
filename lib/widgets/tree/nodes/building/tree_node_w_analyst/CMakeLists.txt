@@ -1,12 +1,14 @@
 set(MODULE_NAME tree_node_w_analyst)
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
-set(INTERFACE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/interface)
+set(BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/base)
                       
 file(GLOB SOURCES ${SOURCE_DIR}/*.cpp)
-                      
+                
+add_subdirectory(managers_stub)
+
 add_library(${MODULE_NAME} STATIC ${SOURCES})
-target_include_directories(${MODULE_NAME} PUBLIC ${INCLUDE_DIR} ${INTERFACE_DIR})
+target_include_directories(${MODULE_NAME} PUBLIC ${INCLUDE_DIR} ${BASE_DIR})
                       
 target_link_libraries(
                     ${MODULE_NAME}
@@ -22,4 +24,9 @@ target_link_libraries(
                         session_scope_map
                         user
                       )
-                      
+                    
+
+if (BUILD_TESTS)
+	add_subdirectory(tests)
+endif()
+                    

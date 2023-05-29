@@ -3,7 +3,7 @@
 #include <Wt/WBreak.h>
 
 #include "EventW.hpp"
-#include "Wt/WBreak.h"
+#include "SessionScopeMap.hpp"
 #include "time_utils.hpp"
 
 MonthW::MonthW() {
@@ -26,16 +26,23 @@ void MonthW::update(Wt::WDate begin_date, std::vector<Event> events) {
         begin_week_day = begin_week_day.addDays(1);
     }
     auto day = begin_date;
+    auto today = Wt::WDate(std::chrono::system_clock::now());
     for (auto pos = 0; pos < 5 * TimeInterval::DAYS_IN_WEEK; day = day.addDays(1)) {
-        table_->elementAt(1 + (pos++) / TimeInterval::DAYS_IN_WEEK, (day.dayOfWeek()))
-            ->addNew<Wt::WText>(std::to_string(day.day()))
-            ->addStyleClass("mx-auto d-block px-auto py-1 text-center");
+        auto text = table_->elementAt(1 + (pos++) / TimeInterval::DAYS_IN_WEEK, (day.dayOfWeek()))
+                        ->addNew<Wt::WText>(std::to_string(day.day()));
+        text->addStyleClass("mx-auto d-block px-auto py-1 text-center");
+        if (day == today) {
+            text->addStyleClass(" today-color");
+        }
     }
 
-   std::vector<EventW> events_w;
+    std::vector<EventW> events_w;
+
+    auto calendar_mgr = SessionScopeMap::instance().get()->managers()->calendar_manager();
 
     for (auto event : events) {
-        events_w.push_back(EventW(event.id, event.summary, event.color, event.start, event.end));
+        auto color = Wt::WColor(calendar_mgr->get(event.calendar_id)->color);
+        events_w.push_back(EventW(event.id, event.summary, color, event.start, event.end));
     }
 
     for (auto&& event : events_w) {

@@ -15,7 +15,7 @@ NavbarW::NavbarW() {
     addStyle();
 }
 
-Wt::WMenuItem *NavbarW::addLink(const std::string &icon_path, const std::string &path) {
+Wt::WMenuItem* NavbarW::addLink(const std::string& icon_path, const std::string& path) {
     auto tmp = left_menu_->addItem(icon_path);
     tmp->setLink(Wt::WLink(Wt::LinkType::InternalPath, path));
     return tmp;
