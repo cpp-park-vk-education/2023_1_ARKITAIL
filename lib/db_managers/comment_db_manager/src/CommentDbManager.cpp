@@ -39,6 +39,10 @@ void CommentDbManager::remove(int comment_id) {
   transaction.commit();
 }
 
+void CommentDbManager::update(CommentSptr comment) {
+  // TODO(Antiho)
+}
+
 CommentSptr CommentDbManager::get(int comment_id) {
   Wt::Dbo::ptr<db::Comment> db_comment =
       session_.find<db::Comment>().where("id = ?").bind(comment_id);

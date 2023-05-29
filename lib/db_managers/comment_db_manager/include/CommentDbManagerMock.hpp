@@ -11,6 +11,7 @@ public:
 
 	CommentSptr get(int comment_id) override;
 	int add(CommentSptr comment) override;
+  void update(CommentSptr comment) override;
 	void remove(int comment_id) override;
 
 private:

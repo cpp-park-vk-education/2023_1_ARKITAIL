@@ -3,7 +3,7 @@
 #include "DbModels.hpp"
 #include "IEventDbManager.hpp"
 
-class EventDbManager: IEventDbManager {
+class EventDbManager: public IEventDbManager {
 public:
   explicit EventDbManager(Wt::Dbo::Session &session) : session_(session) {}
 

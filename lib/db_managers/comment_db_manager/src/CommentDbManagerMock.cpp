@@ -28,6 +28,10 @@ int CommentDbManagerMock::add(CommentSptr comment) {
 	return aid_++;
 }
 
+void CommentDbManagerMock::update(CommentSptr comment) {
+  // TODO(Antiho)
+}
+
 // void CommentDbManagerMock::update(CommentSptr comment) {
 // 	for (auto e : data_)
 // 		if (e.id == comment.id)
