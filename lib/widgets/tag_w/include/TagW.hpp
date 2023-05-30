@@ -6,11 +6,13 @@
 #include "Tag.hpp"
 
 class TagW : public Wt::WContainerWidget {
-  public:
+public:
     TagW(Tag tag);
     ~TagW() = default;
+
     Wt::Signal<size_t>& tagClicked();
 
-  private:
+private:
     Wt::Signal<size_t> tag_clicked_;
+
 };

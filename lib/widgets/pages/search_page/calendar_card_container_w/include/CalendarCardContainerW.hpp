@@ -7,13 +7,15 @@
 #include <vector>
 
 #include "CalendarCardW.hpp"
+#include "Calendar.hpp"
 
 class CalendarCardContainerW : public Wt::WContainerWidget {
 public:
 	CalendarCardContainerW();
+	void init(const std::vector<Calendar>& content);
 
 private:
-	Wt::WText* text_;
+	Wt::WText* status_;
 	std::vector<CalendarCardW*> calendar_cards_; 
 
 };

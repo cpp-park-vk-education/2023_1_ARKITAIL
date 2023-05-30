@@ -5,10 +5,9 @@
 #include "Tag.hpp"
 
 TagW::TagW(Tag tag) {
-    addWidget(
-        std::make_unique<Wt::WAnchor>(Wt::WLink(Wt::LinkType::InternalPath, "/search"), tag.name));
+    addWidget(std::make_unique<Wt::WAnchor>(Wt::WLink(Wt::LinkType::InternalPath, "/search"), tag.name));
     addStyleClass("btn btn-light border-success p-0 px-1 mx-1");
-    clicked().connect([=] {
+    clicked().connect([&] {
         tag_clicked_.emit(tag.id);
     });
 }

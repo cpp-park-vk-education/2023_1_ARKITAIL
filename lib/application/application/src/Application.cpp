@@ -10,6 +10,7 @@
 
 #include "MainP.hpp"
 #include "OtherP.hpp"
+#include "SearchPage.hpp"
 #include "SessionScopeMap.hpp"
 #include "navbar_w.hpp"
 
@@ -35,7 +36,7 @@ Application::Application(const Wt::WEnvironment& env) :
     pages_.emplace("/profile", std::make_unique<Deferred<OtherP, Wt::WContainerWidget>>())
         .first->second.set_destination(&cur_swap_);
     navbar_->addLink("My Profile", "/profile");
-    pages_.emplace("/search", std::make_unique<Deferred<Wt::WContainerWidget>>())
+    pages_.emplace("/search", std::make_unique<Deferred<SearchP, Wt::WContainerWidget>>())
         .first->second.set_destination(&cur_swap_);
     navbar_->addLink("Search", "/search");
 

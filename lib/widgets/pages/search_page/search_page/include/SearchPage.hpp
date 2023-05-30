@@ -11,12 +11,12 @@
 class SearchP : public Wt::WContainerWidget {
 public:
     SearchP();
-    void Find(std::string input_string);
+    void search();
        
 private:
     Wt::WLineEdit* input_users_;
     Wt::WLineEdit* input_tags_;
-    Wt::WPushButton& find_button_;
+    Wt::WPushButton* find_button_;
     Wt::WText* hint_;
     CalendarCardContainerW* found_;
     Searcher* searcher_;
