@@ -1,7 +1,7 @@
-#include "day_w.hpp"
+#include "DayW.hpp"
 
 #include "EventW.hpp"
-#include "time_utils.hpp"
+#include "TimeUtils.hpp"
 #include "SessionScopeMap.hpp"
 
 DayW::DayW() {

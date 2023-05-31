@@ -52,5 +52,8 @@ TEST_F(TreeNodeWAnalystTest, TYPIC1) {
 }
 
 TEST_F(TreeNodeWAnalystTest, TYPIC_TYPIC_TUPIC) {
+    for (auto group_node : group_nodes_) {
+        group_node->getNode();
+    }
     EXPECT_EQ(1, 1);
 }

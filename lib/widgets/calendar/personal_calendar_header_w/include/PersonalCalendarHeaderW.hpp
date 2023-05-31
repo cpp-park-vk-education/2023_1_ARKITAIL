@@ -2,7 +2,7 @@
 
 #include <Wt/WPushButton.h>
 
-#include "calendar_header_w.hpp"
+#include "CalendarHeaderW.hpp"
 
 class PersonalCalendarHeaderW : public CalendarHeaderW {
   public:

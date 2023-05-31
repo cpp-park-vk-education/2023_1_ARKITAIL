@@ -11,7 +11,7 @@
 #include <memory>
 
 #include "Event.hpp"
-#include "i_calendar_header_w.hpp"
+#include "ICalendarHeaderW.hpp"
 
 enum SwitchingDirection {
     BACK = -1,

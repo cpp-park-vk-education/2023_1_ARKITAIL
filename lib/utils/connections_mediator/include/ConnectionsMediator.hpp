@@ -9,7 +9,7 @@
 #include "ITreeNode.hpp"
 #include "TreeW.hpp"
 #include "Wt/WDate.h"
-#include "i_calendar_header_w.hpp"
+#include "ICalendarHeaderW.hpp"
 
 class ConnectionsMediator {
   public:

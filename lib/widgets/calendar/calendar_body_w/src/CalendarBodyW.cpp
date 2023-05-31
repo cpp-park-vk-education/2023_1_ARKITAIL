@@ -7,7 +7,7 @@
 
 #include <memory>
 
-#include "time_utils.hpp"
+#include "TimeUtils.hpp"
 
 CalendarBodyW::CalendarBodyW() {
     table_ = addWidget(std::make_unique<Wt::WTable>());

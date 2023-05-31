@@ -5,8 +5,8 @@
 #include <memory>
 
 #include "CalendarBodyW.hpp"
-#include "calendar_w.hpp"
-#include "i_calendar_header_w.hpp"
+#include "CalendarW.hpp"
+#include "ICalendarHeaderW.hpp"
 
 class CalendarHeaderStub : public CalendarHeaderW {
   public:

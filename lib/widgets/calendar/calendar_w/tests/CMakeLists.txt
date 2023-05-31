@@ -1,4 +1,4 @@
-add_executable(calendar_w_tests src/calendar_w_tests.cpp)
+add_executable(calendar_w_tests src/tests.cpp)
 
 target_link_libraries(calendar_w_tests PUBLIC
                       calendar_w

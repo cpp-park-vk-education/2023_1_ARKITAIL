@@ -1,4 +1,4 @@
-#include "calendar_header_w.hpp"
+#include "CalendarHeaderW.hpp"
 
 #include <Wt/WComboBox.h>
 #include <Wt/WContainerWidget.h>
@@ -11,7 +11,7 @@
 #include <memory>
 
 #include "Event.hpp"
-#include "time_utils.hpp"
+#include "TimeUtils.hpp"
 
 CalendarHeaderW::CalendarHeaderW() :
     today_button_(),

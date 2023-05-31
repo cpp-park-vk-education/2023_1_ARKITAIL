@@ -2,7 +2,7 @@
 
 #include <Wt/WContainerWidget.h>
 
-#include "calendar_w.hpp"
+#include "CalendarW.hpp"
 
 class MainP : public Wt::WContainerWidget {
   public:

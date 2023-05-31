@@ -7,7 +7,8 @@ ProfileDbManagerMock::ProfileDbManagerMock() :
 	data_(),
 	aid_(1) {
 
-	data_.emplace_back(0, 0, 0, std::vector<size_t>());
+	// data_.emplace_back(0, 0, 0, std::vector<size_t>(), "");
+    data_.emplace_back(0, 26, 0, std::vector<size_t>{12, 21}, "Profile");
 }
 
 const Profile& ProfileDbManagerMock::get(size_t profile_id) {
@@ -23,7 +24,8 @@ size_t ProfileDbManagerMock::add(const Profile& profile) {
 		aid_,
 		profile.node_id,
 		profile.owner_id,
-		profile.nodes
+		profile.nodes,
+		profile.name
 	);
 
 	return aid_++;

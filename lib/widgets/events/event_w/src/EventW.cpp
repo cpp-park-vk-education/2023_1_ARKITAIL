@@ -14,7 +14,7 @@
 #include <string>
 
 #include "event_d.hpp"
-#include "time_utils.hpp"
+#include "TimeUtils.hpp"
 
 bool EventW::isLargeEvent() {
     return begin_.date().daysTo(end_.date());

@@ -11,7 +11,7 @@
 #include "MainP.hpp"
 #include "OtherP.hpp"
 #include "SessionScopeMap.hpp"
-#include "navbar_w.hpp"
+#include "NavbarW.hpp"
 
 #include "Deferred.hpp"
 
