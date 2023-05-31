@@ -11,6 +11,9 @@
 #include "TreeW.hpp"
 #include "Wt/WDate.h"
 #include "i_calendar_header_w.hpp"
+#include "Profile.hpp"
+#include "User.hpp"
+#include "OtherUserP.hpp"
 
 class ConnectionsMediator {
   public:
@@ -52,5 +55,5 @@ class ConnectionsMediator {
     ConnectionPoint<Wt::Signal<Tag>, TagsLineEdit, const Tag&> search_tag;
 
     // сигнал для перехода на чужой профиль
-    // ConnectionPoint<Wt::Signal<User>, ProfileP, const User&> swap_to_profile_page;
+    ConnectionPoint<Wt::Signal<User>, OtherUserP, const User&> swap_to_profile_page;
 };

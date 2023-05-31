@@ -10,6 +10,7 @@
 
 #include "MainP.hpp"
 #include "OtherP.hpp"
+#include "OtherUserP.hpp"
 #include "SearchPage.hpp"
 #include "SessionScopeMap.hpp"
 #include "navbar_w.hpp"
@@ -33,12 +34,18 @@ Application::Application(const Wt::WEnvironment& env) :
     pages_.emplace("/calendars", std::make_unique<Deferred<MainP, Wt::WContainerWidget>>())
         .first->second.set_destination(&cur_swap_);
     navbar_->addLink("Calendars", "/calendars");
-    pages_.emplace("/profile", std::make_unique<Deferred<OtherP, Wt::WContainerWidget>>())
+    pages_.emplace("/profile", std::make_unique<Deferred<OtherUserP, Wt::WContainerWidget>>()) // заменить на UserP
         .first->second.set_destination(&cur_swap_);
     navbar_->addLink("My Profile", "/profile");
     pages_.emplace("/search", std::make_unique<Deferred<SearchP, Wt::WContainerWidget>>())
         .first->second.set_destination(&cur_swap_);
     navbar_->addLink("Search", "/search");
+
+    pages_.emplace("/other_calendar", std::make_unique<Deferred<OtherP, Wt::WContainerWidget>>())
+        .first->second.set_destination(&cur_swap_);
+
+    pages_.emplace("/other_profile", std::make_unique<Deferred<OtherUserP, Wt::WContainerWidget>>())
+        .first->second.set_destination(&cur_swap_);
 
     // Main page configuration
     pages_["/search"].build_destination();

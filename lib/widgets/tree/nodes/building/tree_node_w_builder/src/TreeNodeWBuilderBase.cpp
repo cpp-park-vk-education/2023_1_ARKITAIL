@@ -27,6 +27,7 @@
 #include "TreeNodeWAnalystBase.hpp"
 #include "TreeW.hpp"
 #include "User.hpp"
+#include "UserAnchorW.hpp"
 
 TreeNodeWBuilderBase* TreeNodeWBuilderBase::addAnalyst(
     std::unique_ptr<TreeNodeWAnalystBase> analyst) {
@@ -80,13 +81,7 @@ TreeNodeWBuilderBase* TreeNodeWBuilderBase::addToolTip(std::string description,
                                                        std::vector<Tag> tags, User author) {
     auto content = std::make_unique<Wt::WContainerWidget>();
 
-    auto author_ptr = content->addWidget(std::make_unique<Wt::WAnchor>(
-        Wt::WLink(Wt::LinkType::InternalPath, "/calendars"), author.nickname));
-    author_ptr->setStyleClass("fw-bolder");
-    author_ptr->clicked().connect([=] {
-        std::cout << "кликнули на пользователя " << author_ptr->text().toUTF8() << std::endl;
-    });
-    content->addWidget(std::make_unique<Wt::WBreak>());
+    auto author_ptr = content->addWidget(std::make_unique<UserAnchorW>(author));
 
     addToolTip(fillToolTipContainer(std::move(content), description, tags));
 

@@ -10,7 +10,7 @@ TagW::TagW(const Tag& tag) :
     Wt::WAnchor(Wt::WLink(Wt::LinkType::InternalPath, "/search"), tag.name),
     tag_(tag) {
 
-    addStyleClass("btn btn-light border-success p-0 px-1 me-3");
+    addStyleClass("btn btn-light border-success p-0 px-1 me-3 mt-1");
     clicked().connect([&] {
         tag_clicked_.emit(tag_);
     });

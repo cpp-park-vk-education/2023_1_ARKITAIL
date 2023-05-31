@@ -10,6 +10,7 @@
 #include "SessionScopeMap.hpp"
 #include "TagW.hpp"
 #include "User.hpp"
+#include "UserAnchorW.hpp"
 
 CalendarCardW::CalendarCardW() :
     title_(),
@@ -21,11 +22,11 @@ CalendarCardW::CalendarCardW() :
 CalendarCardW::CalendarCardW(const User& user, CalendarSptr calendar,
                              const std::vector<Tag>& tags) :
     title_(addWidget(std::make_unique<Wt::WAnchor>(
-        Wt::WLink(Wt::LinkType::InternalPath, "/profile"), calendar->summary))),
+        Wt::WLink(Wt::LinkType::InternalPath, "/other_calendar"), calendar->summary))),
+    username_(addWidget(std::make_unique<UserAnchorW>(user))),
     descriptions_(addWidget(std::make_unique<Wt::WText>(
         "<b>Описание:</b> " + ((calendar->description.empty()) ? " — " : calendar->description)))),
     tags_(),
-    username_(),
     node_() {
     auto ss = SessionScopeMap::instance().get();
     auto mng = ss->managers();
@@ -45,7 +46,5 @@ CalendarCardW::CalendarCardW(const User& user, CalendarSptr calendar,
     for (auto tag : tags) {
         tags_.push_back(addWidget(std::make_unique<TagW>(tag)));
     }
-    username_ = addWidget(std::make_unique<Wt::WAnchor>(
-        Wt::WLink(Wt::LinkType::InternalPath, "/profile"), user.nickname));
-    username_->addStyleClass("d-block text-decoration-none mt-2");
+
 }

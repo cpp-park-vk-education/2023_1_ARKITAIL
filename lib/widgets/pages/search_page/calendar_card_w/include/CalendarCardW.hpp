@@ -20,9 +20,9 @@ class CalendarCardW : public Wt::WContainerWidget {
 
   private:
     Wt::WAnchor* title_;
+    Wt::WAnchor* username_;
     Wt::WText* descriptions_;
     std::vector<TagW*> tags_;
-    Wt::WAnchor* username_;
     Node node_;
 
     Wt::Signal<const Node&> calendar_clicked_;
