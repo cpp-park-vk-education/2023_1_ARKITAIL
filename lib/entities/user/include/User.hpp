@@ -10,14 +10,14 @@ class User {
  public:
   User() = default;
   User(
-    int id,
+    long long id,
     int root_id,
     std::string login,
     std::string email,
     std::string nickname,
     std::string description);
 
-  int id;
+  long long id;
   int root_id;
 
   std::string login;

@@ -6,6 +6,7 @@
 #include <Wt/WDateTime.h>
 #include <Wt/WDate.h>
 #include <Wt/WGlobal.h>
+#include <Wt/Auth/Dbo/AuthInfo.h>
 #include <Wt/Dbo/Dbo.h>
 #include <Wt/Dbo/WtSqlTraits.h>
 #include <Wt/Dbo/Field.h>
@@ -50,7 +51,7 @@ public:
 
   template <class Action> void persist(Action &a) {
     Wt::Dbo::hasMany(a, events, Wt::Dbo::ManyToOne, "calendar");
-    Wt::Dbo::belongsTo(a, user, "User");
+    Wt::Dbo::belongsTo(a, user, "user");
     Wt::Dbo::belongsTo(a, node, "node");
     Wt::Dbo::field(a, summary, "summary");
     Wt::Dbo::field(a, description, "description");
@@ -91,7 +92,7 @@ public:
   template <class Action> void persist(Action &a) {
     Wt::Dbo::field(a, name, "name");
     Wt::Dbo::belongsTo(a, node, "node");
-    Wt::Dbo::belongsTo(a, user, "User");
+    Wt::Dbo::belongsTo(a, user, "user");
     Wt::Dbo::field(a, description, "description");
   }
 };
@@ -156,18 +157,18 @@ public:
   std::string email;
   std::string nickname;
   std::string description;
-  std::string password;
   std::vector<unsigned char> avatar;
   Wt::Dbo::collection<CalendarPtr> calendars;
+  Wt::Dbo::collection<Wt::Dbo::ptr<AuthInfo>> auth_infos;
 
   template <class Action> void persist(Action &a) {
     Wt::Dbo::field(a, login, "login");
     Wt::Dbo::field(a, email, "email");
     Wt::Dbo::field(a, nickname, "nickname");
     Wt::Dbo::field(a, description, "description");
-    Wt::Dbo::field(a, password, "password");
     Wt::Dbo::field(a, avatar, "avatar");
-    Wt::Dbo::hasMany(a, calendars, Wt::Dbo::ManyToOne, "User");
+    Wt::Dbo::hasMany(a, calendars, Wt::Dbo::ManyToOne, "user");
+    Wt::Dbo::hasMany(a, auth_infos, Wt::Dbo::ManyToOne, "user");
   }
 };
 } // namespace db

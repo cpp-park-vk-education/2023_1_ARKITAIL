@@ -28,4 +28,5 @@ add_subdirectory(lib)
 target_link_libraries(
     Calendula PUBLIC
     application # Все зависимости содержит библиотека application
+    session
 )

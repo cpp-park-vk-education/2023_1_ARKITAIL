@@ -25,7 +25,7 @@ class Session : public Wt::Dbo::Session {
   Session();
   explicit Session(const std::string& connection_information);
 
-  db::UserPtr user() const;
+  db::UserPtr user();
   Wt::Auth::AbstractUserDatabase& users();
   Wt::Auth::Login& login();
 

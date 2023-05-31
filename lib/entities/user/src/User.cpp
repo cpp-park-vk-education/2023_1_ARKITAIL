@@ -1,7 +1,7 @@
 #include "User.hpp"
 
 User::User(
-    int id,
+    long long id,
     int root_id,
     std::string login,
     std::string email,

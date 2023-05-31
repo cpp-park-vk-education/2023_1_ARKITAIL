@@ -1,5 +1,7 @@
 #include "Session.hpp"
 
+#include <Wt/Dbo/Transaction.h>
+#include <Wt/WLogger.h>
 #include <exception>
 #include <memory>
 
@@ -50,6 +52,9 @@ Session::Session(const std::string& conn_info) {
 
   setConnection(std::move(connection));
 
+  mapClass<db::AuthInfo>("auth_info");
+  mapClass<db::AuthInfo::AuthIdentityType>("auth_identity");
+  mapClass<db::AuthInfo::AuthTokenType>("auth_token");
   mapClass<db::Calendar>("calendar");
   mapClass<db::Comment>("comment");
   mapClass<db::Directory>("directory");
@@ -59,15 +64,16 @@ Session::Session(const std::string& conn_info) {
   mapClass<db::Tag>("tag");
   mapClass<db::User>("user");
 
-  mapClass<db::AuthInfo>("auth_info");
-  mapClass<db::AuthInfo::AuthIdentityType>("auth_identity");
-  mapClass<db::AuthInfo::AuthTokenType>("auth_token");
-
+  Wt::Dbo::Transaction transaction(*this);
+  
   try {
     createTables();
+    Wt::log("Using existing database");
   } catch (std::exception& e) {
     std::cerr << e.what() << std::endl;
   }
+
+  transaction.commit();
 
   users_ = std::make_unique<UserDatabase>(*this);
 }
@@ -80,10 +86,21 @@ Wt::Auth::Login& Session::login() {
   return login_;
 }
 
-db::UserPtr Session::user() const {
+db::UserPtr Session::user() {
   if (login_.loggedIn()) {
-    auto auth_info = users_->find(login_.user());
-    return auth_info->user();
+    Wt::Dbo::ptr<db::AuthInfo> auth_info = users_->find(login_.user());
+    db::UserPtr db_user = auth_info->user();
+
+    if (!db_user) {
+      Wt::Dbo::Transaction transaction(*this);
+      
+      db_user = add(std::make_unique<db::User>());
+      auth_info.modify()->setUser(db_user);
+
+      transaction.commit();
+    }
+    
+    return db_user;
   } else {
     return db::UserPtr();
   }

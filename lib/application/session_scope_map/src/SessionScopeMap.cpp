@@ -62,11 +62,11 @@ SessionScope* SessionScopeMap::get() {
 
 void SessionScopeMap::add(std::string sid) {
   std::unique_ptr<Session> session = std::make_unique<Session>();
-  
-  // Пока используем моки
 	std::shared_ptr<DbMock> db_mock = std::make_shared<DbMock>();
+  
+  // Пока используем смесь моков и реальной БД
   std::shared_ptr<IDbManagers> db = std::make_shared<DbManagers>(
-      std::make_unique<UserDbManagerMock>(db_mock),
+      std::make_unique<UserDbManager>(*session),
       std::make_unique<NodeDbManagerMock>(db_mock),
       std::make_unique<DirectoryDbManagerMock>(db_mock),
       std::make_unique<CalendarDbManagerMock>(db_mock),

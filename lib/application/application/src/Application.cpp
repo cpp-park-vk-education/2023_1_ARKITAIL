@@ -50,7 +50,7 @@ Application::Application(const Wt::WEnvironment& env) :
 
     // Connections mediator connections establishing
     
-    // root()->addWidget(CreateAuthWiget());
+    root()->addWidget(CreateAuthWiget());
 }
 
 void Application::route(const std::string& internalPath) {

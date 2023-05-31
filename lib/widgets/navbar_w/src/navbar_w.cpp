@@ -1,4 +1,8 @@
 #include "navbar_w.hpp"
+#include "SessionScopeMap.hpp"
+
+#include <Wt/Auth/Login.h>
+#include <iostream>
 
 #include <Wt/WMenu.h>
 #include <Wt/WNavigationBar.h>
@@ -33,5 +37,8 @@ void NavbarW::addStyle() {
 }
 
 void NavbarW::logout() {
-    // выходим
+  auto& login = SessionScopeMap::instance().get()->session()->login();
+  std::cout << (login.state() == Wt::Auth::LoginState::LoggedOut) << std::endl;
+  login.logout();
+  std::cout << (login.state() == Wt::Auth::LoginState::LoggedOut) << std::endl;
 }
