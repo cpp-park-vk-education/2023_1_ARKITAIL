@@ -10,3 +10,7 @@
 .today-color {
     background-color: #d1e7dd;
 }
+
+.hover:hover {
+    cursor: pointer;
+}

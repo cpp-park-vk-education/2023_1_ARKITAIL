@@ -12,5 +12,6 @@ target_link_libraries(
                         PUBLIC
                         calendula_compiler_flags
                         tag
+                        managers
                       )
                     

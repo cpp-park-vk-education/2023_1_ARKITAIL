@@ -12,5 +12,6 @@ target_link_libraries(
 	PUBLIC 
 	application
 	session_scope_map
+	search_page
 )
  

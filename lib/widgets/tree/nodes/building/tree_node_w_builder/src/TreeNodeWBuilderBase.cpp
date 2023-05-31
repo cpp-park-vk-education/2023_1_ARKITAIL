@@ -115,7 +115,6 @@ std::unique_ptr<Wt::WContainerWidget> TreeNodeWBuilderBase::fillToolTipContainer
 
     for (auto&& tag : tags) {
         auto tag_ptr = content->addWidget(std::make_unique<TagW>(tag));
-        tag_ptr->tagClicked().connect([=](size_t tag_id) {});
     }
     return content;
 }

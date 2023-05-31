@@ -49,8 +49,10 @@ TreeW::TreeW() :
 }
 
 void TreeW::setRoot(const Node& node) {
-    auto ss = SessionScopeMap::instance().get();
-    auto mgr = ss->managers();
+    if (root_) {
+        removeChild(root_);
+    }
+    auto mgr = SessionScopeMap::instance().get()->managers();
 
     tree_manager_ = std::make_unique<Tree>(node);
 

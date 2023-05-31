@@ -13,5 +13,7 @@ target_link_libraries(
 	calendar_card_container_w
 	users_line_edit
 	tags_line_edit
+	session_scope_map
+	managers
 )
 

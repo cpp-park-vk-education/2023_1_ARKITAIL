@@ -1,18 +1,18 @@
 #pragma once
 
 #include <Wt/WAnchor.h>
-#include <Wt/WContainerWidget.h>
 
 #include "Tag.hpp"
 
-class TagW : public Wt::WContainerWidget {
-public:
-    TagW(Tag tag);
+class TagW : public Wt::WAnchor {
+  public:
+    TagW(const Tag& tag);
     ~TagW() = default;
 
-    Wt::Signal<size_t>& tagClicked();
+    Wt::Signal<Tag>& tagClicked();
 
-private:
-    Wt::Signal<size_t> tag_clicked_;
-
+  private:
+    Wt::Signal<Tag> tag_clicked_;
+    Tag tag_;
+    
 };

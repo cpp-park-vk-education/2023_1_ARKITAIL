@@ -12,5 +12,6 @@ target_link_libraries(
 	calendar_card_w
 	calendar
 	user
+	managers
 )
 
