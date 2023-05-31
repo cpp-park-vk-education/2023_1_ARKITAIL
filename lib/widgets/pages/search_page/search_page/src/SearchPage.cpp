@@ -4,15 +4,20 @@
 #include <memory>
 
 #include "SearchPage.hpp"
+#include "TagsLineEdit.hpp"
+#include "UsersLineEdit.hpp"
 
 SearchP::SearchP() :
-	input_users_(addWidget(std::make_unique<Wt::WLineEdit>())),
-	input_tags_(addWidget(std::make_unique<Wt::WLineEdit>())),
-	find_button_(addWidget(std::make_unique<Wt::WPushButton>())),
+	users_(addWidget(std::make_unique<UsersLineEdit>())),
+	tags_(addWidget(std::make_unique<TagsLineEdit>())),
 	hint_(addWidget(std::make_unique<Wt::WText>())),
 	found_(addWidget(std::make_unique<CalendarCardContainerW>())),
 	searcher_() {
 
+	users_->parseItem("ХУЙ");
+	users_->parseItem("ХУЙ");
+	users_->parseItem("ХУЙ");
+	users_->parseItem("ХУЙ");
 }
 
 void SearchP::search() {}

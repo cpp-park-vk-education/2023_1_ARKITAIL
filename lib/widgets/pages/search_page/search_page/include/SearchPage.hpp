@@ -7,6 +7,8 @@
 
 #include "Searcher.hpp"
 #include "CalendarCardContainerW.hpp"
+#include "UsersLineEdit.hpp"
+#include "TagsLineEdit.hpp"
 
 class SearchP : public Wt::WContainerWidget {
 public:
@@ -14,9 +16,9 @@ public:
     void search();
        
 private:
-    Wt::WLineEdit* input_users_;
-    Wt::WLineEdit* input_tags_;
-    Wt::WPushButton* find_button_;
+    UsersLineEdit* users_;
+    TagsLineEdit* tags_;
+    
     Wt::WText* hint_;
     CalendarCardContainerW* found_;
     Searcher* searcher_;

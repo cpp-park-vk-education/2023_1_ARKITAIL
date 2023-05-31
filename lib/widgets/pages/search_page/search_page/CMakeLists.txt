@@ -11,6 +11,7 @@ target_link_libraries(
 	PUBLIC
 	searcher
 	calendar_card_container_w
-
+	users_line_edit
+	tags_line_edit
 )
 

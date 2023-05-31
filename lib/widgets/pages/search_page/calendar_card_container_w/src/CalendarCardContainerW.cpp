@@ -9,6 +9,6 @@ CalendarCardContainerW::CalendarCardContainerW() :
 
 void CalendarCardContainerW::init(const std::vector<Calendar>& content) {
 	for (auto card : content)
-		calendar_cards_.push_back(addWidget(std::make_unique<CalendarCardW>(card)));
+		calendar_cards_.push_back(addWidget(std::make_unique<CalendarCardW>(User(), card, std::vector<Tag>())));
 }
 

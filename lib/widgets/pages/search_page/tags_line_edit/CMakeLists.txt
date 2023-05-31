@@ -9,7 +9,7 @@ target_include_directories(${MODULE_NAME} PUBLIC ${INCLUDE_DIR})
 target_link_libraries(
 	${MODULE_NAME}
 	PUBLIC
-	removable_tag_w
+	items_container_w
 	tag
 )
 
