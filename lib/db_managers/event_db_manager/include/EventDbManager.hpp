@@ -2,19 +2,19 @@
 
 #include "DbModels.hpp"
 #include "IEventDbManager.hpp"
+#include "Session.hpp"
 
 class EventDbManager: public IEventDbManager {
 public:
-  explicit EventDbManager(Wt::Dbo::Session &session) : session_(session) {}
+  explicit EventDbManager(Session& session);
 
-  int add(EventSptr) override;
+  int add(EventSptr event) override;
   void remove(int event_id) override;
-  void update(EventSptr) override;
+  void update(EventSptr event) override;
   EventSptr get(int event_id) override;
 
-  //std::vector<Comment> getComments(int event_id)
-
 private:
-  int id_;
-  Wt::Dbo::Session &session_;
+  Session& session_;
+
 };
+

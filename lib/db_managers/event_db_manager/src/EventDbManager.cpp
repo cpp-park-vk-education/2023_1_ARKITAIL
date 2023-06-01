@@ -1,35 +1,58 @@
 #include "EventDbManager.hpp"
 
 #include <memory>
+#include <string>
 
+#include <Wt/WLogger.h>
 #include <Wt/Dbo/Transaction.h>
 
 #include "DbModels.hpp"
+#include "Event.hpp"
+#include "Session.hpp"
+
+EventDbManager::EventDbManager(Session& session)
+    : session_(session) {
+}
 
 int EventDbManager::add(EventSptr event) {
   Wt::Dbo::Transaction transaction(session_);
 
-  std::unique_ptr<db::Event> db_event_unique = std::make_unique<db::Event>();
+  // достаём всё необходимое для создания события
+  db::CalendarPtr db_calendar
+      = session_.find<db::Calendar>().where("id = ?").bind(event->calendar_id);
 
-  db_event_unique->summary = event->summary;
-  db_event_unique->description = event->description;
-  db_event_unique->location = event->location;
-  db_event_unique->calendar =
-      session_.find<db::Calendar>().where("id = ?").bind(event->calendar_id);
-  db_event_unique->start = event->start;
-  db_event_unique->end = event->end;
-  db_event_unique->stamp = event->stamp;
-  db_event_unique->frequency = event->frequency;
-  db_event_unique->interval = event->interval;
-  db_event_unique->until = event->until;
+  if (!db_calendar) {
+    Wt::log("EventDbManager::add: not found event's calendar with id = "
+        + std::to_string(event->calendar_id));
+    return -1;
+  }
 
-  db::EventPtr db_event = session_.add(std::move(db_event_unique));
+  // создаём событие
+  db::EventPtr db_event
+      = session_.add(std::make_unique<db::Event>());
+
+  // непосредственно сохраняем, чтобы получить id
   session_.flush();
+  int id = static_cast<int>(db_event.id());
 
+  // устанавливаем поля
+  db_event.modify()->calendar = db_calendar;
+
+  db_event.modify()->summary = event->summary;
+  db_event.modify()->description = event->description;
+  db_event.modify()->location = event->location;
+
+  db_event.modify()->start = event->start;
+  db_event.modify()->end = event->end;
+  db_event.modify()->stamp = event->stamp;
+
+  db_event.modify()->frequency = event->frequency;
+  db_event.modify()->interval = event->interval;
+  db_event.modify()->until = event->until;
+  
   transaction.commit();
   
-  id_ = db_event.id();
-  return id_;
+  return id;
 }
 
 void EventDbManager::remove(int event_id) {
@@ -39,6 +62,8 @@ void EventDbManager::remove(int event_id) {
       = session_.find<db::Event>().where("id = ?").bind(event_id);
 
   if (!db_event) {
+    Wt::log("EventDbManager::remove: not found event with id = "
+        + std::to_string(event_id));
     return;
   }
 
@@ -54,17 +79,30 @@ void EventDbManager::update(EventSptr event) {
       = session_.find<db::Event>().where("id = ?").bind(event->id);
 
   if (!db_event) {
+    Wt::log("EventDbManager::update: not found event with id = "
+        + std::to_string(event->id));
+    return;
+  }
+
+  db::CalendarPtr db_calendar
+      = session_.find<db::Calendar>().where("id = ?").bind(event->calendar_id);
+
+  if (!db_calendar) {
+    Wt::log("EventDbManager::update: not found event's calendar with id = "
+        + std::to_string(event->calendar_id));
     return;
   }
 
   db_event.modify()->summary = event->summary;
   db_event.modify()->description = event->description;
   db_event.modify()->location = event->location;
-  db_event.modify()->calendar
-      = session_.find<db::Calendar>().where("id = ?").bind(event->calendar_id);
+
+  db_event.modify()->calendar = db_calendar;
+
   db_event.modify()->start = event->start;
   db_event.modify()->end = event->end;
   db_event.modify()->stamp = event->stamp;
+
   db_event.modify()->frequency = event->frequency;
   db_event.modify()->interval = event->interval;
   db_event.modify()->until = event->until;
@@ -73,25 +111,36 @@ void EventDbManager::update(EventSptr event) {
 }
 
 EventSptr EventDbManager::get(int event_id) {
+  Wt::Dbo::Transaction transaction(session_);
+
   Wt::Dbo::ptr<db::Event> db_event
       = session_.find<db::Event>().where("id = ?").bind(event_id);
   
   if (!db_event) {
-    return nullptr;
+    Wt::log("EventDbManager::get: not found event with id = "
+        + std::to_string(event_id));
+    return std::make_shared<Event>();
   }
 
-  Event event;
-  event.id = db_event.id();
-  event.summary = db_event->summary;
-  event.description = db_event->description;
-  event.location = db_event->location;
-  event.calendar_id = db_event->calendar.id();
-  event.start = db_event->start;
-  event.end = db_event->end;
-  event.stamp = db_event->stamp;
-  event.frequency = db_event->frequency;
-  event.interval = db_event->interval;
-  event.until = db_event->until;
+  Event event {
+    static_cast<int>(db_event.id()),
+    static_cast<int>(db_event->calendar.id()),
+    
+    db_event->summary,
+    db_event->description,
+    db_event->location,
+    
+    db_event->start,
+    db_event->end,
+    db_event->stamp,
+
+    db_event->frequency,
+    db_event->interval,
+    db_event->until,
+  };
+
+  transaction.commit();
 
   return std::make_shared<Event>(std::move(event));
 }
+

@@ -12,8 +12,6 @@ public:
     virtual void update(EventSptr) = 0;
     virtual void remove(int event_id) = 0;
 
-    //virtual std::vector<Comment> getComments(int event_id) = 0;
-
 };
 
 
