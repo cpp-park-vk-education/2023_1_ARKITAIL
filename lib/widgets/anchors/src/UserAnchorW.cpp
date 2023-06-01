@@ -6,17 +6,22 @@
 #include "SessionScopeMap.hpp"
 #include "User.hpp"
 
-UserAnchorW::UserAnchorW(const User& user) :
-    Wt::WAnchor(Wt::WLink(Wt::LinkType::InternalPath, "/other_profile"), "<b>Автор:</b> " + user.nickname),
+UserAnchorW::UserAnchorW(const std::string prefix, const User& user) :
+    Wt::WAnchor(Wt::WLink(Wt::LinkType::InternalPath, "/other_calendar"),
+               prefix + user.nickname),
     user_(user) {
 
     addStyleClass("d-block text-decoration-none fw-bolder");
+
+    SessionScopeMap::instance().get()->connections_mediator()->set_tree_root.add_sender(
+        &user_clicked_);
+
     clicked().connect([&] {
-        user_clicked_.emit(user_);
+        auto mgr = SessionScopeMap::instance().get()->managers();
+
+        // переделать на ноду паблик групп
+        std::cout << "\nemit signal USER" << user_.root_id <<"\n\n";
+        user_clicked_.emit(mgr->node_manager()->get(16), user_);
     });
 
-    auto cm = SessionScopeMap::instance().get()->connections_mediator();
-    cm->swap_to_profile_page.add_sender(&user_clicked_);
-
 }
-

@@ -20,7 +20,6 @@ MainP::MainP() {
 
     auto mgr = ss->managers();
     auto node = mgr->node_manager()->get(mgr->user_manager()->get().root_id);
-    auto sub = mgr->node_manager()->get(4);
     tree->setRoot(node);
 
     auto cm = ss->connections_mediator();

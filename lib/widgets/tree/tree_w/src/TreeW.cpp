@@ -12,10 +12,13 @@
 #include <algorithm>
 #include <memory>
 #include <string>
+#include <queue>
 
+#include "AddProfileW.hpp"
 #include "ITreeNode.hpp"
 #include "Managers.hpp"
 #include "Node.hpp"
+#include "OtherUserW.hpp"
 #include "SessionScopeMap.hpp"
 #include "Tree.hpp"
 #include "TreeNode.hpp"
@@ -27,28 +30,45 @@
 
 TreeW::TreeW() :
     tree_manager_(),
-    search_line_(),
-    remember_combination_button_(),
+    header_(),
+    add_profile_w_(),
     root_() {
+
     animateHide(Wt::WAnimation(Wt::AnimationEffect::SlideInFromLeft));
     setStyleClass("start-0 w-100");
-    auto tree_header_container = addWidget(std::make_unique<Wt::WContainerWidget>());
-    auto tree_header = tree_header_container->setLayout(std::make_unique<Wt::WHBoxLayout>());
-    search_line_ = tree_header->addWidget(std::make_unique<Wt::WLineEdit>(), 1);
-    search_line_->setPlaceholderText("Введите название календаря...");
-    search_line_->setStyleClass("form-control");
-    search_line_->setWidth(Wt::WLength(250));
-    remember_combination_button_ =
-        tree_header->addWidget(std::make_unique<Wt::WPushButton>(Wt::WString("Запомнить")));
-    remember_combination_button_->setStyleClass("btn");
-    remember_combination_button_->setEnabled(false);
-    remember_combination_button_->setWidth(Wt::WLength(120));
-
-    search_line_->enterPressed().connect(this, &TreeW::search);
-    remember_combination_button_->clicked().connect(this, &TreeW::rememberCombination);
 }
 
 void TreeW::setRoot(const Node& node) {
+
+    auto mgr = SessionScopeMap::instance().get()->managers();
+
+    tree_manager_ = std::make_unique<Tree>(node);
+
+    auto tree_node = tree_manager_->getRoot();
+
+    header_ = addWidget(std::make_unique<Wt::WContainerWidget>());
+    
+    root_ = addWidget(TreeNodeWDirector().fillNode(TreeNodeWAnalyst(mgr).analyseTreeNodeWChild(tree_node)));
+
+    root_->open();
+
+    for (auto group : root_->getChildrenNodes()) {
+
+        if(group->getType() & NodeType::PROFILE_GROUP){
+            add_profile_w_ = header_->addWidget(std::make_unique<AddProfileW>(group));
+        }
+    }
+
+    add_profile_w_->needCheckedNodes().connect(this, &TreeW::sendCheckedNodes);
+}
+
+void TreeW::setRoot(const Node& node, const User& user) {
+    if (header_) {
+        removeChild(header_);
+    }
+
+    header_ = addWidget(std::make_unique<OtherUserW>(user));
+
     if (root_) {
         removeChild(root_);
     }
@@ -58,24 +78,19 @@ void TreeW::setRoot(const Node& node) {
 
     auto tree_node = tree_manager_->getRoot();
 
-    if (node.type & NodeType::ROOT) {
-        root_ = addWidget(
-            TreeNodeWDirector().fillNode(TreeNodeWAnalyst(mgr).analyseTreeNodeWChild(tree_node)));
-    } else {
-        root_ = addWidget(TreeNodeWDirector().fillNode(
-            TreeNodeWOtherAnalyst(mgr).analyseTreeNodeWChild(tree_node)));
-    }
+    root_ = addWidget(
+        TreeNodeWDirector().fillNode(TreeNodeWOtherAnalyst(mgr).analyseTreeNodeWChild(tree_node)));
 }
-
-void TreeW::rememberCombination() {}
-
-void TreeW::search() {}
 
 void TreeW::checkNode(ITreeNode* tree_node) {
     if (tree_node->isChecked()) {
         tree_manager_->uncheckNode(tree_node);
+
+        // Сеня если счетчик меньше 2, то add_profile_w_->setButtonEnabled(false);
     } else {
         tree_manager_->checkNode(tree_node);
+
+        // Сеня если счетчик больше 1, то add_profile_w_->setButtonEnabled(true);
     }
     std::cout << "\nnode_checked из дерева => выпущен сигнал в хедер\n" << std::endl;
     node_checked.emit();
@@ -92,3 +107,29 @@ void TreeW::getRangeEvents(Wt::WDate date1, Wt::WDate date2) {
     std::cout << "\nпо двум датам получили события и отправили в тело календаря\n" << std::endl;
     events_getted.emit(date1, events);
 }
+
+void TreeW::sendCheckedNodes() {
+    std::queue<TreeNodeW*> q;
+    std::vector<size_t> v;
+
+    q.push(root_);
+
+    while (!q.empty()) {
+        if (!(q.front()->getType() & NodeType::PROFILE_GROUP)) {
+
+            if(q.front()->isCheck()) {
+                size_t node_id = q.front()->getTreeNode()->getNode().id;
+                v.push_back(node_id);
+            } else {
+                for (auto child : q.front()->getChildrenNodes()) {
+                    q.push(child);
+                }
+            }
+        }
+
+        q.pop();
+    }
+
+    add_profile_w_->addProfileW(v);
+}
+

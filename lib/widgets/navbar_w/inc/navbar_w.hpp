@@ -10,6 +10,7 @@ class NavbarW : public Wt::WNavigationBar {
     ~NavbarW() = default;
 
     Wt::WMenuItem* addLink(const std::string& icon_path, const std::string& path);
+    Wt::WMenuItem* addItem(const std::string& icon_path);
 
   private:
     Wt::WMenu* left_menu_;

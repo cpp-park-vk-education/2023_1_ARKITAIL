@@ -21,7 +21,7 @@
 #include "Profile.hpp"
 #include "SessionScopeMap.hpp"
 #include "Tag.hpp"
-#include "TagW.hpp"
+#include "TagAnchorW.hpp"
 #include "TreeNodeW.hpp"
 #include "TreeNodeWAnalyst.hpp"
 #include "TreeNodeWAnalystBase.hpp"
@@ -81,7 +81,7 @@ TreeNodeWBuilderBase* TreeNodeWBuilderBase::addToolTip(std::string description,
                                                        std::vector<Tag> tags, User author) {
     auto content = std::make_unique<Wt::WContainerWidget>();
 
-    auto author_ptr = content->addWidget(std::make_unique<UserAnchorW>(author));
+    content->addWidget(std::make_unique<UserAnchorW>("<b>Автор:</b> ", author));
 
     addToolTip(fillToolTipContainer(std::move(content), description, tags));
 
@@ -109,7 +109,7 @@ std::unique_ptr<Wt::WContainerWidget> TreeNodeWBuilderBase::fillToolTipContainer
     content->addWidget(std::make_unique<Wt::WBreak>());
 
     for (auto&& tag : tags) {
-        auto tag_ptr = content->addWidget(std::make_unique<TagW>(tag));
+        content->addWidget(std::make_unique<TagAnchorW>(tag));
     }
     return content;
 }

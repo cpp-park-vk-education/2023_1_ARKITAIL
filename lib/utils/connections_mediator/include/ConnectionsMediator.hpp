@@ -13,7 +13,6 @@
 #include "i_calendar_header_w.hpp"
 #include "Profile.hpp"
 #include "User.hpp"
-#include "OtherUserP.hpp"
 
 class ConnectionsMediator {
   public:
@@ -49,11 +48,9 @@ class ConnectionsMediator {
         header_to_tree_other;
 
     // сигнал для передачи ноды из поиска при клике на календарь в дерево
-    ConnectionPoint<Wt::Signal<const Node&>, TreeW, const Node&> set_tree_root;
+    ConnectionPoint<Wt::Signal<const Node&, const User&>, TreeW, const Node&, const User&> set_tree_root;
 
     // сигнал для передачи тега на страницу поиска
     ConnectionPoint<Wt::Signal<Tag>, TagsLineEdit, const Tag&> search_tag;
 
-    // сигнал для перехода на чужой профиль
-    ConnectionPoint<Wt::Signal<User>, OtherUserP, const User&> swap_to_profile_page;
 };
