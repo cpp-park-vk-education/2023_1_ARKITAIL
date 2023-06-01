@@ -13,5 +13,6 @@ target_link_libraries(
 	directory
   db_models
   db_mock
+  session
 )
 

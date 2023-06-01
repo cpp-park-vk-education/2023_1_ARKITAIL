@@ -68,7 +68,7 @@ void SessionScopeMap::add(std::string sid) {
   std::shared_ptr<IDbManagers> db = std::make_shared<DbManagers>(
       std::make_unique<UserDbManager>(*session),
       std::make_unique<NodeDbManager>(*session),
-      std::make_unique<DirectoryDbManagerMock>(db_mock),
+      std::make_unique<DirectoryDbManager>(*session),
       std::make_unique<CalendarDbManager>(*session),
       std::make_unique<EventDbManager>(*session),
       std::make_unique<CommentDbManagerMock>(),
