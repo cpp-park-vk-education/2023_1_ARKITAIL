@@ -5,7 +5,7 @@
 class IUserManager {
 public:
 	virtual UserSptr get() = 0;
-	virtual UserSptr get(int) = 0;
+	virtual UserSptr get(int user_id) = 0;
 
 };
 

@@ -18,15 +18,9 @@ TreeNodeWAnalyst::TreeNodeWAnalyst(IManagers* managers) :
 
 TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeWChild(ITreeNode* tree_node) {
     Node node = tree_node->getNode();
-<<<<<<< HEAD
-    std::vector<std::string> tags;
-    auto mgr = SessionScopeMap::instance().get()->managers();
-    UserSptr user = mgr->user_manager()->get();
-=======
     std::vector<Tag> tags;
     tags.push_back(Tag(0, "tag1"));
-    User user = managers_->user_manager()->get();
->>>>>>> origin/impl-bannikov
+    UserSptr user = managers_->user_manager()->get();
     TreeNodeWConvertedData data;
 
     tree_node->getParent();
@@ -35,24 +29,12 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeWChild(ITreeNode* tree_n
         tree_node->getParent()->getNode().type & NodeType::SUBSCRIPTIONS_GROUP) {
         // тут только unsub, так как это подписки
         if (node.type & NodeType::PUBLIC_DIRECTORY) {
-<<<<<<< HEAD
-            DirectorySptr child = mgr->directory_manager()->get(node.resource_id);
-            data = TreeNodeWConvertedData{
-                TreeNodeWType::SUB_DIR_OPTIONS,           child->name, child->description, tags,
-                *mgr->user_manager()->get(child->owner_id), tree_node};
-
-        } else {
-            CalendarSptr child = mgr->calendar_manager()->get(node.resource_id);
-            data = TreeNodeWConvertedData{
-                TreeNodeWType::SUB_CALENDAR_OPTIONS,      child->summary, child->description, tags,
-                *mgr->user_manager()->get(child->owner_id), tree_node};
-=======
-            Directory child = managers_->directory_manager()->get(node.resource_id);
+            DirectorySptr child = managers_->directory_manager()->get(node.resource_id);
             data = TreeNodeWConvertedData{TreeNodeWType::SUB_DIR_OPTIONS,
-                                          child.name,
-                                          child.description,
+                                          child->name,
+                                          child->description,
                                           tags,
-                                          managers_->user_manager()->get(child.owner_id),
+                                          *managers_->user_manager()->get(child->owner_id),
                                           tree_node};
 
         } else {
@@ -61,61 +43,36 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeWChild(ITreeNode* tree_n
                                           child->summary,
                                           child->description,
                                           tags,
-                                          managers_->user_manager()->get(child->owner_id),
+                                          *managers_->user_manager()->get(child->owner_id),
                                           tree_node};
->>>>>>> origin/impl-bannikov
         }
     } else if (node.type & (NodeType::PRIVATE_CALENDAR | NodeType::PUBLIC_CALENDAR)) {
-<<<<<<< HEAD
-        CalendarSptr child = mgr->calendar_manager()->get(node.resource_id);
-
-        data = TreeNodeWConvertedData{
-            TreeNodeWType::PERSONAL_CALENDAR,         child->summary, child->description, tags,
-            *mgr->user_manager()->get(child->owner_id), tree_node};
-=======
         CalendarSptr child = managers_->calendar_manager()->get(node.resource_id);
->>>>>>> origin/impl-bannikov
 
         data = TreeNodeWConvertedData{TreeNodeWType::PERSONAL_CALENDAR,
                                       child->summary,
                                       child->description,
                                       tags,
-                                      managers_->user_manager()->get(child->owner_id),
+                                      *managers_->user_manager()->get(child->owner_id),
                                       tree_node};
     } else if (node.type & (NodeType::PRIVATE_DIRECTORY | NodeType::PUBLIC_DIRECTORY)) {
-<<<<<<< HEAD
-        DirectorySptr child = mgr->directory_manager()->get(node.resource_id);
-=======
-        Directory child = managers_->directory_manager()->get(node.resource_id);
->>>>>>> origin/impl-bannikov
+        DirectorySptr child = managers_->directory_manager()->get(node.resource_id);
 
         data = TreeNodeWConvertedData{TreeNodeWType::DIR,
                                       child->name,
                                       child->description,
                                       tags,
-<<<<<<< HEAD
-                                      *mgr->user_manager()->get(child->owner_id),
-=======
-                                      managers_->user_manager()->get(child.owner_id),
->>>>>>> origin/impl-bannikov
+                                      *managers_->user_manager()->get(child->owner_id),
                                       tree_node};
     } else if (node.type & (NodeType::ROOT | NodeType::PRIVATE_GROUP | NodeType::PUBLIC_GROUP |
                             NodeType::SUBSCRIPTIONS_GROUP | NodeType::PROFILE_GROUP)) {
-<<<<<<< HEAD
-        DirectorySptr child = mgr->directory_manager()->get(node.resource_id);
-=======
-        Directory child = managers_->directory_manager()->get(node.resource_id);
->>>>>>> origin/impl-bannikov
+        DirectorySptr child = managers_->directory_manager()->get(node.resource_id);
 
         data = TreeNodeWConvertedData{TreeNodeWType::GROUP,
                                       child->name,
                                       child->description,
                                       tags,
-<<<<<<< HEAD
-                                      *mgr->user_manager()->get(child->owner_id),
-=======
-                                      managers_->user_manager()->get(child.owner_id),
->>>>>>> origin/impl-bannikov
+                                      *managers_->user_manager()->get(child->owner_id),
                                       tree_node};
     } else if (node.type & NodeType::PROFILE) {
         // Profile child = Managers::instance().profile_manager->get(node.resource_id);

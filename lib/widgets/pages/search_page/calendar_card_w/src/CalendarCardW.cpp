@@ -30,7 +30,7 @@ CalendarCardW::CalendarCardW(const User& user, CalendarSptr calendar,
     node_() {
     auto ss = SessionScopeMap::instance().get();
     auto mng = ss->managers();
-    node_ = mng->node_manager()->get(calendar->node_id);
+    node_ = *mng->node_manager()->get(calendar->node_id);
 
     addStyleClass("rounded p-3 border border-4 mt-2 p-0");
 

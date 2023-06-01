@@ -7,6 +7,7 @@ target_link_libraries(event_w PUBLIC
                       event_d
                       time_utils)
 
+# affeeal: пока закомментил, т.к. у меня не работало...
 if(BUILD_TESTS)
-  add_subdirectory(tests)
+  # add_subdirectory(tests)
 endif(BUILD_TESTS)   

@@ -19,67 +19,41 @@ TreeNodeWOtherAnalyst::TreeNodeWOtherAnalyst(IManagers* managers) :
 
 TreeNodeWConvertedData TreeNodeWOtherAnalyst::analyseTreeNodeWChild(ITreeNode* tree_node) {
     Node node = tree_node->getNode();
-<<<<<<< HEAD
-    auto mgr = SessionScopeMap::instance().get()->managers();
-    UserSptr user = mgr->user_manager()->get();
-=======
-    User user = managers_->user_manager()->get();
->>>>>>> origin/impl-bannikov
+    UserSptr user = managers_->user_manager()->get();
     TreeNodeWConvertedData data;
 
     std::vector<Tag> tags;
 
     auto is_sub = managers_->node_manager()->subscribed(node.id);
     if (node.type & NodeType::PUBLIC_GROUP) {
-<<<<<<< HEAD
-        DirectorySptr child = mgr->directory_manager()->get(node.resource_id);
-        data = TreeNodeWConvertedData{
-            TreeNodeWType::OTHER_GROUP_SUB,           child->name, child->description, tags,
-            *mgr->user_manager()->get(child->owner_id), tree_node};
-
-    } else if (node.type & NodeType::PUBLIC_DIRECTORY) {
-        DirectorySptr child = mgr->directory_manager()->get(node.resource_id);
-        data = TreeNodeWConvertedData{TreeNodeWType::OTHER_DIR_SUB,
-                                      child->name,
-                                      child->description,
-                                      tags,
-                                      *mgr->user_manager()->get(child->owner_id),
-                                      tree_node};
-=======
-        Directory child = managers_->directory_manager()->get(node.resource_id);
+        DirectorySptr child = managers_->directory_manager()->get(node.resource_id);
         data = TreeNodeWConvertedData{
             (is_sub ? TreeNodeWType::OTHER_GROUP_SUB : TreeNodeWType::OTHER_GROUP_UNSUB),
-            child.name,
-            child.description,
+            child->name,
+            child->description,
             tags,
-            managers_->user_manager()->get(child.owner_id),
+            *managers_->user_manager()->get(child->owner_id),
             tree_node};
 
     } else if (node.type & NodeType::PUBLIC_DIRECTORY) {
-        Directory child = managers_->directory_manager()->get(node.resource_id);
+        DirectorySptr child = managers_->directory_manager()->get(node.resource_id);
         data = TreeNodeWConvertedData{
             is_sub ? TreeNodeWType::OTHER_DIR_SUB : TreeNodeWType::OTHER_DIR_UNSUB,
-            child.name,
-            child.description,
+            child->name,
+            child->description,
             tags,
-            managers_->user_manager()->get(child.owner_id),
+            *managers_->user_manager()->get(child->owner_id),
             tree_node};
->>>>>>> origin/impl-bannikov
 
     } else {
         CalendarSptr child = managers_->calendar_manager()->get(node.resource_id);
         data = TreeNodeWConvertedData{
-<<<<<<< HEAD
-            TreeNodeWType::OTHER_CALENDAR_SUB,         child->summary, child->description, tags,
-            *mgr->user_manager()->get(child->owner_id), tree_node};
-=======
             is_sub ? TreeNodeWType::OTHER_CALENDAR_SUB : TreeNodeWType::OTHER_CALENDAR_UNSUB,
             child->summary,
             child->description,
             tags,
-            managers_->user_manager()->get(child->owner_id),
+            *managers_->user_manager()->get(child->owner_id),
             tree_node};
->>>>>>> origin/impl-bannikov
     }
 
     return data;

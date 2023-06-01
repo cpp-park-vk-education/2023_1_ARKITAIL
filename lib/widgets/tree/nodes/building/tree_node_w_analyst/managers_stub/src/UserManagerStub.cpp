@@ -3,10 +3,10 @@
 UserManagerStub::UserManagerStub(std::vector<User> users) :
     users_(users) {}
 
-const User& UserManagerStub::get() {
-    return users_[0];
+UserSptr UserManagerStub::get() {
+    return std::make_shared<User>(users_[0]);
 }
 
-const User& UserManagerStub::get(size_t user_id) {
-    return users_[user_id];
+UserSptr UserManagerStub::get(int user_id) {
+    return std::make_shared<User>(users_[user_id]);
 }

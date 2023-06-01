@@ -34,12 +34,6 @@ TreeW* CalendarW::addTree(std::unique_ptr<TreeW> tree) {
     tree_ = tree_panel_layout->addWidget(std::move(tree));
 
     // В дальнейшем метод setRoot будет вызываться по сигналу перехода на страницу
-<<<<<<< HEAD
-    auto mgr = SessionScopeMap::instance().get()->managers();
-    auto node = mgr->node_manager()->get(mgr->user_manager()->get()->root_id);
-    tree_->setRoot(*node);
-=======
->>>>>>> origin/impl-bannikov
 
     show_tree_button_ =
         tree_panel_layout->addWidget(std::make_unique<Wt::WPushButton>(Wt::WString(">")));

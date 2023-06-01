@@ -18,7 +18,7 @@ OtherP::OtherP() {
     auto tree = calendar_->addTree(std::make_unique<TreeW>());
 
     auto mgr = ss->managers();
-    auto node = mgr->node_manager()->get(mgr->user_manager()->get().root_id);
+    auto node = mgr->node_manager()->get(mgr->user_manager()->get()->root_id);
 
     auto cm = ss->connections_mediator();
 

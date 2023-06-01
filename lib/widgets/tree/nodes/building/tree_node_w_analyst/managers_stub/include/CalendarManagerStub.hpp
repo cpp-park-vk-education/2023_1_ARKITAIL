@@ -20,12 +20,12 @@ class CalendarManagerStub : public ICalendarManager {
     void remove(size_t calendar_id) override {}
     void update(CalendarSptr calendar) override {}
 
-    std::vector<EventSptr> getEvents(size_t calendar_id) override {
-        return std::vector<EventSptr>();
+    std::vector<Event> getEvents(size_t calendar_id) override {
+        return std::vector<Event>();
     }
 
-    std::vector<EventSptr> getEventsByInterval(size_t calendar_id, Wt::WDateTime begin,
+    std::vector<Event> getEventsByInterval(size_t calendar_id, Wt::WDateTime begin,
                                                Wt::WDateTime end) override {
-        return std::vector<EventSptr>();
+        return std::vector<Event>();
     }
 };
