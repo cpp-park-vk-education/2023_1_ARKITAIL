@@ -13,7 +13,12 @@ target_link_libraries(
 	tag
 )
 
-# if (BUILD_TESTS)
-# 	add_subdirectory(tests)
-# endif()
+if (BUILD_TESTS)
+ 	add_subdirectory(tests)
+	target_link_libraries(
+		${MODULE_NAME}
+		PUBLIC
+		db_mock
+	)
+endif()
 

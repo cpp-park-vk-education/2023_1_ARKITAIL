@@ -23,6 +23,6 @@ public:
 	std::vector<Comment> comments;
 	std::vector<Tag> tags;
 	std::vector<Profile> profiles;
-
+	std::vector<std::pair<int, int>> tags_to_nodes;
 };
 

@@ -9,6 +9,7 @@
 #include "Event.hpp"
 #include "DbManagers.hpp"
 #include "IDbManagers.hpp"
+#include "Node.hpp"
 #include "SessionScopeMap.hpp"
 
 CalendarManager::CalendarManager(std::shared_ptr<IDbManagers> db) :
@@ -27,18 +28,21 @@ size_t CalendarManager::add(CalendarSptr calendar, size_t directory_id) {
     if (!parent_directory.id || user.id != parent_directory.owner_id)
         return 0;
 
-    Node parent_node = mgr->node_manager()->get(get(directory_id)->node_id);
-    Node new_node = {0, parent_node.id, 0, parent_node.type};
+    Node parent_node = mgr->node_manager()->get(mgr->directory_manager()->get(directory_id).node_id);
+    Node new_node = {0, parent_node.id, 0, (parent_node.type & PUBLIC ? PUBLIC_CALENDAR : PRIVATE_CALENDAR)};
 
-    size_t new_node_id = mgr->node_manager()->add(new_node);
+    new_node.id = mgr->node_manager()->add(new_node);
 
-    if (!new_node_id)
+    if (!new_node.id) 
         return 0;
 
-    CalendarSptr new_calendar = calendar;
-    calendar->node_id = new_node_id;
+    calendar->node_id = new_node.id;
 
-    return db_->calendar_dbm()->add(calendar);
+    calendar->id = db_->calendar_dbm()->add(calendar);
+    new_node.resource_id = calendar->id;
+    db_->node_dbm()->update(new_node);
+
+    return calendar->id;
 }
 
 void CalendarManager::update(CalendarSptr calendar) {
