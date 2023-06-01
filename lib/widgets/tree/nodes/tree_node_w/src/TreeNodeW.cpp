@@ -56,6 +56,7 @@ TreeNodeW::TreeNodeW(ITreeNode* node) :
     Wt::WContainerWidget(),
     node_block_(),
     check_box_container(),
+    check_box_(),
     checked_(),
     text_title_(),
     header_container_(),
@@ -78,9 +79,15 @@ TreeNodeW* TreeNodeW::addChildNode(std::unique_ptr<TreeNodeW> child) {
     return this;
 }
 
+void TreeNodeW::open() {}
+
 void TreeNodeW::showNode() {}
 
 void TreeNodeW::closeNode() {}
+
+std::vector<TreeNodeW*> TreeNodeW::getChildrenNodes() {
+    return std::vector<TreeNodeW*>();
+}
 
 void TreeNodeW::performAction(Action action) {
     OptionsWBuilder options_builder;
@@ -153,6 +160,17 @@ bool TreeNodeW::isRoot() {
 
 bool TreeNodeW::isCanCheck() {
     return check_box_container->count();
+}
+
+bool TreeNodeW::isCheck() {
+    if (isCanCheck()) {
+        return check_box_->isChecked();
+    }
+    return false;
+}
+
+ITreeNode* TreeNodeW::getTreeNode() {
+    return node_;
 }
 
 void TreeNodeW::uncheckParentNodes() {

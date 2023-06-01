@@ -2,4 +2,6 @@ add_subdirectory(search_page)
 add_subdirectory(calendar_card_container_w)
 add_subdirectory(calendar_card_w)
 add_subdirectory(searcher)
+add_subdirectory(users_line_edit)
+add_subdirectory(tags_line_edit)
 

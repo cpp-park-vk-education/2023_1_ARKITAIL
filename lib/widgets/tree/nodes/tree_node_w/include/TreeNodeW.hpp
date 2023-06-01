@@ -26,8 +26,10 @@ class TreeNodeW : public Wt::WContainerWidget {
     virtual ~TreeNodeW() = default;
     virtual void checkNode() = 0;
     virtual void uncheckNode() = 0;
+    virtual void open();
     virtual void showNode();
     virtual void closeNode();
+    virtual std::vector<TreeNodeW*> getChildrenNodes();
     virtual void performAction(Action action);
 
     virtual TreeNodeW* addChildNode(std::unique_ptr<TreeNodeW> child);
@@ -37,8 +39,11 @@ class TreeNodeW : public Wt::WContainerWidget {
     virtual void removeChildNode(TreeNodeW* child);
     bool isRoot();
     bool isCanCheck();
+    bool isCheck();
     void uncheckParentNodes();
     NodeType getType();
+    ITreeNode* getTreeNode();
+
 
     std::unique_ptr<TreeNodeW> makeTreeNodeWidget(ITreeNode* node);
     void setOptions(std::unique_ptr<OptionsW> options);

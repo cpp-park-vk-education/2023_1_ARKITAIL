@@ -10,15 +10,58 @@
 #include "TreeNodeWAnalystBase.hpp"
 #include "TreeNodeWOtherAnalyst.hpp"
 #include "TreeNodeWSubAnalyst.hpp"
+#include "DbMock.hpp"
+#include "IDbManagers.hpp"
+#include "DbManagers.hpp"
+#include "EventManager.hpp"
+#include "UserDbManagerMock.hpp"
+#include "NodeDbManagerMock.hpp"
+#include "DirectoryDbManagerMock.hpp"
+#include "CalendarDbManagerMock.hpp"
+#include "EventDbManagerMock.hpp"
+#include "CommentDbManagerMock.hpp"
+#include "TagDbManagerMock.hpp"
+#include "ProfileDbManagerMock.hpp"
+
+#include "Managers.hpp"
+#include "UserManager.hpp"
+#include "NodeManager.hpp"
+#include "DirectoryManager.hpp"
+#include "CalendarManager.hpp"
+#include "TagManager.hpp"
+#include "ProfileManager.hpp"
+
+
 
 class TreeNodeWAnalystTest : public ::testing::Test {
   protected:
     void SetUp() override {
-        m = std::make_unique<ManagersStub>();
-        managers = m.get();
-        analyst_ = TreeNodeWAnalyst(managers);
-        sub_analyst_ = TreeNodeWSubAnalyst(managers);
-        other_analyst_ = TreeNodeWOtherAnalyst(managers);
+        auto db = std::make_shared<DbMock>();
+		
+		auto db_managers = std::make_shared<DbManagers>(
+			std::make_unique<UserDbManagerMock>(db),
+			std::make_unique<NodeDbManagerMock>(db),
+			std::make_unique<DirectoryDbManagerMock>(db),
+			std::make_unique<CalendarDbManagerMock>(db),
+			std::make_unique<EventDbManagerMock>(db),
+			std::make_unique<CommentDbManagerMock>(),
+			std::make_unique<TagDbManagerMock>(),
+			std::make_unique<ProfileDbManagerMock>()
+		);
+
+		managers = std::make_unique<Managers>(
+			std::make_unique<UserManager>(db_managers),
+			std::make_unique<NodeManager>(db_managers),
+			std::make_unique<DirectoryManager>(db_managers),
+			std::make_unique<CalendarManager>(db_managers),
+			std::make_unique<EventManager>(db_managers),
+			std::make_unique<TagManager>(db_managers),
+			std::make_unique<ProfileManager>(db_managers)
+		);
+
+        analyst_ = TreeNodeWAnalyst(managers.get());
+        sub_analyst_ = TreeNodeWSubAnalyst(managers.get());
+        other_analyst_ = TreeNodeWOtherAnalyst(managers.get());
         auto tree_node = TreeNodeMock(Node(0, 0, 0, NodeType::ROOT), nullptr);
         group_nodes_.push_back(&tree_node);
         group_nodes_.push_back(group_nodes_[0]->addChild(Node(1, 0, 1, NodeType::PRIVATE_GROUP)));
@@ -33,8 +76,7 @@ class TreeNodeWAnalystTest : public ::testing::Test {
     TreeNodeWSubAnalyst sub_analyst_;
     TreeNodeWOtherAnalyst other_analyst_;
     std::vector<ITreeNode*> group_nodes_;
-    ManagersStub* managers;
-    std::unique_ptr<ManagersStub> m;
+    std::unique_ptr<IManagers> managers;
 };
 
 TEST_F(TreeNodeWAnalystTest, TYPIC) {

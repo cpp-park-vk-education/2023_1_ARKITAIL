@@ -20,9 +20,10 @@ OtherP::OtherP() {
     auto mgr = ss->managers();
     auto node = mgr->node_manager()->get(mgr->user_manager()->get().root_id);
 
-    tree->setRoot(node);
-
     auto cm = ss->connections_mediator();
+
+    ss->connections_mediator()->set_tree_root.add_receiver(tree, &TreeW::setRoot);
+
     cm->node_to_tree_other.add_receiver(tree, &TreeW::checkNode);
     cm->tree_to_header_other.add_sender(&tree->node_checked);
     cm->header_to_tree_other.add_receiver(tree, &TreeW::getRangeEvents);

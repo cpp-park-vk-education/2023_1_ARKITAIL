@@ -8,7 +8,7 @@ InPlaceEditTitle::InPlaceEditTitle(std::string label) :
     Wt::WInPlaceEdit(false, label) {
     title_ = Wt::WString(label);
     setPlaceholderText("Название");
-    lineEdit()->setMaxLength(15);
+    lineEdit()->setMaxLength(30); // Илья
     valueChanged().connect(this, &InPlaceEditTitle::setTitle);
 }
 

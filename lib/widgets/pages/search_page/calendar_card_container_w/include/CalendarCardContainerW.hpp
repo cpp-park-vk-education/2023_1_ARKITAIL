@@ -4,16 +4,19 @@
 #include <Wt/WLineEdit.h>
 #include <Wt/WPushButton.h>
 #include <Wt/WText.h>
+
+#include <Directory.hpp>
 #include <vector>
 
+#include "Calendar.hpp"
 #include "CalendarCardW.hpp"
 
 class CalendarCardContainerW : public Wt::WContainerWidget {
-public:
-	CalendarCardContainerW();
+  public:
+    CalendarCardContainerW();
+    void init(const std::vector<CalendarSptr>& content);
 
-private:
-	Wt::WText* text_;
-	std::vector<CalendarCardW*> calendar_cards_; 
-
+  private:
+    Wt::WText* status_;
+    std::vector<CalendarCardW*> calendar_cards_;
 };

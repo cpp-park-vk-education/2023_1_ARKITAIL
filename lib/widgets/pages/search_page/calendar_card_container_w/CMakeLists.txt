@@ -10,5 +10,8 @@ target_link_libraries(
 	${MODULE_NAME}
 	PUBLIC
 	calendar_card_w
+	calendar
+	user
+	managers
 )
 

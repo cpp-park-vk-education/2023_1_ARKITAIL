@@ -15,8 +15,9 @@ class TreeNodeDirW : public TreeNodeW {
     TreeNodeDirW(ITreeNode* node);
     ~TreeNodeDirW() = default;
     TreeNodeW* addChildNode(std::unique_ptr<TreeNodeW> child) override;
-    std::vector<TreeNodeW*> childrenNodes();
+    std::vector<TreeNodeW*> getChildrenNodes() override;
     void removeChildNode(TreeNodeW* child) override;
+    void open() override;
     void showNode() override;
     void closeNode() override;
     void checkNode() override;

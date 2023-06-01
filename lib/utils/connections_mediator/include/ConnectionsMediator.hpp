@@ -7,8 +7,11 @@
 #include "Event.hpp"
 #include "ICalendarBodyW.hpp"
 #include "ITreeNode.hpp"
+#include "SearchPage.hpp"
 #include "TreeW.hpp"
 #include "Wt/WDate.h"
+#include "Profile.hpp"
+#include "User.hpp"
 #include "ICalendarHeaderW.hpp"
 
 class ConnectionsMediator {
@@ -43,4 +46,11 @@ class ConnectionsMediator {
         header_to_tree_main;
     ConnectionPoint<Wt::Signal<Wt::WDate, Wt::WDate>, TreeW, Wt::WDate, Wt::WDate>
         header_to_tree_other;
+
+    // сигнал для передачи ноды из поиска при клике на календарь в дерево
+    ConnectionPoint<Wt::Signal<const Node&, const User&>, TreeW, const Node&, const User&> set_tree_root;
+
+    // сигнал для передачи тега на страницу поиска
+    ConnectionPoint<Wt::Signal<Tag>, TagsLineEdit, const Tag&> search_tag;
+
 };

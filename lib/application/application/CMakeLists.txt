@@ -19,6 +19,7 @@ target_link_libraries(
 	session_scope_map
 	main_p
 	other_p
+	search_page
 	navbar_w
 )
 
