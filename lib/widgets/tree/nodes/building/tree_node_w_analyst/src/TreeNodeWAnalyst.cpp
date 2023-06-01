@@ -64,11 +64,20 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeWChild(ITreeNode* tree_n
                                       tags,
                                       managers_->user_manager()->get(child.owner_id),
                                       tree_node};
-    } else if (node.type & (NodeType::ROOT | NodeType::PRIVATE_GROUP | NodeType::PUBLIC_GROUP |
+    } else if (node.type & (NodeType::ROOT | 
                             NodeType::SUBSCRIPTIONS_GROUP | NodeType::PROFILE_GROUP)) {
         Directory child = managers_->directory_manager()->get(node.resource_id);
 
         data = TreeNodeWConvertedData{TreeNodeWType::GROUP,
+                                      child.name,
+                                      child.description,
+                                      tags,
+                                      managers_->user_manager()->get(child.owner_id),
+                                      tree_node};
+    } else if (node.type & (NodeType::PRIVATE_GROUP | NodeType::PUBLIC_GROUP)) {
+        Directory child = managers_->directory_manager()->get(node.resource_id);
+
+        data = TreeNodeWConvertedData{TreeNodeWType::GROUP_OPTIONS,
                                       child.name,
                                       child.description,
                                       tags,

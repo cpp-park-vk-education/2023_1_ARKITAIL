@@ -43,16 +43,18 @@ enum Components {
     OPTIONS_CALENDARS_DIR = 1 << 5,
     OPTIONS_PERSONAL_CALENDAR = 1 << 6,
     OPTIONS_PROFILE = 1 << 7,
+    OPTIONS_GROUP = 1 << 8,
 
-    TOOLTIP_AUTHOR = 1 << 8,
+    TOOLTIP_AUTHOR = 1 << 9,
 
-    LABEL = 1 << 9,
+    LABEL = 1 << 10,
 
-    CHECKBOX = 1 << 10,
+    CHECKBOX = 1 << 11,
 };
 
 enum TreeNodeWType {
-    GROUP,                                                           // группы
+    GROUP,            // группа
+    GROUP_OPTIONS = Components::OPTIONS_GROUP,  // группа с возможностью добавления календарей и директорий
     DIR = Components::CHECKBOX | Components::OPTIONS_CALENDARS_DIR,  // свои директории
 
     SUB_GROUP = Components::TYPE_SUB_DIR,  // группа подписок
