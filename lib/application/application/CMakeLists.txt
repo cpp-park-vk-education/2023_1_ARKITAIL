@@ -10,6 +10,7 @@ target_link_libraries(
 	${MODULE_NAME} PUBLIC 
   calendula_compiler_flags
   deferred
+	search_page
 	session_scope_map
 	swapable
 	main_p

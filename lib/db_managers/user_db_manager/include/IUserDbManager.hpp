@@ -5,7 +5,7 @@
 class IUserDbManager {
 public:
     virtual UserSptr get() = 0; // вернуть текущего пользователя
-    virtual UserSptr get(long long user_id) = 0;
+    virtual UserSptr get(int user_id) = 0;
 
 };
 

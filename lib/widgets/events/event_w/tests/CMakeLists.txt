@@ -4,7 +4,8 @@ target_link_libraries(event_w_tests PUBLIC
                       event_w
                       wt
                       wthttp
-                      GTest::gtest_main)
+                      GTest::gtest_main
+                      GTest::gmock_main)
 
 include(GoogleTest)
 

@@ -10,10 +10,10 @@
 #include "Calendar.hpp"
 #include "Directory.hpp"
 #include "ITreeNode.hpp"
-#include "ITreeNodeWAnalyst.hpp"
 #include "Node.hpp"
 #include "OptionsW.hpp"
 #include "Tree.hpp"
+#include "TreeNodeWAnalystBase.hpp"
 #include "TreeNodeWBuilderBase.hpp"
 #include "User.hpp"
 
@@ -34,6 +34,7 @@ class TreeNodeW : public Wt::WContainerWidget {
     TreeNodeW* addParent(TreeNodeW* parent_node);
 
     void removeNode();
+    virtual void removeChildNode(TreeNodeW* child);
     bool isRoot();
     bool isCanCheck();
     void uncheckParentNodes();
@@ -46,7 +47,7 @@ class TreeNodeW : public Wt::WContainerWidget {
   protected:
     Wt::Signal<ITreeNode*> checked_;
     Wt::WText* text_title_;
-    std::unique_ptr<ITreeNodeWAnalyst> analyst_;
+    std::unique_ptr<TreeNodeWAnalystBase> analyst_;
     Wt::WContainerWidget* header_container_;
     Wt::WPushButton* options_button_;
     Wt::WHBoxLayout* node_block_;

@@ -29,7 +29,7 @@ private:
     Node node_;
     ITreeNode* parent_;
     std::vector<std::unique_ptr<ITreeNode>> children_;
-    bool checked_;
+    size_t checked_;
 
 };
 

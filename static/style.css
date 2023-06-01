@@ -6,3 +6,11 @@
 .calendar {
     min-width: min(100%, 1000px);
 }
+
+.today-color {
+    background-color: #d1e7dd;
+}
+
+.hover:hover {
+    cursor: pointer;
+}

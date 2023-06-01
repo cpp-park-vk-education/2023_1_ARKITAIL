@@ -8,8 +8,8 @@
 #include <Wt/WLineEdit.h>
 #include <Wt/WLogger.h>
 #include <Wt/WPushButton.h>
-
 #include <Wt/WTime.h>
+
 #include <algorithm>
 #include <memory>
 #include <string>
@@ -24,13 +24,13 @@
 #include "TreeNodeLeafW.hpp"
 #include "TreeNodeWAnalyst.hpp"
 #include "TreeNodeWDirector.hpp"
+#include "TreeNodeWOtherAnalyst.hpp"
 
 TreeW::TreeW() :
     tree_manager_(),
     search_line_(),
     remember_combination_button_(),
     root_() {
-
     animateHide(Wt::WAnimation(Wt::AnimationEffect::SlideInFromLeft));
     setStyleClass("start-0 w-100");
     auto tree_header_container = addWidget(std::make_unique<Wt::WContainerWidget>());
@@ -50,26 +50,21 @@ TreeW::TreeW() :
 }
 
 void TreeW::setRoot(const Node& node) {
-    auto ss = SessionScopeMap::instance().get();
-    auto mgr = ss->managers();
+    if (root_) {
+        removeChild(root_);
+    }
+    auto mgr = SessionScopeMap::instance().get()->managers();
 
     tree_manager_ = std::make_unique<Tree>(node);
 
     auto tree_node = tree_manager_->getRoot();
 
-    auto root = TreeNodeWDirector().fillNode(TreeNodeWAnalyst().analyseTreeNodeWChild(tree_node));
-
-    if (node.type & NodeType::PUBLIC_CALENDAR) {
-        auto calendar = mgr->calendar_manager()->get(node.resource_id);
-        root_ = addWidget(std::move(root));
-
+    if (node.type & NodeType::ROOT) {
+        root_ = addWidget(
+            TreeNodeWDirector().fillNode(TreeNodeWAnalyst(mgr).analyseTreeNodeWChild(tree_node)));
     } else {
-        auto directory = mgr->directory_manager()->get(node.resource_id);
-        if (node.type & NodeType::ROOT) {
-            root_ = addWidget(std::move(root));
-        } else {
-            root_ = addWidget(std::move(root));
-        }
+        root_ = addWidget(TreeNodeWDirector().fillNode(
+            TreeNodeWOtherAnalyst(mgr).analyseTreeNodeWChild(tree_node)));
     }
 }
 
@@ -88,7 +83,8 @@ void TreeW::checkNode(ITreeNode* tree_node) {
 }
 
 void TreeW::getRangeEvents(Wt::WDate date1, Wt::WDate date2) {
-    auto events = tree_manager_->getCheckedEventsByInterval(Wt::WDateTime(date1, Wt::WTime(0, 0, 0)), Wt::WDateTime(date2, Wt::WTime(0, 0, 0)));
+    auto events = tree_manager_->getCheckedEventsByInterval(
+        Wt::WDateTime(date1, Wt::WTime(0, 0, 0)), Wt::WDateTime(date2, Wt::WTime(0, 0, 0)));
     std::cout << events.size() << "\n";
     for (auto e : events) {
         std::cout << e.summary << std::endl;

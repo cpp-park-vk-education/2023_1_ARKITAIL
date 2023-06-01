@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "ITreeNode.hpp"
-#include "ITreeNodeWAnalyst.hpp"
+#include "TreeNodeWAnalystBase.hpp"
 #include "Node.hpp"
 
 class TreeNodeW;

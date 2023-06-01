@@ -1,9 +1,7 @@
-set(MODULE_NAME search_page)
-set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
-set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
-
-file(GLOB SOURCES ${SOURCE_DIR}/*.cpp)
-
-add_library(${MODULE_NAME} SHARED ${SOURCES})
-target_include_directories(${MODULE_NAME} PUBLIC ${INCLUDE_DIR})
+add_subdirectory(search_page)
+add_subdirectory(calendar_card_container_w)
+add_subdirectory(calendar_card_w)
+add_subdirectory(searcher)
+add_subdirectory(users_line_edit)
+add_subdirectory(tags_line_edit)
 

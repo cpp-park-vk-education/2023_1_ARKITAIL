@@ -13,7 +13,7 @@ UserSptr UserDbManagerMock::get() {
 	return std::make_shared<User>(db_->users[0]);
 }
 
-UserSptr UserDbManagerMock::get(long long user_id) {
+UserSptr UserDbManagerMock::get(int user_id) {
 	return std::make_shared<User>(db_->users[user_id]);
 }
 

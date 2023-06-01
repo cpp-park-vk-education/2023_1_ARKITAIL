@@ -11,7 +11,7 @@ class PersonalCalendarHeaderW : public CalendarHeaderW {
 
   private:
     Wt::WPushButton* button_add_event_;
-    
+
     void addEvent();
 
     PersonalCalendarHeaderW* addButtons() override;

@@ -1,15 +1,14 @@
 #pragma once
 
-#include <Wt/Dbo/Session.h>
-
 #include "DbModels.hpp"
 #include "INodeDbManager.hpp"
 #include "Node.hpp"
+#include "Session.hpp"
 #include "Tag.hpp"
 
 class NodeDbManager: public INodeDbManager {
 public:
-  NodeDbManager(Wt::Dbo::Session &session) : session_(session) {}
+  NodeDbManager(Session& session);
 
   int add(NodeSptr node) override;
   void remove(int node_id) override;
@@ -22,7 +21,7 @@ public:
   void move(int node_id, int destination_id) override;
 
 private:
-  int id_;
-  int destination_id_;
-  Wt::Dbo::Session &session_;
+  Session& session_;
+
 };
+

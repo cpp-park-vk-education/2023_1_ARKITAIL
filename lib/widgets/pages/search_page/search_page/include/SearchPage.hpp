@@ -1,22 +1,24 @@
 #pragma once
 
+#include <Wt/WContainerWidget.h>
 #include <Wt/WLineEdit.h>
 #include <Wt/WPushButton.h>
 #include <Wt/WText.h>
 
-#include "PageW.hpp"
 #include "Searcher.hpp"
 #include "CalendarCardContainerW.hpp"
+#include "UsersLineEdit.hpp"
+#include "TagsLineEdit.hpp"
 
-class SearchP : PageW {
+class SearchP : public Wt::WContainerWidget {
 public:
-    void SearchP();
-    void Find(std::string input_string);
+    SearchP();
+    void search();
        
 private:
-    Wt::WLineEdit* input_users_;
-    Wt::WLineEdit* input_tags_;
-    Wt::WPushButton& find_button_;
+    UsersLineEdit* users_;
+    TagsLineEdit* tags_;
+    
     Wt::WText* hint_;
     CalendarCardContainerW* found_;
     Searcher* searcher_;

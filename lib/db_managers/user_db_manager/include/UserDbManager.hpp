@@ -9,7 +9,7 @@ public:
   explicit UserDbManager(Session& session);
 
   UserSptr get() override;
-  UserSptr get(long long user_id) override;
+  UserSptr get(int user_id) override;
 
 private:
   Session& session_;

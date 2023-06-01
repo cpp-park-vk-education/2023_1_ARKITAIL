@@ -20,6 +20,7 @@ target_link_libraries(${MODULE_NAME} PUBLIC
                         tree_node_w_analyst
                         session_scope_map
                         user
+                        anchors
                       )
                       
 

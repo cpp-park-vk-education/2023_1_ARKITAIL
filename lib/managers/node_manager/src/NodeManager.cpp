@@ -25,7 +25,12 @@ bool NodeManager::checkAccess(int user_id, int node_id) {
     if (node->type & CALENDAR)
         return db_->calendar_dbm()->get(node->resource_id)->owner_id == user_id;
 
+<<<<<<< HEAD
     if (node->type & MOUNT) return checkAccess(user_id, node->parent_id);
+=======
+    if (node.type & MOUNT)
+        return checkAccess(user_id, node.parent_id);
+>>>>>>> origin/impl-bannikov
 
     return false;
 }
@@ -49,32 +54,64 @@ NodeSptr NodeManager::get(int node_id) {
 int NodeManager::add(NodeSptr node) {
     UserSptr user = db_->user_dbm()->get();
 
+<<<<<<< HEAD
     if (!checkAccess(user->id, node->parent_id)) return 0;
+=======
+    if (!checkAccess(user.id, node.parent_id)) {
+        return 0;
+    }
+>>>>>>> origin/impl-bannikov
 
     if (node->type & (PRIVATE_DIRECTORY | PUBLIC_DIRECTORY)) {
         NodeSptr parent_node = db_->node_dbm()->get(node->parent_id);
 
+<<<<<<< HEAD
         if (!(parent_node->type & PRIVATE_GD && node->type & PRIVATE_DIRECTORY ||
               parent_node->type & PUBLIC_GD && node->type & PUBLIC_DIRECTORY ||
               checkAccess(user->id, node->id)))
+=======
+        if (!(parent_node.type & PRIVATE_GD && node.type & PRIVATE_DIRECTORY ||
+              parent_node.type & PUBLIC_GD && node.type & PUBLIC_DIRECTORY ||
+              checkAccess(user.id, node.id))) {
+>>>>>>> origin/impl-bannikov
             return 0;
+        }
 
     } else if (node->type & CALENDAR) {
         NodeSptr parent_node = db_->node_dbm()->get(node->parent_id);
 
+<<<<<<< HEAD
         if (!(parent_node->type & PRIVATE_GD && node->type & PRIVATE_CALENDAR ||
               parent_node->type & PUBLIC_GD && node->type & PUBLIC_CALENDAR ||
               checkAccess(user->id, node->id)))
+=======
+        if (!(parent_node.type & PRIVATE_GD && node.type & PRIVATE_CALENDAR ||
+              parent_node.type & PUBLIC_GD && node.type & PUBLIC_CALENDAR ||
+              checkAccess(user.id, node.id))) {
+>>>>>>> origin/impl-bannikov
             return 0;
+        }
 
     } else if (node->type & MOUNT) {
         NodeSptr parent_node = db_->node_dbm()->get(node->parent_id);
 
+<<<<<<< HEAD
         if (!(parent_node->type & SUBSCRIPTIONS_GROUP)) return 0;
+=======
+        if (!(parent_node.type & SUBSCRIPTIONS_GROUP)) {
+            return 0;
+        }
+>>>>>>> origin/impl-bannikov
 
         NodeSptr resource_node = db_->node_dbm()->get(node->resource_id);
 
+<<<<<<< HEAD
         if (!(resource_node->type & (PUBLIC_DIRECTORY | PUBLIC_CALENDAR))) return 0;
+=======
+        if (!(resource_node.type & (PUBLIC_DIRECTORY | PUBLIC_CALENDAR))) {
+            return 0;
+        }
+>>>>>>> origin/impl-bannikov
 
     } else {
         return 0;
@@ -100,6 +137,7 @@ void NodeManager::update(NodeSptr node) {
 }
 
 // Удалять запрещено типы ROOT, {PRIVATE | PUBLIC | SUBSCRIPTIONS | PROFILE}_GROUP
+<<<<<<< HEAD
 void NodeManager::remove(int node_id) {
 	UserSptr user = db_->user_dbm()->get();
 	NodeSptr node = db_->node_dbm()->get(node_id);
@@ -107,6 +145,15 @@ void NodeManager::remove(int node_id) {
 	if (!checkAccess(user->id, node->id) ||
 		node->type & (ROOT | PRIVATE_GROUP | PUBLIC_GROUP | SUBSCRIPTIONS_GROUP | PROFILE_GROUP))
 		return;
+=======
+void NodeManager::remove(size_t node_id) {
+    User user = db_->user_dbm()->get();
+    Node node = db_->node_dbm()->get(node_id);
+
+    if (!checkAccess(user.id, node.id) ||
+        node.type & (ROOT | PRIVATE_GROUP | PUBLIC_GROUP | SUBSCRIPTIONS_GROUP | PROFILE_GROUP))
+        return;
+>>>>>>> origin/impl-bannikov
 
     std::queue<NodeSptr> subtree;
     subtree.push(node);
@@ -116,6 +163,7 @@ void NodeManager::remove(int node_id) {
     while (!subtree.empty()) {
         cur_node = subtree.front();
 
+<<<<<<< HEAD
 		if (cur_node->type & (PRIVATE_DIRECTORY | PUBLIC_DIRECTORY))
 			for (Node child_node : db_->node_dbm()->getChildren(cur_node->id))
         // affeeal: возможно, здесь я мог сделать умнее...
@@ -130,6 +178,21 @@ void NodeManager::remove(int node_id) {
         
 		subtree.pop();
 	}
+=======
+        if (cur_node.type & (PRIVATE_DIRECTORY | PUBLIC_DIRECTORY))
+            for (auto child_node : db_->node_dbm()->getChildren(cur_node.id))
+                subtree.push(child_node);
+
+        db_->node_dbm()->remove(cur_node.id);
+
+        if (cur_node.type & (PRIVATE_DIRECTORY | PUBLIC_DIRECTORY))
+            db_->directory_dbm()->remove(cur_node.resource_id);
+        else if (cur_node.type & (PRIVATE_CALENDAR | PUBLIC_CALENDAR))
+            db_->calendar_dbm()->remove(cur_node.resource_id);
+
+        subtree.pop();
+    }
+>>>>>>> origin/impl-bannikov
 }
 
 void NodeManager::tag(TagSptr tag, int node_id) {
@@ -150,7 +213,12 @@ void NodeManager::subscribe(int node_id) {
     UserSptr user = db_->user_dbm()->get();
     NodeSptr node = db_->node_dbm()->get(node_id);
 
+<<<<<<< HEAD
     if (!(node->type & (PUBLIC_DIRECTORY | PUBLIC_CALENDAR))) return;
+=======
+    if (!(node.type & (PUBLIC_DIRECTORY | PUBLIC_CALENDAR)))
+        return;
+>>>>>>> origin/impl-bannikov
 
     for (Node subg : db_->node_dbm()->getChildren(user->root_id)) {
         if (subg.type & SUBSCRIPTIONS_GROUP) {
@@ -159,7 +227,6 @@ void NodeManager::subscribe(int node_id) {
             break;
         }
     }
-
 }
 
 // Отписка является одной из самых безобидных операций
@@ -169,24 +236,34 @@ void NodeManager::unsubscribe(int node_id) {
 
     for (auto subg : db_->node_dbm()->getChildren(user->root_id))
         if (subg.type & SUBSCRIPTIONS_GROUP) {
-            for (auto sub : db_->node_dbm()->getChildren(subg.id))
+            for (auto sub : db_->node_dbm()->getChildren(subg.id)) {
                 if (sub.resource_id == node_id) {
                     db_->node_dbm()->remove(sub.id);
                     break;
                 }
+            }
             break;
         }
 }
 
 // Получение детей так же как и получение требует лишь проверки прав доступа
+<<<<<<< HEAD
 std::vector<Node> NodeManager::getChildren(int node_id) {
 	UserSptr user = db_->user_dbm()->get();
 	NodeSptr node = db_->node_dbm()->get(node_id);
 
 	if (!(checkAccess(user->id, node_id) || node->type & PUBLIC))
 		return std::vector<Node>();
+=======
+std::vector<Node> NodeManager::getChildren(size_t node_id) {
+    User user = db_->user_dbm()->get();
+    Node node = db_->node_dbm()->get(node_id);
 
-	return db_->node_dbm()->getChildren(node_id);
+    if (!(checkAccess(user.id, node_id) || node.type & PUBLIC))
+        return std::vector<Node>();
+>>>>>>> origin/impl-bannikov
+
+    return db_->node_dbm()->getChildren(node_id);
 }
 
 bool NodeManager::subscribed(int node_id) {
@@ -199,6 +276,6 @@ bool NodeManager::subscribed(int node_id) {
 	    	    if (s.resource_id == node_id)
 	    	        return true;
 
+
     return false;
 }
-
