@@ -40,7 +40,10 @@ ITreeNode* TreeNode::getParent() {
 std::vector<ITreeNode*> TreeNode::getChildren() {
     std::vector<ITreeNode*> children;
 
-    for (size_t i = 0; i < children_.size(); i++) children.push_back(children_[i].get());
+    for (size_t i = 0; i < children_.size(); i++) {
+        std::cout << "Addr of child: " << children_[i].get() << std::endl;
+        children.push_back(children_[i].get());
+    }
 
     return children;
 }
@@ -60,7 +63,8 @@ void TreeNode::check() {
 }
 
 void TreeNode::uncheck() {
-    checked_--;
+    if (isChecked())
+        checked_--;
 }
 
 bool TreeNode::isChecked() {

@@ -87,8 +87,6 @@ void TreeNodeW::performAction(Action action) {
     auto mgr = SessionScopeMap::instance().get()->managers();
     switch (action) {
         case Action::REMOVE:
-            std::cout << "ID_NODE" << std::endl;
-            std::cout << node_->getNode().id << std::endl;
             mgr->node_manager()->remove(node_->getNode().id);
             removeNode();
             break;
@@ -178,7 +176,6 @@ NodeType TreeNodeW::getType() {
 }
 
 void TreeNodeW::setOptions(std::unique_ptr<OptionsW> options) {
-    std::cout << options.get() << std::endl;
     options->selectedOption().connect(this, &TreeNodeW::performAction);
     options_button_->setMenu(std::make_unique<OptionsW>());
 

@@ -90,3 +90,4 @@ void TreeW::getRangeEvents(Wt::WDate date1, Wt::WDate date2) {
     std::cout << "\nпо двум датам получили события и отправили в тело календаря\n" << std::endl;
     events_getted.emit(date1, events);
 }
+

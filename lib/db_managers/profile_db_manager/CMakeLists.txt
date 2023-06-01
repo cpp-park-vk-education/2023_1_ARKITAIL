@@ -13,7 +13,13 @@ target_link_libraries(
 	profile
 )
 
-# if (BUILD_TESTS)
-# 	add_subdirectory(tests)
-# endif()
+if (BUILD_TESTS)
+	target_link_libraries(
+		${MODULE_NAME}
+		PUBLIC
+		db_mock
+	)
+
+	add_subdirectory(tests)
+endif()
 

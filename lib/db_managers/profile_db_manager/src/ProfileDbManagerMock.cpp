@@ -1,38 +1,50 @@
+#include <memory>
 #include <vector>
 
+#include "DbMock.hpp"
 #include "ProfileDbManagerMock.hpp"
 #include "Profile.hpp"
 
-ProfileDbManagerMock::ProfileDbManagerMock() : 
-data_(),
-aid_(1) {
+ProfileDbManagerMock::ProfileDbManagerMock(std::shared_ptr<DbMock> db) : 
+	db_(db),
+	aid_(db->profiles.size()) {}
 
-	// data_.emplace_back(0, 0, 0, std::vector<size_t>(), "");
-}
-
-const Profile& ProfileDbManagerMock::get(size_t profile_id) {
-	for (auto e = data_.begin() + 1; e != data_.end(); e++)
+ProfileSptr ProfileDbManagerMock::get(size_t profile_id) {
+	for (auto e = db_->profiles.begin() + 1; e != db_->profiles.end(); e++)
 		if (e->id == profile_id)
-			return *e;
+			return std::make_shared<Profile>(*e);
 	
-	return data_[0];
+	return std::make_shared<Profile>(db_->profiles[0]);
 }
 
-size_t ProfileDbManagerMock::add(const Profile& profile) {
-	data_.emplace_back(
+size_t ProfileDbManagerMock::add(ProfileSptr profile) {
+	db_->profiles.emplace_back(
 		aid_,
-		profile.node_id,
-		profile.owner_id,
-		profile.nodes,
-		profile.name
+		profile->node_id,
+		profile->owner_id,
+		profile->nodes,
+		profile->name
 	);
 
 	return aid_++;
 }
 
+void ProfileDbManagerMock::update(ProfileSptr profile) {
+	for (auto e = db_->profiles.begin() + 1; e != db_->profiles.end(); e++)
+		if (e->id == profile->id) {
+			e->node_id = profile->node_id;
+			e->owner_id = profile->owner_id;
+			e->nodes = profile->nodes;
+			e->name = profile->name;
+			break;
+		};
+}
+
 void ProfileDbManagerMock::remove(size_t profile_id) {
-	for (auto e = data_.begin() + 1; e != data_.end(); e++)
-		if (e->id == profile_id)
-			data_.erase(e);
+	for (auto e = db_->profiles.begin() + 1; e != db_->profiles.end(); e++)
+		if (e->id == profile_id) {
+			db_->profiles.erase(e);
+			break;
+		}
 }
 

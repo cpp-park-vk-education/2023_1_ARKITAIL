@@ -62,17 +62,18 @@ std::vector<Event> Tree::getCheckedEventsByInterval(Wt::WDateTime begin, Wt::WDa
 }
 
 void Tree::checkNode(ITreeNode* node) {
+    std::cout << "Pointer: " << node << std::endl;
     auto mgr = SessionScopeMap::instance().get()->managers();
 
     std::queue<ITreeNode*> q;
 
     if (node->getNode().type & PROFILE) {
-        Profile profile = mgr->profile_manager()->get(node->getNode().resource_id);
+        ProfileSptr profile = mgr->profile_manager()->get(node->getNode().resource_id);
 
         q.push(root_.get());
 
         while (!q.empty()) {
-            for (auto p : profile.nodes)
+            for (auto p : profile->nodes)
                 if (p == q.front()->getNode().id) {
                     q.front()->check();
                     break;
