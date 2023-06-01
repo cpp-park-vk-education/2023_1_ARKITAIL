@@ -1,4 +1,5 @@
 #include "CommentDbManagerMock.hpp"
+
 #include "Comment.hpp"
 #include "ICommentDbManager.hpp"
 
@@ -21,22 +22,15 @@ int CommentDbManagerMock::add(CommentSptr comment) {
 	data_.emplace_back(
 		aid_,
 		comment->event_id,
-		//comment.owner_id,
 		comment->text
 	);
 
 	return aid_++;
 }
 
-void CommentDbManagerMock::update(CommentSptr comment) {
-  // TODO(Antiho)
+void CommentDbManagerMock::update(CommentSptr) {
+  // TODO
 }
-
-// void CommentDbManagerMock::update(CommentSptr comment) {
-// 	for (auto e : data_)
-// 		if (e.id == comment.id)
-// 			e = comment;
-// }
 
 void CommentDbManagerMock::remove(int comment_id) {
 	for (auto e = data_.begin() + 1; e != data_.end(); e++)

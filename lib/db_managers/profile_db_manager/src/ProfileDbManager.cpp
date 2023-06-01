@@ -1,24 +1,29 @@
 #include "ProfileDbManager.hpp"
 
-#include <memory>
-
-#include <Wt/Dbo/Transaction.h>
-
 #include "DbModels.hpp"
 #include "Profile.hpp"
+#include "Session.hpp"
 
-int ProfileDbManager::add(ProfileSptr profile) {
-  // ...
+ProfileDbManager::ProfileDbManager(Session& session)
+    : session_(session) {
 }
 
-void ProfileDbManager::remove(int event_id) {
-  // ...
+int ProfileDbManager::add(ProfileSptr) {
+  // TODO
+  
+  return -1;
 }
 
-void ProfileDbManager::update(ProfileSptr profile) {
-  // ...
+void ProfileDbManager::remove(int) {
+  // TODO
 }
 
-ProfileSptr ProfileDbManager::get(int event_id) {
-  // ...
+void ProfileDbManager::update(ProfileSptr) {
+  // TODO
+}
+
+ProfileSptr ProfileDbManager::get(int) {
+  // TODO
+
+  return std::make_shared<Profile>();
 }

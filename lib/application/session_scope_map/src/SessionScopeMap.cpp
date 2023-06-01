@@ -62,7 +62,6 @@ SessionScope* SessionScopeMap::get() {
 
 void SessionScopeMap::add(std::string sid) {
   std::unique_ptr<Session> session = std::make_unique<Session>();
-	std::shared_ptr<DbMock> db_mock = std::make_shared<DbMock>();
   
   std::shared_ptr<IDbManagers> db = std::make_shared<DbManagers>(
       std::make_unique<UserDbManager>(*session),
@@ -70,9 +69,9 @@ void SessionScopeMap::add(std::string sid) {
       std::make_unique<DirectoryDbManager>(*session),
       std::make_unique<CalendarDbManager>(*session),
       std::make_unique<EventDbManager>(*session),
-      std::make_unique<CommentDbManagerMock>(),
+      std::make_unique<CommentDbManager>(*session), // не используется
       std::make_unique<TagDbManager>(*session),
-      std::make_unique<ProfileDbManagerMock>());
+      std::make_unique<ProfileDbManager>(*session));
 
 	container_.insert(
 		std::make_pair(

@@ -1,13 +1,13 @@
 #pragma once
 
-#include <Wt/Dbo/Session.h>
-
 #include "IProfileDbManager.hpp"
 #include "Profile.hpp"
+#include "Session.hpp"
 
 class ProfileDbManager : public IProfileDbManager {
 public:
-  explicit ProfileDbManager(Wt::Dbo::Session &session) : session_(session) {}
+  ProfileDbManager() = delete;
+  explicit ProfileDbManager(Session& session);
 
   int add(ProfileSptr profile) override;
   void remove(int profile_id) override;
@@ -15,6 +15,7 @@ public:
   ProfileSptr get(int profile_id) override;
 
 private:
-  int id_;
-  Wt::Dbo::Session &session_;
+  Session& session_;
+
 };
+
