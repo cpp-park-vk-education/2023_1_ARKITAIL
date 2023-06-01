@@ -5,16 +5,15 @@
 #include "DbMock.hpp"
 #include "User.hpp"
 
-UserDbManagerMock::UserDbManagerMock(std::shared_ptr<DbMock> db) :
-	db_(db) {}
+UserDbManagerMock::UserDbManagerMock(std::shared_ptr<DbMock> db)
+	  : db_(db) {
+}
 
 UserSptr UserDbManagerMock::get() {
-  Wt::log("UserDbManagerMock::get()");
 	return std::make_shared<User>(db_->users[0]);
 }
 
-UserSptr UserDbManagerMock::get(int user_id) {
-  Wt::log("UserDbManagerMock::get(int user_id)");
+UserSptr UserDbManagerMock::get(long long user_id) {
 	return std::make_shared<User>(db_->users[user_id]);
 }
 

@@ -20,7 +20,7 @@ target_compile_features(
 )
 
 target_compile_options(calendula_compiler_flags INTERFACE
-    "$<BUILD_INTERFACE:-g;-Wall;-Wextra;-Wshadow;-Wformat=2;-Wunused>"
+    "$<BUILD_INTERFACE:-g;-Wall;-Wextra;-Wformat=2;-Wunused>"
 )
 
 add_executable(Calendula src/main.cpp)

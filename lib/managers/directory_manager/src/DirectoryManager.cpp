@@ -20,9 +20,10 @@ DirectorySptr DirectoryManager::get(int directory_id) {
     DirectorySptr directory = db_->directory_dbm()->get(directory_id);
     NodeSptr node = db_->node_dbm()->get(directory->node_id);
 
-    // ЗДЕСЬ КАКОЙ-ТО БАГ
+    // affeeal: здесь какой-то баг или кто-то не проверят возвращаемое значение
+    // на nullptr, поэтому пока исправил на вовзрат пустого DirectorySptr.
     if (!(user->id == directory->owner_id || node->type & PUBLIC_DIRECTORY))
-        return nullptr;
+      return std::make_shared<Directory>();
 
     return directory;
 }

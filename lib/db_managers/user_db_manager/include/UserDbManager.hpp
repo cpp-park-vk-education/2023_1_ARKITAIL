@@ -2,15 +2,17 @@
 
 #include "DbModels.hpp"
 #include "IUserDbManager.hpp"
+#include "Session.hpp"
 
 class UserDbManager: public IUserDbManager {
 public:
-  UserDbManager(Wt::Dbo::Session &session) : session_(session) {}
+  explicit UserDbManager(Session& session);
 
   UserSptr get() override;
-  UserSptr get(int user_id) override;
+  UserSptr get(long long user_id) override;
 
 private:
-  int id_;
-  Wt::Dbo::Session &session_;
+  Session& session_;
+
 };
+

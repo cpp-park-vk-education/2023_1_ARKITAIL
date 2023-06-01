@@ -10,18 +10,9 @@ target_include_directories(${MODULE_NAME} PUBLIC ${INCLUDE_DIR})
 target_link_libraries(
 	${MODULE_NAME}
 	PUBLIC
-	user
 	db_managers
 	db_models
+  session
+	user
 )
-
-if (BUILD_TESTS)
-	target_link_libraries(
-		${MODULE_NAME}
-		PUBLIC
-		db_mock
-	)
-
- 	# add_subdirectory(tests)
-endif()
 
