@@ -4,10 +4,12 @@
 
 #include "DbModels.hpp"
 #include "ITagDbManager.hpp"
+#include "Session.hpp"
 
 class TagDbManager: public ITagDbManager {
 public:
-  TagDbManager(Wt::Dbo::Session &session) : session_(session) {}
+  TagDbManager() = delete;
+  explicit TagDbManager(Session &session);
 
   int add(TagSptr tag) override;
   void remove(int tag_id) override;
@@ -15,6 +17,7 @@ public:
   TagSptr get(int tag_id) override;
 
 private:
-  int id_;
-  Wt::Dbo::Session &session_;
+  Session& session_;
+
 };
+

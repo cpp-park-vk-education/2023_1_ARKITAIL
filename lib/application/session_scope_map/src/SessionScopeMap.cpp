@@ -64,7 +64,6 @@ void SessionScopeMap::add(std::string sid) {
   std::unique_ptr<Session> session = std::make_unique<Session>();
 	std::shared_ptr<DbMock> db_mock = std::make_shared<DbMock>();
   
-  // Пока используем смесь моков и реальной БД
   std::shared_ptr<IDbManagers> db = std::make_shared<DbManagers>(
       std::make_unique<UserDbManager>(*session),
       std::make_unique<NodeDbManager>(*session),
@@ -72,22 +71,9 @@ void SessionScopeMap::add(std::string sid) {
       std::make_unique<CalendarDbManager>(*session),
       std::make_unique<EventDbManager>(*session),
       std::make_unique<CommentDbManagerMock>(),
-      std::make_unique<TagDbManagerMock>(),
+      std::make_unique<TagDbManager>(*session),
       std::make_unique<ProfileDbManagerMock>());
 
-  // Раскомментить, когда будем использовать реальные БД
-  /*
-  std::shared_ptr<IDbManagers> db = std::make_shared<DbManagers>(
-      std::make_unique<UserDbManager>(*session),
-      std::make_unique<NodeDbManager>(*session),
-      std::make_unique<DirectoryDbManager>(*session),
-      std::make_unique<CalendarDbManager>(*session),
-      std::make_unique<EventDbManager>(*session),
-      std::make_unique<CommentDbManager>(*session),
-      std::make_unique<TagDbManager>(*session),
-      std::make_unique<ProfileDbManager>(*session));
-  */
-  
 	container_.insert(
 		std::make_pair(
 			sid,
