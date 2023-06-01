@@ -12,5 +12,6 @@ target_link_libraries(
   wt
   wtdbo
   
+  calendar
   node
   )

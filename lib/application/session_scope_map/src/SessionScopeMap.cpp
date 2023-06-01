@@ -69,7 +69,7 @@ void SessionScopeMap::add(std::string sid) {
       std::make_unique<UserDbManager>(*session),
       std::make_unique<NodeDbManager>(*session),
       std::make_unique<DirectoryDbManagerMock>(db_mock),
-      std::make_unique<CalendarDbManagerMock>(db_mock),
+      std::make_unique<CalendarDbManager>(*session),
       std::make_unique<EventDbManager>(*session),
       std::make_unique<CommentDbManagerMock>(),
       std::make_unique<TagDbManagerMock>(),

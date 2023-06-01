@@ -14,6 +14,7 @@
 #include <Wt/Dbo/collection.h>
 #include <Wt/Dbo/ptr.h>
 
+#include "Calendar.hpp"
 #include "Node.hpp"
 
 namespace db {
@@ -46,7 +47,7 @@ public:
   NodePtr node;
   std::string summary;
   std::string description;
-  std::string visibility;
+  CalendarVisibility visibility;
   std::string color;
 
   template <class Action> void persist(Action &a) {
@@ -55,8 +56,8 @@ public:
     Wt::Dbo::belongsTo(a, node, "node");
     Wt::Dbo::field(a, summary, "summary");
     Wt::Dbo::field(a, description, "description");
-    Wt::Dbo::field(a, color, "color");
     Wt::Dbo::field(a, visibility, "visibility");
+    Wt::Dbo::field(a, color, "color");
   }
 };
 

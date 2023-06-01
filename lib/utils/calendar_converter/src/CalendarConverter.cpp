@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 
+#include <Wt/WColor.h>
 #include <Wt/WDateTime.h>
-#include <Wt/WString.h>
 
 #include "Calendar.hpp"
 #include "Event.hpp"
@@ -71,13 +71,16 @@ std::vector<CalendarSptr> CalendarConverter::IcalendarToCalendars(
         parser::TextValue* text_value
           = dynamic_cast<parser::TextValue*>(property->value().get());
         if (text_value) {
-          calendar.color = std::move(text_value->text());
+          calendar.color = Wt::WColor(std::move(text_value->text()));
         }
       } else if (property->name() == "X-CALENDULA-VISIBILITY") {
         parser::TextValue* text_value
           = dynamic_cast<parser::TextValue*>(property->value().get());
         if (text_value) {
-          calendar.visibility = std::move(text_value->text());
+          calendar.visibility
+              = (text_value->text() == "Приватный")
+              ? CalendarVisibility::kPrivate
+              : CalendarVisibility::kPublic;
         }
       }
     }
@@ -224,8 +227,11 @@ std::unique_ptr<std::istream> CalendarConverter::CalendarsToIcalendar(
     Write(source, "METHOD", "PUBLISH");
     Write(source, "X-WR-CALNAME", calendar->summary);
     Write(source, "X-CALENDULA-DESCRIPTION", calendar->description);
-    Write(source, "X-CALENDULA-COLOR", calendar->color);
-    Write(source, "X-CALENDULA-VISIBILITY", calendar->visibility);
+    Write(source, "X-CALENDULA-COLOR", calendar->color.cssText());
+    Write(source, "X-CALENDULA-VISIBILITY",
+        (calendar->visibility == CalendarVisibility::kPrivate)
+        ? "Приватный"
+        : "Публичный");
 
     auto managers = SessionScopeMap::instance().get()->managers();
     std::vector<Event> events

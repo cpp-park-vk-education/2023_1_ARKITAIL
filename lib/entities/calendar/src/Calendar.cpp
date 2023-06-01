@@ -6,13 +6,13 @@ Calendar::Calendar(
     int owner_id,
     std::string summary,
     std::string description,
-    std::string visibility,
-    std::string color)
+    CalendarVisibility visibility,
+    Wt::WColor color)
   : id(id),
     node_id(node_id),
     owner_id(owner_id),
     summary(std::move(summary)),
     description(std::move(description)),
-    visibility(std::move(visibility)),
+    visibility(visibility),
     color(std::move(color)) {
 }

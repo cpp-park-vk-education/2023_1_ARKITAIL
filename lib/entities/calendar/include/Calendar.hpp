@@ -1,11 +1,18 @@
 #pragma once
 
+#include <Wt/WColor.h>
+
 #include <memory>
 #include <string>
 #include <vector>
 
 class Calendar;
 using CalendarSptr = std::shared_ptr<Calendar>;
+
+enum class CalendarVisibility {
+  kPublic,
+  kPrivate,
+};
 
 class Calendar {
  public:
@@ -16,8 +23,8 @@ class Calendar {
       int owner_id,
       std::string summary,
       std::string description,
-      std::string visibility,
-      std::string color = "#FFDAB9");
+      CalendarVisibility visibility,
+      Wt::WColor color);
 
   int id;
   int node_id;
@@ -25,6 +32,6 @@ class Calendar {
 
   std::string summary;
   std::string description;
-  std::string visibility;
-  std::string color;
+  CalendarVisibility visibility;
+  Wt::WColor color;
 };
