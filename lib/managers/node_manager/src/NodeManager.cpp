@@ -97,8 +97,9 @@ void NodeManager::update(const Node& node) {
     Node prev_parent_node = db_->node_dbm()->get(prev_node.parent_id);
     Node parent_node = db_->node_dbm()->get(node.parent_id);
 
-    if (!checkAccess(user.id, parent_node.id) || prev_parent_node.type != parent_node.type ||
-        prev_node.resource_id != node.resource_id || prev_node.type != node.type)
+    if (!checkAccess(user.id, parent_node.id) ||
+        prev_parent_node.type != parent_node.type ||
+        prev_node.type != node.type)
         return;
 
     db_->node_dbm()->update(node);

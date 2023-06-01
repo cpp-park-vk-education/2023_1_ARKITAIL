@@ -1,22 +1,21 @@
 #include "TagDbManagerMock.hpp"
+#include "DbMock.hpp"
+#include <vector>
 
-TagDbManagerMock::TagDbManagerMock() :
-	data_(),
-	aid_(1) {
-
-	data_.emplace_back(0, "");
-}
+TagDbManagerMock::TagDbManagerMock(std::shared_ptr<DbMock> db) :
+	db_(db),
+	aid_(db->tags_to_nodes.size()) {}
 
 const Tag& TagDbManagerMock::get(size_t tag_id) {
-	for (auto e = data_.begin() + 1; e != data_.end(); e++)
+	for (auto e = db_->tags.begin() + 1; e != db_->tags.end(); e++)
 		if (e->id == tag_id)
 			return *e;
 	
-	return data_[0];
+	return db_->tags[0];
 }
 
 size_t TagDbManagerMock::add(const Tag& tag) {
-	data_.emplace_back(
+	db_->tags.emplace_back(
 		aid_,
 		tag.name
 	);
@@ -25,14 +24,18 @@ size_t TagDbManagerMock::add(const Tag& tag) {
 }
 
 void TagDbManagerMock::update(const Tag& tag) {
-	for (auto e : data_)
+	for (auto e : db_->tags)
 		if (e.id == tag.id)
 			e = tag;
 }
 
 void TagDbManagerMock::remove(size_t tag_id) {
-	for (auto e = data_.begin() + 1; e != data_.end(); e++)
+	for (auto e = db_->tags.begin() + 1; e != db_->tags.end(); e++)
 		if (e->id == tag_id)
-			data_.erase(e);
+			db_->tags.erase(e);
+}
+
+std::vector<Node> TagDbManagerMock::NodeByTag(size_t tag_id) {
+	return std::vector<Node>();
 }
 
