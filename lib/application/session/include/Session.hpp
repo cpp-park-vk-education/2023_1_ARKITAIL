@@ -33,6 +33,8 @@ class Session : public Wt::Dbo::Session {
   static Wt::Auth::AuthService auth_service_;
   static Wt::Auth::PasswordService password_service_;
 
+  void InitializeNodesForUser();
+
   std::unique_ptr<UserDatabase> users_;
   Wt::Auth::Login login_;
 

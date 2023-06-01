@@ -1,19 +1,20 @@
 #include "Session.hpp"
 
-#include <Wt/Dbo/Transaction.h>
-#include <Wt/WLogger.h>
 #include <exception>
 #include <memory>
 
+#include <Wt/WLogger.h>
 #include <Wt/Auth/AuthService.h>
 #include <Wt/Auth/Dbo/AuthInfo.h>
 #include <Wt/Auth/HashFunction.h>
 #include <Wt/Auth/PasswordService.h>
 #include <Wt/Auth/PasswordStrengthValidator.h>
 #include <Wt/Auth/PasswordVerifier.h>
+#include <Wt/Dbo/Transaction.h>
 #include <Wt/Dbo/backend/Postgres.h>
 
 #include "DbModels.hpp"
+#include "Node.hpp"
 #include "Utils.hpp"
 
 Wt::Auth::AuthService Session::auth_service_ { };
@@ -91,11 +92,67 @@ db::UserPtr Session::user() {
     Wt::Dbo::ptr<db::AuthInfo> auth_info = users_->find(login_.user());
     db::UserPtr db_user = auth_info->user();
 
+    // Если для auth_info не существует соответствующего пользователя,
+    // создаём его.
     if (!db_user) {
       Wt::Dbo::Transaction transaction(*this);
       
       db_user = add(std::make_unique<db::User>());
       auth_info.modify()->setUser(db_user);
+
+      // создание нод
+      db::NodePtr root = add(std::make_unique<db::Node>());
+
+      db::NodePtr private_group = add(std::make_unique<db::Node>());
+      db::NodePtr public_group = add(std::make_unique<db::Node>());
+      db::NodePtr subscriptions_group = add(std::make_unique<db::Node>());
+      db::NodePtr profiles_group = add(std::make_unique<db::Node>());
+
+      db::DirectoryPtr root_directory = add(std::make_unique<db::Directory>());
+      
+      flush();
+      
+      // корневая директория
+      root_directory.modify()->description = "Корневая директория";
+      root_directory.modify()->name = "Корень";
+      root_directory.modify()->node = root;
+      // root_directory.modify()->owner = db_user;
+      
+      // корень
+      root.modify()->parent = root;
+      root.modify()->resource_id = static_cast<int>(root_directory.id());
+      root.modify()->owner = db_user;
+      root.modify()->type = NodeType::ROOT;
+
+      db_user.modify()->root = root;
+
+      // приватная группа
+      private_group.modify()->parent = root;
+      private_group.modify()->resource_id
+          = static_cast<int>(private_group.id());
+      private_group.modify()->owner = db_user;
+      private_group.modify()->type = NodeType::PRIVATE_GROUP;
+      
+      // публичная группа
+      public_group.modify()->parent = root;
+      public_group.modify()->resource_id
+          = static_cast<int>(public_group.id());
+      public_group.modify()->owner = db_user;
+      public_group.modify()->type = NodeType::PUBLIC_GROUP;
+      
+      // группа подписок
+      subscriptions_group.modify()->parent = root;
+      subscriptions_group.modify()->resource_id
+          = static_cast<int>(subscriptions_group.id());
+      subscriptions_group.modify()->owner = db_user;
+      subscriptions_group.modify()->type = NodeType::SUBSCRIPTIONS_GROUP;
+      
+      // группа профилей
+      profiles_group.modify()->parent = root;
+      profiles_group.modify()->resource_id
+          = static_cast<int>(profiles_group.id());
+      profiles_group.modify()->owner = db_user;
+      profiles_group.modify()->type = NodeType::PROFILE_GROUP;
 
       transaction.commit();
     }

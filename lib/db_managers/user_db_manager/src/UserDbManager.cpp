@@ -37,6 +37,7 @@ UserSptr UserDbManager::get() {
 }
 
 UserSptr UserDbManager::get(int user_id) {
+  Wt::log("UserDbManger::get(int)");
   Wt::Dbo::Transaction transaction(session_);
   
   db::UserPtr db_user

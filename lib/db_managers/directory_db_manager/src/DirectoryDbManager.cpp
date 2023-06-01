@@ -39,7 +39,7 @@ int DirectoryDbManager::add(DirectorySptr directory) {
   int id = db_directory.id();
 
   db_directory.modify()->node = db_node;
-  db_directory.modify()->user = db_user;
+  db_directory.modify()->owner = db_user;
 
   db_directory.modify()->name = directory->name;
   db_directory.modify()->description = directory->description;
@@ -97,7 +97,7 @@ void DirectoryDbManager::update(DirectorySptr directory) {
   }
   
   db_directory.modify()->node = db_node;
-  db_directory.modify()->user = db_user;
+  db_directory.modify()->owner = db_user;
 
   db_directory.modify()->name = directory->name;
   db_directory.modify()->description = directory->description;
@@ -120,7 +120,7 @@ DirectorySptr DirectoryDbManager::get(int directory_id) {
   Directory directory {
     static_cast<int>(db_directory.id()),
     static_cast<int>(db_directory->node.id()),
-    static_cast<int>(db_directory->user.id()),
+    static_cast<int>(db_directory->owner.id()),
 
     db_directory->name,
     db_directory->description,

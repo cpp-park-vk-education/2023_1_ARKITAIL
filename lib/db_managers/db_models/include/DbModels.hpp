@@ -86,16 +86,16 @@ public:
 
 class Directory {
 public:
-  UserPtr user; // owner
-  NodePtr node;
   std::string name;
   std::string description;
+  NodePtr node;
+  UserPtr owner;
 
   template <class Action> void persist(Action &a) {
     Wt::Dbo::field(a, name, "name");
-    Wt::Dbo::belongsTo(a, node, "node");
-    Wt::Dbo::belongsTo(a, user, "user");
     Wt::Dbo::field(a, description, "description");
+    Wt::Dbo::belongsTo(a, node, "node");
+    Wt::Dbo::belongsTo(a, owner, "user");
   }
 };
 
