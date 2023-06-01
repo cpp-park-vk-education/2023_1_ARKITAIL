@@ -108,18 +108,51 @@ db::UserPtr Session::user() {
       db::NodePtr subscriptions_group = add(std::make_unique<db::Node>());
       db::NodePtr profiles_group = add(std::make_unique<db::Node>());
 
-      db::DirectoryPtr root_directory = add(std::make_unique<db::Directory>());
+      db::DirectoryPtr root_directory
+          = add(std::make_unique<db::Directory>());
+      db::DirectoryPtr public_directory
+          = add(std::make_unique<db::Directory>());
+      db::DirectoryPtr private_directory
+          = add(std::make_unique<db::Directory>());
+      db::DirectoryPtr subscribtions_directory
+          = add(std::make_unique<db::Directory>());
+      db::DirectoryPtr profile_directory
+          = add(std::make_unique<db::Directory>());
       
       flush();
       
       // корневая директория
-      root_directory.modify()->description = "Корневая директория";
-      root_directory.modify()->name = "Корень";
+      root_directory.modify()->owner = db_user;
       root_directory.modify()->node = root;
-      // root_directory.modify()->owner = db_user;
+      root_directory.modify()->name = "Корень";
+      root_directory.modify()->description = "Корень";
+      
+      // приватная директория
+      private_directory.modify()->owner = db_user;
+      private_directory.modify()->node = private_group;
+      private_directory.modify()->name = "Приватные календари";
+      private_directory.modify()->description = "Приватные календари";
+      
+      // публичная директория
+      public_directory.modify()->owner = db_user;
+      public_directory.modify()->node = public_group;
+      public_directory.modify()->name = "Публичные календари";
+      public_directory.modify()->description = "Публичные календари";
+      
+      // директория подписок
+      subscribtions_directory.modify()->owner = db_user;
+      subscribtions_directory.modify()->node = subscriptions_group;
+      subscribtions_directory.modify()->name = "Подписки";
+      subscribtions_directory.modify()->description = "Подписки";
+      
+      // директория профилей
+      profile_directory.modify()->owner = db_user;
+      profile_directory.modify()->node = profiles_group;
+      profile_directory.modify()->name = "Профили";
+      profile_directory.modify()->description = "Профили";
       
       // корень
-      root.modify()->parent = root;
+      root.modify()->parent = nullptr;
       root.modify()->resource_id = static_cast<int>(root_directory.id());
       root.modify()->owner = db_user;
       root.modify()->type = NodeType::ROOT;

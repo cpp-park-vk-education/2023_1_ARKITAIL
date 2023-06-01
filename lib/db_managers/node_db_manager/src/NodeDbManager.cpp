@@ -1,8 +1,8 @@
 #include "NodeDbManager.hpp"
 
-#include <Wt/WLogger.h>
 #include <string>
 
+#include <Wt/WLogger.h>
 #include <Wt/Dbo/Transaction.h>
 
 #include "DbModels.hpp"
@@ -196,7 +196,7 @@ std::vector<Node> NodeDbManager::getChildren(int node_id) {
         + std::to_string(node_id));
     return std::vector<Node>();
   }
-
+  
   std::vector<Node> children;
   for (const db::NodePtr& db_node : db_children) {
     children.push_back(Node {
@@ -207,6 +207,8 @@ std::vector<Node> NodeDbManager::getChildren(int node_id) {
         db_node->type,
     });
   }
+
+  transaction.commit();
 
   return children;
 }

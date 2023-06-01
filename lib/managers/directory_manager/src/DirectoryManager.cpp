@@ -1,3 +1,4 @@
+#include <Wt/WLogger.h>
 #include <vector>
 #include <queue>
 #include <memory>
@@ -47,7 +48,7 @@ int DirectoryManager::add(DirectorySptr directory, int parent_id) {
 
     NodeSptr parent_node = node_mgr->get(get(parent_id)->node_id);
     NodeSptr new_node
-        = std::make_shared<Node>(0, parent_node->id, 0, parent_node->owner_id, parent_node->type);
+        = std::make_shared<Node>(0, parent_node->id, 0, -1, parent_node->type);
 
     size_t new_node_id = node_mgr->add(new_node);
 

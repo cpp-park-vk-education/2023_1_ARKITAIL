@@ -1,7 +1,9 @@
 #include "NodeManager.hpp"
 
+#include <Wt/WLogger.h>
 #include <memory>
 #include <queue>
+#include <string>
 #include <vector>
 
 #include "Calendar.hpp"
