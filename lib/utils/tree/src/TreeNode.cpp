@@ -41,7 +41,6 @@ std::vector<ITreeNode*> TreeNode::getChildren() {
     std::vector<ITreeNode*> children;
 
     for (size_t i = 0; i < children_.size(); i++) {
-        std::cout << "Addr of child: " << children_[i].get() << std::endl;
         children.push_back(children_[i].get());
     }
 

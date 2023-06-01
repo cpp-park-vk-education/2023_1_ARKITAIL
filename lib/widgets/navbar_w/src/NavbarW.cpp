@@ -21,6 +21,12 @@ Wt::WMenuItem* NavbarW::addLink(const std::string& icon_path, const std::string&
     return tmp;
 }
 
+
+Wt::WMenuItem* NavbarW::addItem(const std::string& icon_path) {
+    auto tmp = left_menu_->addItem(icon_path);
+    return tmp;
+}
+
 void NavbarW::addSignals() {
     exit_button_->clicked().connect(this, &NavbarW::logout);
 }
