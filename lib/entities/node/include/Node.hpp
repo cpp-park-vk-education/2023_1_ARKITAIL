@@ -31,11 +31,12 @@ enum GenericNodeType {
 class Node {
 public:
     Node() = default;
-    Node(int id, int parent_id, int rosource_id, NodeType type);
+    Node(int id, int parent_id, int resource_id, int owner_id, NodeType type);
 
     int id;
-    int parent_id;
-    int resource_id;
+    int parent_id; // id родительской ноды
+    int resource_id; // id ресурса, которым владеет нода
+    int owner_id; // id пользователя, владеющего нодой
 
     NodeType type;
 };

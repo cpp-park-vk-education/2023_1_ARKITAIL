@@ -24,7 +24,7 @@ UserSptr UserDbManager::get() {
 
   User user {
     static_cast<int>(db_user.id()),
-    db_user->root_id,
+    static_cast<int>(db_user->root.id()),
     db_user->login,
     db_user->email,
     db_user->nickname,
@@ -50,7 +50,7 @@ UserSptr UserDbManager::get(int user_id) {
 
   User user {
     static_cast<int>(db_user.id()),
-    db_user->root_id,
+    static_cast<int>(db_user->root.id()),
     db_user->login,
     db_user->email,
     db_user->nickname,

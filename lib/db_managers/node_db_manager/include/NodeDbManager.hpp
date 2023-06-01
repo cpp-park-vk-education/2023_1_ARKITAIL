@@ -8,7 +8,8 @@
 
 class NodeDbManager: public INodeDbManager {
 public:
-  NodeDbManager(Session& session);
+  NodeDbManager() = delete;
+  explicit NodeDbManager(Session& session);
 
   int add(NodeSptr node) override;
   void remove(int node_id) override;

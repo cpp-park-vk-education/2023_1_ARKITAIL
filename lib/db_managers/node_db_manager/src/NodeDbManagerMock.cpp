@@ -23,7 +23,8 @@ NodeSptr NodeDbManagerMock::get(int node_id) {
 }
 
 int NodeDbManagerMock::add(NodeSptr node) {
-    db_->nodes.emplace_back(aid_++, node->parent_id, node->resource_id, node->type);
+    db_->nodes.emplace_back(
+        aid_++, node->parent_id, node->resource_id, node->owner_id, node->type);
 
     return aid_;
 }

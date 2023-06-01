@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Wt/Dbo/weak_ptr.h>
 #include <string>
 #include <vector>
 
@@ -127,16 +128,18 @@ public:
 
 class Node {
 public:
-  NodeType type;
-  NodePtr parent;
-  Wt::Dbo::collection<TagPtr> tags;
   int resource_id;
+  NodePtr parent;
+  NodeType type;
+  UserPtr owner;
+  Wt::Dbo::collection<TagPtr> tags;
 
   template <class Action> void persist(Action &a) {
-    Wt::Dbo::field(a, type, "type");
-    Wt::Dbo::belongsTo(a, parent, "parent");
-    Wt::Dbo::hasMany(a, tags, Wt::Dbo::ManyToMany, "node_tags");
     Wt::Dbo::field(a, resource_id, "resource_id");
+    Wt::Dbo::belongsTo(a, parent, "parent");
+    Wt::Dbo::field(a, type, "type");
+    Wt::Dbo::belongsTo(a, owner);
+    Wt::Dbo::hasMany(a, tags, Wt::Dbo::ManyToMany, "node_tags");
   }
 };
 
@@ -153,7 +156,6 @@ public:
 
 class User {
 public:
-  int root_id;
   std::string login;
   std::string email;
   std::string nickname;
@@ -161,6 +163,7 @@ public:
   std::vector<unsigned char> avatar;
   Wt::Dbo::collection<CalendarPtr> calendars;
   Wt::Dbo::collection<Wt::Dbo::ptr<AuthInfo>> auth_infos;
+  Wt::Dbo::weak_ptr<Node> root;
 
   template <class Action> void persist(Action &a) {
     Wt::Dbo::field(a, login, "login");
@@ -170,6 +173,7 @@ public:
     Wt::Dbo::field(a, avatar, "avatar");
     Wt::Dbo::hasMany(a, calendars, Wt::Dbo::ManyToOne, "user");
     Wt::Dbo::hasMany(a, auth_infos, Wt::Dbo::ManyToOne, "user");
+    Wt::Dbo::hasOne(a, root);
   }
 };
 } // namespace db

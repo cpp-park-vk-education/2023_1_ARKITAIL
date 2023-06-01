@@ -31,8 +31,8 @@ size_t CalendarManager::add(CalendarSptr calendar, size_t directory_id) {
         return 0;
 
     NodeSptr parent_node = mgr->node_manager()->get(get(directory_id)->node_id);
-    NodeSptr new_node
-        = std::make_shared<Node>(0, parent_node->id, 0, parent_node->type);
+    NodeSptr new_node = std::make_shared<Node>(
+            0, parent_node->id, 0, parent_node->owner_id, parent_node->type);
 
     size_t new_node_id = mgr->node_manager()->add(new_node);
 

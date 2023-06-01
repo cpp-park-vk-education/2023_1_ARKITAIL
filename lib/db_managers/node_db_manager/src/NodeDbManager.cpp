@@ -16,22 +16,34 @@ NodeDbManager::NodeDbManager(Session& session)
 int NodeDbManager::add(NodeSptr node) {
   Wt::Dbo::Transaction transaction(session_);
 
-  db::NodePtr db_node = session_.add(std::make_unique<db::Node>());
-  
-  session_.flush();
-
-  int id = db_node.id();
-
+  // собираем всё необходимое для создания ноды
   db::NodePtr db_parent
       = session_.find<db::Node>().where("id = ?").bind(node->parent_id);
 
   if (!db_parent) {
-    Wt::log("NodeDbManger::add: not found parent node with id = "
+    Wt::log("NodeDbManger::add: not found node's parent with id = "
         + std::to_string(node->parent_id));
   }
+  
+  db::UserPtr db_owner
+      = session_.find<db::User>().where("id = ?").bind(node->owner_id);
 
-  db_node.modify()->parent = db_parent;
+  if (!db_owner) {
+    Wt::log("NodeDbManger::add: not found node's owner with id = "
+        + std::to_string(node->owner_id));
+  }
+
+  // создаём ноду
+  db::NodePtr db_node = session_.add(std::make_unique<db::Node>());
+  
+  // непосредственно сохраняем для получения id
+  session_.flush();
+  int id = static_cast<int>(db_node.id());
+
+  // устанавливаем поля
   db_node.modify()->resource_id = node->resource_id;
+  db_node.modify()->owner = db_owner;
+  db_node.modify()->parent = db_parent;
   db_node.modify()->type = node->type;
 
   transaction.commit();
@@ -72,13 +84,23 @@ void NodeDbManager::update(NodeSptr node) {
       = session_.find<db::Node>().where("id = ?").bind(node->parent_id);
   
   if (!db_parent) {
-    Wt::log("NodeDbManger::update: not found parent node with id = "
+    Wt::log("NodeDbManger::update: not found node's parent with id = "
         + std::to_string(node->parent_id));
     return;
   }
 
-  db_node.modify()->parent = db_parent;
+  db::UserPtr db_owner
+      = session_.find<db::User>().where("id = ?").bind(node->owner_id);
+  
+  if (!db_owner) {
+    Wt::log("NodeDbManger::update: not found node's owner with id = "
+        + std::to_string(node->parent_id));
+    return;
+  }
+
   db_node.modify()->resource_id = node->resource_id;
+  db_node.modify()->parent = db_parent;
+  db_node.modify()->owner = db_owner;
   db_node.modify()->type = node->type;
 
   transaction.commit();
@@ -100,6 +122,7 @@ NodeSptr NodeDbManager::get(int node_id) {
     static_cast<int>(db_node.id()),
     static_cast<int>(db_node->parent.id()),
     db_node->resource_id,
+    static_cast<int>(db_node->owner.id()),
     db_node->type
   };
 
@@ -152,7 +175,7 @@ void NodeDbManager::move(int node_id, int destination_id) {
       = session_.find<db::Node>().where("id = ?").bind(destination_id);
 
   if (!db_destination) {
-    Wt::log("NodeDbManger::move: not found destination node with id = "
+    Wt::log("NodeDbManger::move: not found destination with id = "
         + std::to_string(destination_id));
     return;
   }
@@ -180,6 +203,7 @@ std::vector<Node> NodeDbManager::getChildren(int node_id) {
         static_cast<int>(db_node.id()),
         static_cast<int>(db_node->parent.id()),
         db_node->resource_id,
+        static_cast<int>(db_node->owner.id()),
         db_node->type,
     });
   }

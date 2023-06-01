@@ -163,7 +163,9 @@ void NodeManager::subscribe(int node_id) {
 
     for (Node subg : db_->node_dbm()->getChildren(user->root_id)) {
         if (subg.type & SUBSCRIPTIONS_GROUP) {
-            NodeSptr mount_node = std::make_shared<Node>(0, subg.id, node_id, MOUNT);
+            // affeeal: возможно, ошибка: точно не знаю, чей owner_id ставить
+            NodeSptr mount_node = std::make_shared<Node>(
+                0, subg.id, node_id, subg.owner_id, MOUNT);
             add(mount_node);
             break;
         }
