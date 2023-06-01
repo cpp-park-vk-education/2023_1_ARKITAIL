@@ -166,7 +166,7 @@ std::vector<Node> NodeDbManager::getChildren(int node_id) {
   Wt::Dbo::Transaction transaction(session_);
   
   Wt::Dbo::collection<db::NodePtr> db_children
-      = session_.find<db::Node>().where("parent = ?").bind(node_id);
+      = session_.find<db::Node>().where("parent_id = ?").bind(node_id);
 
   if (db_children.empty()) {
     Wt::log("NodeDbManager::getChildren: not found children of node with id = "
