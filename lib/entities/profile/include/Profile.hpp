@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <vector>
 #include <string>
+#include <memory>
 
 class Profile {
 public:
@@ -18,4 +19,6 @@ public:
     std::string name;
 
 };
+
+using ProfileSptr = std::shared_ptr<Profile>;
 
