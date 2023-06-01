@@ -103,10 +103,12 @@ std::unique_ptr<Wt::WContainerWidget> TreeNodeWBuilderBase::fillToolTipContainer
     content->setMaximumSize(Wt::WLength(300), Wt::WLength::Auto);
     content->addStyleClass("p-2");
 
-    auto description_ptr = content->addWidget(std::make_unique<Wt::WText>(description));
-    description_ptr->addStyleClass("text-center text-break");
+    if (!description.empty()) {
+        auto description_ptr = content->addWidget(std::make_unique<Wt::WText>(description));
+        description_ptr->addStyleClass("text-center text-break");
+        content->addWidget(std::make_unique<Wt::WBreak>());
+    }
 
-    content->addWidget(std::make_unique<Wt::WBreak>());
 
     for (auto&& tag : tags) {
         content->addWidget(std::make_unique<TagAnchorW>(tag));

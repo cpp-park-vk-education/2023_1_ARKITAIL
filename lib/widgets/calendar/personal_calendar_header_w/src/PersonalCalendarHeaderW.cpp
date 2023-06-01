@@ -1,4 +1,4 @@
-#include "personal_calendar_header_w.hpp"
+#include "PersonalCalendarHeaderW.hpp"
 
 #include <Wt/WDate.h>
 #include <Wt/WLogger.h>

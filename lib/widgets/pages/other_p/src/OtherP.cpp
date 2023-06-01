@@ -5,10 +5,10 @@
 #include "SessionScopeMap.hpp"
 #include "TreeW.hpp"
 #include "WeekW.hpp"
-#include "calendar_header_w.hpp"
-#include "calendar_w.hpp"
-#include "day_w.hpp"
-#include "month_w.hpp"
+#include "CalendarHeaderW.hpp"
+#include "CalendarW.hpp"
+#include "DayW.hpp"
+#include "MonthW.hpp"
 
 OtherP::OtherP() {
     auto ss = SessionScopeMap::instance().get();

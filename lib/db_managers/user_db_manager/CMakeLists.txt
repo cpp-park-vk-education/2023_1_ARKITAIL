@@ -20,6 +20,6 @@ if (BUILD_TESTS)
 		db_mock
 	)
 
- 	# add_subdirectory(tests)
+ 	add_subdirectory(tests)
 endif()
 

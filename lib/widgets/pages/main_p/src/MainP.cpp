@@ -5,11 +5,11 @@
 #include "SessionScopeMap.hpp"
 #include "TreeW.hpp"
 #include "WeekW.hpp"
-#include "calendar_header_w.hpp"
-#include "calendar_w.hpp"
-#include "day_w.hpp"
-#include "month_w.hpp"
-#include "personal_calendar_header_w.hpp"
+#include "CalendarHeaderW.hpp"
+#include "CalendarW.hpp"
+#include "DayW.hpp"
+#include "MonthW.hpp"
+#include "PersonalCalendarHeaderW.hpp"
 
 MainP::MainP() {
     auto ss = SessionScopeMap::instance().get();

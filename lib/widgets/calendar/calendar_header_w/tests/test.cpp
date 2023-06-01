@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "calendar_header_w.hpp"
+#include "CalendarHeaderW.hpp"
 
 class CalendarHeaderWTest : public ::testing::Test {
   protected:

@@ -33,7 +33,7 @@ class ManagersSuit : public ::testing::Test {
             std::make_unique<DirectoryDbManagerMock>(db),
             std::make_unique<CalendarDbManagerMock>(db), std::make_unique<EventDbManagerMock>(db),
             std::make_unique<CommentDbManagerMock>(), std::make_unique<TagDbManagerMock>(),
-            std::make_unique<ProfileDbManagerMock>());
+            std::make_unique<ProfileDbManagerMock>(db));
 
         managers = std::make_unique<Managers>(std::make_unique<UserManager>(db_managers),
                                               std::make_unique<NodeManager>(db_managers),

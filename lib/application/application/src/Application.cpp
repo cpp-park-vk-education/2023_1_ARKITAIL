@@ -12,7 +12,7 @@
 #include "OtherP.hpp"
 #include "SearchPage.hpp"
 #include "SessionScopeMap.hpp"
-#include "navbar_w.hpp"
+#include "NavbarW.hpp"
 
 #include "Deferred.hpp"
 

@@ -1,4 +1,4 @@
-#include "navbar_w.hpp"
+#include "NavbarW.hpp"
 
 #include <Wt/WMenu.h>
 #include <Wt/WNavigationBar.h>

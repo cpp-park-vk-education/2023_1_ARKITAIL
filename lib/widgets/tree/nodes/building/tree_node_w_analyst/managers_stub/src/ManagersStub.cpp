@@ -48,3 +48,7 @@ IEventManager* ManagersStub::event_manager() {
 IProfileManager* ManagersStub::profile_manager() {
     return profile_manager_.get();
 }
+
+ITagManager* ManagersStub::tag_manager() {
+    return tag_manager_.get();
+}

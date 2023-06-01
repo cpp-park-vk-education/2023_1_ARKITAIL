@@ -1,7 +1,13 @@
-add_library(personal_calendar_header_w src/personal_calendar_header_w.cpp)
-
-target_include_directories(personal_calendar_header_w PUBLIC include)
-
-target_link_libraries(personal_calendar_header_w PUBLIC
-                      calendar_header_w
-                      calendula_compiler_flags)
+set(MODULE_NAME personal_calendar_header_w)
+set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+                      
+file(GLOB SOURCES ${SOURCE_DIR}/*.cpp)
+                      
+add_library(${MODULE_NAME} STATIC ${SOURCES})
+target_include_directories(${MODULE_NAME} PUBLIC ${INCLUDE_DIR})
+                      
+target_link_libraries(${MODULE_NAME} PUBLIC
+                        calendula_compiler_flags
+                        calendar_header_w
+                        )

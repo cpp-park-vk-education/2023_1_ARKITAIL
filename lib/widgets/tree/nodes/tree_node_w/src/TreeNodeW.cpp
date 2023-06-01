@@ -183,7 +183,7 @@ void TreeNodeW::uncheckParentNodes() {
 void TreeNodeW::addToolTipSignal() {
     tool_tip_->setTransient(true, 2);
     tool_tip_->setAnchorWidget(header_container_);
-    header_container_->clicked().connect([=]() {  // mouseWentOver
+    header_container_->mouseWentOver().connect([=]() {  // mouseWentOver        
         tool_tip_->setOffsets(Wt::WLength("100px"), Wt::WFlags(Wt::Side::Bottom));
         tool_tip_->setHidden(false);
     });
