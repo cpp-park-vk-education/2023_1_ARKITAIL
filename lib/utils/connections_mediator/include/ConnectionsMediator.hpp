@@ -5,6 +5,7 @@
 
 #include "ConnectionPoint.hpp"
 #include "Event.hpp"
+#include "EventBlockW.hpp"
 #include "ICalendarBodyW.hpp"
 #include "ITreeNode.hpp"
 #include "SearchPage.hpp"
@@ -51,6 +52,9 @@ class ConnectionsMediator {
     ConnectionPoint<Wt::Signal<const Node&, const User&>, TreeW, const Node&, const User&> set_tree_root;
 
     // сигнал для передачи тега на страницу поиска
-    ConnectionPoint<Wt::Signal<Tag>, TagsLineEdit, const Tag&> search_tag;
+    ConnectionPoint<Wt::Signal<const Tag&>, TagsLineEdit, const Tag&> search_tag;
+
+    // сигнал для редактирования названия события на сетке календаря
+    ConnectionPoint<Wt::Signal<const std::string&, size_t>, EventBlockW, const std::string&, size_t> edit_event_title;
 
 };

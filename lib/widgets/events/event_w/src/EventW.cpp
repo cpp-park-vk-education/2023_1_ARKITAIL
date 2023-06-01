@@ -14,7 +14,10 @@
 #include <string>
 
 #include "event_d.hpp"
+#include "EventBlockW.hpp"
 #include "TimeUtils.hpp"
+#include "SessionScopeMap.hpp"
+#include "ConnectionsMediator.hpp"
 
 bool EventW::isLargeEvent() {
     return begin_.date().daysTo(end_.date());
@@ -38,6 +41,7 @@ void EventW::makeDayEventWidget(Wt::WTable* table) {
             makeEventSmallPartWidget(table->elementAt(h + 1, 1), "");
         }
     }
+    addConnections();
 }
 
 void EventW::makeWeekEventWidget(Wt::WTable* table, Wt::WDate begin_of_week) {
@@ -79,6 +83,7 @@ void EventW::makeWeekEventWidget(Wt::WTable* table, Wt::WDate begin_of_week) {
             makeEventSmallPartWidget(table->elementAt(h + 2, day_week + 1), "");
         }
     }
+    addConnections();
 }
 
 void EventW::makeMonthEventWidget(Wt::WTable* table, Wt::WDate first_day_of_table) {
@@ -102,34 +107,46 @@ void EventW::makeMonthEventWidget(Wt::WTable* table, Wt::WDate first_day_of_tabl
                 ->addWidget(std::make_unique<Wt::WBreak>());
         }
     }
+    addConnections();
 }
 
-void EventW::addDialog(Wt::WPushButton* eventWidget) {
-    eventWidget->setAttributeValue("id", Wt::WString(std::to_string(id_)));
-    eventWidget->setAttributeValue("title", Wt::WString(title_, Wt::CharEncoding::UTF8));
-    eventWidget->clicked().connect([=]() {
-        eventWidget->addChild(
-            std::make_unique<EventD>(std::stoi(eventWidget->attributeValue("id").toUTF8()),
-                                     eventWidget->attributeValue("title").toUTF8()));
+void EventW::addDialog(EventBlockW* event_widget) {
+    event_widget->clicked().connect([=]() {
+        event_widget->addChild(
+            std::make_unique<EventD>(event_widget->getId(),
+                                     event_widget->getTitle()));
     });
 }
 
 void EventW::makeEventLargePartWidget(std::string title, std::string style_class,
                                       Wt::WTableCell* event_cell) {
-    auto eventWidget = event_cell->addWidget(std::make_unique<Wt::WPushButton>(title));
-    eventWidget->decorationStyle().setBackgroundColor(color_);
-    eventWidget->setStyleClass(
+    auto event_widget = event_cell->addWidget(std::make_unique<EventBlockW>(title, id_));
+    if (title != "ㅤ") {
+        title_w_.push_back(event_widget);
+    }
+    event_widget->decorationStyle().setBackgroundColor(color_);
+    event_widget->setStyleClass(
         "d-block p-0 border-1 text-truncate btn btn-sm btn-light rounded-0 " + style_class);
-    addDialog(eventWidget);
+    addDialog(event_widget);
 }
 
 void EventW::makeEventSmallPartWidget(Wt::WTableCell* event_cell, std::string style_class) {
-    auto eventWidget = event_cell->addWidget(std::make_unique<Wt::WPushButton>(title_));
-    eventWidget->decorationStyle().setBackgroundColor(color_);
-    eventWidget->setStyleClass(
+    auto event_widget = event_cell->addWidget(std::make_unique<EventBlockW>(title_, id_));
+    title_w_.push_back(event_widget);
+    event_widget->decorationStyle().setBackgroundColor(color_);
+    event_widget->setStyleClass(
         "p-1 px-2 m-1 border-0 text-truncate btn btn-sm btn-light rounded-0" + style_class);
-    addDialog(eventWidget);
+    addDialog(event_widget);
     if (style_class != " d-inline") {
         event_cell->addWidget(std::make_unique<Wt::WBreak>());
     }
 }
+
+void EventW::addConnections() {
+    auto signal = SessionScopeMap::instance().get()->connections_mediator()->edit_event_title;
+    for (auto title_w : title_w_) {
+        std::cout << "\nДобавлен коннекшен событию " << title_w->getTitle() << " " << title_w <<std::endl;
+        signal.add_receiver(title_w, &EventBlockW::setTitle);
+    }
+}
+
