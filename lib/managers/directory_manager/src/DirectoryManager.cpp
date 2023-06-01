@@ -43,7 +43,7 @@ size_t DirectoryManager::add(const Directory& directory, size_t directory_id) {
     auto node_mgr = SessionScopeMap::instance().get()->managers()->node_manager();
 
     Node parent_node = node_mgr->get(get(directory_id).node_id);
-    Node new_node = {0, parent_node.id, 0, parent_node.type};
+    Node new_node = {0, parent_node.id, 0, (parent_node.type & PUBLIC ? PUBLIC_DIRECTORY : PRIVATE_DIRECTORY)};
 
     new_node.id = node_mgr->add(new_node);
 
@@ -57,7 +57,7 @@ size_t DirectoryManager::add(const Directory& directory, size_t directory_id) {
     new_node.resource_id = new_directory.id;
     db_->node_dbm()->update(new_node);
     
-    return new_directry->id;
+    return new_directory.id;
 }
 
 // Сменить можно только название и описание
