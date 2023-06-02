@@ -84,14 +84,17 @@ void TreeW::setRoot(const Node& node, const User& user) {
 }
 
 void TreeW::checkNode(ITreeNode* tree_node) {
+    size_t check_nodes_count = getCheckedNodes().size();
     if (tree_node->isChecked()) {
         tree_manager_->uncheckNode(tree_node);
-
-        // Сеня если счетчик меньше 2, то add_profile_w_->setButtonEnabled(false);
+        if (check_nodes_count < 2) {
+            add_profile_w_->setButtonEnabled(false);
+        }
     } else {
         tree_manager_->checkNode(tree_node);
-
-        // Сеня если счетчик больше 1, то add_profile_w_->setButtonEnabled(true);
+        if (check_nodes_count > 1) {
+            add_profile_w_->setButtonEnabled(true);
+        }
     }
     std::cout << "\nnode_checked из дерева => выпущен сигнал в хедер\n" << std::endl;
     node_checked.emit();
@@ -110,6 +113,10 @@ void TreeW::getRangeEvents(Wt::WDate date1, Wt::WDate date2) {
 }
 
 void TreeW::sendCheckedNodes() {
+    add_profile_w_->addProfileW(getCheckedNodes());
+}
+
+std::vector<size_t> TreeW::getCheckedNodes() {
     std::queue<TreeNodeW*> q;
     std::vector<size_t> v;
 
@@ -131,6 +138,6 @@ void TreeW::sendCheckedNodes() {
         q.pop();
     }
 
-    add_profile_w_->addProfileW(v);
+    return v;
 }
 

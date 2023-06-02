@@ -42,8 +42,10 @@ void AddProfileW::validate() {
 }
 
 void AddProfileW::addProfileW(std::vector<size_t> nodes) {
-    input_name_->setText("");
+    auto mgr = SessionScopeMap::instance().get()->managers();
+
     // profile_group_->addChildNode();
+    input_name_->setText("");
 }
 
 Wt::Signal<Node*>& AddProfileW::profileAdded() {
