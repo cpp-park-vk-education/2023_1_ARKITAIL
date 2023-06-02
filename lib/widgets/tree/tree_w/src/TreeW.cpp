@@ -83,17 +83,18 @@ void TreeW::setRoot(const Node& node, const User& user) {
         TreeNodeWDirector().fillNode(TreeNodeWOtherAnalyst(mgr).analyseTreeNodeWChild(tree_node)));
 }
 
-void TreeW::checkNode(ITreeNode* tree_node) {
+void TreeW::checkNode(TreeNodeW* tree_node_w) {
+    auto tree_node = tree_node_w->getTreeNode();
     size_t check_nodes_count = getCheckedNodes().size();
-    if (tree_node->isChecked()) {
-        tree_manager_->uncheckNode(tree_node);
-        if (check_nodes_count < 2) {
-            add_profile_w_->setButtonEnabled(false);
-        }
-    } else {
+    if (tree_node_w->isCheck()) {
         tree_manager_->checkNode(tree_node);
         if (check_nodes_count > 1) {
             add_profile_w_->setButtonEnabled(true);
+        }
+    } else {
+        tree_manager_->uncheckNode(tree_node);
+        if (check_nodes_count < 2) {
+            add_profile_w_->setButtonEnabled(false);
         }
     }
     std::cout << "\nnode_checked из дерева => выпущен сигнал в хедер\n" << std::endl;
@@ -116,9 +117,9 @@ void TreeW::sendCheckedNodes() {
     add_profile_w_->addProfileW(getCheckedNodes());
 }
 
-std::vector<size_t> TreeW::getCheckedNodes() {
+std::vector<int> TreeW::getCheckedNodes() {
     std::queue<TreeNodeW*> q;
-    std::vector<size_t> v;
+    std::vector<int> v;
 
     q.push(root_);
 
@@ -126,7 +127,7 @@ std::vector<size_t> TreeW::getCheckedNodes() {
         if (!(q.front()->getType() & NodeType::PROFILE_GROUP)) {
 
             if(q.front()->isCheck()) {
-                size_t node_id = q.front()->getTreeNode()->getNode().id;
+                int node_id = q.front()->getTreeNode()->getNode().id;
                 v.push_back(node_id);
             } else {
                 for (auto child : q.front()->getChildrenNodes()) {

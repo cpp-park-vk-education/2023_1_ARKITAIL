@@ -125,6 +125,7 @@ void TreeNodeW::performAction(Action action) {
             dialog->show();
 
             dialog->node_created().connect([=](NodeSptr node) {
+                open();
                 auto tree_node = node_->addChild(*node);
                 addChildNode(makeTreeNodeWidget(tree_node));
             });

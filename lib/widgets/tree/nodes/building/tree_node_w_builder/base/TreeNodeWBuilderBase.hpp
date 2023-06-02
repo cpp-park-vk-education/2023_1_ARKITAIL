@@ -25,7 +25,7 @@ class TreeNodeWBuilderBase {
     TreeNodeWBuilderBase* addTextHead(std::unique_ptr<Wt::WText> head);
 
     TreeNodeWBuilderBase* addCheckBoxConnectionPoint(
-        ConnectionPoint<Wt::Signal<ITreeNode*>, TreeW, ITreeNode*>* cp);
+        ConnectionPoint<Wt::Signal<TreeNodeW*>, TreeW, TreeNodeW*>* cp);
     TreeNodeWBuilderBase* addCheckBox();
 
     TreeNodeWBuilderBase* addOptions(std::unique_ptr<OptionsW> options);

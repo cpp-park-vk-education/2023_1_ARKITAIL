@@ -19,14 +19,14 @@ TreeNodeLeafW::TreeNodeLeafW(ITreeNode* node) :
 
 void TreeNodeLeafW::checkNode() {
     if (check_box_->checkState() == Wt::CheckState::Checked) {
-        checked_.emit(node_);
+        checked_.emit(this);
     }
     check_box_->setChecked(true);
 }
 
 void TreeNodeLeafW::uncheckNode() {
     if (check_box_->checkState() == Wt::CheckState::Unchecked)
-        checked_.emit(node_);
+        checked_.emit(this);
     uncheckParentNodes();
 }
 

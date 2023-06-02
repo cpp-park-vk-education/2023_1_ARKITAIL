@@ -17,7 +17,7 @@ class AddProfileW : public Wt::WContainerWidget {
     Wt::Signal<>& needCheckedNodes();
 
     void setButtonEnabled(bool value);
-    void addProfileW(std::vector<size_t> nodes);
+    void addProfileW(std::vector<int> nodes);
 
   private:
     TreeNodeW* profile_group_;

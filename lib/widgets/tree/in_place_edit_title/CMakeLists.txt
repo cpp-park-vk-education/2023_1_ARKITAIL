@@ -11,4 +11,6 @@ target_link_libraries(
 	${MODULE_NAME}
 	PUBLIC 
 	calendula_compiler_flags
+	session_scope_map
+	managers
 )

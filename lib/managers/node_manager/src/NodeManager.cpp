@@ -39,7 +39,9 @@ NodeSptr NodeManager::get(int node_id) {
     // if (!checkAccess(user->id, node_id))
     // 	return nullptr;
 
-    return db_->node_dbm()->get(node_id);
+    NodeSptr node = db_->node_dbm()->get(node_id);
+
+    return node;
 }
 
 // В ноду типа PRIVATE_{GROUP | DIRECTORY}
@@ -50,31 +52,36 @@ NodeSptr NodeManager::get(int node_id) {
 // В ноды ROOT, MOUNT, PUBLIC_CALENDAR, PRIVATE_CALENDAR добавить ничего нельзя
 // Ресурсом MOUNT может быть только нодой с ресурсом PUBLIC_{DIRECTORY | CALENDAR}
 int NodeManager::add(NodeSptr node) {
+
     UserSptr user = db_->user_dbm()->get();
 
     if (!checkAccess(user->id, node->parent_id)) {
         return 0;
     }
 
-    if (node->type & (PRIVATE_DIRECTORY | PUBLIC_DIRECTORY)) {
+    if (node->type & DIRECTORY) {
         NodeSptr parent_node = db_->node_dbm()->get(node->parent_id);
 
-        if (!((parent_node->type & PRIVATE_GD && node->type & PRIVATE_DIRECTORY) ||
-              (parent_node->type & PUBLIC_GD && node->type & PUBLIC_DIRECTORY) ||
+        if (!(parent_node->type & PRIVATE_GD && node->type & PRIVATE_DIRECTORY ||
+              parent_node->type & PUBLIC_GD && node->type & PUBLIC_DIRECTORY ||
               checkAccess(user->id, node->id))) {
+
             return 0;
         }
+
 
     } else if (node->type & CALENDAR) {
         NodeSptr parent_node = db_->node_dbm()->get(node->parent_id);
 
-        if (!((parent_node->type & PRIVATE_GD && node->type & PRIVATE_CALENDAR) ||
-              (parent_node->type & PUBLIC_GD && node->type & PUBLIC_CALENDAR) ||
+        if (!(parent_node->type & PRIVATE_GD && node->type & PRIVATE_CALENDAR ||
+              parent_node->type & PUBLIC_GD && node->type & PUBLIC_CALENDAR ||
               checkAccess(user->id, node->id))) {
+            
             return 0;
         }
 
     } else if (node->type & MOUNT) {
+
         NodeSptr parent_node = db_->node_dbm()->get(node->parent_id);
 
         if (!(parent_node->type & SUBSCRIPTIONS_GROUP)) {
@@ -86,12 +93,16 @@ int NodeManager::add(NodeSptr node) {
         if (!(resource_node->type & (PUBLIC_DIRECTORY | PUBLIC_CALENDAR))) {
             return 0;
         }
-
+    } else if (node->type & PROFILE) {
+        // write some validation
     } else {
         return 0;
     }
 
-    return db_->node_dbm()->add(node);
+    NodeSptr new_node = node;
+    new_node->id = db_->node_dbm()->add(node);
+
+    return new_node->id;
 }
 
 // Можно менять только поле parent_id функция аналогична NodeManager::move
@@ -100,12 +111,10 @@ void NodeManager::update(NodeSptr node) {
     NodeSptr prev_node = db_->node_dbm()->get(node->id);
     NodeSptr prev_parent_node = db_->node_dbm()->get(prev_node->parent_id);
     NodeSptr parent_node = db_->node_dbm()->get(node->parent_id);
-
     if (!checkAccess(user->id, parent_node->id) ||
         prev_parent_node->type != parent_node->type ||
         prev_node->type != node->type)
         return;
-
     db_->node_dbm()->update(node);
 }
 

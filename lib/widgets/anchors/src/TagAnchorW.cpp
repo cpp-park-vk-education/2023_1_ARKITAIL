@@ -20,6 +20,6 @@ TagAnchorW::TagAnchorW(const Tag& tag) :
 
 }
 
-Wt::Signal<Tag>& TagAnchorW::tagClicked() {
+Wt::Signal<const Tag&>& TagAnchorW::tagClicked() {
     return tag_clicked_;
 }
