@@ -14,7 +14,7 @@ public:
 
 private:
 	Wt::WLineEdit* line_edit_;
-	ItemsContainerW<Tag> tags_;
+	ItemsContainerW<Tag>* tags_;
 
 	Wt::Signal<Tag> added_;
 	Wt::Signal<Tag> removed_;

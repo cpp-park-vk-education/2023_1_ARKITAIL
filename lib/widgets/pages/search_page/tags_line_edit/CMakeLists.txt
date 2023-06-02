@@ -11,5 +11,7 @@ target_link_libraries(
 	PUBLIC
 	items_container_w
 	tag
+	session_scope_map
+	connections_mediator
 )
 

@@ -14,6 +14,7 @@ public:
 
 	void addItem(std::unique_ptr<ItemW<T>> item);
 	void removeItem(ItemW<T>* item);
+	bool hasItem(size_t id);
 
 private:
 	std::vector<ItemW<T>*> items_;
@@ -36,5 +37,16 @@ void ItemsContainerW<T>::removeItem(ItemW<T>* item) {
 			items_.erase(i);
 			break;
 		};
+}
+
+
+template<typename T>
+bool ItemsContainerW<T>::hasItem(size_t id) {
+	for (auto i = items_.begin(); i != items_.end(); i++) {
+		if ((*i)->getId() == id) {
+			return true;
+		}
+	}
+	return false;
 }
 

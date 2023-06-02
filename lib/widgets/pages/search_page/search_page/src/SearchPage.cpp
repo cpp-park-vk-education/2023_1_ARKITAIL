@@ -24,6 +24,7 @@ SearchP::SearchP() :
     users_->parseItem("User2");
     users_->parseItem("User3");
     users_->parseItem("User4");
+    users_->parseItem("tag1");
 
     auto ss = SessionScopeMap::instance().get();
 
