@@ -44,6 +44,8 @@ void AddProfileW::validate() {
 }
 
 void AddProfileW::addProfileW(std::vector<size_t> nodes) {
+    profile_group_->open();
+    
     auto manager = SessionScopeMap::instance().get()->managers();
     ProfileSptr profile = std::make_shared<Profile>(0, 0, 0, nodes, input_name_->text().toUTF8());
 
@@ -53,10 +55,9 @@ void AddProfileW::addProfileW(std::vector<size_t> nodes) {
     Node node = manager->node_manager()->get(new_profile->node_id);
     auto tree_node = profile_group_->getTreeNode()->addChild(node);
 
-    profile_group_->open();
+    input_name_->setText("");
     profile_group_->addChildNode(TreeNodeWDirector().fillNode(TreeNodeWAnalyst(manager).analyseTreeNodeWChild(tree_node)));
 
-    input_name_->setText("");
 }
 
 Wt::Signal<Node*>& AddProfileW::profileAdded() {
