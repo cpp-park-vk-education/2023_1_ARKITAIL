@@ -16,6 +16,11 @@ class CalendarCardContainerW : public Wt::WContainerWidget {
     CalendarCardContainerW();
     void init(const std::vector<CalendarSptr>& content);
 
+    void addCardsByUser(size_t user_id);
+    void removeCardsByUser(size_t user_id);
+    void addCardsByTag(size_t tag_id);
+    void removeCardsByTag(size_t tag_id);
+
   private:
     Wt::WText* status_;
     std::vector<CalendarCardW*> calendar_cards_;

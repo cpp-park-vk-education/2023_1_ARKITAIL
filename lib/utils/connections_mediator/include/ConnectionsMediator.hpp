@@ -3,19 +3,21 @@
 #include <Wt/WContainerWidget.h>
 #include <Wt/WSignal.h>
 
+#include "CalendarCardContainerW.hpp"
 #include "ConnectionPoint.hpp"
 #include "Event.hpp"
 #include "ICalendarBodyW.hpp"
 #include "ITreeNode.hpp"
 #include "SearchPage.hpp"
 #include "TreeW.hpp"
+#include "UsersLineEdit.hpp"
 #include "Wt/WDate.h"
 #include "Profile.hpp"
 #include "User.hpp"
 #include "ICalendarHeaderW.hpp"
 
 class ConnectionsMediator {
-  public:
+public:
     ConnectionsMediator();
 
     void connect();
@@ -52,5 +54,10 @@ class ConnectionsMediator {
 
     // сигнал для передачи тега на страницу поиска
     ConnectionPoint<Wt::Signal<Tag>, TagsLineEdit, const Tag&> search_tag;
+
+    ConnectionPoint<Wt::Signal<size_t>, CalendarCardContainerW, size_t> add_cards_by_user;
+    ConnectionPoint<Wt::Signal<size_t>, CalendarCardContainerW, size_t> remove_cards_by_user;
+    ConnectionPoint<Wt::Signal<size_t>, CalendarCardContainerW, size_t> add_cards_by_tag;
+    ConnectionPoint<Wt::Signal<size_t>, CalendarCardContainerW, size_t> remove_cards_by_tag;
 
 };

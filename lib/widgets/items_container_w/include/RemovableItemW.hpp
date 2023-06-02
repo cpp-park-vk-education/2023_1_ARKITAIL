@@ -7,17 +7,17 @@
 template<typename T>
 class RemovableItemW : public ItemW<T> {
 public:
-	RemovableItemW(const T& obj);
+	RemovableItemW(const std::string& title, const T& obj);
 
 };
 
 template<typename T>
-RemovableItemW<T>::RemovableItemW(const T& obj) :
-	ItemW<T>(obj) {
-	
-	ItemW<T>::clicked()->connect([&](){
-		ItemW<T>::clicked_.emit(ItemW<T>::obj_);
-		ItemW<T>::parent()->removeChild(this);
+RemovableItemW<T>::RemovableItemW(const std::string& title, const T& obj) :
+	ItemW<T>(title, obj) {
+	ItemW<T>::addStyleClass("mt-2 me-2");
+	ItemW<T>::clicked().connect([this](){
+	 	this->ItemW<T>::clicked_.emit(this->ItemW<T>::obj_);
+	 	this->ItemW<T>::parent()->removeChild(this);
 	});
 }
 
