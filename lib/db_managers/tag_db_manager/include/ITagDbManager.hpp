@@ -12,6 +12,7 @@ public:
 	virtual void update(const Tag& tag) = 0;
 	virtual void remove(size_t tag_id) = 0;
 	virtual std::vector<Node> NodeByTag(size_t tag) = 0;
+	virtual Tag find(const std::string title) = 0;
 
 };
 

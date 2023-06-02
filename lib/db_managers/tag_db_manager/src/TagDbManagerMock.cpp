@@ -39,3 +39,10 @@ std::vector<Node> TagDbManagerMock::NodeByTag(size_t tag_id) {
 	return std::vector<Node>();
 }
 
+Tag TagDbManagerMock::find(const std::string title) {
+	for (auto e = db_->tags.begin() + 1; e != db_->tags.end(); e++)
+		if (e->name == title)
+			return *e;
+	
+	return db_->tags[0];
+}

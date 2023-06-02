@@ -62,9 +62,10 @@ DbMock::DbMock() {
     calendars.emplace_back(7, 23, 1, "PublicCalendar", "desc");
     calendars.emplace_back(8, 24, 1, "PublicCalendar", "desc");
 
-    tags.emplace_back(0, "tag1");
-    tags.emplace_back(1, "tag2");
-    tags.emplace_back(2, "tag3");
+    tags.emplace_back(0, "tag0");
+    tags.emplace_back(1, "tag1");
+    tags.emplace_back(2, "tag2");
+    tags.emplace_back(3, "tag3");
     
     profiles.emplace_back(0, 26, 0, std::vector<size_t>{12, 21}, "Profile");
 

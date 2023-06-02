@@ -15,6 +15,7 @@ public:
 	void update(const Tag& tag);
 	void remove(size_t tag_id);
 	std::vector<Node> NodeByTag(size_t tag_id);
+	Tag find(const std::string title);
 	
 private:
 	std::shared_ptr<DbMock> db_;

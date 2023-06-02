@@ -23,6 +23,8 @@ TreeNodeWConvertedData TreeNodeWOtherAnalyst::analyseTreeNodeWChild(ITreeNode* t
     TreeNodeWConvertedData data;
 
     std::vector<Tag> tags;
+    tags.push_back(managers_->tag_manager()->get(3));
+    tags.push_back(managers_->tag_manager()->get(2));
 
     auto is_sub = managers_->node_manager()->subscribed(node.id);
     if (node.type & NodeType::PUBLIC_GROUP) {

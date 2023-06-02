@@ -18,3 +18,8 @@ void TagManager::remove(size_t tag_id) {
 	db_->tag_dbm()->remove(tag_id);
 }
 
+Tag TagManager::find(const std::string title) {
+	
+}
+
+

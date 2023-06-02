@@ -20,6 +20,9 @@ TreeNodeWConvertedData TreeNodeWSubAnalyst::analyseTreeNodeWChild(ITreeNode* tre
     TreeNodeWConvertedData data;
 
     std::vector<Tag> tags;
+    tags.push_back(managers_->tag_manager()->get(1));
+    tags.push_back(managers_->tag_manager()->get(2));
+    tags.push_back(managers_->tag_manager()->get(3));
 
     if (node.type & NodeType::PUBLIC_CALENDAR) {
         CalendarSptr child = managers_->calendar_manager()->get(tree_node->getNode().resource_id);

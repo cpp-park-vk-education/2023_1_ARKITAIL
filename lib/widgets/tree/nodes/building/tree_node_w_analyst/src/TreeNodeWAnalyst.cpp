@@ -18,8 +18,11 @@ TreeNodeWAnalyst::TreeNodeWAnalyst(IManagers* managers) :
 
 TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeWChild(ITreeNode* tree_node) {
     Node node = tree_node->getNode();
+    
     std::vector<Tag> tags;
-    tags.push_back(Tag(0, "tag1"));
+    tags.push_back(managers_->tag_manager()->get(1));
+    tags.push_back(managers_->tag_manager()->get(2));
+
     User user = managers_->user_manager()->get();
     TreeNodeWConvertedData data;
 

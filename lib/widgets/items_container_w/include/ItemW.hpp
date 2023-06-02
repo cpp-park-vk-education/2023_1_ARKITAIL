@@ -9,21 +9,21 @@
 template<typename T>
 class ItemW : public Wt::WPushButton {
 public:
-	ItemW(size_t id, const std::string& title, const T& obj);
+	ItemW(const std::string& title, const T& obj);
 	Wt::Signal<T>* item_clicked();
-	size_t getId();
+	const std::string& getTitle();
 
 protected:
 	Wt::Signal<T> clicked_;
 	T obj_;
-	size_t id_;
+	std::string title_;
 };
 
 template<typename T>
-ItemW<T>::ItemW(size_t id, const std::string& title, const T& obj) :
+ItemW<T>::ItemW(const std::string& title, const T& obj) :
 	clicked_(),
 	obj_(obj),
-	id_(id) {
+	title_(title) {
 
 	setText(Wt::WString(title));
 
@@ -38,6 +38,6 @@ Wt::Signal<T>* ItemW<T>::item_clicked() {
 }
 
 template<typename T>
-size_t ItemW<T>::getId() {
-	return id_;
+const std::string& ItemW<T>::getTitle() {
+	return title_;
 }

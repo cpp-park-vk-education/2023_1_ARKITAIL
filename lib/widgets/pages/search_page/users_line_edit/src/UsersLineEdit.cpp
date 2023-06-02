@@ -17,12 +17,16 @@ UsersLineEdit::UsersLineEdit() :
     removed_() {
     line_edit_->addStyleClass("mt-3");
     auto cm = SessionScopeMap::instance().get()->connections_mediator();
-    
+    line_edit_->enterPressed().connect([this]() {
+		if (!line_edit_->text().empty()) {
+    		auto manager = SessionScopeMap::instance().get()->managers()->user_manager();
+		}
+    });
 }
 
 void UsersLineEdit::parseItem(const std::string& user_name) {
     User user = User(0, 0, "login", "email", user_name, "description");
-    auto item = std::make_unique<RemovableItemW<User>>(user.id, user_name, user);
+    auto item = std::make_unique<RemovableItemW<User>>(user_name, user);
 
     item->item_clicked()->connect([this, user]() {
         this->removed_.emit(user);

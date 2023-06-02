@@ -11,6 +11,7 @@ public:
 	Tag get(size_t tag_id);
 	size_t add(const Tag& tag);
 	void remove(size_t tag_id);
+	Tag find(const std::string title);
 
 private:
 	std::shared_ptr<IDbManagers> db_;
