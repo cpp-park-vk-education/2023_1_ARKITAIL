@@ -41,8 +41,9 @@ size_t DirectoryManager::add(const Directory& directory, size_t directory_id) {
         return 0;
 
     auto node_mgr = SessionScopeMap::instance().get()->managers()->node_manager();
+    auto directory_mgr = SessionScopeMap::instance().get()->managers()->directory_manager();
 
-    Node parent_node = node_mgr->get(get(directory_id).node_id);
+    Node parent_node = node_mgr->get(directory_mgr->get(directory_id).node_id);
     Node new_node = {0, parent_node.id, 0, (parent_node.type & PUBLIC ? PUBLIC_DIRECTORY : PRIVATE_DIRECTORY)};
 
     new_node.id = node_mgr->add(new_node);
