@@ -18,10 +18,12 @@ SearchP::SearchP() :
     hint_(addWidget(std::make_unique<Wt::WText>())),
     found_(addWidget(std::make_unique<CalendarCardContainerW>())),
     searcher_() {
-    users_->parseItem("ХУЙ");
-    users_->parseItem("ХУЙ");
-    users_->parseItem("ХУЙ");
-    users_->parseItem("ХУЙ");
+    
+    addStyleClass("mx-3");
+    users_->parseItem("User1");
+    users_->parseItem("User2");
+    users_->parseItem("User3");
+    users_->parseItem("User4");
 
     auto ss = SessionScopeMap::instance().get();
 

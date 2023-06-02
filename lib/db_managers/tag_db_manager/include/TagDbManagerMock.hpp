@@ -9,15 +9,16 @@
 
 class TagDbManagerMock : public ITagDbManager {
 public:
-	TagDbManagerMock();
+	TagDbManagerMock(std::shared_ptr<DbMock> db);
 
 	TagSptr get(int tag_id) override;
 	int add(TagSptr tag) override;
 	void update(TagSptr tag) override;
 	void remove(int tag_id) override;
+	std::vector<Node> NodeByTag(int tag_id) override;
 	
 private:
-	std::vector<Tag> data_;
+	std::shared_ptr<DbMock> db_;
 	int aid_;
 
 };

@@ -10,6 +10,8 @@
 template<typename T>
 class ItemsContainerW : public Wt::WContainerWidget {
 public: 
+	ItemsContainerW();
+
 	void addItem(std::unique_ptr<ItemW<T>> item);
 	void removeItem(ItemW<T>* item);
 
@@ -17,6 +19,9 @@ private:
 	std::vector<ItemW<T>*> items_;
 
 };
+
+template<typename T>
+ItemsContainerW<T>::ItemsContainerW() {}
 
 template<typename T>
 void ItemsContainerW<T>::addItem(std::unique_ptr<ItemW<T>> item) {

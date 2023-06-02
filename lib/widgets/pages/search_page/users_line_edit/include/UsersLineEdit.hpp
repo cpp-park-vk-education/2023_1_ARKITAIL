@@ -14,7 +14,7 @@ public:
 
 private:
 	Wt::WLineEdit* line_edit_;
-	ItemsContainerW<User> users_;
+	ItemsContainerW<User>* users_;
 
 	Wt::Signal<User> added_;
 	Wt::Signal<User> removed_;

@@ -22,3 +22,4 @@ void CalendarCardContainerW::init(const std::vector<CalendarSptr>& content) {
             user, card, std::vector<Tag>{Tag(0, "tag1"), Tag(0, "tag2"), Tag(0, "tag3")})));
     }
 }
+

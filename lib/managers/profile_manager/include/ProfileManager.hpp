@@ -11,7 +11,7 @@ public:
 	explicit ProfileManager(std::shared_ptr<IDbManagers> db);
 
 	ProfileSptr get(int profile_id) override;
-	int add(ProfileSptr profile) override;
+	int add(ProfileSptr profile, int directory_id) override;
 	void update(ProfileSptr profile) override;
 	void remove(int profile_id) override;
 

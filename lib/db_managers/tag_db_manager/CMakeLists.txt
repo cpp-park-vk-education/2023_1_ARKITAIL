@@ -15,7 +15,12 @@ target_link_libraries(
   db_models
 )
 
-# if (BUILD_TESTS)
-# 	add_subdirectory(tests)
-# endif()
+if (BUILD_TESTS)
+ 	add_subdirectory(tests)
+	target_link_libraries(
+		${MODULE_NAME}
+		PUBLIC
+		db_mock
+	)
+endif()
 

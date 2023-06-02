@@ -37,27 +37,35 @@ DirectorySptr DirectoryManager::get(int directory_id) {
 // Остальные поля не участвуют в добавлении (опускаются) 
 //
 // directory_id является полем Directory::id родительской директории
-int DirectoryManager::add(DirectorySptr directory, int parent_id) {
+int DirectoryManager::add(DirectorySptr directory, int directory_id) {
+    auto directory_mgr = SessionScopeMap::instance().get()->managers()->directory_manager();
+
     UserSptr user = db_->user_dbm()->get();
-    DirectorySptr parent_directory = get(parent_id);
+    DirectorySptr parent_directory = directory_mgr->get(directory_id);
 
     if (!parent_directory->id || user->id != parent_directory->owner_id)
         return 0;
 
     auto node_mgr = SessionScopeMap::instance().get()->managers()->node_manager();
 
-    NodeSptr parent_node = node_mgr->get(get(parent_id)->node_id);
-    NodeSptr new_node
-        = std::make_shared<Node>(0, parent_node->id, 0, -1, parent_node->type);
+    NodeSptr parent_node = node_mgr->get(directory_mgr->get(directory_id)->node_id);
+    NodeSptr new_node = std::make_shared<Node>(
+        0, parent_node->id, 0, parent_node->owner_id,
+        (parent_node->type & PUBLIC ? PUBLIC_DIRECTORY : PRIVATE_DIRECTORY));
 
-    size_t new_node_id = node_mgr->add(new_node);
+    new_node->id = node_mgr->add(new_node);
 
-    if (!new_node_id)
+    if (!new_node->id)
         return 0;
 
-    directory->node_id = new_node_id;
+    DirectorySptr new_directory = directory;
+    new_directory->node_id = new_node->id;
+
+    new_directory->id = db_->directory_dbm()->add(new_directory);
+    new_node->resource_id = new_directory->id;
+    db_->node_dbm()->update(new_node);
     
-    return db_->directory_dbm()->add(directory);
+    return new_directory->id;
 }
 
 // Сменить можно только название и описание

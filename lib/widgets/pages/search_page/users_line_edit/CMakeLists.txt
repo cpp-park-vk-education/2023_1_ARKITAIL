@@ -10,6 +10,8 @@ target_link_libraries(
 	${MODULE_NAME}
 	PUBLIC
 	user
+	session_scope_map
+	connections_mediator
 	items_container_w
 )
 

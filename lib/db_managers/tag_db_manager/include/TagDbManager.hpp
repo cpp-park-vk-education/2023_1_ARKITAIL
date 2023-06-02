@@ -1,7 +1,5 @@
 #pragma once
 
-#include <Wt/Dbo/Session.h>
-
 #include "DbModels.hpp"
 #include "ITagDbManager.hpp"
 #include "Session.hpp"

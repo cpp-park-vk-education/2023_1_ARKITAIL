@@ -1,6 +1,9 @@
 #pragma once
 
+#include <vector>
+
 #include "Tag.hpp"
+#include "Node.hpp"
 
 class ITagDbManager {
 public:
@@ -8,6 +11,8 @@ public:
 	virtual int add(TagSptr tag) = 0;
 	virtual void update(TagSptr tag) = 0;
 	virtual void remove(int tag_id) = 0;
+  
+	virtual std::vector<Node> NodeByTag(int tag) = 0;
 
 };
 

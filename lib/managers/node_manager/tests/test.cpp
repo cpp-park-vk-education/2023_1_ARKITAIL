@@ -42,7 +42,7 @@ protected:
 			std::make_unique<CalendarDbManagerMock>(db),
 			std::make_unique<EventDbManagerMock>(db),
 			std::make_unique<CommentDbManagerMock>(),
-			std::make_unique<TagDbManagerMock>(),
+			std::make_unique<TagDbManagerMock>(db),
 			std::make_unique<ProfileDbManagerMock>(db)
 		);
 
