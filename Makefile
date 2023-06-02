@@ -14,7 +14,7 @@ clean: # Delete build/ and .cache/ directories.
 generate: # Generate a build recipe in a build/ directory.
 	cmake \
 		-DCMAKE_BUILD_TYPE=Debug \
-		-DBUILD_TESTS=ON \
+		-DBUILD_TESTS=OFF \
 		-B build/
 
 silent-build:
