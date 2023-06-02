@@ -52,8 +52,7 @@ std::unique_ptr<TreeNodeW> TreeNodeWDirector::fillNode(TreeNodeWConvertedData da
     }
 
     if (data.components_set & Components::LABEL) {
-        std::cout << data.name << std::endl;
-        node_builder->addHead(std::make_unique<InPlaceEditTitle>(data.name));
+        node_builder->addHead(std::make_unique<InPlaceEditTitle>(data.name, data.tree_node->getNode().resource_id));
     } else {
         node_builder->addTextHead(std::make_unique<Wt::WText>(data.name));
     }

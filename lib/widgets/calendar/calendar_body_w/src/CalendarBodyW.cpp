@@ -34,8 +34,9 @@ void CalendarBodyW::updateCalendar(Wt::WDate begin_date, std::vector<Event> even
 
 void CalendarBodyW::activateToday(Wt::WDate& selected_date) {
     auto today_day = Wt::WDate(std::chrono::system_clock::now());
-    if (selected_date.month() == today_day.month() && today_day.day() >= selected_date.day() &&
-        today_day.day() < selected_date.day() + TimeInterval::DAYS_IN_WEEK) {
-        table_->elementAt(0, today_day.dayOfWeek())->addStyleClass("table-success");
+    std::cout << today_day.toString("d MMMM yyyy   ") << selected_date.toString("d MMMM yyyy") << "\n\n";
+    if (today_day >= selected_date &&
+        today_day < selected_date.addDays(TimeInterval::DAYS_IN_WEEK)) {
+        table_->elementAt(0, today_day.dayOfWeek())->addStyleClass("table-success color");
     }
 }

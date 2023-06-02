@@ -34,7 +34,7 @@ DbMock::DbMock() {
     nodes.emplace_back(23, 22, 7, PUBLIC_CALENDAR);
     nodes.emplace_back(24, 16, 8, PUBLIC_CALENDAR);
     nodes.emplace_back(25, 17, 10, MOUNT);
-    nodes.emplace_back(26, 18, 0, PROFILE);
+    nodes.emplace_back(26, 18, 1, PROFILE);
 
     directories.emplace_back(0, 0, 0, "", "");
     directories.emplace_back(1, 1, 0, "UmaOpRoot", "desc");
@@ -66,7 +66,8 @@ DbMock::DbMock() {
     tags.emplace_back(1, "tag2");
     tags.emplace_back(2, "tag3");
     
-    profiles.emplace_back(0, 26, 0, std::vector<size_t>{12, 21}, "Profile");
+    profiles.emplace_back(0, 0, 0, std::vector<size_t>(), "Profile0");
+    profiles.emplace_back(1, 26, 0, std::vector<size_t>{12, 21}, "Profile");
 
     events.emplace_back();
 

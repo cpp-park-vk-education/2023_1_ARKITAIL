@@ -25,8 +25,8 @@ class ConnectionsMediator {
     ConnectionPoint<Wt::Signal<int>, Wt::WContainerWidget, int> cp;
 
     // сигналы от нод к дереву при нажатии чекбокса
-    ConnectionPoint<Wt::Signal<ITreeNode*>, TreeW, ITreeNode*> node_to_tree_main;
-    ConnectionPoint<Wt::Signal<ITreeNode*>, TreeW, ITreeNode*> node_to_tree_other;
+    ConnectionPoint<Wt::Signal<TreeNodeW*>, TreeW, TreeNodeW*> node_to_tree_main;
+    ConnectionPoint<Wt::Signal<TreeNodeW*>, TreeW, TreeNodeW*> node_to_tree_other;
 
     // сигналы от дерева хедеру календаря передаются при чеке ноды, ничего не несет
     ConnectionPoint<Wt::Signal<>, ICalendarHeaderW> tree_to_header_main;

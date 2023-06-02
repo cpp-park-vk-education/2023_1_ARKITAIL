@@ -100,7 +100,7 @@ void TreeNodeDirW::closeNode() {
 
 void TreeNodeDirW::checkNode() {
     if (!node_->isChecked()) {
-        checked_.emit(node_);
+        checked_.emit(this);
     }
 
     check_box_->setChecked(true);
@@ -112,7 +112,7 @@ void TreeNodeDirW::checkNode() {
 
 void TreeNodeDirW::uncheckNode() {
     if (node_->isChecked())
-        checked_.emit(node_);
+        checked_.emit(this);
 
     uncheckParentNodes();
     for (auto child : getChildrenNodes()) {
