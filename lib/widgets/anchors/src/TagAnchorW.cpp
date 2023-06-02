@@ -1,4 +1,4 @@
-#include "TagW.hpp"
+#include "TagAnchorW.hpp"
 
 #include <Wt/WLink.h>
 
@@ -6,7 +6,7 @@
 #include "SessionScopeMap.hpp"
 #include "Tag.hpp"
 
-TagW::TagW(const Tag& tag) :
+TagAnchorW::TagAnchorW(const Tag& tag) :
     Wt::WAnchor(Wt::WLink(Wt::LinkType::InternalPath, "/search"), tag.name),
     tag_(tag) {
 
@@ -20,6 +20,6 @@ TagW::TagW(const Tag& tag) :
 
 }
 
-Wt::Signal<Tag>& TagW::tagClicked() {
+Wt::Signal<Tag>& TagAnchorW::tagClicked() {
     return tag_clicked_;
 }

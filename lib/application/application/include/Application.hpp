@@ -11,7 +11,7 @@
 #include "ConnectionsMediator.hpp"
 #include "Managers.hpp"
 #include "Swapable.hpp"
-#include "navbar_w.hpp"
+#include "NavbarW.hpp"
 #include "IDeferred.hpp"
 
 class Application : public Wt::WApplication {

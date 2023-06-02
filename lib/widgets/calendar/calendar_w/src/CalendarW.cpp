@@ -1,4 +1,4 @@
-#include "calendar_w.hpp"
+#include "CalendarW.hpp"
 
 #include <Wt/WApplication.h>
 #include <Wt/WContainerWidget.h>
@@ -15,9 +15,9 @@
 #include "SessionScopeMap.hpp"
 #include "TreeW.hpp"
 #include "WeekW.hpp"
-#include "calendar_header_w.hpp"
-#include "day_w.hpp"
-#include "month_w.hpp"
+#include "CalendarHeaderW.hpp"
+#include "DayW.hpp"
+#include "MonthW.hpp"
 
 CalendarW::CalendarW() {
     auto layout = setLayout(std::make_unique<Wt::WHBoxLayout>());

@@ -33,15 +33,12 @@ std::vector<Event> Tree::getCheckedEvents() {
     while (!q.empty()) {
         if ((q.front()->getNode().type & (PUBLIC_CALENDAR | PRIVATE_CALENDAR)) &&
             q.front()->isChecked()) {
-            std::cout << "Calendar id: " << q.front()->getNode().resource_id << std::endl;
             for (auto e : mgr->calendar_manager()->getEvents(q.front()->getNode().resource_id)) {
-                std::cout << "Event id: " << e.id << std::endl;
                 v.push_back(e);
             }
         }
 
         for (auto c : q.front()->getChildren()) {
-            std::cout << "Children node id: " << c->getNode().id << std::endl;
             q.push(c);
         }
 
@@ -62,24 +59,24 @@ std::vector<Event> Tree::getCheckedEventsByInterval(Wt::WDateTime begin, Wt::WDa
 }
 
 void Tree::checkNode(ITreeNode* node) {
-    auto mgr = SessionScopeMap::instance().get()->managers();
-
     std::queue<ITreeNode*> q;
 
     if (node->getNode().type & PROFILE) {
+        auto mgr = SessionScopeMap::instance().get()->managers();
         ProfileSptr profile = mgr->profile_manager()->get(node->getNode().resource_id);
 
         q.push(root_.get());
 
         while (!q.empty()) {
-            for (auto p : profile->nodes)
+            for (auto p : profile->nodes) {
                 if (p == q.front()->getNode().id) {
-                    q.front()->check();
+                    checkNode(q.front());
                     break;
-                }
-
-            for (auto c : q.front()->getChildren())
-                q.push(c);
+                } else {
+                    for (auto c : q.front()->getChildren())
+                        q.push(c);
+                } 
+            }
 
             q.pop();
         }
@@ -101,23 +98,48 @@ void Tree::checkNode(ITreeNode* node) {
 }
 
 void Tree::uncheckNode(ITreeNode* node) {
+    std::cout << "Unchecking" << std::endl;
     ITreeNode* cur_node = node;
-
-    while (cur_node && cur_node->isChecked()) {
-        cur_node->uncheck();
-        cur_node = cur_node->getParent();
-    }
-
     std::queue<ITreeNode*> q;
-    q.push(node);
 
-    while (!q.empty()) {
-        q.front()->uncheck();
+    if (node->getNode().type & PROFILE) {
+        std::cout << "Unchecking" << std::endl;
+        auto mgr = SessionScopeMap::instance().get()->managers();
+        ProfileSptr profile = mgr->profile_manager()->get(node->getNode().resource_id);
 
-        for (auto c : q.front()->getChildren())
-            q.push(c);
+        q.push(root_.get());
 
-        q.pop();
+        while (!q.empty()) {
+            for (auto p : profile->nodes) {
+                if (p == q.front()->getNode().id) {
+                    std::cout << "Unchecked node: " << p << std::endl;
+                    uncheckNode(q.front());
+                    break;
+                } else {
+                    for (auto c : q.front()->getChildren())
+                        q.push(c);
+                } 
+            }
+
+            q.pop();
+        }
+
+    } else {
+        while (cur_node && cur_node->isChecked()) {
+            cur_node->uncheck();
+            cur_node = cur_node->getParent();
+        }
+        
+        q.push(node);
+        
+        while (!q.empty()) {
+            q.front()->uncheck();
+        
+            for (auto c : q.front()->getChildren())
+                q.push(c);
+        
+            q.pop();
+        }
     }
 }
 

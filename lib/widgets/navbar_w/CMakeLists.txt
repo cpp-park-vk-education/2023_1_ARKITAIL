@@ -1,9 +1,14 @@
-add_library(navbar_w src/navbar_w.cpp)
-
-target_include_directories(navbar_w PUBLIC inc)
-
-target_link_libraries(navbar_w PUBLIC
-                    wt
-                    session_scope_map
-                    calendula_compiler_flags)
- 
+set(MODULE_NAME navbar_w)
+set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+                      
+file(GLOB SOURCES ${SOURCE_DIR}/*.cpp)
+                      
+add_library(${MODULE_NAME} STATIC ${SOURCES})
+target_include_directories(${MODULE_NAME} PUBLIC ${INCLUDE_DIR})
+                      
+target_link_libraries(${MODULE_NAME} PUBLIC
+                        calendula_compiler_flags
+                        session_scope_map
+                        )
+                      

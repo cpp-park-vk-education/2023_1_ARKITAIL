@@ -43,7 +43,7 @@ protected:
 			std::make_unique<EventDbManagerMock>(db),
 			std::make_unique<CommentDbManagerMock>(),
 			std::make_unique<TagDbManagerMock>(),
-			std::make_unique<ProfileDbManagerMock>()
+			std::make_unique<ProfileDbManagerMock>(db)
 		);
 
 		managers = std::make_unique<Managers>(

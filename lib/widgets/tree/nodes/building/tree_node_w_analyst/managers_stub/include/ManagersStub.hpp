@@ -13,6 +13,7 @@ class ManagersStub : public IManagers {
     ICalendarManager* calendar_manager() override;
     IEventManager* event_manager() override;
     IProfileManager* profile_manager() override;
+    ITagManager* tag_manager() override;
 
   private:
     std::unique_ptr<IUserManager> user_manager_;
@@ -21,4 +22,5 @@ class ManagersStub : public IManagers {
     std::unique_ptr<ICalendarManager> calendar_manager_;
     std::unique_ptr<IEventManager> event_manager_;
     std::unique_ptr<IProfileManager> profile_manager_;
+    std::unique_ptr<ITagManager> tag_manager_;
 };

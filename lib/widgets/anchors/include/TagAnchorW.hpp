@@ -4,10 +4,10 @@
 
 #include "Tag.hpp"
 
-class TagW : public Wt::WAnchor {
+class TagAnchorW : public Wt::WAnchor {
   public:
-    TagW(const Tag& tag);
-    ~TagW() = default;
+    TagAnchorW(const Tag& tag);
+    ~TagAnchorW() = default;
 
     Wt::Signal<Tag>& tagClicked();
 

@@ -72,12 +72,17 @@ TreeNodeW* TreeNodeDirW::addChildNode(std::unique_ptr<TreeNodeW> child) {
     return child_node;
 }
 
-std::vector<TreeNodeW*> TreeNodeDirW::childrenNodes() {
+std::vector<TreeNodeW*> TreeNodeDirW::getChildrenNodes() {
     return children_;
 }
 
+void TreeNodeDirW::open() {
+    icon_->	showIcon2();
+    showNode();
+}
+
 void TreeNodeDirW::showNode() {
-    if (childrenNodes().empty()) {
+    if (getChildrenNodes().empty()) {
         for (auto node_child : node_->getChildren()) {
             auto child_block = addChildNode(this->makeTreeNodeWidget(node_child));
             if (isCanCheck() && check_box_->isChecked()) {
@@ -86,14 +91,14 @@ void TreeNodeDirW::showNode() {
         }
 
     } else {
-        for (auto child : childrenNodes()) {
+        for (auto child : getChildrenNodes()) {
             child->setHidden(false);
         }
     }
 }
 
 void TreeNodeDirW::closeNode() {
-    for (auto child : childrenNodes()) {
+    for (auto child : getChildrenNodes()) {
         child->setHidden(true);
     }
 }
@@ -105,7 +110,7 @@ void TreeNodeDirW::checkNode() {
 
     check_box_->setChecked(true);
 
-    for (auto child : childrenNodes()) {
+    for (auto child : getChildrenNodes()) {
         child->checkNode();
     }
 }
@@ -115,7 +120,7 @@ void TreeNodeDirW::uncheckNode() {
         checked_.emit(node_);
 
     uncheckParentNodes();
-    for (auto child : childrenNodes()) {
+    for (auto child : getChildrenNodes()) {
         child->uncheckNode();
     }
 }

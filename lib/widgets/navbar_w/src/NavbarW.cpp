@@ -1,12 +1,13 @@
-#include "navbar_w.hpp"
-#include "SessionScopeMap.hpp"
+#include "NavbarW.hpp"
 
-#include <Wt/Auth/Login.h>
 #include <iostream>
 
 #include <Wt/WMenu.h>
 #include <Wt/WNavigationBar.h>
 #include <Wt/WPushButton.h>
+#include <Wt/Auth/Login.h>
+
+#include "SessionScopeMap.hpp"
 
 NavbarW::NavbarW() {
     setTitle("Calendula", "/");
@@ -25,6 +26,12 @@ Wt::WMenuItem* NavbarW::addLink(const std::string& icon_path, const std::string&
     return tmp;
 }
 
+
+Wt::WMenuItem* NavbarW::addItem(const std::string& icon_path) {
+    auto tmp = left_menu_->addItem(icon_path);
+    return tmp;
+}
+
 void NavbarW::addSignals() {
     exit_button_->clicked().connect(this, &NavbarW::logout);
 }
@@ -37,8 +44,5 @@ void NavbarW::addStyle() {
 }
 
 void NavbarW::logout() {
-  auto& login = SessionScopeMap::instance().get()->session()->login();
-  std::cout << (login.state() == Wt::Auth::LoginState::LoggedOut) << std::endl;
-  login.logout();
-  std::cout << (login.state() == Wt::Auth::LoginState::LoggedOut) << std::endl;
+  SessionScopeMap::instance().get()->session()->login().logout();
 }

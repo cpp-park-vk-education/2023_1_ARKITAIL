@@ -9,13 +9,12 @@
 #include <string>
 #include <thread>
 
+#include "Deferred.hpp"
 #include "MainP.hpp"
 #include "OtherP.hpp"
-#include "OtherUserP.hpp"
 #include "SearchPage.hpp"
 #include "SessionScopeMap.hpp"
-#include "navbar_w.hpp"
-#include "Deferred.hpp"
+#include "NavbarW.hpp"
 
 Application::Application(const Wt::WEnvironment& env) :
     Wt::WApplication(env),
@@ -33,20 +32,16 @@ Application::Application(const Wt::WEnvironment& env) :
     // Some initial widgets configuration
     pages_.emplace("/calendars", std::make_unique<Deferred<MainP, Wt::WContainerWidget>>())
         .first->second.set_destination(&cur_swap_);
-    navbar_->addLink("Calendars", "/calendars");
-
-    pages_.emplace("/profile", std::make_unique<Deferred<OtherUserP, Wt::WContainerWidget>>()) // заменить на UserP
-        .first->second.set_destination(&cur_swap_);
-    navbar_->addLink("My Profile", "/profile");
-
+    navbar_->addLink("Календари", "/calendars");
+    // pages_.emplace("/profile", std::make_unique<Deferred<UserP, Wt::WContainerWidget>>()) 
+    //     .first->second.set_destination(&cur_swap_);
+    navbar_->addItem("Настройки профиля");
+    
     pages_.emplace("/search", std::make_unique<Deferred<SearchP, Wt::WContainerWidget>>())
         .first->second.set_destination(&cur_swap_);
-    navbar_->addLink("Search", "/search");
+    navbar_->addLink("Поиск", "/search");
 
     pages_.emplace("/other_calendar", std::make_unique<Deferred<OtherP, Wt::WContainerWidget>>())
-        .first->second.set_destination(&cur_swap_);
-
-    pages_.emplace("/other_profile", std::make_unique<Deferred<OtherUserP, Wt::WContainerWidget>>())
         .first->second.set_destination(&cur_swap_);
 
     // Main page configuration

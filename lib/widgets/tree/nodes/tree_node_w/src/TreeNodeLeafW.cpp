@@ -1,5 +1,6 @@
 #include "TreeNodeLeafW.hpp"
 
+#include <Wt/WGlobal.h>
 #include <memory>
 
 #include "Calendar.hpp"
@@ -17,15 +18,14 @@ TreeNodeLeafW::TreeNodeLeafW(ITreeNode* node) :
     TreeNodeW(node) {}
 
 void TreeNodeLeafW::checkNode() {
-    if (!node_->isChecked()) {
+    if (check_box_->checkState() == Wt::CheckState::Checked) {
         checked_.emit(node_);
     }
-
     check_box_->setChecked(true);
 }
 
 void TreeNodeLeafW::uncheckNode() {
-    if (node_->isChecked())
+    if (check_box_->checkState() == Wt::CheckState::Unchecked)
         checked_.emit(node_);
     uncheckParentNodes();
 }

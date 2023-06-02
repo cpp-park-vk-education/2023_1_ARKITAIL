@@ -8,7 +8,7 @@
 #include <vector>
 
 #include "Calendar.hpp"
-#include "TagW.hpp"
+#include "TagAnchorW.hpp"
 #include "User.hpp"
 #include "Node.hpp"
 
@@ -20,10 +20,12 @@ class CalendarCardW : public Wt::WContainerWidget {
 
   private:
     Wt::WAnchor* title_;
+    Wt::WImage* avatar_;
     Wt::WAnchor* username_;
-    Wt::WText* descriptions_;
-    std::vector<TagW*> tags_;
+    Wt::WText* description_;
+    std::vector<TagAnchorW*> tags_;
     Node node_;
+    User user_;
 
-    Wt::Signal<const Node&> calendar_clicked_;
+    Wt::Signal<const Node&, const User&> calendar_clicked_;
 };

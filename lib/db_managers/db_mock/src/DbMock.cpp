@@ -90,6 +90,12 @@ DbMock::DbMock() {
         8, 24, 1, "PublicCalendar", "desc",
         CalendarVisibility::kPublic, Wt::WColor());
 
+    tags.emplace_back(0, "tag1");
+    tags.emplace_back(1, "tag2");
+    tags.emplace_back(2, "tag3");
+    
+    profiles.emplace_back(0, 26, 0, std::vector<int>{12, 21}, "Profile");
+
     events.emplace_back();
 
     events.emplace_back(

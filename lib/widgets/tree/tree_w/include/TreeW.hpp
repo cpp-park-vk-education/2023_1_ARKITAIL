@@ -6,6 +6,7 @@
 
 #include <vector>
 
+#include "AddProfileW.hpp"
 #include "Event.hpp"
 #include "Node.hpp"
 #include "Tree.hpp"
@@ -16,18 +17,18 @@ class TreeW : public Wt::WContainerWidget {
   public:
     TreeW();
     void setRoot(const Node& node);
+    void setRoot(const Node& node, const User& user);
     void checkNode(ITreeNode* tree_node);
     void getRangeEvents(Wt::WDate date1, Wt::WDate date2);
+    void sendCheckedNodes();
 
     Wt::Signal<> node_checked;
     Wt::Signal<Wt::WDate, std::vector<Event>> events_getted;
 
   private:
     std::unique_ptr<Tree> tree_manager_;
-    Wt::WLineEdit* search_line_;
-    Wt::WPushButton* remember_combination_button_;
+    Wt::WContainerWidget* header_;
+    AddProfileW* add_profile_w_;
     TreeNodeW* root_;
 
-    void search();
-    void rememberCombination();
 };

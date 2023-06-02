@@ -1,10 +1,10 @@
-#include "month_w.hpp"
+#include "MonthW.hpp"
 
 #include <Wt/WBreak.h>
 
 #include "EventW.hpp"
 #include "SessionScopeMap.hpp"
-#include "time_utils.hpp"
+#include "TimeUtils.hpp"
 
 MonthW::MonthW() {
     table_->setHeaderCount(1);

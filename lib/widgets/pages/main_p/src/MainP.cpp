@@ -5,11 +5,11 @@
 #include "SessionScopeMap.hpp"
 #include "TreeW.hpp"
 #include "WeekW.hpp"
-#include "calendar_header_w.hpp"
-#include "calendar_w.hpp"
-#include "day_w.hpp"
-#include "month_w.hpp"
-#include "personal_calendar_header_w.hpp"
+#include "CalendarHeaderW.hpp"
+#include "CalendarW.hpp"
+#include "DayW.hpp"
+#include "MonthW.hpp"
+#include "PersonalCalendarHeaderW.hpp"
 
 MainP::MainP() {
     auto ss = SessionScopeMap::instance().get();
@@ -20,7 +20,6 @@ MainP::MainP() {
 
     auto mgr = ss->managers();
     auto node = mgr->node_manager()->get(mgr->user_manager()->get()->root_id);
-    auto sub = mgr->node_manager()->get(4);
     tree->setRoot(*node);
 
     auto cm = ss->connections_mediator();

@@ -75,9 +75,9 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeWChild(ITreeNode* tree_n
                                       *managers_->user_manager()->get(child->owner_id),
                                       tree_node};
     } else if (node.type & NodeType::PROFILE) {
-        // Profile child = Managers::instance().profile_manager->get(node.resource_id);
-        // return TreeNodeWConvertedData{TreeNodeWType::PROFILE_LEAF, child.name, child.description,
-        //                               tags, managers_->user_manager()->get(child.owner_id)};
+        ProfileSptr child = managers_->profile_manager()->get(node.resource_id);
+        return TreeNodeWConvertedData{TreeNodeWType::PROFILE_LEAF, child->name, "",
+                                      tags, *managers_->user_manager()->get(child->owner_id), tree_node->addChild(node)};
     }
     return data;
 }

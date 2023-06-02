@@ -3,14 +3,15 @@
 #include <Wt/WAnchor.h>
 
 #include "User.hpp"
+#include "Node.hpp"
 
 class UserAnchorW : public Wt::WAnchor {
   public:
-    UserAnchorW(const User& tag);
+    UserAnchorW(const std::string prefix, const User& user);
     ~UserAnchorW() = default;
 
   private:
-    Wt::Signal<User> user_clicked_;
+    Wt::Signal<const Node&, const User&> user_clicked_;
     User user_;
     
 };

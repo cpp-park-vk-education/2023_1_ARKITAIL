@@ -13,6 +13,6 @@ target_link_libraries(
 	application
 	session_scope_map
 	search_page
-	other_user_p
+	calendar_header_w
 )
  
