@@ -13,7 +13,7 @@ public:
 	size_t add(TagSptr tag) override;
 	void remove(size_t tag_id) override;
 
-	Tag find(const std::string& tag_name) override;
+	TagSptr find(const std::string& tag_name) override;
 
 private:
 	std::shared_ptr<IDbManagers> db_;

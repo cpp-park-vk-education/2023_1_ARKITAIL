@@ -4,6 +4,7 @@
 #include <Wt/WLogger.h>
 #include <memory>
 #include <string>
+#include <vector>
 
 #include "DbModels.hpp"
 #include "Tag.hpp"
@@ -83,3 +84,8 @@ TagSptr TagDbManager::get(int tag_id) {
 
   return std::make_shared<Tag>(std::move(tag));
 }
+
+TagSptr TagDbManager::find(const std::string& tag_name) {}
+
+std::vector<Node> TagDbManager::NodeByTag(int tag_id) {}
+

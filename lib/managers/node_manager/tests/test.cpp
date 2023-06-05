@@ -69,7 +69,7 @@ protected:
 TEST_F(ManagersSuit, GetRootNodeOfCurrentUser) {
 	auto user = managers->user_manager()->get();
 
-	Node expected = {1, 1, 1, NodeType::ROOT};
+	Node expected = {1, 1, 1, 0, NodeType::ROOT};
 	auto got = managers->node_manager()->get(user->root_id);
 	
 	EXPECT_EQ(expected.id, got->id);
@@ -82,10 +82,10 @@ TEST_F(ManagersSuit, GetChildrens) {
 	auto user = managers->user_manager()->get();
 	
 	std::vector<Node> expected = {
-		Node(3, 1, 3, NodeType::PRIVATE_GROUP),
-		Node(4, 1, 4, NodeType::PUBLIC_GROUP),
-		Node(5, 1, 5, NodeType::SUBSCRIPTIONS_GROUP),
-		Node(6, 1, 6, NodeType::PROFILE_GROUP)
+		Node(3, 1, 3, 0, NodeType::PRIVATE_GROUP),
+		Node(4, 1, 4, 0, NodeType::PUBLIC_GROUP),
+		Node(5, 1, 5, 0, NodeType::SUBSCRIPTIONS_GROUP),
+		Node(6, 1, 6, 0, NodeType::PROFILE_GROUP)
 	};
 
 	auto root_node = managers->node_manager()->get(user->root_id);
@@ -106,6 +106,7 @@ TEST_F(ManagersSuit, AddNodeToCurrentUser) {
 		0,
 		3,
 		0,
+		0,
 		PRIVATE_DIRECTORY
 	};
 
@@ -121,6 +122,7 @@ TEST_F(ManagersSuit, AddNodeToOthrerUser) {
 	Node new_node = {
 		0,
 		15,
+		0,
 		0,
 		PRIVATE_DIRECTORY
 	};

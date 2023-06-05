@@ -22,8 +22,8 @@ TagsLineEdit::TagsLineEdit() :
 		if (!this->line_edit_->text().empty()) {
     		auto manager = SessionScopeMap::instance().get()->managers()->tag_manager();
             auto tag = manager->find(this->line_edit_->text().toUTF8());
-            if (tag.id != 0) {
-                this->appendItem(tag);
+            if (tag->id != 0) {
+                this->appendItem(*tag);
             }
 		}
     });

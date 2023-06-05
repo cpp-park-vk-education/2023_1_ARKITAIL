@@ -1,5 +1,7 @@
 #include "TagDbManagerMock.hpp"
 #include "DbMock.hpp"
+#include "Tag.hpp"
+#include <memory>
 #include <vector>
 
 TagDbManagerMock::TagDbManagerMock(std::shared_ptr<DbMock> db) :
@@ -39,10 +41,10 @@ std::vector<Node> TagDbManagerMock::NodeByTag(int tag_id) {
 	return std::vector<Node>();
 }
 
-Tag TagDbManagerMock::find(const std::string title) {
+TagSptr TagDbManagerMock::find(const std::string& tag_name) {
 	for (auto e = db_->tags.begin() + 1; e != db_->tags.end(); e++)
-		if (e->name == title)
-			return *e;
+		if (e->name == tag_name)
+			return std::make_shared<Tag>(*e);
 	
-	return db_->tags[0];
+	return std::make_shared<Tag>(db_->tags[0]);
 }

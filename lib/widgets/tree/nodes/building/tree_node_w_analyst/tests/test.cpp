@@ -31,8 +31,6 @@
 #include "TagManager.hpp"
 #include "ProfileManager.hpp"
 
-
-
 class TreeNodeWAnalystTest : public ::testing::Test {
   protected:
     void SetUp() override {
@@ -62,12 +60,12 @@ class TreeNodeWAnalystTest : public ::testing::Test {
         analyst_ = TreeNodeWAnalyst(managers.get());
         sub_analyst_ = TreeNodeWSubAnalyst(managers.get());
         other_analyst_ = TreeNodeWOtherAnalyst(managers.get());
-        auto tree_node = TreeNodeMock(Node(0, 0, 0, NodeType::ROOT), nullptr);
+        auto tree_node = TreeNodeMock(Node(0, 0, 0, 0, NodeType::ROOT), nullptr);
         group_nodes_.push_back(&tree_node);
-        group_nodes_.push_back(group_nodes_[0]->addChild(Node(1, 0, 1, NodeType::PRIVATE_GROUP)));
-        group_nodes_.push_back(group_nodes_[0]->addChild(Node(2, 0, 2, NodeType::PUBLIC_GROUP)));
-        group_nodes_[0]->addChild(Node(3, 0, 3, NodeType::SUBSCRIPTIONS_GROUP));
-        group_nodes_[0]->addChild(Node(4, 0, 4, NodeType::PROFILE_GROUP));
+        group_nodes_.push_back(group_nodes_[0]->addChild(Node(1, 0, 1, 0, NodeType::PRIVATE_GROUP)));
+        group_nodes_.push_back(group_nodes_[0]->addChild(Node(2, 0, 2, 0, NodeType::PUBLIC_GROUP)));
+        group_nodes_[0]->addChild(Node(3, 0, 3, 0, NodeType::SUBSCRIPTIONS_GROUP));
+        group_nodes_[0]->addChild(Node(4, 0, 4, 0, NodeType::PROFILE_GROUP));
     }
 
     void TearDown() override {}

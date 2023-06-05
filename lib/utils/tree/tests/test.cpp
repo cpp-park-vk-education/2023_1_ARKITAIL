@@ -34,10 +34,10 @@ TEST_F(SessionSuit, TreeNodeGettingChilds) {
 	TreeNode tree_node(*node);
 
 	std::vector<Node> expected_children = {
-		Node(3, 1, 3, PRIVATE_GROUP),
-		Node(4, 1, 4, PUBLIC_GROUP),
-		Node(5, 1, 5, SUBSCRIPTIONS_GROUP),
-		Node(6, 1, 6, PROFILE_GROUP)
+		Node(3, 1, 3, 0, PRIVATE_GROUP),
+		Node(4, 1, 4, 0, PUBLIC_GROUP),
+		Node(5, 1, 5, 0, SUBSCRIPTIONS_GROUP),
+		Node(6, 1, 6, 0, PROFILE_GROUP)
 	};
 
 	std::vector<ITreeNode*> got_children = tree_node.getChildren();
