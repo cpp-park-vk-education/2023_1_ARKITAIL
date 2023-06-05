@@ -10,8 +10,8 @@ class UserManager : public IUserManager {
 public:
 	UserManager(std::shared_ptr<IDbManagers> db);
 	
-    const User& get();
-    const User& get(size_t user_id);
+    UserSptr get() override;
+    UserSptr get(int user_id) override;
 
 private:
 	std::shared_ptr<IDbManagers> db_;

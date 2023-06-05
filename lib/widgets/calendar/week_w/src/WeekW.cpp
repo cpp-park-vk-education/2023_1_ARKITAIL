@@ -28,7 +28,6 @@ void WeekW::update(Wt::WDate begin_date, std::vector<Event> events) {
     table_->insertRow(0);
 
     auto begin_week_day = begin_date;
-    activateToday(begin_date);
     // Вектор названий вынести в константы
     // Исправить range-based for на обычный
 
@@ -38,7 +37,8 @@ void WeekW::update(Wt::WDate begin_date, std::vector<Event> events) {
         table_->elementAt(0, i++)->addNew<Wt::WText>(", " + std::to_string(begin_week_day.day()));
         begin_week_day = begin_week_day.addDays(1);
     }
-
+    
+    activateToday(begin_date);
     table_->insertRow(1);
 
     std::vector<EventW> events_w;

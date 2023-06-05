@@ -14,6 +14,7 @@
 
 class DbManagers : public IDbManagers {
 public:
+  DbManagers() = default;
 	DbManagers(
 		std::unique_ptr<IUserDbManager> user_dbm,
 		std::unique_ptr<INodeDbManager> node_dbm,

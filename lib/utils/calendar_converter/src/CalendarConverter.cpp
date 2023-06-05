@@ -5,8 +5,8 @@
 #include <string>
 #include <vector>
 
+#include <Wt/WColor.h>
 #include <Wt/WDateTime.h>
-#include <Wt/WString.h>
 
 #include "Calendar.hpp"
 #include "Event.hpp"
@@ -71,13 +71,16 @@ std::vector<CalendarSptr> CalendarConverter::IcalendarToCalendars(
         parser::TextValue* text_value
           = dynamic_cast<parser::TextValue*>(property->value().get());
         if (text_value) {
-          calendar.color = std::move(text_value->text());
+          calendar.color = Wt::WColor(std::move(text_value->text()));
         }
       } else if (property->name() == "X-CALENDULA-VISIBILITY") {
         parser::TextValue* text_value
           = dynamic_cast<parser::TextValue*>(property->value().get());
         if (text_value) {
-          calendar.visibility = std::move(text_value->text());
+          calendar.visibility
+              = (text_value->text() == "Приватный")
+              ? CalendarVisibility::kPrivate
+              : CalendarVisibility::kPublic;
         }
       }
     }
@@ -128,6 +131,12 @@ EventSptr CalendarConverter::FromIcalendarEvent(
       if (text_value) {
         event.description = text_value->text();
       }
+    } else if (property->name() == "LOCATION") {
+      parser::TextValue* text_value
+        = dynamic_cast<parser::TextValue*>(property->value().get());
+      if (text_value) {
+        event.location = text_value->text();
+      }
     } else if (property->name() == "DTSTART") {
       parser::TextValue* text_value
         = dynamic_cast<parser::TextValue*>(property->value().get());
@@ -140,14 +149,19 @@ EventSptr CalendarConverter::FromIcalendarEvent(
       if (text_value) {
         event.end = FromIcalendarDateTime(text_value->text());
       }
+    } else if (property->name() == "DTSTAMP") {
+      parser::TextValue* text_value
+        = dynamic_cast<parser::TextValue*>(property->value().get());
+      if (text_value) {
+        event.stamp = FromIcalendarDateTime(text_value->text());
+      }
     } else if (property->name() == "RRULE") {
       parser::CompositeValue* composite_value
         = dynamic_cast<parser::CompositeValue*>(property->value().get());
+
       if (!composite_value) {
         continue;
       }
-
-      event.is_recurrent = true;
 
       for (parser::IValueUptr& value : composite_value->values()) {
         parser::PairValue* pair_value
@@ -213,23 +227,27 @@ std::unique_ptr<std::istream> CalendarConverter::CalendarsToIcalendar(
     Write(source, "METHOD", "PUBLISH");
     Write(source, "X-WR-CALNAME", calendar->summary);
     Write(source, "X-CALENDULA-DESCRIPTION", calendar->description);
-    Write(source, "X-CALENDULA-COLOR", calendar->color);
-    Write(source, "X-CALENDULA-VISIBILITY", calendar->visibility);
+    Write(source, "X-CALENDULA-COLOR", calendar->color.cssText());
+    Write(source, "X-CALENDULA-VISIBILITY",
+        (calendar->visibility == CalendarVisibility::kPrivate)
+        ? "Приватный"
+        : "Публичный");
 
     auto managers = SessionScopeMap::instance().get()->managers();
-    std::vector<EventSptr> events = managers->calendar_manager()->getEvents(calendar->id);
+    std::vector<Event> events
+        = managers->calendar_manager()->getEvents(calendar->id);
 
-    for (EventSptr event : events) {
+    for (Event& event : events) {
       Write(source, "BEGIN", "VEVENT");
 
       // TODO(affeeal): установить UID
-      Write(source, "SUMMARY", event->summary);
-      // TODO(affeeal): установить DTSTAMP
-      Write(source, "DTSTART", FromCalendarDateTime(event->start));
-      Write(source, "DTEND", FromCalendarDateTime(event->end));
-      Write(source, "DESCRIPTION", event->description);
-      // TODO(affeeal): установить LOCATION
-      if (event->is_recurrent) {
+      Write(source, "SUMMARY", event.summary);
+      Write(source, "DTSTAMP", FromCalendarDateTime(event.stamp));
+      Write(source, "DTSTART", FromCalendarDateTime(event.start));
+      Write(source, "DTEND", FromCalendarDateTime(event.end));
+      Write(source, "DESCRIPTION", event.description);
+      Write(source, "LOCATION", event.location);
+      if (event.IsRecurrent()) {
         Write(source, "RRULE", FromCalendarRrule(event));
       }
 
@@ -254,12 +272,12 @@ std::string CalendarConverter::FromCalendarDateTime(
   return date_time.toString(kDateTimeFormat).toUTF8();
 }
 
-std::string CalendarConverter::FromCalendarRrule(EventSptr event) {
+std::string CalendarConverter::FromCalendarRrule(const Event& event) {
   std::stringstream source;
 
-  source << "FREQ=" << event->frequency;
-  source << ";INTERVAL=" << std::to_string(event->interval);
-  source << ";UNTIL=" << FromCalendarDate(event->until);
+  source << "FREQ=" << event.frequency;
+  source << ";INTERVAL=" << std::to_string(event.interval);
+  source << ";UNTIL=" << FromCalendarDate(event.until);
 
   return source.str();
 }

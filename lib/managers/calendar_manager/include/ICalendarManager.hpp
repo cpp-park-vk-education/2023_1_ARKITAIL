@@ -14,12 +14,10 @@ public:
 	virtual void remove(size_t calendar_id) = 0;
 	virtual void update(CalendarSptr calendar) = 0;
 
-	virtual std::vector<EventSptr> getEvents(size_t calendar_id) = 0;
-	
-	virtual std::vector<EventSptr> getEventsByInterval(
-		size_t calendar_id,
-		Wt::WDateTime begin,
-		Wt::WDateTime end) = 0;
-
+	virtual std::vector<Event> getEvents(size_t calendar_id) = 0;
+	virtual std::vector<Event> getEventsByInterval(
+      size_t calendar_id,
+		  Wt::WDateTime start,
+		  Wt::WDateTime end) = 0;
 };
 

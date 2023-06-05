@@ -31,7 +31,7 @@ class CalendarConverter {
     const std::string& value);
 
   static std::string FromCalendarDateTime(const Wt::WDateTime& date_time);
-  static std::string FromCalendarRrule(EventSptr event);
+  static std::string FromCalendarRrule(const Event& event);
   static std::string FromCalendarDate(const Wt::WDate& date);
 };
 } // namespace converter

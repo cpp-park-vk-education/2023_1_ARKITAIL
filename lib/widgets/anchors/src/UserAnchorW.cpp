@@ -21,7 +21,7 @@ UserAnchorW::UserAnchorW(const std::string prefix, const User& user) :
 
         // переделать на ноду паблик групп
         std::cout << "\nemit signal USER" << user_.root_id <<"\n\n";
-        user_clicked_.emit(mgr->node_manager()->get(16), user_);
+        user_clicked_.emit(*mgr->node_manager()->get(16), user_);
     });
 
 }

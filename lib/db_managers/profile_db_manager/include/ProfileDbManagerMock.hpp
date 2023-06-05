@@ -10,14 +10,14 @@ class ProfileDbManagerMock : public IProfileDbManager {
 public:
 	ProfileDbManagerMock(std::shared_ptr<DbMock> db);
 
-	ProfileSptr get(size_t profile_id) override;
-	size_t add(ProfileSptr profile) override;
+	ProfileSptr get(int profile_id) override;
+	int add(ProfileSptr profile) override;
 	void update(ProfileSptr profile) override;
-	void remove(size_t profile_id) override;
+	void remove(int profile_id) override;
 
 private:
 	std::shared_ptr<DbMock> db_;
-	size_t aid_;
+	int aid_;
 
 };
 

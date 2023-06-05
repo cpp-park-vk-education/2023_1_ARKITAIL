@@ -1,26 +1,28 @@
 #pragma once
 
-#include <vector>
 #include <memory>
+#include <vector>
 
 #include "DbMock.hpp"
-#include "Node.hpp"
 #include "INodeDbManager.hpp"
 
-class NodeDbManagerMock : public INodeDbManager {
+class NodeDbManagerMock: public INodeDbManager{
 public:
-    NodeDbManagerMock(std::shared_ptr<DbMock> db);
+  NodeDbManagerMock(std::shared_ptr<DbMock> db);
 
-    const Node& get(size_t node_id);
-    size_t add(const Node& node);
-    void update(const Node& node);
-    void remove(size_t node_id);
+  NodeSptr get(int node_id) override;
+  int add(NodeSptr node) override;
+  void update(NodeSptr node) override;
+  void remove(int node_id) override;
 
-    std::vector<Node> getChildren(size_t node_id);
+  std::vector<Node> getChildren(int node_id) override;
+  
+  void tag(int node_id, TagSptr tag) override;
+  void move(int node_id, int destination_id) override;
 
 private:
-    std::shared_ptr<DbMock> db_;
-    size_t aid_;
+  std::shared_ptr<DbMock> db_;
+  int aid_;
 
 };
 

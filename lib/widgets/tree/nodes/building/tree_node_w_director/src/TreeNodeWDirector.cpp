@@ -52,8 +52,7 @@ std::unique_ptr<TreeNodeW> TreeNodeWDirector::fillNode(TreeNodeWConvertedData da
     }
 
     if (data.components_set & Components::LABEL) {
-        std::cout << data.name << std::endl;
-        node_builder->addHead(std::make_unique<InPlaceEditTitle>(data.name));
+        node_builder->addHead(std::make_unique<InPlaceEditTitle>(data.name, data.tree_node->getNode().resource_id));
     } else {
         node_builder->addTextHead(std::make_unique<Wt::WText>(data.name));
     }
@@ -71,7 +70,11 @@ std::unique_ptr<TreeNodeW> TreeNodeWDirector::fillNode(TreeNodeWConvertedData da
         node_builder->addOptions(OptionsWDirector().createOptionsSubscriptionW(options_builder));
     } else if (data.components_set & Components::OPTIONS_UNSUB) {
         node_builder->addOptions(OptionsWDirector().createOptionsUnsubscriptionW(options_builder));
+    } else if (data.components_set & Components::OPTIONS_GROUP) {
+        node_builder->addOptions(OptionsWDirector().createOptionsGroupW(options_builder));
     }
+
+
     if (data.description != "" || data.tags.size() != 0) {
         if (data.components_set & Components::TOOLTIP_AUTHOR) {
             node_builder->addToolTip(data.description, data.tags, data.author);

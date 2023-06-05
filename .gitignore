@@ -1,6 +1,5 @@
 build
-dummy
+Build
 .cache
-*.json
-*.sh
-
+.devcontainer
+.vscode

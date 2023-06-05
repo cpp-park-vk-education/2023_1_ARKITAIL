@@ -1,5 +1,6 @@
 #include "CalendarModel.hpp"
 
+#include <Wt/WColor.h>
 #include <Wt/WFormModel.h>
 #include <Wt/WValidator.h>
 #include <Wt/WLengthValidator.h>
@@ -12,6 +13,8 @@ const Wt::WFormModel::Field CalendarModel::kSummary = "summary";
 const Wt::WFormModel::Field CalendarModel::kDescription = "description";
 const Wt::WFormModel::Field CalendarModel::kVisibility = "visibility";
 const Wt::WFormModel::Field CalendarModel::kColor = "color";
+
+const std::string kPrivate = "Приватный";
 
 // по умолчанию calendar = nullptr
 CalendarModel::CalendarModel(CalendarSptr calendar)
@@ -29,8 +32,10 @@ void CalendarModel::UpdateCalendar() {
 
   calendar_->summary = Wt::asString(value(kSummary)).toUTF8();
   calendar_->description = Wt::asString(value(kDescription)).toUTF8();
-  calendar_->visibility = Wt::asString(value(kVisibility)).toUTF8();
-  calendar_->color = Wt::asString(value(kColor)).toUTF8();
+  calendar_->visibility
+      = (Wt::asString(value(kVisibility)) == kPrivate)
+      ? CalendarVisibility::kPrivate : CalendarVisibility::kPublic;
+  calendar_->color = Wt::WColor(Wt::asString(value(kColor)));
 }
 
 CalendarSptr CalendarModel::calendar() const {

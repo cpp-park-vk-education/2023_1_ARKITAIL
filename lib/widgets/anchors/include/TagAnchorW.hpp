@@ -9,10 +9,10 @@ class TagAnchorW : public Wt::WAnchor {
     TagAnchorW(const Tag& tag);
     ~TagAnchorW() = default;
 
-    Wt::Signal<Tag>& tagClicked();
+    Wt::Signal<const Tag&>& tagClicked();
 
   private:
-    Wt::Signal<Tag> tag_clicked_;
+    Wt::Signal<const Tag&> tag_clicked_;
     Tag tag_;
     
 };

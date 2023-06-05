@@ -12,6 +12,7 @@ class EventModel : public Wt::WFormModel {
  public:
   static const Wt::WFormModel::Field kSummary;
   static const Wt::WFormModel::Field kDescription;
+  static const Wt::WFormModel::Field kLocation;
   static const Wt::WFormModel::Field kCalendars;
 
   static const Wt::WFormModel::Field kStartDate;

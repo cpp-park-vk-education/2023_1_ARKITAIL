@@ -9,7 +9,6 @@
 
 class Tree {
   public:
-    Tree();
     Tree(const Node& node);
 
     ITreeNode* getRoot();
@@ -20,9 +19,9 @@ class Tree {
     void checkNode(ITreeNode* node);
     void uncheckNode(ITreeNode* node);
 
-    size_t checked();
+    int checked();
 
   private:
     std::unique_ptr<ITreeNode> root_;
-    size_t checked_;
+    int checked_;
 };

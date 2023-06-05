@@ -8,11 +8,16 @@
 OptionsWDirector::OptionsWDirector() {}
 
 std::unique_ptr<OptionsW> OptionsWDirector::createOptionsProfileW(OptionsWBuilder& builder) {
-    return builder.createOptionsW()->addOptionRemove()->getOptionsW();
+    return builder.createOptionsW()
+        ->addOptionRemove()
+        ->getOptionsW();
 }
 
-std::unique_ptr<OptionsW> createOptionsGroupW(OptionsWBuilder& builder) {
-    return builder.createOptionsW()->addOptionAddCalendar()->addOptionAddDirectory()->getOptionsW();
+std::unique_ptr<OptionsW> OptionsWDirector::createOptionsGroupW(OptionsWBuilder& builder) {
+    return builder.createOptionsW()
+        ->addOptionAddCalendar()
+        ->addOptionAddDirectory()
+        ->getOptionsW();
 }
 
 std::unique_ptr<OptionsW> OptionsWDirector::createOptionsCalendarsDirW(OptionsWBuilder& builder) {
@@ -26,13 +31,20 @@ std::unique_ptr<OptionsW> OptionsWDirector::createOptionsCalendarsDirW(OptionsWB
 
 std::unique_ptr<OptionsW> OptionsWDirector::createOptionsPersonalCalendarW(
     OptionsWBuilder& builder) {
-    return builder.createOptionsW()->addOptionEdit()->addOptionRemove()->getOptionsW();
+    return builder.createOptionsW()
+        ->addOptionEdit()
+        ->addOptionRemove()
+        ->getOptionsW();
 }
 
 std::unique_ptr<OptionsW> OptionsWDirector::createOptionsSubscriptionW(OptionsWBuilder& builder) {
-    return builder.createOptionsW()->addOptionSubscribe()->getOptionsW();
+    return builder.createOptionsW()
+        ->addOptionSubscribe()
+        ->getOptionsW();
 }
 
 std::unique_ptr<OptionsW> OptionsWDirector::createOptionsUnsubscriptionW(OptionsWBuilder& builder) {
-    return builder.createOptionsW()->addOptionUnsubscribe()->getOptionsW();
+    return builder.createOptionsW()
+        ->addOptionUnsubscribe()
+        ->getOptionsW();
 }

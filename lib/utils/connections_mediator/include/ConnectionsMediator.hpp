@@ -6,6 +6,7 @@
 #include "CalendarCardContainerW.hpp"
 #include "ConnectionPoint.hpp"
 #include "Event.hpp"
+#include "EventBlockW.hpp"
 #include "ICalendarBodyW.hpp"
 #include "ITreeNode.hpp"
 #include "SearchPage.hpp"
@@ -26,8 +27,8 @@ public:
     ConnectionPoint<Wt::Signal<int>, Wt::WContainerWidget, int> cp;
 
     // сигналы от нод к дереву при нажатии чекбокса
-    ConnectionPoint<Wt::Signal<ITreeNode*>, TreeW, ITreeNode*> node_to_tree_main;
-    ConnectionPoint<Wt::Signal<ITreeNode*>, TreeW, ITreeNode*> node_to_tree_other;
+    ConnectionPoint<Wt::Signal<TreeNodeW*>, TreeW, TreeNodeW*> node_to_tree_main;
+    ConnectionPoint<Wt::Signal<TreeNodeW*>, TreeW, TreeNodeW*> node_to_tree_other;
 
     // сигналы от дерева хедеру календаря передаются при чеке ноды, ничего не несет
     ConnectionPoint<Wt::Signal<>, ICalendarHeaderW> tree_to_header_main;
@@ -53,7 +54,10 @@ public:
     ConnectionPoint<Wt::Signal<const Node&, const User&>, TreeW, const Node&, const User&> set_tree_root;
 
     // сигнал для передачи тега на страницу поиска
-    ConnectionPoint<Wt::Signal<Tag>, TagsLineEdit, const Tag&> search_tag;
+    ConnectionPoint<Wt::Signal<const Tag&>, TagsLineEdit, const Tag&> search_tag;
+
+    // сигнал для редактирования названия события на сетке календаря
+    ConnectionPoint<Wt::Signal<const std::string&, size_t>, EventBlockW, const std::string&, size_t> edit_event_title;
 
     ConnectionPoint<Wt::Signal<size_t>, CalendarCardContainerW, size_t> add_cards_by_user;
     ConnectionPoint<Wt::Signal<size_t>, CalendarCardContainerW, size_t> remove_cards_by_user;

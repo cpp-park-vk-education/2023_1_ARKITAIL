@@ -20,10 +20,10 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeWChild(ITreeNode* tree_n
     Node node = tree_node->getNode();
     
     std::vector<Tag> tags;
-    tags.push_back(managers_->tag_manager()->get(1));
-    tags.push_back(managers_->tag_manager()->get(2));
+    tags.push_back(*managers_->tag_manager()->get(1));
+    tags.push_back(*managers_->tag_manager()->get(2));
 
-    User user = managers_->user_manager()->get();
+    UserSptr user = managers_->user_manager()->get();
     TreeNodeWConvertedData data;
 
     tree_node->getParent();
@@ -32,12 +32,12 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeWChild(ITreeNode* tree_n
         tree_node->getParent()->getNode().type & NodeType::SUBSCRIPTIONS_GROUP) {
         // тут только unsub, так как это подписки
         if (node.type & NodeType::PUBLIC_DIRECTORY) {
-            Directory child = managers_->directory_manager()->get(node.resource_id);
+            DirectorySptr child = managers_->directory_manager()->get(node.resource_id);
             data = TreeNodeWConvertedData{TreeNodeWType::SUB_DIR_OPTIONS,
-                                          child.name,
-                                          child.description,
+                                          child->name,
+                                          child->description,
                                           tags,
-                                          managers_->user_manager()->get(child.owner_id),
+                                          *managers_->user_manager()->get(child->owner_id),
                                           tree_node};
 
         } else {
@@ -46,7 +46,7 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeWChild(ITreeNode* tree_n
                                           child->summary,
                                           child->description,
                                           tags,
-                                          managers_->user_manager()->get(child->owner_id),
+                                          *managers_->user_manager()->get(child->owner_id),
                                           tree_node};
         }
     } else if (node.type & (NodeType::PRIVATE_CALENDAR | NodeType::PUBLIC_CALENDAR)) {
@@ -56,31 +56,40 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeWChild(ITreeNode* tree_n
                                       child->summary,
                                       child->description,
                                       tags,
-                                      managers_->user_manager()->get(child->owner_id),
+                                      *managers_->user_manager()->get(child->owner_id),
                                       tree_node};
     } else if (node.type & (NodeType::PRIVATE_DIRECTORY | NodeType::PUBLIC_DIRECTORY)) {
-        Directory child = managers_->directory_manager()->get(node.resource_id);
+        DirectorySptr child = managers_->directory_manager()->get(node.resource_id);
 
         data = TreeNodeWConvertedData{TreeNodeWType::DIR,
-                                      child.name,
-                                      child.description,
+                                      child->name,
+                                      child->description,
                                       tags,
-                                      managers_->user_manager()->get(child.owner_id),
+                                      *managers_->user_manager()->get(child->owner_id),
                                       tree_node};
-    } else if (node.type & (NodeType::ROOT | NodeType::PRIVATE_GROUP | NodeType::PUBLIC_GROUP |
+    } else if (node.type & (NodeType::ROOT | 
                             NodeType::SUBSCRIPTIONS_GROUP | NodeType::PROFILE_GROUP)) {
-        Directory child = managers_->directory_manager()->get(node.resource_id);
+        DirectorySptr child = managers_->directory_manager()->get(node.resource_id);
 
         data = TreeNodeWConvertedData{TreeNodeWType::GROUP,
-                                      child.name,
-                                      child.description,
+                                      child->name,
+                                      child->description,
                                       tags,
-                                      managers_->user_manager()->get(child.owner_id),
+                                      *managers_->user_manager()->get(child->owner_id),
+                                      tree_node};
+    } else if (node.type & (NodeType::PRIVATE_GROUP | NodeType::PUBLIC_GROUP)) {
+        DirectorySptr child = managers_->directory_manager()->get(node.resource_id);
+
+        data = TreeNodeWConvertedData{TreeNodeWType::GROUP_OPTIONS,
+                                      child->name,
+                                      child->description,
+                                      tags,
+                                      *managers_->user_manager()->get(child->owner_id),
                                       tree_node};
     } else if (node.type & NodeType::PROFILE) {
         ProfileSptr child = managers_->profile_manager()->get(node.resource_id);
         return TreeNodeWConvertedData{TreeNodeWType::PROFILE_LEAF, child->name, "",
-                                      tags, managers_->user_manager()->get(child->owner_id), tree_node->addChild(node)};
+                                      tags, *managers_->user_manager()->get(child->owner_id), tree_node->addChild(node)};
     }
     return data;
 }

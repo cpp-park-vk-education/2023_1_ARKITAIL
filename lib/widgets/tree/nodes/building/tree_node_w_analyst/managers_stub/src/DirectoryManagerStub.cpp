@@ -3,10 +3,10 @@
 DirectoryManagerStub::DirectoryManagerStub(std::vector<Directory> directories) :
     directories_(directories) {}
 
-Directory DirectoryManagerStub::get(size_t directory_id) {
+DirectorySptr DirectoryManagerStub::get(int directory_id) {
     for (auto e = directories_.begin(); e != directories_.end(); e++)
         if (e->id == directory_id)
-            return *e;
+            return std::make_shared<Directory>(*e);
 
-    return directories_[0];
+    return std::make_shared<Directory>(directories_[0]);
 }

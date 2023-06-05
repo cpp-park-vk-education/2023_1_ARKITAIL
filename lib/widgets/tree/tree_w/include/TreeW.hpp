@@ -16,11 +16,11 @@
 class TreeW : public Wt::WContainerWidget {
   public:
     TreeW();
-    ~TreeW() = default;
     void setRoot(const Node& node);
     void setRoot(const Node& node, const User& user);
-    void checkNode(ITreeNode* tree_node);
+    void checkNode(TreeNodeW* tree_node_w);
     void getRangeEvents(Wt::WDate date1, Wt::WDate date2);
+    std::vector<int> getCheckedNodes();
     void sendCheckedNodes();
 
     Wt::Signal<> node_checked;

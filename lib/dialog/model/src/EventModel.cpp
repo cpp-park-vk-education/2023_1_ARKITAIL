@@ -1,9 +1,8 @@
 #include "EventModel.hpp"
 
-#include <Wt/WAny.h>
-#include <Wt/WDate.h>
 #include <memory>
 
+#include <Wt/WDate.h>
 #include <Wt/WDateTime.h>
 #include <Wt/WDateValidator.h>
 #include <Wt/WFormModel.h>
@@ -20,6 +19,7 @@
 namespace dialog {
 const Wt::WFormModel::Field EventModel::kSummary = "summary";
 const Wt::WFormModel::Field EventModel::kDescription= "description";
+const Wt::WFormModel::Field EventModel::kLocation= "location";
 const Wt::WFormModel::Field EventModel::kCalendars = "calendars";
 
 const Wt::WFormModel::Field EventModel::kStartDate = "start-date";
@@ -47,10 +47,14 @@ EventModel::EventModel(EventSptr event)
 void EventModel::UpdateEvent() {
   if (!event_) {
     event_ = std::make_shared<Event>();
+
+    // устанавливаем время создания события
+    event_->stamp = Wt::WDateTime::currentDateTime();
   }
 
   event_->summary = Wt::asString(value(kSummary)).toUTF8();
   event_->description = Wt::asString(value(kDescription)).toUTF8();
+  event_->location = Wt::asString(value(kLocation)).toUTF8();
   // TODO(affeeal): разобраться с event->calendars
 
   event_->start = Wt::WDateTime(
@@ -60,8 +64,6 @@ void EventModel::UpdateEvent() {
       Wt::WDate::fromString(Wt::asString(value(kEndDate)), kDateFormat),
       Wt::WTime::fromString(Wt::asString(value(kEndTime)), kStartTime));
 
-  // исправить костыль
-  event_->is_recurrent = (Wt::asString(value(kIsRecurrent)).toUTF8() == "true");
   event_->frequency = Wt::asString(value(kFrequency)).toUTF8();
   event_->interval = Wt::asNumber(value(kInterval));
   event_->until = Wt::WDate::fromString(
@@ -79,6 +81,7 @@ void EventModel::set_event(EventSptr event) {
 void EventModel::AddFields() {
   addField(kSummary);
   addField(kDescription);
+  addField(kLocation);
   addField(kCalendars);
 
   addField(kStartDate);
@@ -116,13 +119,14 @@ void EventModel::SetValues() {
   if (event_) {
     setValue(kSummary, event_->summary);
     setValue(kDescription, event_->description);
+    setValue(kLocation, event_->location);
 
     setValue(kStartDate, event_->start.date());
     setValue(kStartTime, event_->start.time());
     setValue(kEndDate, event_->end.date());
     setValue(kEndTime, event_->end.time());
 
-    setValue(kIsRecurrent, event_->is_recurrent);
+    setValue(kIsRecurrent, event_->IsRecurrent());
     setValue(kFrequency, event_->frequency);
     setValue(kInterval, event_->interval);
     setValue(kUntil, event_->until);

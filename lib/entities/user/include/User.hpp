@@ -1,21 +1,24 @@
 #pragma once
 
-#include <cstddef>
+#include <memory>
 #include <string>
+
+class User;
+using UserSptr = std::shared_ptr<User>;
 
 class User {
  public:
   User() = default;
   User(
-    size_t id,
-    size_t root_id,
+    int id,
+    int root_id,
     std::string login,
     std::string email,
     std::string nickname,
     std::string description);
 
-  size_t id;
-  size_t root_id;
+  int id;
+  int root_id;
 
   std::string login;
   std::string email;

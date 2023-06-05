@@ -11,14 +11,8 @@ target_link_libraries(
 	${MODULE_NAME}
 	PUBLIC
 	directory
+  db_models
+  db_mock
+  session
 )
-
-if (BUILD_TESTS)
-	target_link_libraries(
-		${MODULE_NAME}
-		PUBLIC
-		db_mock
-	)
-# 	add_subdirectory(tests)
-endif()
 

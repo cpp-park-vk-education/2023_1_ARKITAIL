@@ -26,6 +26,7 @@ EventView::EventView(EventSptr event)
     : Wt::WTemplateFormView(Wt::WString::tr("event")),
       model_(std::make_shared<EventModel>(event)) {
   InitializeSummary();
+  InitializeLocation();
   InitializeDescription();
   InitializeCalendars();
   InitializeStartDate();
@@ -48,6 +49,10 @@ void EventView::InitializeSummary() {
 
 void EventView::InitializeDescription() {
   setFormWidget(EventModel::kDescription, std::make_unique<Wt::WTextArea>());
+}
+
+void EventView::InitializeLocation() {
+  setFormWidget(EventModel::kLocation, std::make_unique<Wt::WLineEdit>());
 }
 
 void EventView::InitializeCalendars() {

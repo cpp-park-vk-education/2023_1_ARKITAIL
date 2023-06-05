@@ -10,8 +10,8 @@ class UserManagerStub : public IUserManager {
   public:
     UserManagerStub(std::vector<User> users);
 
-    const User& get();
-    const User& get(size_t user_id);
+    UserSptr get() override;
+    UserSptr get(int user_id) override;
 
   private:
     std::vector<User> users_;

@@ -1,16 +1,17 @@
 #include "TagManager.hpp"
 #include "IDbManagers.hpp"
+#include "Tag.hpp"
 #include <cstddef>
 #include <memory>
 
 TagManager::TagManager(std::shared_ptr<IDbManagers> db) :
 	db_(db) {}
 
-Tag TagManager::get(size_t tag_id) {
+TagSptr TagManager::get(size_t tag_id) {
 	return db_->tag_dbm()->get(tag_id);
 }
 
-size_t TagManager::add(const Tag& tag) {
+size_t TagManager::add(TagSptr tag) {
 	return db_->tag_dbm()->add(tag);
 }
 

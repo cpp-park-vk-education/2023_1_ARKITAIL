@@ -3,6 +3,7 @@
 #include <Wt/WApplication.h>
 #include <Wt/WContainerWidget.h>
 #include <Wt/WHBoxLayout.h>
+#include <Wt/WLogger.h>
 #include <Wt/WPushButton.h>
 #include <Wt/WString.h>
 

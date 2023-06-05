@@ -11,16 +11,6 @@ target_link_libraries(
 	${MODULE_NAME}
 	PUBLIC
 	event
-	comment
 	db_managers
+  db_models
 )
-
-if (BUILD_TESTS)
-	target_link_libraries(
-		${MODULE_NAME}
-		PUBLIC
-		db_mock
-	)
-# 	add_subdirectory(tests)
-endif()
-

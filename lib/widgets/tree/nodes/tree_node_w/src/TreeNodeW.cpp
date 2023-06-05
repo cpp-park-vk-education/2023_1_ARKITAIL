@@ -17,6 +17,7 @@
 
 #include "Calendar.hpp"
 #include "CreateCalendarDialog.hpp"
+#include "CreateDirectoryDialog.hpp"
 #include "Directory.hpp"
 #include "EditCalendarDialog.hpp"
 #include "ITreeNode.hpp"
@@ -123,8 +124,9 @@ void TreeNodeW::performAction(Action action) {
 
             dialog->show();
 
-            dialog->node_created().connect([=](Node node) {
-                auto tree_node = node_->addChild(node);
+            dialog->node_created().connect([=](NodeSptr node) {
+                open();
+                auto tree_node = node_->addChild(*node);
                 addChildNode(makeTreeNodeWidget(tree_node));
             });
 
@@ -135,9 +137,23 @@ void TreeNodeW::performAction(Action action) {
             break;
         }
 
-        case Action::ADD_DIRECTORY:
-            // добавить директорию
+        case Action::ADD_DIRECTORY: {
+            dialog::CreateDirectoryDialog* dialog =
+                addChild(std::make_unique<dialog::CreateDirectoryDialog>(node_));
+
+            dialog->show();
+
+            dialog->node_created().connect([=](NodeSptr node) {
+                auto tree_node = node_->addChild(*node);
+                addChildNode(makeTreeNodeWidget(tree_node));
+            });
+
+            dialog->finished().connect([=] {
+                removeChild(dialog);
+                Wt::log("CreateDirectoryDialog removed");
+            });
             break;
+        }
     }
 }
 
@@ -183,7 +199,8 @@ void TreeNodeW::uncheckParentNodes() {
 void TreeNodeW::addToolTipSignal() {
     tool_tip_->setTransient(true, 2);
     tool_tip_->setAnchorWidget(header_container_);
-    header_container_->mouseWentOver().connect([=]() {  // mouseWentOver        
+    header_container_->addStyleClass("hover");
+    header_container_->clicked().connect([=]() {  // mouseWentOver        
         tool_tip_->setOffsets(Wt::WLength("100px"), Wt::WFlags(Wt::Side::Bottom));
         tool_tip_->setHidden(false);
     });

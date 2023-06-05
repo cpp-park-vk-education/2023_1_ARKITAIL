@@ -55,7 +55,7 @@ TreeNodeWBuilderBase* TreeNodeWBuilderBase::addCheckBox() {
 }
 
 TreeNodeWBuilderBase* TreeNodeWBuilderBase::addCheckBoxConnectionPoint(
-    ConnectionPoint<Wt::Signal<ITreeNode*>, TreeW, ITreeNode*>* cp) {
+    ConnectionPoint<Wt::Signal<TreeNodeW*>, TreeW, TreeNodeW*>* cp) {
     cp->add_sender(&(tree_node_w->checked_));
     return this;
 }

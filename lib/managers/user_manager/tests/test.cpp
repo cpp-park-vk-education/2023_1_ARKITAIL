@@ -56,12 +56,12 @@ class ManagersSuit : public ::testing::Test {
 TEST_F(ManagersSuit, GetCurrentUser) {
     User expected = {0, 1, "uma_op", "bannikovtop@gmail.com", "UmaOp", "Arkitail"};
 
-    auto got = managers->user_manager()->get();
-
-    EXPECT_EQ(expected.id, got.id);
-    EXPECT_EQ(expected.root_id, got.root_id);
-    EXPECT_EQ(expected.login, got.login);
-    EXPECT_EQ(expected.email, got.email);
-    EXPECT_EQ(expected.nickname, got.nickname);
-    EXPECT_EQ(expected.description, got.description);
+	auto got = managers->user_manager()->get();
+	
+	EXPECT_EQ(expected.id, got->id);
+	EXPECT_EQ(expected.root_id, got->root_id);
+	EXPECT_EQ(expected.login, got->login);
+	EXPECT_EQ(expected.email, got->email);
+	EXPECT_EQ(expected.nickname, got->nickname);
+	EXPECT_EQ(expected.description, got->description);
 }

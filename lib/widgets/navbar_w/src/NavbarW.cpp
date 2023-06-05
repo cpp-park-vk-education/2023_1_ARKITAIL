@@ -1,8 +1,13 @@
 #include "NavbarW.hpp"
 
+#include <iostream>
+
 #include <Wt/WMenu.h>
 #include <Wt/WNavigationBar.h>
 #include <Wt/WPushButton.h>
+#include <Wt/Auth/Login.h>
+
+#include "SessionScopeMap.hpp"
 
 NavbarW::NavbarW() {
     setTitle("Calendula", "/");
@@ -39,5 +44,5 @@ void NavbarW::addStyle() {
 }
 
 void NavbarW::logout() {
-    // выходим
+  SessionScopeMap::instance().get()->session()->login().logout();
 }

@@ -6,36 +6,36 @@ TagDbManagerMock::TagDbManagerMock(std::shared_ptr<DbMock> db) :
 	db_(db),
 	aid_(db->tags_to_nodes.size()) {}
 
-const Tag& TagDbManagerMock::get(size_t tag_id) {
+TagSptr TagDbManagerMock::get(int tag_id) {
 	for (auto e = db_->tags.begin() + 1; e != db_->tags.end(); e++)
 		if (e->id == tag_id)
-			return *e;
+			return std::make_shared<Tag>(*e);
 	
-	return db_->tags[0];
+	return std::make_shared<Tag>(db_->tags[0]);
 }
 
-size_t TagDbManagerMock::add(const Tag& tag) {
+int TagDbManagerMock::add(TagSptr tag) {
 	db_->tags.emplace_back(
 		aid_,
-		tag.name
+		tag->name
 	);
 
 	return aid_++;
 }
 
-void TagDbManagerMock::update(const Tag& tag) {
+void TagDbManagerMock::update(TagSptr tag) {
 	for (auto e : db_->tags)
-		if (e.id == tag.id)
-			e = tag;
+		if (e.id == tag->id)
+			e = *tag;
 }
 
-void TagDbManagerMock::remove(size_t tag_id) {
+void TagDbManagerMock::remove(int tag_id) {
 	for (auto e = db_->tags.begin() + 1; e != db_->tags.end(); e++)
 		if (e->id == tag_id)
 			db_->tags.erase(e);
 }
 
-std::vector<Node> TagDbManagerMock::NodeByTag(size_t tag_id) {
+std::vector<Node> TagDbManagerMock::NodeByTag(int tag_id) {
 	return std::vector<Node>();
 }
 

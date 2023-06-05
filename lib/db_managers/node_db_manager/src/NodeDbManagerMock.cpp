@@ -1,35 +1,45 @@
 #include "NodeDbManagerMock.hpp"
 
 #include <memory>
+#include <string>
 
+#include "DbManagers.hpp"
 #include "DbMock.hpp"
 #include "Node.hpp"
+#include "NodeDbManagerMock.hpp"
+#include "Tag.hpp"
+#include "TagDbManagerMock.hpp"
 
 NodeDbManagerMock::NodeDbManagerMock(std::shared_ptr<DbMock> db) :
     db_(db),
     aid_(db_->nodes.size()) {}
 
-const Node& NodeDbManagerMock::get(size_t node_id) {
+NodeSptr NodeDbManagerMock::get(int node_id) {
+    for (auto e = db_->nodes.begin() + 1; e != db_->nodes.end(); e++) {
+        if (e->id == node_id) {
+            return std::make_shared<Node>(*e);
+        }
+    }
+
+    return std::make_shared<Node>(db_->nodes[0]);
+}
+
+int NodeDbManagerMock::add(NodeSptr node) {
+    db_->nodes.emplace_back(
+        aid_, node->parent_id, node->resource_id, node->owner_id, node->type);
+
+    return aid_++;
+}
+
+void NodeDbManagerMock::update(NodeSptr node) {
     for (auto e = db_->nodes.begin() + 1; e != db_->nodes.end(); e++)
-        if (e->id == node_id)
-            return *e;
-
-    return db_->nodes[0];
+        if (e->id == node->id) {
+            *e = *node;
+            break;
+        }
 }
 
-size_t NodeDbManagerMock::add(const Node& node) {
-    db_->nodes.emplace_back(aid_++, node.parent_id, node.resource_id, node.type);
-
-    return aid_;
-}
-
-void NodeDbManagerMock::update(const Node& node) {
-    for (auto e : db_->nodes)
-        if (e.id == node.id)
-            e = node;
-}
-
-void NodeDbManagerMock::remove(size_t node_id) {
+void NodeDbManagerMock::remove(int node_id) {
     for (auto e = db_->nodes.begin() + 1; e != db_->nodes.end(); e++)
         if (e->id == node_id) {
             db_->nodes.erase(e);
@@ -37,7 +47,7 @@ void NodeDbManagerMock::remove(size_t node_id) {
         }
 }
 
-std::vector<Node> NodeDbManagerMock::getChildren(size_t node_id) {
+std::vector<Node> NodeDbManagerMock::getChildren(int node_id) {
     std::vector<Node> children;
 
     for (auto e : db_->nodes)
@@ -45,4 +55,12 @@ std::vector<Node> NodeDbManagerMock::getChildren(size_t node_id) {
             children.push_back(e);
 
     return children;
+}
+
+void NodeDbManagerMock::tag(int node_id, TagSptr tag) {
+  // TODO
+}
+
+void NodeDbManagerMock::move(int node_id, int destination_id) {
+  // TODO
 }

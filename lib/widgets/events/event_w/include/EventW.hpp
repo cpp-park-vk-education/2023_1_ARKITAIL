@@ -10,11 +10,15 @@
 #include <string>
 
 #include "event_d.hpp"
+#include "EventBlockW.hpp"
 
 class EventW {
   public:
-    EventW(int id, const std::string& title, Wt::WColor color, Wt::WDateTime begin,
-           Wt::WDateTime end) :
+    EventW(size_t id, 
+          const std::string& title, 
+          Wt::WColor color, 
+          Wt::WDateTime begin,
+          Wt::WDateTime end) :
         id_(id),
         title_(title),
         color_(color),
@@ -39,13 +43,15 @@ class EventW {
     bool isBelongsToEventWeek(Wt::WDate date);
 
   private:
-    int id_;
+    size_t id_;
+    std::vector<EventBlockW*> title_w_;
     std::string title_;
     Wt::WColor color_;
     Wt::WDateTime begin_;
     Wt::WDateTime end_;
 
-    void addDialog(Wt::WPushButton* eventWidget);
+    void addConnections();
+    void addDialog(EventBlockW* eventWidget);
     void makeEventLargePartWidget(std::string title, std::string style_class,
                                   Wt::WTableCell* event_cell);
     void makeEventSmallPartWidget(Wt::WTableCell* event_cell, std::string style_class);

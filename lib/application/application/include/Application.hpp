@@ -4,24 +4,24 @@
 #include <Wt/WContainerWidget.h>
 #include <Wt/WEnvironment.h>
 
+#include <Wt/WGlobal.h>
 #include <string>
 #include <unordered_map>
 
 #include "ConnectionsMediator.hpp"
 #include "Managers.hpp"
 #include "Swapable.hpp"
-#include "UnmetDeps.hpp"
 #include "NavbarW.hpp"
 #include "IDeferred.hpp"
 
 class Application : public Wt::WApplication {
   public:
-    Application(const Wt::WEnvironment& env);
+    explicit Application(const Wt::WEnvironment& env);
 
     void route(const std::string& internalPath);
 
   private:
-    Session session_;
+    std::unique_ptr<Wt::Auth::AuthWidget> CreateAuthWiget();
 
     std::unordered_map<std::string, Swapable<IDeferred<Wt::WContainerWidget>>> pages_;
     Swapable<IDeferred<Wt::WContainerWidget>> cur_swap_;

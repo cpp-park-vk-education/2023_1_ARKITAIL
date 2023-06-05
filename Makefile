@@ -14,7 +14,7 @@ clean: # Delete build/ and .cache/ directories.
 generate: # Generate a build recipe in a build/ directory.
 	cmake \
 		-DCMAKE_BUILD_TYPE=Debug \
-		-DBUILD_TESTS=ON \
+		-DBUILD_TESTS=OFF \
 		-B build/
 
 silent-build:
@@ -29,8 +29,6 @@ test: # Run all Google tests.
 	ctest --test-dir build/
 
 # TODO: coverage, lint
-
-# TODO: подумать над неймингами :)
 
 .PHONY: run
 run: # Run development container and up all dependences.
@@ -48,11 +46,11 @@ remove: # Remove development container and down all dependences.
 
 .PHONY: debug
 debug: # Run application
-	./build/Calendula \
+	./Build/Calendula \
 		--docroot . \
 		--http-address 0.0.0.0 \
 		--http-port 8080 \
-		--resources-dir='/usr/local/share/Wt/resources, ../static'
+		--resources-dir=/usr/share/Wt/resources
 
 # TODO: prod
 

@@ -50,7 +50,7 @@ class TreeNodeW : public Wt::WContainerWidget {
     void addToolTipSignal();
 
   protected:
-    Wt::Signal<ITreeNode*> checked_;
+    Wt::Signal<TreeNodeW*> checked_;
     Wt::WText* text_title_;
     std::unique_ptr<TreeNodeWAnalystBase> analyst_;
     Wt::WContainerWidget* header_container_;

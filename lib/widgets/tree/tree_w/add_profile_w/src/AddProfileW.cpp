@@ -10,6 +10,8 @@
 #include "TreeNodeW.hpp"
 #include "SessionScopeMap.hpp"
 #include "Managers.hpp"
+#include "TreeNodeWAnalyst.hpp"
+#include "TreeNodeWDirector.hpp"
 
 AddProfileW::AddProfileW(TreeNodeW* profile_group) :
     profile_group_(profile_group) {
@@ -41,9 +43,21 @@ void AddProfileW::validate() {
     }
 }
 
-void AddProfileW::addProfileW(std::vector<size_t> nodes) {
+void AddProfileW::addProfileW(std::vector<int> nodes) {
+    profile_group_->open();
+    
+    auto manager = SessionScopeMap::instance().get()->managers();
+    ProfileSptr profile = std::make_shared<Profile>(0, 0, 0, nodes, input_name_->text().toUTF8());
+
+    size_t profile_id = manager->profile_manager()->add(profile, profile_group_->getTreeNode()->getNode().id);
+    auto new_profile = manager->profile_manager()->get(profile_id);
+
+    NodeSptr node = manager->node_manager()->get(new_profile->node_id);
+    auto tree_node = profile_group_->getTreeNode()->addChild(*node);
+
     input_name_->setText("");
-    // profile_group_->addChildNode();
+    profile_group_->addChildNode(TreeNodeWDirector().fillNode(TreeNodeWAnalyst(manager).analyseTreeNodeWChild(tree_node)));
+
 }
 
 Wt::Signal<Node*>& AddProfileW::profileAdded() {

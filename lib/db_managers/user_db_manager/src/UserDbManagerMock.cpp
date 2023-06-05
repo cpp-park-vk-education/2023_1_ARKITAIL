@@ -1,14 +1,19 @@
 #include "UserDbManagerMock.hpp"
+
+#include <Wt/WLogger.h>
+
 #include "DbMock.hpp"
+#include "User.hpp"
 
-UserDbManagerMock::UserDbManagerMock(std::shared_ptr<DbMock> db) :
-	db_(db) {}
-
-const User& UserDbManagerMock::get() {
-	return db_->users[0];
+UserDbManagerMock::UserDbManagerMock(std::shared_ptr<DbMock> db)
+	  : db_(db) {
 }
 
-const User& UserDbManagerMock::get(size_t user_id) {
-	return db_->users[user_id];
+UserSptr UserDbManagerMock::get() {
+	return std::make_shared<User>(db_->users[0]);
+}
+
+UserSptr UserDbManagerMock::get(int user_id) {
+	return std::make_shared<User>(db_->users[user_id]);
 }
 

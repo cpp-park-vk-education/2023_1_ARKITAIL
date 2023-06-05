@@ -34,7 +34,7 @@ std::vector<Event> Tree::getCheckedEvents() {
         if ((q.front()->getNode().type & (PUBLIC_CALENDAR | PRIVATE_CALENDAR)) &&
             q.front()->isChecked()) {
             for (auto e : mgr->calendar_manager()->getEvents(q.front()->getNode().resource_id)) {
-                v.push_back(*e);
+                v.push_back(e);
             }
         }
 
@@ -143,6 +143,6 @@ void Tree::uncheckNode(ITreeNode* node) {
     }
 }
 
-size_t Tree::checked() {
+int Tree::checked() {
     return checked_;
 }

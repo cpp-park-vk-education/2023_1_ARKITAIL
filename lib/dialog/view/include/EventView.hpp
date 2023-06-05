@@ -21,6 +21,7 @@ class EventView : public Wt::WTemplateFormView {
  private:
   void InitializeSummary();
   void InitializeDescription();
+  void InitializeLocation();
   void InitializeCalendars();
   void InitializeStartDate();
   void InitializeStartTime();

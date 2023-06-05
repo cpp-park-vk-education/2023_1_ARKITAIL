@@ -8,24 +8,34 @@
 #include <utility>
 #include <Wt/WApplication.h>
 
+#include "CalendarDbManager.hpp"
 #include "CalendarDbManagerMock.hpp"
 #include "CalendarManager.hpp"
+#include "CommentDbManager.hpp"
 #include "CommentDbManagerMock.hpp"
+#include "CommentManager.hpp"
 #include "DbManagers.hpp"
 #include "DbMock.hpp"
+#include "DirectoryDbManager.hpp"
 #include "DirectoryDbManagerMock.hpp"
 #include "DirectoryManager.hpp"
+#include "EventDbManager.hpp"
 #include "EventDbManagerMock.hpp"
 #include "EventManager.hpp"
 #include "IDbManagers.hpp"
 #include "Managers.hpp"
-#include "NodeDbManagerMock.hpp"
 #include "NodeManager.hpp"
+#include "NodeDbManager.hpp"
+#include "NodeDbManagerMock.hpp"
+#include "ProfileDbManager.hpp"
 #include "ProfileDbManagerMock.hpp"
 #include "ProfileManager.hpp"
+#include "Session.hpp"
 #include "SessionScope.hpp"
+#include "TagDbManager.hpp"
 #include "TagDbManagerMock.hpp"
 #include "TagManager.hpp"
+#include "UserDbManager.hpp"
 #include "UserDbManagerMock.hpp"
 #include "UserManager.hpp"
 
@@ -47,18 +57,21 @@ SessionScope* SessionScopeMap::get() {
 		ss = container_.find(sid);  // Можно было бы возвращать итератор из add
 	}
 
-    return ss->second.get();
+  return ss->second.get();
 }
 
 void SessionScopeMap::add(std::string sid) {
-	std::shared_ptr<DbMock> db_mock = std::make_shared<DbMock>();
-
-    std::shared_ptr<IDbManagers> db = std::make_shared<DbManagers>(
-        std::make_unique<UserDbManagerMock>(db_mock), std::make_unique<NodeDbManagerMock>(db_mock),
-        std::make_unique<DirectoryDbManagerMock>(db_mock),
-        std::make_unique<CalendarDbManagerMock>(db_mock),
-        std::make_unique<EventDbManagerMock>(db_mock), std::make_unique<CommentDbManagerMock>(),
-        std::make_unique<TagDbManagerMock>(db_mock), std::make_unique<ProfileDbManagerMock>(db_mock));
+  std::unique_ptr<Session> session = std::make_unique<Session>();
+  
+  std::shared_ptr<IDbManagers> db = std::make_shared<DbManagers>(
+      std::make_unique<UserDbManager>(*session),
+      std::make_unique<NodeDbManager>(*session),
+      std::make_unique<DirectoryDbManager>(*session),
+      std::make_unique<CalendarDbManager>(*session),
+      std::make_unique<EventDbManager>(*session),
+      std::make_unique<CommentDbManager>(*session), // не используется
+      std::make_unique<TagDbManager>(*session),
+      std::make_unique<ProfileDbManager>(*session));
 
 	container_.insert(
 		std::make_pair(
@@ -73,7 +86,8 @@ void SessionScopeMap::add(std::string sid) {
 					std::make_unique<TagManager>(db),
 					std::make_unique<ProfileManager>(db)
 				),
-				std::make_unique<ConnectionsMediator>()
+				std::make_unique<ConnectionsMediator>(),
+        std::move(session)
 			)
 		)
 	);

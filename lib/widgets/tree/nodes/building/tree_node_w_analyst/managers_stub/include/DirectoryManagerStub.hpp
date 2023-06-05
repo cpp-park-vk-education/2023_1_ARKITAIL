@@ -9,19 +9,19 @@
 class DirectoryManagerStub : public IDirectoryManager {
   public:
     DirectoryManagerStub(std::vector<Directory> directories);
-    Directory get(size_t directory_id) override;
+    DirectorySptr get(int directory_id) override;
 
   private:
-    size_t add(const Directory& directory, size_t directory_id) override {
-        return size_t();
+    int add(DirectorySptr directory, int directory_id) override {
+        return 0;
     }
 
-    void update(const Directory& directory) override {}
+    void update(DirectorySptr directory) override {}
 
-    void remove(size_t directory_id) override {}
+    void remove(int directory_id) override {}
 
-    std::vector<EventSptr> getEvents(size_t directory_id) override {
-        return std::vector<EventSptr>();
+    std::vector<Event> getEvents(int directory_id) override {
+        return std::vector<Event>();
     }
 
     std::vector<Directory> directories_;

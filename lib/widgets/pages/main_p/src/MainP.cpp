@@ -19,8 +19,8 @@ MainP::MainP() {
     auto tree = calendar_->addTree(std::make_unique<TreeW>());
 
     auto mgr = ss->managers();
-    auto node = mgr->node_manager()->get(mgr->user_manager()->get().root_id);
-    tree->setRoot(node);
+    auto node = mgr->node_manager()->get(mgr->user_manager()->get()->root_id);
+    tree->setRoot(*node);
 
     auto cm = ss->connections_mediator();
     cm->node_to_tree_main.add_receiver(tree, &TreeW::checkNode);
