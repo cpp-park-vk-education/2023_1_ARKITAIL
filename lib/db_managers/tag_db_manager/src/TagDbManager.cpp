@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "DbModels.hpp"
+#include "Node.hpp"
 #include "Tag.hpp"
 #include "Session.hpp"
 
@@ -46,22 +47,22 @@ void TagDbManager::remove(int tag_id) {
   transaction.commit();
 }
 
-void TagDbManager::update(TagSptr tag) {
-  Wt::Dbo::Transaction transaction(session_);
-  
-  db::TagPtr db_tag
-      = session_.find<db::Tag>().where("id = ?").bind(tag->id);
-
-  if (!db_tag) {
-    Wt::log("TagDbManager::update: not found tag with id = "
-        + std::to_string(tag->id));
-    return;
-  }
-
-  db_tag.modify()->name = tag->name;
-
-  transaction.commit();
-}
+// void TagDbManager::update(TagSptr tag) {
+//   Wt::Dbo::Transaction transaction(session_);
+//   
+//   db::TagPtr db_tag
+//       = session_.find<db::Tag>().where("id = ?").bind(tag->id);
+// 
+//   if (!db_tag) {
+//     Wt::log("TagDbManager::update: not found tag with id = "
+//         + std::to_string(tag->id));
+//     return;
+//   }
+// 
+//   db_tag.modify()->name = tag->name;
+// 
+//   transaction.commit();
+// }
 
 TagSptr TagDbManager::get(int tag_id) {
   Wt::Dbo::Transaction transaction(session_);
@@ -87,5 +88,7 @@ TagSptr TagDbManager::get(int tag_id) {
 
 TagSptr TagDbManager::find(const std::string& tag_name) {}
 
-std::vector<Node> TagDbManager::NodeByTag(int tag_id) {}
+// std::vector<Node> TagDbManager::NodeByTag(int tag_id) {}
+std::vector<NodeSptr> TagDbManager::nodeByTag(int tag_id) {}
+
 

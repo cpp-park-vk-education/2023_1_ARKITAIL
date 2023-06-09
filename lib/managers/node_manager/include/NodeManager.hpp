@@ -18,13 +18,14 @@ public:
 
 	void remove(int node_id) override;
 
-	void tag(TagSptr tag, int node_id) override;
+	void tag(int node_id, int tag_id) override;
 	void move(int node_id, int destination_id) override;
 	void subscribe(int node_id) override;
 	void unsubscribe(int node_id) override;
 	std::vector<Node> getChildren(int node_id) override;
-
 	bool subscribed(int node_id) override;
+
+	std::vector<TagSptr> tagByNode(int node_id) override;
 
 private:
 	bool checkAccess(int user_id, int node_id);

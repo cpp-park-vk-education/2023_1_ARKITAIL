@@ -2,6 +2,7 @@
 
 #include "DbModels.hpp"
 #include "ITagDbManager.hpp"
+#include "Node.hpp"
 #include "Session.hpp"
 #include "Tag.hpp"
 #include <string>
@@ -14,10 +15,9 @@ public:
   TagSptr get(int tag_id) override;
   int add(TagSptr tag) override;
   void remove(int tag_id) override;
-  void update(TagSptr tag) override;
   
   TagSptr find(const std::string& tag_name) override;
-  std::vector<Node> NodeByTag(int tag) override;
+  std::vector<NodeSptr> nodeByTag(int tag) override;
 
 private:
   Session& session_;

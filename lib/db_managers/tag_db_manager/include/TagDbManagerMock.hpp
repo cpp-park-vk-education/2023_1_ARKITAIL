@@ -5,6 +5,7 @@
 
 #include "DbMock.hpp"
 #include "ITagDbManager.hpp"
+#include "Node.hpp"
 #include "Tag.hpp"
 
 class TagDbManagerMock : public ITagDbManager {
@@ -13,11 +14,10 @@ public:
 
 	TagSptr get(int tag_id) override;
 	int add(TagSptr tag) override;
-	void update(TagSptr tag) override;
 	void remove(int tag_id) override;
 
 	TagSptr find(const std::string& tag_name) override;
-	std::vector<Node> NodeByTag(int tag_id) override;
+	std::vector<NodeSptr> nodeByTag(int tag_id) override;
 	
 private:
 	std::shared_ptr<DbMock> db_;

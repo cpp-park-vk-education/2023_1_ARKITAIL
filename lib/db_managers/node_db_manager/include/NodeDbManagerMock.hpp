@@ -5,6 +5,7 @@
 
 #include "DbMock.hpp"
 #include "INodeDbManager.hpp"
+#include "Tag.hpp"
 
 class NodeDbManagerMock: public INodeDbManager{
 public:
@@ -16,9 +17,8 @@ public:
   void remove(int node_id) override;
 
   std::vector<Node> getChildren(int node_id) override;
-  
-  void tag(int node_id, TagSptr tag) override;
-  void move(int node_id, int destination_id) override;
+  void tag(int node_id, int tag_id) override;
+  std::vector<TagSptr> tagByNode(int node_id) override;
 
 private:
   std::shared_ptr<DbMock> db_;

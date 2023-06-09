@@ -1,5 +1,6 @@
 #include "TagDbManagerMock.hpp"
 #include "DbMock.hpp"
+#include "Node.hpp"
 #include "Tag.hpp"
 #include <memory>
 #include <vector>
@@ -25,20 +26,26 @@ int TagDbManagerMock::add(TagSptr tag) {
 	return aid_++;
 }
 
-void TagDbManagerMock::update(TagSptr tag) {
-	for (auto e : db_->tags)
-		if (e.id == tag->id)
-			e = *tag;
-}
-
 void TagDbManagerMock::remove(int tag_id) {
 	for (auto e = db_->tags.begin() + 1; e != db_->tags.end(); e++)
-		if (e->id == tag_id)
+		if (e->id == tag_id) {
 			db_->tags.erase(e);
+			break;
+		}
 }
 
-std::vector<Node> TagDbManagerMock::NodeByTag(int tag_id) {
-	return std::vector<Node>();
+std::vector<NodeSptr> TagDbManagerMock::nodeByTag(int tag_id) {
+	std::vector<NodeSptr> ns;
+
+	for (auto tn : db_->tags_to_nodes)
+		if (tn.first == tag_id)
+			for (auto e = db_->nodes.begin() + 1; e != db_->nodes.end(); e++)
+			    if (e->id == tn.second) {
+					ns.push_back(std::make_shared<Node>(*e));
+					break;
+				}
+
+	return ns;
 }
 
 TagSptr TagDbManagerMock::find(const std::string& tag_name) {
