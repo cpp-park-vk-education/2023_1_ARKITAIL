@@ -17,6 +17,8 @@ class User {
     std::string nickname,
     std::string description);
 
+  bool operator==(const User& a) const;
+
   int id;
   int root_id;
 

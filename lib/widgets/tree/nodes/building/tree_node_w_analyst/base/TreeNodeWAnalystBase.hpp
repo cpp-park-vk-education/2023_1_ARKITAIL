@@ -2,8 +2,8 @@
 
 #include "IManagers.hpp"
 #include "ITreeNode.hpp"
-#include "User.hpp"
 #include "Tag.hpp"
+#include "User.hpp"
 
 // |1| |2| |3| |4'5'6'7'8| |9'10'11|
 
@@ -53,11 +53,11 @@ enum Components {
 };
 
 enum TreeNodeWType {
-    GROUP,            // группа
-    GROUP_OPTIONS = Components::OPTIONS_GROUP,  // группа с возможностью добавления календарей и директорий
+    GROUP,  // группа
+    GROUP_OPTIONS =
+        Components::OPTIONS_GROUP,  // группа с возможностью добавления календарей и директорий
     DIR = Components::CHECKBOX | Components::OPTIONS_CALENDARS_DIR,  // свои директории
 
-    SUB_GROUP = Components::TYPE_SUB_DIR,  // группа подписок
     SUB_DIR =
         Components::CHECKBOX | Components::TOOLTIP_AUTHOR |
         Components::TYPE_SUB_DIR,  // директория из подписок без возможности отписаться(не mount)
@@ -99,6 +99,11 @@ struct TreeNodeWConvertedData {
     std::vector<Tag> tags;
     User author;
     ITreeNode* tree_node;
+
+    bool operator==(const TreeNodeWConvertedData& data) const {
+        return std::tie(components_set, name, description, tags, author, tree_node) ==
+               std::tie(data.components_set, data.name, data.description, data.tags, data.author, data.tree_node);
+    }
 };
 
 class TreeNodeWAnalystBase {

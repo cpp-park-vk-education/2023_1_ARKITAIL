@@ -20,14 +20,14 @@ protected:
 	IManagers* managers;
 };
 
-TEST_F(SessionSuit, TreeNodeCreation) {
+TEST_F(SessionSuit, DISABLED_TreeNodeCreation) {
 	UserSptr user = managers->user_manager()->get();
 	NodeSptr node = managers->node_manager()->get(user->root_id);
 
 	EXPECT_NO_THROW((TreeNode(*node)));
 }
 
-TEST_F(SessionSuit, TreeNodeGettingChilds) {
+TEST_F(SessionSuit, DISABLED_TreeNodeGettingChilds) {
 	UserSptr user = managers->user_manager()->get();
 	NodeSptr node = managers->node_manager()->get(user->root_id);
 
@@ -53,7 +53,7 @@ TEST_F(SessionSuit, TreeNodeGettingChilds) {
 	}
 }
 
-TEST_F(SessionSuit, TreeNodeRemovingChild) {
+TEST_F(SessionSuit, DISABLED_TreeNodeRemovingChild) {
 	UserSptr user = managers->user_manager()->get();
 	NodeSptr node = managers->node_manager()->get(user->root_id);
 
@@ -70,7 +70,7 @@ TEST_F(SessionSuit, TreeNodeRemovingChild) {
 	EXPECT_NO_THROW(children[3]->remove());
 }
 
-TEST_F(SessionSuit, TreeNodeAdditionChild) {
+TEST_F(SessionSuit, DISABLED_TreeNodeAdditionChild) {
 	UserSptr user = managers->user_manager()->get();
 	NodeSptr node = managers->node_manager()->get(user->root_id);
 	

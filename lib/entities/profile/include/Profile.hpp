@@ -3,7 +3,6 @@
 #include <memory>
 #include <vector>
 #include <string>
-#include <memory>
 
 class Profile;
 using ProfileSptr = std::shared_ptr<Profile>;
@@ -24,4 +23,3 @@ public:
 };
 
 using ProfileSptr = std::shared_ptr<Profile>;
-

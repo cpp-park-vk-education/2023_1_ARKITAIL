@@ -14,3 +14,8 @@ User::User(
     nickname(nickname),
     description(description) {
 }
+
+bool User::operator==(const User& a) const {
+  return std::tie(id, root_id, login, email, nickname, description) ==
+           std::tie(a.id, a.root_id, a.login, a.email, a.nickname, a.description);
+}

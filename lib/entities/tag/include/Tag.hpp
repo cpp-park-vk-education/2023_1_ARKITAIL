@@ -10,6 +10,8 @@ class Tag {
 public:
   Tag() = default;
   Tag(int id, std::string name);
+
+  bool operator==(const Tag& a) const;
   
   int id;
   std::string name;

@@ -20,13 +20,9 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeWChild(ITreeNode* tree_n
     Node node = tree_node->getNode();
     
     std::vector<Tag> tags;
-    tags.push_back(*managers_->tag_manager()->get(1));
-    tags.push_back(*managers_->tag_manager()->get(2));
 
     UserSptr user = managers_->user_manager()->get();
     TreeNodeWConvertedData data;
-
-    tree_node->getParent();
 
     if (tree_node->getParent() &&
         tree_node->getParent()->getNode().type & NodeType::SUBSCRIPTIONS_GROUP) {
@@ -70,6 +66,7 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeWChild(ITreeNode* tree_n
     } else if (node.type & (NodeType::ROOT | 
                             NodeType::SUBSCRIPTIONS_GROUP | NodeType::PROFILE_GROUP)) {
         DirectorySptr child = managers_->directory_manager()->get(node.resource_id);
+    std::cout << "ROOT" << std::endl;
 
         data = TreeNodeWConvertedData{TreeNodeWType::GROUP,
                                       child->name,
@@ -78,6 +75,7 @@ TreeNodeWConvertedData TreeNodeWAnalyst::analyseTreeNodeWChild(ITreeNode* tree_n
                                       *managers_->user_manager()->get(child->owner_id),
                                       tree_node};
     } else if (node.type & (NodeType::PRIVATE_GROUP | NodeType::PUBLIC_GROUP)) {
+    std::cout << "PRIVATE_GROUP" << std::endl;
         DirectorySptr child = managers_->directory_manager()->get(node.resource_id);
 
         data = TreeNodeWConvertedData{TreeNodeWType::GROUP_OPTIONS,

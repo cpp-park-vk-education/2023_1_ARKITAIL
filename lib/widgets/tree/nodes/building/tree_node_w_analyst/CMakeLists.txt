@@ -5,7 +5,8 @@ set(BASE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/base)
                       
 file(GLOB SOURCES ${SOURCE_DIR}/*.cpp)
                 
-add_subdirectory(managers_stub)
+add_subdirectory(managers_stub
+                  tree_node_stub)
 
 add_library(${MODULE_NAME} STATIC ${SOURCES})
 target_include_directories(${MODULE_NAME} PUBLIC ${INCLUDE_DIR} ${BASE_DIR})
