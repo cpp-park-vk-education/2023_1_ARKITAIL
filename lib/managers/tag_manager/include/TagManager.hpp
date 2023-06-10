@@ -2,8 +2,10 @@
 
 #include "IDbManagers.hpp"
 #include "ITagManager.hpp"
+#include "Node.hpp"
 #include "Tag.hpp"
 #include <memory>
+#include <vector>
 
 class TagManager : public ITagManager {
 public:
@@ -14,6 +16,7 @@ public:
 	void remove(size_t tag_id) override;
 
 	TagSptr find(const std::string& tag_name) override;
+	std::vector<NodeSptr> nodeByTag(int tag_id) override;
 
 private:
 	std::shared_ptr<IDbManagers> db_;

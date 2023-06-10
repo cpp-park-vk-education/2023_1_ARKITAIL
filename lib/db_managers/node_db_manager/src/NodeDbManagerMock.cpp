@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <utility>
 
 #include "DbManagers.hpp"
 #include "DbMock.hpp"
@@ -57,10 +58,21 @@ std::vector<Node> NodeDbManagerMock::getChildren(int node_id) {
     return children;
 }
 
-void NodeDbManagerMock::tag(int node_id, TagSptr tag) {
-  // TODO
+void NodeDbManagerMock::tag(int node_id, int tag_id) {
+    db_->tags_to_nodes.push_back(std::make_pair(node_id, tag_id));
 }
 
-void NodeDbManagerMock::move(int node_id, int destination_id) {
-  // TODO
+std::vector<TagSptr> NodeDbManagerMock::tagByNode(int node_id) {
+    std::vector<TagSptr> ts;
+
+    for (auto tn : db_->tags_to_nodes)
+        if (tn.second == node_id)
+            for (auto e = db_->tags.begin() + 1; e != db_->tags.end(); e++)
+                if (e->id == tn.first) {
+                    ts.push_back(std::make_shared<Tag>(*e));
+                    break;
+                };
+
+    return ts;
 }
+

@@ -150,8 +150,9 @@ void NodeManager::remove(int node_id) {
     }
 }
 
-void NodeManager::tag(TagSptr tag, int node_id) {
+void NodeManager::tag(int node_id, int tag_id) {
 	// TODO(uma_op): IMPLEMENT ME
+    db_->node_dbm()->tag(node_id, tag_id);
 }
 
 // Проверка на то, что перемещение осуществляется только внутри дерева одного пользователя
@@ -223,3 +224,8 @@ bool NodeManager::subscribed(int node_id) {
 
     return false;
 }
+
+std::vector<TagSptr> NodeManager::tagByNode(int node_id) {
+    return db_->node_dbm()->tagByNode(node_id);
+}
+

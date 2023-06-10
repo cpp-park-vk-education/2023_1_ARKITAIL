@@ -8,6 +8,7 @@
 #include "DbModels.hpp"
 #include "Node.hpp"
 #include "Session.hpp"
+#include "Tag.hpp"
 
 NodeDbManager::NodeDbManager(Session& session)
     : session_(session) {
@@ -131,58 +132,36 @@ NodeSptr NodeDbManager::get(int node_id) {
   return std::make_shared<Node>(std::move(node));
 }
 
-void NodeDbManager::tag(int node_id, TagSptr tag) {
-  Wt::Dbo::Transaction transaction(session_);
+void NodeDbManager::tag(int node_id, int tag_id) {
+    Wt::Dbo::Transaction transaction(session_);
 
-  db::NodePtr db_node
+    db::TagPtr db_tag = session_.find<db::Tag>().where("id = ?").bind(tag_id);
+
+    db::NodePtr db_node
       = session_.find<db::Node>().where("id = ?").bind(node_id);
 
-  if (!db_node) {
-    Wt::log("NodeDbManger::tag: not found node with id = "
-        + std::to_string(node_id));
-    return;
-  }
+    if (!db_node) {
+        Wt::log("NodeDbManger::tag: not found node with id = " + std::to_string(node_id));
+        return;
+    }
 
-  db::TagPtr db_tag
-      = session_.find<db::Tag>().where("id = ?").bind(tag->id);
+    if (!db_node) {
+        Wt::log("NodeDbManger::tag: not found tag with id = " + std::to_string(tag_id));
+        return;
+    }
 
-  if (!db_tag) {
-    Wt::log("NodeDbManger::tag: not found tag with id = "
-        + std::to_string(tag->id) + "; creating new one");
-    
-    db_tag = session_.add(std::make_unique<db::Tag>());
-    db_tag.modify()->name = tag->name;
-  }
 
-  db_node.modify()->tags.insert(db_tag);
+  // if (!db_tag) {
+  //   Wt::log("NodeDbManger::tag: not found tag with id = "
+  //       + std::to_string(tag->id) + "; creating new one");
+  //   
+  //   db_tag = session_.add(std::make_unique<db::Tag>());
+  //   db_tag.modify()->name = tag->name;
+  // }
 
-  transaction.commit();
-}
+    db_node.modify()->tags.insert(db_tag);
 
-void NodeDbManager::move(int node_id, int destination_id) {
-  Wt::Dbo::Transaction transaction(session_);
-
-  db::NodePtr db_node
-      = session_.find<db::Node>().where("id = ?").bind(node_id);
-
-  if (!db_node) {
-    Wt::log("NodeDbManger::move: not found node with id = "
-        + std::to_string(node_id));
-    return;
-  }
-
-  db::NodePtr db_destination
-      = session_.find<db::Node>().where("id = ?").bind(destination_id);
-
-  if (!db_destination) {
-    Wt::log("NodeDbManger::move: not found destination with id = "
-        + std::to_string(destination_id));
-    return;
-  }
-
-  db_node.modify()->parent = db_destination;
-
-  transaction.commit();
+    transaction.commit();
 }
 
 std::vector<Node> NodeDbManager::getChildren(int node_id) {
@@ -211,5 +190,9 @@ std::vector<Node> NodeDbManager::getChildren(int node_id) {
   transaction.commit();
 
   return children;
+}
+
+std::vector<TagSptr> NodeDbManager::tagByNode(int node_id) {
+    return std::vector<TagSptr>();
 }
 

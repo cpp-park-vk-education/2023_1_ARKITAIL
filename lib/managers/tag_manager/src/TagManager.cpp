@@ -1,5 +1,6 @@
 #include "TagManager.hpp"
 #include "IDbManagers.hpp"
+#include "Node.hpp"
 #include "Tag.hpp"
 #include <cstddef>
 #include <memory>
@@ -20,4 +21,5 @@ void TagManager::remove(size_t tag_id) {
 }
 
 TagSptr TagManager::find(const std::string& title) {}
+std::vector<NodeSptr> TagManager::nodeByTag(int tag_id) {}
 
